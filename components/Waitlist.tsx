@@ -22,7 +22,7 @@ function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: st
 }
 
 export function Waitlist() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [state, formAction] = useActionState<WaitlistResult | null, FormData>(
     async (_prev, formData) => submitWaitlist(formData),
     initialState,
@@ -49,6 +49,7 @@ export function Waitlist() {
             action={formAction}
             className="mt-8 space-y-4 rounded-2xl bg-white p-6 text-left shadow-sm sm:p-8"
           >
+            <input type="hidden" name="language" value={lang} />
             <div>
               <label htmlFor="name" className="text-sm font-semibold text-deep">
                 {t.waitlist.nameLabel}

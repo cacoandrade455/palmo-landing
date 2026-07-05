@@ -78,6 +78,49 @@ export function Waitlist() {
               />
             </div>
 
+            <div>
+              <label htmlFor="country" className="text-sm font-semibold text-deep">
+                {t.waitlist.countryLabel}
+              </label>
+              <input
+                id="country"
+                name="country"
+                type="text"
+                required
+                defaultValue={lang === "en" ? "Brazil" : "Brasil"}
+                className="mt-1.5 w-full rounded-xl border border-deep/15 px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="state" className="text-sm font-semibold text-deep">
+                  {t.waitlist.stateLabel}
+                </label>
+                <input
+                  id="state"
+                  name="state"
+                  type="text"
+                  required
+                  placeholder={t.waitlist.statePlaceholder}
+                  className="mt-1.5 w-full rounded-xl border border-deep/15 px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none"
+                />
+              </div>
+              <div>
+                <label htmlFor="municipality" className="text-sm font-semibold text-deep">
+                  {t.waitlist.municipalityLabel}
+                </label>
+                <input
+                  id="municipality"
+                  name="municipality"
+                  type="text"
+                  required
+                  placeholder={t.waitlist.municipalityPlaceholder}
+                  className="mt-1.5 w-full rounded-xl border border-deep/15 px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none"
+                />
+              </div>
+            </div>
+
             <fieldset>
               <legend className="text-sm font-semibold text-deep">
                 {t.waitlist.roleLabel}

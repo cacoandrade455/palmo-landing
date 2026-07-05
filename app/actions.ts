@@ -9,16 +9,25 @@ export type WaitlistResult = { ok: true } | { ok: false; error: string };
 /**
  * Sends waitlist signups to the Google Sheet (via the Apps Script web app
  * URL configured in lib/site-config.ts -> waitlistEndpoint). The script
- * appends one row per signup: Timestamp, Name, WhatsApp, Type, Municipality,
- * Language.
+ * appends one row per signup, in this column order:
+ * Timestamp, Name, WhatsApp, Type, Country, State, Municipality, Language.
  */
 export async function submitWaitlist(formData: FormData): Promise<WaitlistResult> {
   const name = String(formData.get("name") ?? "").trim();
   const phone = String(formData.get("phone") ?? "").trim();
   const role = String(formData.get("role") ?? "").trim() as WaitlistRole;
+  const country = String(formData.get("country") ?? "").trim();
+  const state = String(formData.get("state") ?? "").trim();
+  const municipality = String(formData.get("municipality") ?? "").trim();
   const language = String(formData.get("language") ?? "").trim();
 
-  if (!name || !phone || (role !== "have" && role !== "want")) {
+  if (
+    !name ||
+    !phone ||
+    !state ||
+    !municipality ||
+    (role !== "have" && role !== "want")
+  ) {
     return { ok: false, error: "missing_fields" };
   }
 
@@ -40,7 +49,9 @@ export async function submitWaitlist(formData: FormData): Promise<WaitlistResult
         name,
         whatsapp: phone,
         type,
-        municipality: "",
+        country: country || (language === "en" ? "Brazil" : "Brasil"),
+        state,
+        municipality,
         language: language || "pt",
       }),
     });

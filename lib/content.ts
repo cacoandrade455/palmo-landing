@@ -43,6 +43,11 @@ export type Content = {
     namePlaceholder: string;
     phoneLabel: string;
     phonePlaceholder: string;
+    countryLabel: string;
+    stateLabel: string;
+    statePlaceholder: string;
+    municipalityLabel: string;
+    municipalityPlaceholder: string;
     roleLabel: string;
     roleHave: string;
     roleWant: string;
@@ -133,6 +138,11 @@ export const content: Record<Lang, Content> = {
       namePlaceholder: "Seu nome completo",
       phoneLabel: "WhatsApp",
       phonePlaceholder: "(00) 00000-0000",
+      countryLabel: "País",
+      stateLabel: "Estado",
+      statePlaceholder: "Ex.: Bahia",
+      municipalityLabel: "Município",
+      municipalityPlaceholder: "Ex.: Salvador",
       roleLabel: "Você é...",
       roleHave: "Tenho terra",
       roleWant: "Procuro terra",
@@ -220,6 +230,11 @@ export const content: Record<Lang, Content> = {
       namePlaceholder: "Your full name",
       phoneLabel: "WhatsApp",
       phonePlaceholder: "+55 00 00000-0000",
+      countryLabel: "Country",
+      stateLabel: "State",
+      statePlaceholder: "e.g. Bahia",
+      municipalityLabel: "Municipality",
+      municipalityPlaceholder: "e.g. Salvador",
       roleLabel: "You are...",
       roleHave: "I have land",
       roleWant: "I'm looking for land",

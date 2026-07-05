@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { MessageCircle } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
-import { whatsappLink, siteConfig } from "@/lib/site-config";
+import { whatsappLink } from "@/lib/site-config";
 
 export function Footer() {
   const { t } = useLanguage();
@@ -33,14 +33,6 @@ export function Footer() {
           >
             <MessageCircle className="h-4 w-4" aria-hidden="true" />
             {t.footer.whatsapp}
-          </a>
-          <a
-            href={siteConfig.instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-semibold text-white/70 transition-colors hover:text-white"
-          >
-            {t.footer.instagram}
           </a>
         </div>
       </div>

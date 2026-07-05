@@ -14,7 +14,7 @@ export function Header() {
           <Image
             src="/palmo-logo.svg"
             alt="Palmo"
-            width={140}
+            width={114}
             height={40}
             className="h-8 w-auto"
             priority

@@ -15,7 +15,7 @@ export function Footer() {
           <Image
             src="/palmo-logo-reverse.svg"
             alt="Palmo"
-            width={120}
+            width={89}
             height={40}
             className="h-8 w-auto"
           />

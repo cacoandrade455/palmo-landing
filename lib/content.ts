@@ -32,8 +32,17 @@ export type Content = {
     badges: { title: string; desc: string }[];
   };
   pricing: {
+    eyebrow: string;
     title: string;
-    body: string;
+    subtitle: string;
+    tiers: {
+      name: string;
+      price: string;
+      priceNote?: string;
+      desc: string;
+      highlight?: boolean;
+    }[];
+    footnote: string;
   };
   waitlist: {
     eyebrow: string;
@@ -126,8 +135,30 @@ export const content: Record<Lang, Content> = {
       ],
     },
     pricing: {
-      title: "Grátis até fechar negócio",
-      body: "Anunciar, buscar e negociar não custa nada. A Palmo só ganha quando o seu negócio fecha.",
+      eyebrow: "Preços",
+      title: "Preços transparentes",
+      subtitle:
+        "Você só paga quando fecha negócio. Sem mensalidade e sem taxa de anúncio.",
+      tiers: [
+        {
+          name: "Anunciar e buscar",
+          price: "Grátis",
+          desc: "Cadastre sua terra, veja anúncios, converse e negocie. De graça para os dois lados.",
+        },
+        {
+          name: "Taxa de sucesso",
+          price: "5%",
+          priceNote: "do 1º ano de contrato",
+          desc: "Cobrada só na assinatura e paga por quem vai produzir na terra. Inclui contrato padronizado, verificação e assinatura digital.",
+          highlight: true,
+        },
+        {
+          name: "Monitoramento por satélite",
+          price: "Opcional",
+          desc: "Assinatura para o dono acompanhar como a terra está sendo usada, por imagens de satélite. Cancele quando quiser.",
+        },
+      ],
+      footnote: "Sem taxas escondidas. O dono nunca paga para anunciar.",
     },
     waitlist: {
       eyebrow: "Seja um dos primeiros",
@@ -219,8 +250,30 @@ export const content: Record<Lang, Content> = {
       ],
     },
     pricing: {
-      title: "Free until the deal closes",
-      body: "Listing, searching and negotiating cost nothing. Palmo only earns when your deal closes.",
+      eyebrow: "Pricing",
+      title: "Transparent pricing",
+      subtitle:
+        "You only pay when a deal closes. No subscription, no listing fee.",
+      tiers: [
+        {
+          name: "List & search",
+          price: "Free",
+          desc: "List your land, browse offers, talk and negotiate. Free for both sides.",
+        },
+        {
+          name: "Success fee",
+          price: "5%",
+          priceNote: "of the first-year contract",
+          desc: "Charged only at signing, paid by the party leasing the land. Includes the standardized contract, verification, and digital signature.",
+          highlight: true,
+        },
+        {
+          name: "Satellite monitoring",
+          price: "Optional",
+          desc: "A subscription for owners to track how their land is being used, with satellite imagery. Cancel anytime.",
+        },
+      ],
+      footnote: "No hidden fees. Owners never pay to list.",
     },
     waitlist: {
       eyebrow: "Be one of the first",

@@ -39,7 +39,13 @@ export function PricingBanner() {
                 {tier.name}
               </h3>
               <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-4xl font-extrabold">{tier.price}</span>
+                <span
+                  className={`font-extrabold ${
+                    tier.price.length > 8 ? "text-2xl" : "text-4xl"
+                  }`}
+                >
+                  {tier.price}
+                </span>
                 {tier.priceNote && (
                   <span
                     className={`text-sm font-semibold ${

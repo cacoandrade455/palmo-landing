@@ -154,8 +154,8 @@ export const content: Record<Lang, Content> = {
         },
         {
           name: "Monitoramento por satélite",
-          price: "Opcional",
-          desc: "Assinatura para o dono acompanhar como a terra está sendo usada, por imagens de satélite. Cancele quando quiser.",
+          price: "Assinatura mensal",
+          desc: "Para o dono acompanhar como a terra está sendo usada, por imagens de satélite da Hexagon. Cancele quando quiser.",
         },
       ],
       footnote: "Sem taxas escondidas. O dono nunca paga para anunciar.",
@@ -269,8 +269,8 @@ export const content: Record<Lang, Content> = {
         },
         {
           name: "Satellite monitoring",
-          price: "Optional",
-          desc: "A subscription for owners to track how their land is being used, with satellite imagery. Cancel anytime.",
+          price: "Monthly subscription",
+          desc: "For owners to track how their land is being used, with satellite imagery powered by Hexagon. Cancel anytime.",
         },
       ],
       footnote: "No hidden fees. Owners never pay to list.",

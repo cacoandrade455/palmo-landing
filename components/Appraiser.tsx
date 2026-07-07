@@ -219,7 +219,9 @@ export function Appraiser() {
 
             {/* Regional use comparison */}
             {(() => {
-              const comps = compareUses(query.uf).slice(0, 4);
+              const comps = compareUses(query.uf)
+                .filter((c) => !c.selective || c.purpose === query.purpose)
+                .slice(0, 4);
               if (comps.length < 2) return null;
               const chosen = comps.find((c) => c.purpose === query.purpose);
               const topRealistic = comps.find(

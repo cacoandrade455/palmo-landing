@@ -9,7 +9,7 @@
 export const siteConfig = {
   whatsappNumber: "5561982626428",
   instagramUrl: "", // Instagram off for now — link is hidden in the footer.
-  siteUrl: "https://palmo.com.br", // TODO: replace with the real domain
+  siteUrl: "https://palmo.lat", // live domain (upgrade to palmo.com.br if acquired)
   waitlistEndpoint:
     "https://script.google.com/macros/s/AKfycbzr2ccHvrI1NP1sAyHNtaIX2KUSDv_oqX2qmYc8-9QaRTJmwETDUQwQpPnWgWX4qnyo/exec",
 };

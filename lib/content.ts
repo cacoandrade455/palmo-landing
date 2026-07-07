@@ -49,6 +49,7 @@ export type Content = {
     totalForArea: string;
     consultTitle: string;
     consultBody: string;
+    consultPotential: string;
     disclaimer: string;
     legalNote: string;
     leadTitle: string;
@@ -186,6 +187,8 @@ export const content: Record<Lang, Content> = {
       consultTitle: "Esse mercado é muito específico",
       consultBody:
         "Para esse uso, os valores variam demais de região para região para darmos uma faixa confiável. Deixe seu contato e avisamos quando tivermos propostas reais na sua região.",
+      consultPotential:
+        "Potencial da sua área com {use} — o uso mais valorizado com referência na sua região:",
       disclaimer:
         "Valores de referência baseados em fontes públicas do mercado (sindicatos rurais, IMEA, CNA, consultorias). Não constituem avaliação formal — o valor real depende de solo, logística, água e negociação.",
       legalNote:
@@ -354,6 +357,8 @@ export const content: Record<Lang, Content> = {
       consultTitle: "This market is very specific",
       consultBody:
         "For this use, values vary too much between regions for a reliable range. Leave your contact and we'll let you know when there are real offers in your region.",
+      consultPotential:
+        "Your area's potential with {use} — the highest-value benchmarked use in your region:",
       disclaimer:
         "Reference values based on public market sources (rural unions, IMEA, CNA, consultancies). Not a formal appraisal — actual value depends on soil, logistics, water and negotiation.",
       legalNote:

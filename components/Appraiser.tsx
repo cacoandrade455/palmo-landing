@@ -173,21 +173,18 @@ export function Appraiser() {
                   {a.resultTitle}
                 </h2>
                 <p className="mt-1 text-sm text-deep/60">
-                  {purposeLabel} · {query.municipality}, {query.uf}
+                  {purposeLabel} · {query.municipality}, {query.uf} · {query.hectares} ha
                 </p>
-                <p className="mt-4 text-3xl font-extrabold text-deep sm:text-4xl">
-                  {formatBRL(estimate.minPerHa)} – {formatBRL(estimate.maxPerHa)}
-                  <span className="ml-2 text-base font-semibold text-deep/50">
-                    {a.perHaYear}
+                <p className="mt-4 text-3xl font-extrabold text-deep sm:text-5xl">
+                  {formatBRL(estimate.minPerHa * query.hectares)} –{" "}
+                  {formatBRL(estimate.maxPerHa * query.hectares)}
+                  <span className="ml-2 text-lg font-bold text-deep/50">
+                    /{lang === "en" ? "year" : "ano"}
                   </span>
                 </p>
-                <p className="mt-2 text-base text-deep/70">
-                  {a.totalForArea}{" "}
-                  <strong className="text-deep">
-                    {formatBRL(estimate.minPerHa * query.hectares)} –{" "}
-                    {formatBRL(estimate.maxPerHa * query.hectares)}
-                  </strong>{" "}
-                  / {lang === "en" ? "year" : "ano"} ({query.hectares} ha)
+                <p className="mt-2 text-base font-semibold text-deep/70">
+                  {formatBRL(estimate.minPerHa)} – {formatBRL(estimate.maxPerHa)}{" "}
+                  {a.perHaYear}
                 </p>
               </>
             ) : (
@@ -196,6 +193,27 @@ export function Appraiser() {
                 <p className="mt-2 text-sm leading-relaxed text-deep/70">
                   {a.consultBody}
                 </p>
+                {(() => {
+                  const comps = compareUses(query.uf);
+                  const top = comps[0];
+                  if (!top) return null;
+                  const labelOf = (p: string) =>
+                    t.waitlist.purposeOptions.find((o) => o.value === p)?.label ?? p;
+                  return (
+                    <>
+                      <p className="mt-4 text-sm font-semibold text-deep/70">
+                        {a.consultPotential.replace("{use}", labelOf(top.purpose))}
+                      </p>
+                      <p className="mt-2 text-3xl font-extrabold text-deep sm:text-5xl">
+                        {formatBRL(top.minPerHa * query.hectares)} –{" "}
+                        {formatBRL(top.maxPerHa * query.hectares)}
+                        <span className="ml-2 text-lg font-bold text-deep/50">
+                          /{lang === "en" ? "year" : "ano"}
+                        </span>
+                      </p>
+                    </>
+                  );
+                })()}
               </>
             )}
 

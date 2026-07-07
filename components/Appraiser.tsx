@@ -7,6 +7,7 @@ import { CheckCircle2, Info } from "lucide-react";
 import { submitWaitlist, type WaitlistResult } from "@/app/actions";
 import { useLanguage } from "@/lib/language-context";
 import {
+  compareUses,
   estimateLease,
   formatBRL,
   UFS,
@@ -197,6 +198,71 @@ export function Appraiser() {
                 </p>
               </>
             )}
+
+            {/* Regional use comparison */}
+            {(() => {
+              const comps = compareUses(query.uf).slice(0, 4);
+              if (comps.length < 2) return null;
+              const chosen = comps.find((c) => c.purpose === query.purpose);
+              const top = comps[0];
+              const showUpsell =
+                estimate.kind === "range" &&
+                chosen &&
+                top.purpose !== query.purpose &&
+                top.mid >= chosen.mid * 1.5;
+              const labelOf = (p: string) =>
+                t.waitlist.purposeOptions.find((o) => o.value === p)?.label ?? p;
+              return (
+                <div className="mt-6">
+                  <h3 className="text-sm font-bold uppercase tracking-wide text-deep/60">
+                    {a.compareTitle}
+                  </h3>
+                  <ul className="mt-3 space-y-2">
+                    {comps.map((c) => {
+                      const isChosen = c.purpose === query.purpose;
+                      return (
+                        <li
+                          key={c.purpose}
+                          className={`flex items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-sm ${
+                            isChosen
+                              ? "bg-primary/10 font-bold text-deep ring-1 ring-primary/30"
+                              : "bg-white text-deep/75"
+                          }`}
+                        >
+                          <span>
+                            {labelOf(c.purpose)}
+                            {isChosen && (
+                              <span className="ml-2 rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-white">
+                                {a.compareYourChoice}
+                              </span>
+                            )}
+                          </span>
+                          <span className="whitespace-nowrap font-semibold">
+                            {formatBRL(c.minPerHa)}–{formatBRL(c.maxPerHa)}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  {showUpsell && chosen && (
+                    <p className="mt-3 rounded-xl bg-accent/20 px-4 py-3 text-sm font-semibold text-deep">
+                      💡{" "}
+                      {a.compareUpsell
+                        .replace("{use}", labelOf(top.purpose))
+                        .replace(
+                          "{ratio}",
+                          (Math.round((top.mid / chosen.mid) * 10) / 10).toLocaleString(
+                            lang === "en" ? "en-US" : "pt-BR",
+                          ),
+                        )}
+                    </p>
+                  )}
+                  <p className="mt-2 text-xs leading-relaxed text-deep/55">
+                    {a.compareCaveat}
+                  </p>
+                </div>
+              );
+            })()}
 
             <p className="mt-5 flex gap-2 text-xs leading-relaxed text-deep/55">
               <Info className="h-4 w-4 shrink-0" aria-hidden="true" />

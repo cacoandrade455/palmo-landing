@@ -54,6 +54,10 @@ export type Content = {
     leadTitle: string;
     leadSubtitle: string;
     heroLink: string;
+    compareTitle: string;
+    compareYourChoice: string;
+    compareUpsell: string;
+    compareCaveat: string;
   };
   pricing: {
     eyebrow: string;
@@ -189,6 +193,12 @@ export const content: Record<Lang, Content> = {
       leadTitle: "Quer receber propostas reais nessa faixa?",
       leadSubtitle: "Entre na lista de espera — é grátis.",
       heroLink: "Quanto vale minha terra? →",
+      compareTitle: "Outros usos na sua região",
+      compareYourChoice: "sua escolha",
+      compareUpsell:
+        "Na sua região, terras para {use} chegam a arrendar por até {ratio}x o valor da sua escolha atual.",
+      compareCaveat:
+        "A comparação usa faixas regionais de mercado. Se um uso mais valorizado é viável na sua terra depende de solo, relevo, água e logística — a Palmo pode ajudar a verificar isso.",
     },
     pricing: {
       eyebrow: "Preços",
@@ -351,6 +361,12 @@ export const content: Record<Lang, Content> = {
       leadTitle: "Want to receive real offers in this range?",
       leadSubtitle: "Join the waitlist — it's free.",
       heroLink: "How much is my land worth? →",
+      compareTitle: "Other uses in your region",
+      compareYourChoice: "your choice",
+      compareUpsell:
+        "In your region, land for {use} leases for up to {ratio}x the value of your current choice.",
+      compareCaveat:
+        "This comparison uses regional market ranges. Whether a higher-value use is viable on your land depends on soil, terrain, water and logistics — Palmo can help you verify that.",
     },
     pricing: {
       eyebrow: "Pricing",

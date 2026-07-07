@@ -84,6 +84,34 @@ export function estimateLease(purpose: string, uf: string): Estimate {
   return { kind: "range", minPerHa: r.min, maxPerHa: r.max, note: r.note };
 }
 
+export type UseComparison = {
+  purpose: string;
+  minPerHa: number;
+  maxPerHa: number;
+  /** midpoint used for ranking */
+  mid: number;
+};
+
+/**
+ * All benchmarked uses for a UF, ranked by midpoint value (highest first).
+ * Only uses with actual regional/fallback data are included — uses without
+ * defensible benchmarks never appear in comparisons.
+ */
+export function compareUses(uf: string): UseComparison[] {
+  const out: UseComparison[] = [];
+  for (const [purpose, byUf] of Object.entries(table)) {
+    const r = byUf[uf] ?? byUf.default;
+    if (!r) continue;
+    out.push({
+      purpose,
+      minPerHa: r.min,
+      maxPerHa: r.max,
+      mid: (r.min + r.max) / 2,
+    });
+  }
+  return out.sort((a, b) => b.mid - a.mid);
+}
+
 export const UFS = [
   "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS",
   "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC",

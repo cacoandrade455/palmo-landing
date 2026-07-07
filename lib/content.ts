@@ -59,6 +59,7 @@ export type Content = {
     compareYourChoice: string;
     compareUpsell: string;
     compareCaveat: string;
+    selectiveTag: string;
   };
   pricing: {
     eyebrow: string;
@@ -202,6 +203,7 @@ export const content: Record<Lang, Content> = {
         "Na sua região, terras para {use} chegam a arrendar por até {ratio}x o valor da sua escolha atual.",
       compareCaveat:
         "A comparação usa faixas regionais de mercado. Se um uso mais valorizado é viável na sua terra depende de solo, relevo, água e logística — a Palmo pode ajudar a verificar isso.",
+      selectiveTag: "mercado seletivo — depende de projeto e rede elétrica na região",
     },
     pricing: {
       eyebrow: "Preços",
@@ -372,6 +374,7 @@ export const content: Record<Lang, Content> = {
         "In your region, land for {use} leases for up to {ratio}x the value of your current choice.",
       compareCaveat:
         "This comparison uses regional market ranges. Whether a higher-value use is viable on your land depends on soil, terrain, water and logistics — Palmo can help you verify that.",
+      selectiveTag: "selective market — depends on projects and grid access in the region",
     },
     pricing: {
       eyebrow: "Pricing",

@@ -195,7 +195,7 @@ export function Appraiser() {
                 </p>
                 {(() => {
                   const comps = compareUses(query.uf);
-                  const top = comps[0];
+                  const top = comps.find((c) => !c.selective) ?? comps[0];
                   if (!top) return null;
                   const labelOf = (p: string) =>
                     t.waitlist.purposeOptions.find((o) => o.value === p)?.label ?? p;
@@ -222,12 +222,14 @@ export function Appraiser() {
               const comps = compareUses(query.uf).slice(0, 4);
               if (comps.length < 2) return null;
               const chosen = comps.find((c) => c.purpose === query.purpose);
-              const top = comps[0];
+              const topRealistic = comps.find(
+                (c) => !c.selective && c.purpose !== query.purpose,
+              );
               const showUpsell =
                 estimate.kind === "range" &&
                 chosen &&
-                top.purpose !== query.purpose &&
-                top.mid >= chosen.mid * 1.5;
+                !!topRealistic &&
+                topRealistic.mid >= chosen.mid * 1.5;
               const labelOf = (p: string) =>
                 t.waitlist.purposeOptions.find((o) => o.value === p)?.label ?? p;
               return (
@@ -254,6 +256,11 @@ export function Appraiser() {
                                 {a.compareYourChoice}
                               </span>
                             )}
+                            {c.selective && (
+                              <span className="mt-0.5 block text-xs font-normal text-deep/50">
+                                {a.selectiveTag}
+                              </span>
+                            )}
                           </span>
                           <span className="whitespace-nowrap font-semibold">
                             {formatBRL(c.minPerHa)}–{formatBRL(c.maxPerHa)}
@@ -262,16 +269,16 @@ export function Appraiser() {
                       );
                     })}
                   </ul>
-                  {showUpsell && chosen && (
+                  {showUpsell && chosen && topRealistic && (
                     <p className="mt-3 rounded-xl bg-accent/20 px-4 py-3 text-sm font-semibold text-deep">
                       💡{" "}
                       {a.compareUpsell
-                        .replace("{use}", labelOf(top.purpose))
+                        .replace("{use}", labelOf(topRealistic.purpose))
                         .replace(
                           "{ratio}",
-                          (Math.round((top.mid / chosen.mid) * 10) / 10).toLocaleString(
-                            lang === "en" ? "en-US" : "pt-BR",
-                          ),
+                          (
+                            Math.round((topRealistic.mid / chosen.mid) * 10) / 10
+                          ).toLocaleString(lang === "en" ? "en-US" : "pt-BR"),
                         )}
                     </p>
                   )}

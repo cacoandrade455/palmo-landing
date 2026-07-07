@@ -20,7 +20,7 @@
 
 export const SACA_SOJA_BRL = 120; // reference price used for conversions
 
-type Range = { min: number; max: number; note?: "sacas" | "arroba" | "atr" };
+type Range = { min: number; max: number; note?: "sacas" | "arroba" | "atr"; selective?: boolean };
 
 // state groups
 const SUL = ["PR", "SC", "RS"];
@@ -67,8 +67,9 @@ const table: Record<string, Record<string, Range>> = {
     ...group([...SUDESTE, ...CO, ...SUL, "BA", "CE", "RN", "PB", "PE", "PI"], {
       min: 1500,
       max: 6000,
+      selective: true,
     }),
-    default: { min: 1000, max: 5000 },
+    default: { min: 1000, max: 5000, selective: true },
   },
 };
 
@@ -90,12 +91,16 @@ export type UseComparison = {
   maxPerHa: number;
   /** midpoint used for ranking */
   mid: number;
+  /** opportunistic markets (e.g. solar): real prices, but site-dependent demand */
+  selective: boolean;
 };
 
 /**
  * All benchmarked uses for a UF, ranked by midpoint value (highest first).
  * Only uses with actual regional/fallback data are included — uses without
- * defensible benchmarks never appear in comparisons.
+ * defensible benchmarks never appear in comparisons. Selective markets are
+ * flagged so the UI can annotate them and keep them out of headline
+ * recommendations.
  */
 export function compareUses(uf: string): UseComparison[] {
   const out: UseComparison[] = [];
@@ -107,6 +112,7 @@ export function compareUses(uf: string): UseComparison[] {
       minPerHa: r.min,
       maxPerHa: r.max,
       mid: (r.min + r.max) / 2,
+      selective: !!r.selective,
     });
   }
   return out.sort((a, b) => b.mid - a.mid);

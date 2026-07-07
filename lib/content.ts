@@ -31,6 +31,30 @@ export type Content = {
     title: string;
     badges: { title: string; desc: string }[];
   };
+  appraiser: {
+    navLabel: string;
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    stateLabel: string;
+    municipalityLabel: string;
+    municipalityPlaceholder: string;
+    hectaresLabel: string;
+    hectaresPlaceholder: string;
+    purposeLabel: string;
+    purposePlaceholder: string;
+    submit: string;
+    resultTitle: string;
+    perHaYear: string;
+    totalForArea: string;
+    consultTitle: string;
+    consultBody: string;
+    disclaimer: string;
+    legalNote: string;
+    leadTitle: string;
+    leadSubtitle: string;
+    heroLink: string;
+  };
   pricing: {
     eyebrow: string;
     title: string;
@@ -58,8 +82,12 @@ export type Content = {
     municipalityLabel: string;
     municipalityPlaceholder: string;
     roleLabel: string;
+    rolePlaceholder: string;
     roleHave: string;
     roleWant: string;
+    purposeLabel: string;
+    purposePlaceholder: string;
+    purposeOptions: { value: string; label: string }[];
     submit: string;
     submitting: string;
     success: string;
@@ -134,6 +162,34 @@ export const content: Record<Lang, Content> = {
         },
       ],
     },
+    appraiser: {
+      navLabel: "Quanto vale",
+      eyebrow: "Calculadora",
+      title: "Quanto vale sua terra parada?",
+      subtitle:
+        "Descubra em 1 minuto a faixa de valores de arrendamento praticada na sua região.",
+      stateLabel: "Estado",
+      municipalityLabel: "Município",
+      municipalityPlaceholder: "Ex.: Rio Verde",
+      hectaresLabel: "Área (hectares)",
+      hectaresPlaceholder: "Ex.: 128",
+      purposeLabel: "Uso da terra",
+      purposePlaceholder: "Selecione o uso...",
+      submit: "Calcular valor",
+      resultTitle: "Faixa de referência para sua terra",
+      perHaYear: "por hectare/ano",
+      totalForArea: "Para sua área, algo em torno de",
+      consultTitle: "Esse mercado é muito específico",
+      consultBody:
+        "Para esse uso, os valores variam demais de região para região para darmos uma faixa confiável. Deixe seu contato e avisamos quando tivermos propostas reais na sua região.",
+      disclaimer:
+        "Valores de referência baseados em fontes públicas do mercado (sindicatos rurais, IMEA, CNA, consultorias). Não constituem avaliação formal — o valor real depende de solo, logística, água e negociação.",
+      legalNote:
+        "Pela lei (Estatuto da Terra), o arrendamento é limitado a 15% do valor do imóvel por ano (30% em zonas de exploração intensiva).",
+      leadTitle: "Quer receber propostas reais nessa faixa?",
+      leadSubtitle: "Entre na lista de espera — é grátis.",
+      heroLink: "Quanto vale minha terra? →",
+    },
     pricing: {
       eyebrow: "Preços",
       title: "Preços transparentes",
@@ -175,8 +231,27 @@ export const content: Record<Lang, Content> = {
       municipalityLabel: "Município",
       municipalityPlaceholder: "Ex.: Salvador",
       roleLabel: "Você é...",
+      rolePlaceholder: "Selecione...",
       roleHave: "Tenho terra",
       roleWant: "Procuro terra",
+      purposeLabel: "Finalidade de uso da terra",
+      purposePlaceholder: "Selecione a finalidade...",
+      purposeOptions: [
+        { value: "graos", label: "Grãos (soja, milho, algodão...)" },
+        { value: "cana", label: "Cana-de-açúcar" },
+        { value: "lavoura_permanente", label: "Lavoura permanente (café, citros, cacau...)" },
+        { value: "fruticultura", label: "Fruticultura" },
+        { value: "horticultura", label: "Horticultura e hortaliças" },
+        { value: "pecuaria_corte", label: "Pecuária de corte" },
+        { value: "pecuaria_leite", label: "Pecuária leiteira" },
+        { value: "avicultura_suinocultura", label: "Avicultura / suinocultura" },
+        { value: "aquicultura", label: "Aquicultura" },
+        { value: "silvicultura", label: "Silvicultura (eucalipto, pinus...)" },
+        { value: "reflorestamento_carbono", label: "Reflorestamento / crédito de carbono" },
+        { value: "energia_solar", label: "Energia solar" },
+        { value: "energia_eolica", label: "Energia eólica" },
+        { value: "outro", label: "Outro" },
+      ],
       submit: "Quero entrar na lista",
       submitting: "Enviando...",
       success: "Recebido! Entraremos em contato pelo WhatsApp.",
@@ -249,6 +324,34 @@ export const content: Record<Lang, Content> = {
         },
       ],
     },
+    appraiser: {
+      navLabel: "Land value",
+      eyebrow: "Calculator",
+      title: "How much is your idle land worth?",
+      subtitle:
+        "Find out in 1 minute the lease value range practiced in your region.",
+      stateLabel: "State",
+      municipalityLabel: "Municipality",
+      municipalityPlaceholder: "e.g. Rio Verde",
+      hectaresLabel: "Area (hectares)",
+      hectaresPlaceholder: "e.g. 128",
+      purposeLabel: "Land use",
+      purposePlaceholder: "Select a use...",
+      submit: "Calculate value",
+      resultTitle: "Reference range for your land",
+      perHaYear: "per hectare/year",
+      totalForArea: "For your area, roughly",
+      consultTitle: "This market is very specific",
+      consultBody:
+        "For this use, values vary too much between regions for a reliable range. Leave your contact and we'll let you know when there are real offers in your region.",
+      disclaimer:
+        "Reference values based on public market sources (rural unions, IMEA, CNA, consultancies). Not a formal appraisal — actual value depends on soil, logistics, water and negotiation.",
+      legalNote:
+        "By law (Estatuto da Terra), rural rent is capped at 15% of the property value per year (30% in intensive-use zones).",
+      leadTitle: "Want to receive real offers in this range?",
+      leadSubtitle: "Join the waitlist — it's free.",
+      heroLink: "How much is my land worth? →",
+    },
     pricing: {
       eyebrow: "Pricing",
       title: "Transparent pricing",
@@ -289,8 +392,27 @@ export const content: Record<Lang, Content> = {
       municipalityLabel: "Municipality",
       municipalityPlaceholder: "e.g. Salvador",
       roleLabel: "You are...",
+      rolePlaceholder: "Select...",
       roleHave: "I have land",
       roleWant: "I'm looking for land",
+      purposeLabel: "Intended land use",
+      purposePlaceholder: "Select a purpose...",
+      purposeOptions: [
+        { value: "graos", label: "Grains (soy, corn, cotton...)" },
+        { value: "cana", label: "Sugarcane" },
+        { value: "lavoura_permanente", label: "Permanent crops (coffee, citrus, cocoa...)" },
+        { value: "fruticultura", label: "Fruit farming" },
+        { value: "horticultura", label: "Horticulture & vegetables" },
+        { value: "pecuaria_corte", label: "Beef cattle" },
+        { value: "pecuaria_leite", label: "Dairy farming" },
+        { value: "avicultura_suinocultura", label: "Poultry / swine" },
+        { value: "aquicultura", label: "Aquaculture" },
+        { value: "silvicultura", label: "Forestry (eucalyptus, pine...)" },
+        { value: "reflorestamento_carbono", label: "Reforestation / carbon credits" },
+        { value: "energia_solar", label: "Solar energy" },
+        { value: "energia_eolica", label: "Wind energy" },
+        { value: "outro", label: "Other" },
+      ],
       submit: "Join the waitlist",
       submitting: "Sending...",
       success: "Got it! We'll reach out on WhatsApp.",

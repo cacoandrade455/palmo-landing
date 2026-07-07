@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { PlotIcon } from "./PlotIcon";
@@ -40,6 +41,13 @@ export function Hero() {
             <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
             {t.hero.trustLine}
           </p>
+
+          <Link
+            href="/quanto-vale"
+            className="mt-3 inline-block text-sm font-bold text-deep/70 underline decoration-accent decoration-2 underline-offset-4 transition-colors hover:text-deep"
+          >
+            {t.appraiser.heroLink}
+          </Link>
         </div>
 
         <div className="relative">

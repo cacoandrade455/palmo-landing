@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useLanguage } from "@/lib/language-context";
 import { LangToggle } from "./LangToggle";
 
@@ -22,25 +23,28 @@ export function Header() {
         </a>
 
         <nav className="hidden items-center gap-8 text-sm font-semibold text-deep/70 md:flex">
-          <a href="#como-funciona" className="transition-colors hover:text-deep">
+          <Link href="/#como-funciona" className="transition-colors hover:text-deep">
             {t.header.navHow}
-          </a>
-          <a href="#confianca" className="transition-colors hover:text-deep">
+          </Link>
+          <Link href="/#confianca" className="transition-colors hover:text-deep">
             {t.header.navTrust}
-          </a>
-          <a href="#precos" className="transition-colors hover:text-deep">
+          </Link>
+          <Link href="/#precos" className="transition-colors hover:text-deep">
             {t.header.navPricing}
-          </a>
+          </Link>
+          <Link href="/quanto-vale" className="font-bold text-primary transition-colors hover:text-primary-dark">
+            {t.appraiser.navLabel}
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">
           <LangToggle />
-          <a
-            href="#lista-de-espera"
+          <Link
+            href="/#lista-de-espera"
             className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
           >
             {t.header.cta}
-          </a>
+          </Link>
         </div>
       </div>
     </header>

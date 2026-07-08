@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
+import type { User } from "@supabase/supabase-js";
 import { useLanguage } from "@/lib/language-context";
+import { getSupabase } from "@/lib/supabase";
 import { UFS } from "@/lib/appraisal-data";
 import { createListing } from "./actions";
 
@@ -21,6 +23,22 @@ export function ListingForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  // undefined = still checking; null = signed out; User = signed in
+  const [user, setUser] = useState<User | null | undefined>(undefined);
+  const supabaseReady = !!getSupabase();
+  const authChecked = !supabaseReady || user !== undefined;
+
+  useEffect(() => {
+    const supabase = getSupabase();
+    if (!supabase) return;
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user ?? null);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (!ufSel || muniByUf[ufSel]) return;
@@ -127,6 +145,33 @@ export function ListingForm() {
           className="mt-6 rounded-full bg-primary px-6 py-3 text-base font-bold text-white hover:bg-primary-dark"
         >
           {lang === "en" ? "Go to my account" : "Ir para minha conta"}
+        </button>
+      </div>
+    );
+  }
+
+  if (authChecked && !user) {
+    return (
+      <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
+        <h2 className="text-xl font-extrabold text-deep">
+          {lang === "en" ? "Sign in to list your land" : "Entre para anunciar sua terra"}
+        </h2>
+        <p className="mt-2 text-deep/60">
+          {lang === "en"
+            ? "You need an account to create a listing."
+            : "Você precisa de uma conta para criar um anúncio."}
+        </p>
+        <button
+          onClick={() => {
+            const supabase = getSupabase();
+            supabase?.auth.signInWithOAuth({
+              provider: "google",
+              options: { redirectTo: `${window.location.origin}/app/anunciar` },
+            });
+          }}
+          className="mt-6 rounded-full bg-primary px-6 py-3 text-base font-bold text-white hover:bg-primary-dark"
+        >
+          {lang === "en" ? "Sign in with Google" : "Entrar com Google"}
         </button>
       </div>
     );

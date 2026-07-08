@@ -1,13 +1,13 @@
 import { Header } from "@/components/Header";
-import { ListingForm } from "./ListingForm";
+import { Marketplace } from "./Marketplace";
 
-export default function AnunciarPage() {
+export default function ExplorarPage() {
   return (
     <>
       <Header />
       <main className="bg-neutral/40 py-12">
-        <div className="mx-auto max-w-2xl px-6">
-          <ListingForm />
+        <div className="mx-auto max-w-4xl px-6">
+          <Marketplace />
         </div>
       </main>
     </>

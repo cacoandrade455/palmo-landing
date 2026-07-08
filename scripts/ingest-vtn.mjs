@@ -131,6 +131,12 @@ async function main() {
       const n = Object.keys(rows).length;
       perYear[year] = n;
       console.log(`  ${n} municipality rows.`);
+      if (n < 100) {
+        console.log(`  WARNING ${year} parsed poorly - its layout likely differs. Excerpt for diagnosis:`);
+        console.log("  ---8<---");
+        console.log("  " + textSample.slice(0, 1200).replace(/\s+/g, " "));
+        console.log("  --->8---");
+      }
       let added = 0;
       for (const [key, row] of Object.entries(rows)) {
         if (!data[key]) {

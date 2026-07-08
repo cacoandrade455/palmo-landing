@@ -13,6 +13,7 @@ import {
   UFS,
   type Estimate,
 } from "@/lib/appraisal-data";
+import { cropLandLeaseRef } from "@/lib/appraisal-data";
 import { estimateFromVTN } from "@/lib/vtn";
 
 type Query = {
@@ -247,7 +248,38 @@ export function Appraiser() {
                   </p>
                 )}
                 {(() => {
+                  const cropRef = query.crop
+                    ? cropLandLeaseRef(query.crop, query.uf)
+                    : null;
                   const vtn = estimateFromVTN(query.uf, query.municipality, query.purpose);
+                  if (cropRef) {
+                    return (
+                      <>
+                        <p className="mt-4 text-sm font-semibold text-deep/70">
+                          📈{" "}
+                          {a.cropRefPotential
+                            .replace("{source}", cropRef.sourceNote)
+                            .replace("{landMin}", String(Math.round(cropRef.landMin / 1000)))
+                            .replace("{landMax}", String(Math.round(cropRef.landMax / 1000)))}
+                        </p>
+                        <p className="mt-2 text-3xl font-extrabold text-deep sm:text-5xl">
+                          {formatBRL(cropRef.minPerHa * query.hectares)} –{" "}
+                          {formatBRL(cropRef.maxPerHa * query.hectares)}
+                          <span className="ml-2 text-lg font-bold text-deep/50">
+                            /{lang === "en" ? "year" : "ano"}
+                          </span>
+                        </p>
+                        {vtn && (
+                          <p className="mt-2 text-sm font-semibold text-deep/60">
+                            🏛️{" "}
+                            {(vtn.approx ? a.vtnLineApprox : a.vtnLine)
+                              .replace("{year}", String(vtn.year))
+                              .replace("{value}", formatBRL(vtn.vtnPerHa))}
+                          </p>
+                        )}
+                      </>
+                    );
+                  }
                   if (vtn) {
                     return (
                       <>

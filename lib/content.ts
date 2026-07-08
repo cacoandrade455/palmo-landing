@@ -62,6 +62,7 @@ export type Content = {
     selectiveTag: string;
     cropLabel: string;
     cropPlaceholder: string;
+    cropRefPotential: string;
     vtnPotential: string;
     vtnPotentialApprox: string;
     vtnLine: string;
@@ -214,6 +215,8 @@ export const content: Record<Lang, Content> = {
       selectiveTag: "mercado seletivo — depende de projeto e rede elétrica na região",
       cropLabel: "Cultura específica (opcional)",
       cropPlaceholder: "Todas / não sei ainda",
+      cropRefPotential:
+        "Estimativa com base no valor de mercado de {source} — R$ {landMin} a {landMax} mil/ha — convertido a 2,5–6% ao ano:",
       vtnPotential:
         "Estimativa pelo valor oficial da terra no seu município (VTN {year} da Receita Federal × 2,5–6% ao ano):",
       vtnPotentialApprox:
@@ -434,6 +437,8 @@ export const content: Record<Lang, Content> = {
       selectiveTag: "selective market — depends on projects and grid access in the region",
       cropLabel: "Specific crop (optional)",
       cropPlaceholder: "All / not sure yet",
+      cropRefPotential:
+        "Estimate based on the market value of {source} — R$ {landMin} to {landMax} thousand/ha — converted at 2.5–6%/year:",
       vtnPotential:
         "Estimate from your municipality's official land value (Federal Revenue VTN {year} × 2.5–6%/year):",
       vtnPotentialApprox:

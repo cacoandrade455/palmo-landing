@@ -86,6 +86,55 @@ const cropOverrides: Record<string, Record<string, Range>> = {
   },
 };
 
+/**
+ * Crop-specific LAND VALUE references (R$/ha) from market/sector sources,
+ * converted to lease equivalents at 2.5%–6%/year — used when a specific
+ * crop is selected and no direct lease benchmark exists.
+ *
+ * SOURCES per entry (add new crops WITH a source, never from memory):
+ * - cacau/BA: formed cocoa farms in southern Bahia listed at
+ *   R$10.000–60.000/ha (sector portals e.g. tudosobrecacau.com.br and
+ *   MF Rural listings, 2026).
+ */
+export type CropLandRef = {
+  landMin: number;
+  landMax: number;
+  sourceNote: string;
+};
+
+const cropLandRefs: Record<string, Record<string, CropLandRef>> = {
+  cacau: {
+    BA: {
+      landMin: 10000,
+      landMax: 60000,
+      sourceNote: "terras de cacau no sul da Bahia (anúncios e portais do setor)",
+    },
+  },
+};
+
+const REF_LOW = 0.025;
+const REF_HIGH = 0.06;
+
+export type CropLeaseRef = {
+  minPerHa: number;
+  maxPerHa: number;
+  landMin: number;
+  landMax: number;
+  sourceNote: string;
+};
+
+export function cropLandLeaseRef(crop: string, uf: string): CropLeaseRef | null {
+  const r = cropLandRefs[crop]?.[uf] ?? cropLandRefs[crop]?.default;
+  if (!r) return null;
+  return {
+    minPerHa: Math.round(r.landMin * REF_LOW),
+    maxPerHa: Math.round(r.landMax * REF_HIGH),
+    landMin: r.landMin,
+    landMax: r.landMax,
+    sourceNote: r.sourceNote,
+  };
+}
+
 export type Estimate =
   | { kind: "range"; minPerHa: number; maxPerHa: number; note?: Range["note"] }
   | { kind: "consult" };

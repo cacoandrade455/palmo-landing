@@ -1,0 +1,58 @@
+"use server";
+
+import { getServerSupabase } from "@/lib/supabase-server";
+
+export type CreateListingResult =
+  | { ok: true; id: string }
+  | { ok: false; error: string };
+
+export async function createListing(
+  formData: FormData,
+): Promise<CreateListingResult> {
+  const supabase = await getServerSupabase();
+  if (!supabase) return { ok: false, error: "unconfigured" };
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "not_signed_in" };
+
+  const title = String(formData.get("title") ?? "").trim();
+  const state = String(formData.get("state") ?? "").trim();
+  const municipality = String(formData.get("municipality") ?? "").trim();
+  const hectares = Number(formData.get("hectares") ?? 0);
+  const purpose = String(formData.get("purpose") ?? "").trim();
+  const crop = String(formData.get("crop") ?? "").trim() || null;
+  const priceRaw = String(formData.get("price_per_ha_year") ?? "").trim();
+  const price_per_ha_year = priceRaw ? Number(priceRaw) : null;
+  const description = String(formData.get("description") ?? "").trim() || null;
+  const has_water = formData.get("has_water") === "on";
+  const car_number = String(formData.get("car_number") ?? "").trim() || null;
+  const publish = formData.get("publish") === "true";
+
+  if (!title || !state || !municipality || !purpose || !hectares || hectares <= 0) {
+    return { ok: false, error: "missing_fields" };
+  }
+
+  const { data, error } = await supabase
+    .from("listings")
+    .insert({
+      owner_id: user.id,
+      title,
+      status: publish ? "active" : "draft",
+      state,
+      municipality,
+      hectares,
+      purpose,
+      crop,
+      price_per_ha_year,
+      description,
+      has_water,
+      car_number,
+    })
+    .select("id")
+    .single();
+
+  if (error) return { ok: false, error: error.message };
+  return { ok: true, id: data.id };
+}

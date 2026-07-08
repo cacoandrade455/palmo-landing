@@ -7,7 +7,7 @@
  * produce per-municipality estimates.
  *
  * HOW TO RUN (from the project root):
- *   1. npm install pdf-parse
+ *   1. npm install unpdf --save-dev
  *   2. node scripts/ingest-vtn.mjs
  *   3. Check the printed stats (should report ~2,900 municipalities).
  *   4. git add lib/vtn-data.json && commit && push
@@ -17,10 +17,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { createRequire } from "node:module";
-
-const require = createRequire(import.meta.url);
-const pdfParse = require("pdf-parse/lib/pdf-parse.js");
+import { extractText, getDocumentProxy } from "unpdf";
 
 const PDF_URL =
   "https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/documentos-tecnicos/vtn/planilha-vtn-2025-para-publicacao-6.pdf/@@download/file";
@@ -60,41 +57,41 @@ async function main() {
   const buf = Buffer.from(await res.arrayBuffer());
   console.log(`Downloaded ${(buf.length / 1024).toFixed(0)} KB. Parsing…`);
 
-  const { text } = await pdfParse(buf);
-  const lines = text.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+  const pdf = await getDocumentProxy(new Uint8Array(buf));
+  const { text } = await extractText(pdf, { mergePages: true });
 
-  // Expected row shape (columns per IN RFB 1.877/2019):
-  //   UF MUNICÍPIO <lavoura boa> <lavoura regular> <lavoura restrita>
-  //   <pastagem plantada> <silvicultura> [<preservação>]
-  // Numbers in pt-BR format. Some cells may be "-" (not reported).
-  const rowRe =
-    /^([A-Z]{2})\s+(.+?)\s+((?:(?:[\d.]+,\d{2}|-|NI)\s*){4,6})$/;
+  // pdf.js merges text items with spaces (no reliable line breaks), so rows
+  // are matched globally across the whole text:
+  //   UF MUNICÍPIO n n n n [n [n]]
+  // where each n is a pt-BR number (1.234,56), "-" or "NI".
+  const NUM = String.raw`(?:\d{1,3}(?:\.\d{3})*,\d{2}|-|NI)`;
+  const rowRe = new RegExp(
+    String.raw`\b([A-Z]{2})\s+([A-ZÀ-ÚÇ][A-ZÀ-ÚÇ0-9'’.\- ]{1,60}?)\s+(${NUM}(?:\s+${NUM}){3,5})(?=\s|$)`,
+    "g",
+  );
 
   const data = {};
   let rows = 0;
   const perUf = {};
   const samples = [];
 
-  for (const line of lines) {
-    const m = line.match(rowRe);
-    if (!m) continue;
+  let m;
+  while ((m = rowRe.exec(text)) !== null) {
     const uf = m[1];
-    if (!UFS.has(uf)) continue;
+    if (!UFS.has(uf)) {
+      // A bogus match (e.g. header noise) may have swallowed a real row that
+      // starts inside it — rescan from just past the bogus UF token.
+      rowRe.lastIndex = m.index + m[1].length;
+      continue;
+    }
     const name = normalizeName(m[2]);
     if (!name || name.length < 2) continue;
     const nums = m[3].trim().split(/\s+/).map(parseBRNumber);
-    // pad to 6 columns
     while (nums.length < 6) nums.push(null);
     const [boa, regular, restrita, pastagem, silvicultura] = nums;
     if (![boa, regular, restrita, pastagem, silvicultura].some((v) => v)) continue;
 
-    data[`${uf}|${name}`] = {
-      boa,
-      regular,
-      restrita,
-      pastagem,
-      silvicultura,
-    };
+    data[`${uf}|${name}`] = { boa, regular, restrita, pastagem, silvicultura };
     rows++;
     perUf[uf] = (perUf[uf] || 0) + 1;
     if (samples.length < 5) samples.push(`${uf} ${name}: boa=${boa} pastagem=${pastagem}`);
@@ -107,10 +104,10 @@ async function main() {
   if (rows < 1000) {
     console.error(
       "\n⚠️  Fewer than 1.000 rows parsed — the PDF layout probably differs from " +
-        "what this parser expects. DO NOT commit the output. Send the lines below " +
+        "what this parser expects. DO NOT commit the output. Send the excerpt below " +
         "to adjust the parser:\n",
     );
-    console.error(lines.slice(0, 40).join("\n"));
+    console.error(text.slice(0, 3000));
     process.exit(1);
   }
 

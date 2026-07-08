@@ -18,7 +18,11 @@
  * the disclaimer.
  */
 
-export const SACA_SOJA_BRL = 120; // reference price used for conversions
+import { price } from "./prices";
+
+// Live reference price (from lib/prices.json, refreshed monthly). Falls back
+// to 130 if the price book is unavailable.
+export const SACA_SOJA_BRL = price("saca_soja") || 130;
 
 type Range = { min: number; max: number; note?: "sacas" | "arroba" | "atr"; selective?: boolean };
 
@@ -67,7 +71,8 @@ const table: Record<string, Record<string, Range>> = {
     // Crédito de carbono: ~140 créditos/ha/ano × ~R$25/crédito ≈ R$3.500/ha/ano
     // (Jusbrasil/Notícias Agrícolas/Aegro 2025); faixa ampla por bioma e metodologia.
     // Requer certificação (Verra/Gold Standard) e projeto de anos — não é renda passiva.
-    default: { min: 1500, max: 5250 },
+    // selective: mercado que depende de certificação e comprador, como solar.
+    default: { min: 1500, max: 5250, selective: true },
   },
   energia_solar: {
     ...group([...SUDESTE, ...CO, ...SUL, "BA", "CE", "RN", "PB", "PE", "PI"], {
@@ -154,78 +159,47 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
       sourceNote: "referência de fruticultura irrigada (varia muito por região)",
     },
   },
-  cacau: {
-    BA: {
-      revMin: 22800,
-      revMax: 57000,
-      sourceNote: "produtores do sul da Bahia (2026): 60–150 @/ha × ~R$380/@",
-    },
-    default: {
-      revMin: 22800,
-      revMax: 57000,
-      sourceNote: "referência sul da Bahia: 60–150 @/ha × ~R$380/@",
-    },
-  },
-  cafe: {
-    // 25–45 sc/ha em lavouras formadas × ~R$1.400–1.700/saca (CEPEA/mercado 2024–26)
-    MG: {
-      revMin: 35000,
-      revMax: 75000,
-      sourceNote: "cafeicultura formada (CEPEA/mercado 2026): 25–45 sc/ha × ~R$1.400–1.700/sc",
-    },
-    SP: {
-      revMin: 35000,
-      revMax: 75000,
-      sourceNote: "cafeicultura formada (CEPEA/mercado 2026): 25–45 sc/ha × ~R$1.400–1.700/sc",
-    },
-    ES: {
-      revMin: 30000,
-      revMax: 65000,
-      sourceNote: "cafeicultura formada ES (conilon/arábica, mercado 2026)",
-    },
-    default: {
-      revMin: 30000,
-      revMax: 70000,
-      sourceNote: "cafeicultura formada (CEPEA/mercado 2026): 25–45 sc/ha",
-    },
-  },
-  citros: {
-    // 650–950 cx/ha em pomares formados × R$30–55/cx (Fundecitrus/CEPEA, mercado volátil 2024–26)
-    SP: {
-      revMin: 20000,
-      revMax: 50000,
-      sourceNote: "citricultura formada SP (Fundecitrus/CEPEA 2026): 650–950 cx/ha × R$30–55/cx",
-    },
-    MG: {
-      revMin: 18000,
-      revMax: 45000,
-      sourceNote: "citricultura formada (Fundecitrus/CEPEA 2026)",
-    },
-    default: {
-      revMin: 18000,
-      revMax: 45000,
-      sourceNote: "citricultura formada (Fundecitrus/CEPEA 2026)",
-    },
-  },
-  manga: {
-    // ~25 t/ha em plena produção; preço muito volátil (R$0,50–0,70/kg médio,
-    // mas caixas de exportação oscilam forte) — Embrapa Semiárido / Vale do São Francisco
-    BA: {
-      revMin: 12500,
-      revMax: 40000,
-      sourceNote: "manga formada Vale do São Francisco (Embrapa): ~25 t/ha, preço muito volátil",
-    },
-    PE: {
-      revMin: 12500,
-      revMax: 40000,
-      sourceNote: "manga formada Vale do São Francisco (Embrapa): ~25 t/ha, preço muito volátil",
-    },
-    default: {
-      revMin: 12500,
-      revMax: 35000,
-      sourceNote: "manga formada (Embrapa Semiárido): ~25 t/ha, preço volátil",
-    },
-  },
+  cacau: (() => {
+    const p = price("arroba_cacau") || 380;
+    const rev = { revMin: Math.round(60 * p), revMax: Math.round(150 * p) };
+    const note = `sul da Bahia: 60–150 @/ha × R$${p}/@`;
+    return {
+      BA: { ...rev, sourceNote: note },
+      default: { ...rev, sourceNote: note },
+    };
+  })(),
+  cafe: (() => {
+    const p = price("saca_cafe_arabica") || 1550;
+    const rev = { revMin: Math.round(25 * p), revMax: Math.round(45 * p) };
+    const note = `cafeicultura formada (CEPEA): 25–45 sc/ha × R$${p}/sc`;
+    return {
+      MG: { ...rev, sourceNote: note },
+      SP: { ...rev, sourceNote: note },
+      ES: { ...rev, sourceNote: note },
+      default: { ...rev, sourceNote: note },
+    };
+  })(),
+  citros: (() => {
+    const p = price("caixa_laranja") || 42;
+    const rev = { revMin: Math.round(650 * p), revMax: Math.round(950 * p) };
+    const note = `citricultura formada (Fundecitrus/CEPEA): 650–950 cx/ha × R$${p}/cx`;
+    return {
+      SP: { ...rev, sourceNote: note },
+      MG: { ...rev, sourceNote: note },
+      default: { ...rev, sourceNote: note },
+    };
+  })(),
+  manga: (() => {
+    const p = price("kg_manga") || 0.55; // R$/kg (very volatile)
+    // 20–30 t/ha; widen the top to reflect export-price spikes
+    const rev = { revMin: Math.round(20 * 1000 * p), revMax: Math.round(30 * 1000 * p * 1.6) };
+    const note = `manga formada Vale do São Francisco (Embrapa): 20–30 t/ha × ~R$${p}/kg, preço muito volátil`;
+    return {
+      BA: { ...rev, sourceNote: note },
+      PE: { ...rev, sourceNote: note },
+      default: { ...rev, sourceNote: note },
+    };
+  })(),
   uva: {
     // uva de mesa irrigada (Vale do São Francisco / Nordeste): alta receita, alto custo
     BA: {

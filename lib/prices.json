@@ -1,0 +1,54 @@
+{
+  "updatedAt": "2026-07",
+  "note": "Preços de referência atualizados mensalmente. Fontes públicas; ver 'source' de cada item.",
+  "prices": {
+    "saca_soja": {
+      "value": 130,
+      "unit": "R$/saca 60kg",
+      "source": "CEPEA/ESALQ indicador soja Paranaguá",
+      "updatedAt": "2026-07"
+    },
+    "saca_milho": {
+      "value": 65,
+      "unit": "R$/saca 60kg",
+      "source": "CEPEA/ESALQ indicador milho",
+      "updatedAt": "2026-07"
+    },
+    "arroba_boi": {
+      "value": 320,
+      "unit": "R$/arroba",
+      "source": "CEPEA/ESALQ indicador boi gordo",
+      "updatedAt": "2026-07"
+    },
+    "arroba_cacau": {
+      "value": 380,
+      "unit": "R$/arroba",
+      "source": "produtores sul da Bahia / CEPLAC (spot)",
+      "updatedAt": "2026-07"
+    },
+    "saca_cafe_arabica": {
+      "value": 1550,
+      "unit": "R$/saca 60kg",
+      "source": "CEPEA/ESALQ indicador café arábica",
+      "updatedAt": "2026-07"
+    },
+    "caixa_laranja": {
+      "value": 42,
+      "unit": "R$/caixa 40,8kg",
+      "source": "CEPEA/ESALQ indicador laranja indústria",
+      "updatedAt": "2026-07"
+    },
+    "kg_manga": {
+      "value": 0.55,
+      "unit": "R$/kg (médio, muito volátil)",
+      "source": "Embrapa Semiárido / CEPEA hortifruti",
+      "updatedAt": "2026-07"
+    },
+    "credito_carbono": {
+      "value": 25,
+      "unit": "R$/crédito (tCO2e)",
+      "source": "mercado voluntário BR (Aegro/ZS/Jusbrasil)",
+      "updatedAt": "2026-07"
+    }
+  }
+}

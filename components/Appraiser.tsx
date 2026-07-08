@@ -16,6 +16,7 @@ import {
 import { cropLandLeaseRef, formedCropLeaseRef } from "@/lib/appraisal-data";
 import { estimateFromVTN } from "@/lib/vtn";
 import { stateAdvantageFor } from "@/lib/state-advantage";
+import { pricesUpdatedLabel } from "@/lib/prices";
 
 type Query = {
   uf: string;
@@ -314,7 +315,14 @@ export function Appraiser() {
               </>
             ) : (
               <>
-                <h2 className="text-lg font-extrabold text-deep">{a.consultTitle}</h2>
+                <p className="text-sm font-semibold text-deep/60">
+                  {(query.crop &&
+                    a.crops[query.purpose]?.find((c) => c.value === query.crop)
+                      ?.label) ||
+                    purposeLabel}{" "}
+                  · {query.municipality}, {query.uf} · {query.hectares} ha
+                </p>
+                <h2 className="mt-2 text-lg font-extrabold text-deep">{a.consultTitle}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-deep/70">
                   {a.consultBody}
                 </p>
@@ -525,7 +533,9 @@ export function Appraiser() {
               <Info className="h-4 w-4 shrink-0" aria-hidden="true" />
               <span>
                 {a.disclaimer}
-                {estimate.kind === "range" && <> {a.legalNote}</>}
+                {estimate.kind === "range" && <> {a.legalNote}</>}{" "}
+                {lang === "en" ? "Prices updated " : "Preços atualizados em "}
+                {pricesUpdatedLabel(lang)}.
               </span>
             </p>
 

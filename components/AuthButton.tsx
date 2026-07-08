@@ -36,7 +36,7 @@ export function AuthButton() {
         onClick={() =>
           supabase.auth.signInWithOAuth({
             provider: "google",
-            options: { redirectTo: `${window.location.origin}/conta` },
+            options: { redirectTo: `${window.location.origin}/app/conta` },
           })
         }
         className="rounded-full border border-deep/15 bg-white px-4 py-2 text-sm font-bold text-deep transition-colors hover:border-primary hover:text-primary"
@@ -55,7 +55,7 @@ export function AuthButton() {
 
   return (
     <Link
-      href="/conta"
+      href="/app/conta"
       title={name}
       className="flex items-center gap-2 rounded-full border border-deep/10 bg-white p-1 pr-3 transition-colors hover:border-primary"
     >

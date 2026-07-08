@@ -10,6 +10,7 @@ import {
   makeOffer,
   respondToOffer,
   setDealStatus,
+  markConversationRead,
   type ConvData,
 } from "./actions";
 
@@ -39,6 +40,10 @@ export function Conversation({ id }: { id: string }) {
 
   useEffect(() => {
     reload();
+    markConversationRead(id).then(() => {
+      // notify header to refresh its unread badge
+      window.dispatchEvent(new CustomEvent("palmo:unread-changed"));
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 

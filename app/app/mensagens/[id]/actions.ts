@@ -170,3 +170,9 @@ export async function setDealStatus(
     .eq("id", conversationId);
   return error ? { ok: false, error: error.message } : { ok: true };
 }
+
+export async function markConversationRead(conversationId: string): Promise<void> {
+  const supabase = await getServerSupabase();
+  if (!supabase) return;
+  await supabase.rpc("mark_conversation_read", { conv_id: conversationId });
+}

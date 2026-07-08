@@ -115,6 +115,147 @@ const cropLandRefs: Record<string, Record<string, CropLandRef>> = {
 const REF_LOW = 0.025;
 const REF_HIGH = 0.06;
 
+/**
+ * FORMED-CROP revenue references: gross revenue (faturamento) per hectare
+ * for a producing plantation, leased at the regional convention of ~15% of
+ * revenue. This is a DIFFERENT market from bare land: it assumes the crop
+ * is planted, mature and producing.
+ *
+ * SOURCES (field-sourced — add new entries WITH a source):
+ * - banana/BA: ~R$44k/ha/ano gross on producing farms (grower reference,
+ *   southern Bahia, jul/2026); range widened for productivity variation.
+ * - cacau/BA: 60–150 arrobas/ha on productive farms × ~R$380/@ (spot,
+ *   jul/2026) = R$22.8k–57k/ha gross (grower reference, southern Bahia).
+ */
+const REVENUE_SHARE = 0.15;
+
+type FormedCropRef = {
+  revMin: number;
+  revMax: number;
+  sourceNote: string;
+};
+
+const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
+  banana: {
+    BA: {
+      revMin: 35000,
+      revMax: 45000,
+      sourceNote: "produtores do sul da Bahia (2026)",
+    },
+    default: {
+      revMin: 25000,
+      revMax: 45000,
+      sourceNote: "referência de fruticultura irrigada (varia muito por região)",
+    },
+  },
+  cacau: {
+    BA: {
+      revMin: 22800,
+      revMax: 57000,
+      sourceNote: "produtores do sul da Bahia (2026): 60–150 @/ha × ~R$380/@",
+    },
+    default: {
+      revMin: 22800,
+      revMax: 57000,
+      sourceNote: "referência sul da Bahia: 60–150 @/ha × ~R$380/@",
+    },
+  },
+  cafe: {
+    // 25–45 sc/ha em lavouras formadas × ~R$1.400–1.700/saca (CEPEA/mercado 2024–26)
+    MG: {
+      revMin: 35000,
+      revMax: 75000,
+      sourceNote: "cafeicultura formada (CEPEA/mercado 2026): 25–45 sc/ha × ~R$1.400–1.700/sc",
+    },
+    SP: {
+      revMin: 35000,
+      revMax: 75000,
+      sourceNote: "cafeicultura formada (CEPEA/mercado 2026): 25–45 sc/ha × ~R$1.400–1.700/sc",
+    },
+    ES: {
+      revMin: 30000,
+      revMax: 65000,
+      sourceNote: "cafeicultura formada ES (conilon/arábica, mercado 2026)",
+    },
+    default: {
+      revMin: 30000,
+      revMax: 70000,
+      sourceNote: "cafeicultura formada (CEPEA/mercado 2026): 25–45 sc/ha",
+    },
+  },
+  citros: {
+    // 650–950 cx/ha em pomares formados × R$30–55/cx (Fundecitrus/CEPEA, mercado volátil 2024–26)
+    SP: {
+      revMin: 20000,
+      revMax: 50000,
+      sourceNote: "citricultura formada SP (Fundecitrus/CEPEA 2026): 650–950 cx/ha × R$30–55/cx",
+    },
+    MG: {
+      revMin: 18000,
+      revMax: 45000,
+      sourceNote: "citricultura formada (Fundecitrus/CEPEA 2026)",
+    },
+    default: {
+      revMin: 18000,
+      revMax: 45000,
+      sourceNote: "citricultura formada (Fundecitrus/CEPEA 2026)",
+    },
+  },
+  manga: {
+    // ~25 t/ha em plena produção; preço muito volátil (R$0,50–0,70/kg médio,
+    // mas caixas de exportação oscilam forte) — Embrapa Semiárido / Vale do São Francisco
+    BA: {
+      revMin: 12500,
+      revMax: 40000,
+      sourceNote: "manga formada Vale do São Francisco (Embrapa): ~25 t/ha, preço muito volátil",
+    },
+    PE: {
+      revMin: 12500,
+      revMax: 40000,
+      sourceNote: "manga formada Vale do São Francisco (Embrapa): ~25 t/ha, preço muito volátil",
+    },
+    default: {
+      revMin: 12500,
+      revMax: 35000,
+      sourceNote: "manga formada (Embrapa Semiárido): ~25 t/ha, preço volátil",
+    },
+  },
+  uva: {
+    // uva de mesa irrigada (Vale do São Francisco / Nordeste): alta receita, alto custo
+    BA: {
+      revMin: 40000,
+      revMax: 90000,
+      sourceNote: "viticultura de mesa irrigada (Vale do São Francisco, mercado 2026)",
+    },
+    PE: {
+      revMin: 40000,
+      revMax: 90000,
+      sourceNote: "viticultura de mesa irrigada (Vale do São Francisco, mercado 2026)",
+    },
+    default: {
+      revMin: 30000,
+      revMax: 80000,
+      sourceNote: "viticultura de mesa irrigada (varia muito por região e cultivar)",
+    },
+  },
+};
+
+export type FormedLeaseRef = {
+  minPerHa: number;
+  maxPerHa: number;
+  sourceNote: string;
+};
+
+export function formedCropLeaseRef(crop: string, uf: string): FormedLeaseRef | null {
+  const r = formedCropRefs[crop]?.[uf] ?? formedCropRefs[crop]?.default;
+  if (!r) return null;
+  return {
+    minPerHa: Math.round(r.revMin * REVENUE_SHARE),
+    maxPerHa: Math.round(r.revMax * REVENUE_SHARE),
+    sourceNote: r.sourceNote,
+  };
+}
+
 export type CropLeaseRef = {
   minPerHa: number;
   maxPerHa: number;

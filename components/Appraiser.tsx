@@ -13,7 +13,7 @@ import {
   UFS,
   type Estimate,
 } from "@/lib/appraisal-data";
-import { cropLandLeaseRef } from "@/lib/appraisal-data";
+import { cropLandLeaseRef, formedCropLeaseRef } from "@/lib/appraisal-data";
 import { estimateFromVTN } from "@/lib/vtn";
 
 type Query = {
@@ -310,7 +310,52 @@ export function Appraiser() {
                   const cropRef = query.crop
                     ? cropLandLeaseRef(query.crop, query.uf)
                     : null;
+                  const formed = query.crop
+                    ? formedCropLeaseRef(query.crop, query.uf)
+                    : null;
                   const vtn = estimateFromVTN(query.uf, query.municipality, query.purpose);
+                  if (formed) {
+                    const raw = cropRef ?? vtn;
+                    return (
+                      <>
+                        <p className="mt-4 text-sm font-semibold text-deep/70">
+                          🌾{" "}
+                          {a.formedPotential.replace("{source}", formed.sourceNote)}
+                        </p>
+                        <p className="mt-2 text-3xl font-extrabold text-deep sm:text-5xl">
+                          {formatBRL(formed.minPerHa * query.hectares)} –{" "}
+                          {formatBRL(formed.maxPerHa * query.hectares)}
+                          <span className="ml-2 text-lg font-bold text-deep/50">
+                            /{lang === "en" ? "year" : "ano"}
+                          </span>
+                        </p>
+                        <p className="mt-1 text-sm font-semibold text-deep/60">
+                          {formatBRL(formed.minPerHa)} – {formatBRL(formed.maxPerHa)}{" "}
+                          {a.perHaYear}
+                        </p>
+                        <p className="mt-3 rounded-xl bg-accent/20 px-4 py-2.5 text-sm font-semibold text-deep">
+                          {a.formedNote}
+                        </p>
+                        {raw && (
+                          <p className="mt-3 text-sm font-semibold text-deep/60">
+                            {a.rawLandLabel}{" "}
+                            {formatBRL(raw.minPerHa)} – {formatBRL(raw.maxPerHa)}{" "}
+                            {a.perHaYear}
+                            {vtn && !cropRef && (
+                              <>
+                                {" "}
+                                (
+                                {(vtn.approx ? a.vtnLineApprox : a.vtnLine)
+                                  .replace("{year}", String(vtn.year))
+                                  .replace("{value}", formatBRL(vtn.vtnPerHa))}
+                                )
+                              </>
+                            )}
+                          </p>
+                        )}
+                      </>
+                    );
+                  }
                   if (cropRef) {
                     return (
                       <>

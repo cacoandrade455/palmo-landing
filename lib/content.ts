@@ -66,6 +66,9 @@ export type Content = {
     cropLabel: string;
     cropPlaceholder: string;
     cropRefPotential: string;
+    formedPotential: string;
+    formedNote: string;
+    rawLandLabel: string;
     vtnPotential: string;
     vtnPotentialApprox: string;
     vtnLine: string;
@@ -233,6 +236,11 @@ export const content: Record<Lang, Content> = {
       cropPlaceholder: "Todas / não sei ainda",
       cropRefPotential:
         "Estimativa com base no valor de mercado de {source} — R$ {landMin} a {landMax} mil/ha — convertido a 2,5–6% ao ano:",
+      formedPotential:
+        "Com lavoura FORMADA e em produção: na sua região, arrendamentos costumam ficar em ~15% do faturamento ({source}):",
+      formedNote:
+        "Vale para lavoura já plantada e produzindo. Terra nua (sem a lavoura) vale bem menos — veja abaixo.",
+      rawLandLabel: "Terra nua (sem lavoura formada):",
       vtnPotential:
         "Estimativa pelo valor oficial da terra no seu município (VTN {year} da Receita Federal × 2,5–6% ao ano):",
       vtnPotentialApprox:
@@ -468,6 +476,11 @@ export const content: Record<Lang, Content> = {
       cropPlaceholder: "All / not sure yet",
       cropRefPotential:
         "Estimate based on the market value of {source} — R$ {landMin} to {landMax} thousand/ha — converted at 2.5–6%/year:",
+      formedPotential:
+        "With a FORMED, producing plantation: leases in your region typically run ~15% of gross revenue ({source}):",
+      formedNote:
+        "Applies to an already planted, producing crop. Bare land (without the plantation) is worth much less — see below.",
+      rawLandLabel: "Bare land (no formed plantation):",
       vtnPotential:
         "Estimate from your municipality's official land value (Federal Revenue VTN {year} × 2.5–6%/year):",
       vtnPotentialApprox:

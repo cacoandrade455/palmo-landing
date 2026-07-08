@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { CheckCircle2, Info } from "lucide-react";
@@ -41,6 +41,33 @@ export function Appraiser() {
   const { t, lang } = useLanguage();
   const [query, setQuery] = useState<Query | null>(null);
   const [purposeSel, setPurposeSel] = useState("");
+  const [ufSel, setUfSel] = useState("");
+  // per-UF cache: string[] = loaded; "error" = IBGE unavailable (free-text fallback)
+  const [muniByUf, setMuniByUf] = useState<Record<string, string[] | "error">>({});
+
+  useEffect(() => {
+    if (!ufSel || muniByUf[ufSel]) return;
+    let cancelled = false;
+    fetch(
+      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufSel}/municipios?orderBy=nome`,
+    )
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((list: { nome: string }[]) => {
+        if (cancelled) return;
+        setMuniByUf((prev) => ({ ...prev, [ufSel]: list.map((m) => m.nome) }));
+      })
+      .catch(() => {
+        if (!cancelled) setMuniByUf((prev) => ({ ...prev, [ufSel]: "error" }));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [ufSel, muniByUf]);
+
+  const muniEntry = ufSel ? muniByUf[ufSel] : undefined;
+  const municipalities = Array.isArray(muniEntry) ? muniEntry : [];
+  const muniFailed = muniEntry === "error";
+  const muniLoading = !!ufSel && muniEntry === undefined;
   const [estimate, setEstimate] = useState<Estimate | null>(null);
   const [leadState, leadAction] = useActionState<WaitlistResult | null, FormData>(
     async (_prev, formData) => submitWaitlist(formData),
@@ -94,7 +121,14 @@ export function Appraiser() {
               <label htmlFor="uf" className="text-sm font-semibold text-deep">
                 {a.stateLabel}
               </label>
-              <select id="uf" name="uf" required defaultValue="" className={inputCls}>
+              <select
+                id="uf"
+                name="uf"
+                required
+                value={ufSel}
+                onChange={(e) => setUfSel(e.target.value)}
+                className={inputCls}
+              >
                 <option value="" disabled>
                   UF
                 </option>
@@ -112,14 +146,39 @@ export function Appraiser() {
               >
                 {a.municipalityLabel}
               </label>
-              <input
-                id="ap-municipality"
-                name="municipality"
-                type="text"
-                required
-                placeholder={a.municipalityPlaceholder}
-                className={inputCls}
-              />
+              {muniFailed ? (
+                <input
+                  id="ap-municipality"
+                  name="municipality"
+                  type="text"
+                  required
+                  placeholder={a.municipalityLabel}
+                  className={inputCls}
+                />
+              ) : (
+                <select
+                  id="ap-municipality"
+                  name="municipality"
+                  required
+                  key={ufSel}
+                  defaultValue=""
+                  disabled={!ufSel || muniLoading}
+                  className={`${inputCls} disabled:cursor-not-allowed disabled:bg-neutral/60 disabled:text-deep/40`}
+                >
+                  <option value="" disabled>
+                    {!ufSel
+                      ? a.municipalitySelectState
+                      : muniLoading
+                        ? a.municipalityLoading
+                        : a.municipalityPlaceholder}
+                  </option>
+                  {municipalities.map((name) => (
+                    <option key={name} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
           </div>
 

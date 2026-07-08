@@ -39,6 +39,8 @@ export type Content = {
     stateLabel: string;
     municipalityLabel: string;
     municipalityPlaceholder: string;
+    municipalitySelectState: string;
+    municipalityLoading: string;
     hectaresLabel: string;
     hectaresPlaceholder: string;
     purposeLabel: string;
@@ -186,7 +188,9 @@ export const content: Record<Lang, Content> = {
         "Descubra em 1 minuto a faixa de valores de arrendamento praticada na sua região.",
       stateLabel: "Estado",
       municipalityLabel: "Município",
-      municipalityPlaceholder: "Ex.: Rio Verde",
+      municipalityPlaceholder: "Selecione o município...",
+      municipalitySelectState: "Escolha o estado primeiro",
+      municipalityLoading: "Carregando municípios...",
       hectaresLabel: "Área (hectares)",
       hectaresPlaceholder: "Ex.: 128",
       purposeLabel: "Uso da terra",
@@ -409,7 +413,9 @@ export const content: Record<Lang, Content> = {
         "Find out in 1 minute the lease value range practiced in your region.",
       stateLabel: "State",
       municipalityLabel: "Municipality",
-      municipalityPlaceholder: "e.g. Rio Verde",
+      municipalityPlaceholder: "Select the municipality...",
+      municipalitySelectState: "Pick the state first",
+      municipalityLoading: "Loading municipalities...",
       hectaresLabel: "Area (hectares)",
       hectaresPlaceholder: "e.g. 128",
       purposeLabel: "Land use",

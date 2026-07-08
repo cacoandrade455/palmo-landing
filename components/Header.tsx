@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/lib/language-context";
+import { AuthButton } from "./AuthButton";
 import { LangToggle } from "./LangToggle";
 
 export function Header() {
@@ -39,6 +40,7 @@ export function Header() {
 
         <div className="flex items-center gap-3">
           <LangToggle />
+          <AuthButton />
           <Link
             href="/#lista-de-espera"
             className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"

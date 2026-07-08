@@ -73,6 +73,16 @@ export type Content = {
     crops: Record<string, { value: string; label: string }[]>;
     cropNotes: Record<string, string>;
   };
+  auth: {
+    signIn: string;
+    signInGoogle: string;
+    signOut: string;
+    myAccount: string;
+    accountTitle: string;
+    accountSubtitle: string;
+    notSignedIn: string;
+    signedInAs: string;
+  };
   pricing: {
     eyebrow: string;
     title: string;
@@ -270,6 +280,16 @@ export const content: Record<Lang, Content> = {
         cafe: "Café costuma ser negociado em parceria (meação), não em valor fixo por hectare — os valores variam muito por região e produtividade.",
         cacau: "Cacau costuma ser negociado em parceria, com partilha da produção — valores fixos por hectare são raros.",
       },
+    },
+    auth: {
+      signIn: "Entrar",
+      signInGoogle: "Entrar com Google",
+      signOut: "Sair",
+      myAccount: "Minha conta",
+      accountTitle: "Minha conta",
+      accountSubtitle: "Sua conta na Palmo. Em breve: seus anúncios e propostas.",
+      notSignedIn: "Você ainda não entrou. Entre para salvar seus dados e acompanhar seus anúncios.",
+      signedInAs: "Conectado como",
     },
     pricing: {
       eyebrow: "Preços",
@@ -495,6 +515,16 @@ export const content: Record<Lang, Content> = {
         cafe: "Coffee is usually negotiated as a partnership (crop share), not fixed rent — values vary widely by region and yield.",
         cacau: "Cocoa is usually negotiated as a partnership with production sharing — fixed per-hectare rents are rare.",
       },
+    },
+    auth: {
+      signIn: "Sign in",
+      signInGoogle: "Sign in with Google",
+      signOut: "Sign out",
+      myAccount: "My account",
+      accountTitle: "My account",
+      accountSubtitle: "Your Palmo account. Coming soon: your listings and offers.",
+      notSignedIn: "You're not signed in yet. Sign in to save your data and track your listings.",
+      signedInAs: "Signed in as",
     },
     pricing: {
       eyebrow: "Pricing",

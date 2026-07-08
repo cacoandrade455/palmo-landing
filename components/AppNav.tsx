@@ -13,8 +13,8 @@ export function AppNav() {
 
   const label =
     lang === "en"
-      ? { explore: "Explore", messages: "Messages", account: "Account" }
-      : { explore: "Explorar", messages: "Mensagens", account: "Conta" };
+      ? { explore: "🔍 Explore", messages: "💬 Messages", account: "👤 Account" }
+      : { explore: "🔍 Explorar", messages: "💬 Mensagens", account: "👤 Conta" };
 
   useEffect(() => {
     let alive = true;

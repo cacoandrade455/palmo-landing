@@ -63,6 +63,12 @@ const table: Record<string, Record<string, Range>> = {
     }),
     default: { min: 150, max: 500 },
   },
+  reflorestamento_carbono: {
+    // Crédito de carbono: ~140 créditos/ha/ano × ~R$25/crédito ≈ R$3.500/ha/ano
+    // (Jusbrasil/Notícias Agrícolas/Aegro 2025); faixa ampla por bioma e metodologia.
+    // Requer certificação (Verra/Gold Standard) e projeto de anos — não é renda passiva.
+    default: { min: 1500, max: 5250 },
+  },
   energia_solar: {
     ...group([...SUDESTE, ...CO, ...SUL, "BA", "CE", "RN", "PB", "PE", "PI"], {
       min: 1500,

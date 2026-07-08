@@ -15,6 +15,7 @@ import {
 } from "@/lib/appraisal-data";
 import { cropLandLeaseRef, formedCropLeaseRef } from "@/lib/appraisal-data";
 import { estimateFromVTN } from "@/lib/vtn";
+import { stateAdvantageFor } from "@/lib/state-advantage";
 
 type Query = {
   uf: string;
@@ -254,6 +255,22 @@ export function Appraiser() {
 
         {query && estimate && (
           <div className="mt-8 rounded-2xl bg-neutral p-6 sm:p-8">
+            {(() => {
+              const adv =
+                (query.crop && stateAdvantageFor(query.crop, query.uf)) ||
+                stateAdvantageFor(query.purpose, query.uf);
+              if (!adv) return null;
+              return (
+                <div className="mb-5 rounded-xl bg-primary/10 px-4 py-3 ring-1 ring-primary/20">
+                  <p className="text-xs font-bold uppercase tracking-wide text-primary">
+                    ⭐ {a.advantageLabel}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-deep">
+                    {lang === "en" ? adv.factEn : adv.factPt}
+                  </p>
+                </div>
+              );
+            })()}
             {estimate.kind === "range" ? (
               <>
                 <h2 className="text-sm font-bold uppercase tracking-wide text-primary">

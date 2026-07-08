@@ -69,6 +69,7 @@ export type Content = {
     formedPotential: string;
     formedNote: string;
     rawLandLabel: string;
+    advantageLabel: string;
     vtnPotential: string;
     vtnPotentialApprox: string;
     vtnLine: string;
@@ -241,6 +242,7 @@ export const content: Record<Lang, Content> = {
       formedNote:
         "Vale para lavoura já plantada e produzindo. Terra nua (sem a lavoura) vale bem menos — veja abaixo.",
       rawLandLabel: "Terra nua (sem lavoura formada):",
+      advantageLabel: "Vantagem regional",
       vtnPotential:
         "Estimativa pelo valor oficial da terra no seu município (VTN {year} da Receita Federal × 2,5–6% ao ano):",
       vtnPotentialApprox:
@@ -481,6 +483,7 @@ export const content: Record<Lang, Content> = {
       formedNote:
         "Applies to an already planted, producing crop. Bare land (without the plantation) is worth much less — see below.",
       rawLandLabel: "Bare land (no formed plantation):",
+      advantageLabel: "Regional advantage",
       vtnPotential:
         "Estimate from your municipality's official land value (Federal Revenue VTN {year} × 2.5–6%/year):",
       vtnPotentialApprox:

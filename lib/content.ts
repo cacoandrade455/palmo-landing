@@ -63,7 +63,9 @@ export type Content = {
     cropLabel: string;
     cropPlaceholder: string;
     vtnPotential: string;
+    vtnPotentialApprox: string;
     vtnLine: string;
+    vtnLineApprox: string;
     crops: Record<string, { value: string; label: string }[]>;
     cropNotes: Record<string, string>;
   };
@@ -214,8 +216,12 @@ export const content: Record<Lang, Content> = {
       cropPlaceholder: "Todas / não sei ainda",
       vtnPotential:
         "Estimativa pelo valor oficial da terra no seu município (VTN {year} da Receita Federal × 2,5–6% ao ano):",
+      vtnPotentialApprox:
+        "Seu município não informou VTN à Receita Federal. Estimativa pela média oficial do seu estado (VTN {year} × 2,5–6% ao ano):",
       vtnLine:
         "Valor oficial da terra (VTN {year}, Receita Federal) no seu município: {value}/ha.",
+      vtnLineApprox:
+        "Média oficial da terra no seu estado (VTN {year}, Receita Federal): {value}/ha — seu município não informou valor próprio.",
       crops: {
         graos: [
           { value: "soja", label: "Soja" },
@@ -430,8 +436,12 @@ export const content: Record<Lang, Content> = {
       cropPlaceholder: "All / not sure yet",
       vtnPotential:
         "Estimate from your municipality's official land value (Federal Revenue VTN {year} × 2.5–6%/year):",
+      vtnPotentialApprox:
+        "Your municipality hasn't reported a VTN. Estimate from your state's official average (VTN {year} × 2.5–6%/year):",
       vtnLine:
         "Official land value (VTN {year}, Federal Revenue) in your municipality: {value}/ha.",
+      vtnLineApprox:
+        "Official state-average land value (VTN {year}, Federal Revenue): {value}/ha — your municipality hasn't reported its own value.",
       crops: {
         graos: [
           { value: "soja", label: "Soybean" },

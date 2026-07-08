@@ -228,7 +228,7 @@ export function Appraiser() {
                   return (
                     <p className="mt-2 text-sm font-semibold text-deep/60">
                       🏛️{" "}
-                      {a.vtnLine
+                      {(vtn.approx ? a.vtnLineApprox : a.vtnLine)
                         .replace("{year}", String(vtn.year))
                         .replace("{value}", formatBRL(vtn.vtnPerHa))}
                     </p>
@@ -252,7 +252,11 @@ export function Appraiser() {
                     return (
                       <>
                         <p className="mt-4 text-sm font-semibold text-deep/70">
-                          🏛️ {a.vtnPotential.replace("{year}", String(vtn.year))}
+                          🏛️{" "}
+                          {(vtn.approx ? a.vtnPotentialApprox : a.vtnPotential).replace(
+                            "{year}",
+                            String(vtn.year),
+                          )}
                         </p>
                         <p className="mt-2 text-3xl font-extrabold text-deep sm:text-5xl">
                           {formatBRL(vtn.minPerHa * query.hectares)} –{" "}

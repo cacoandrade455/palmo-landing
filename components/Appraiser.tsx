@@ -372,6 +372,9 @@ export function Appraiser() {
                           </span>
                           <span className="whitespace-nowrap font-semibold">
                             {formatBRL(c.minPerHa)}–{formatBRL(c.maxPerHa)}
+                            <span className="ml-1 text-xs font-normal text-deep/50">
+                              {a.compareUnit}
+                            </span>
                           </span>
                         </li>
                       );

@@ -56,6 +56,7 @@ export type Content = {
     leadSubtitle: string;
     heroLink: string;
     compareTitle: string;
+    compareUnit: string;
     compareYourChoice: string;
     compareUpsell: string;
     compareCaveat: string;
@@ -207,6 +208,7 @@ export const content: Record<Lang, Content> = {
       leadSubtitle: "Entre na lista de espera — é grátis.",
       heroLink: "Quanto vale minha terra? →",
       compareTitle: "Outros usos na sua região",
+      compareUnit: "/ha/ano",
       compareYourChoice: "sua escolha",
       compareUpsell:
         "Na sua região, terras para {use} chegam a arrendar por até {ratio}x o valor da sua escolha atual.",
@@ -429,6 +431,7 @@ export const content: Record<Lang, Content> = {
       leadSubtitle: "Join the waitlist — it's free.",
       heroLink: "How much is my land worth? →",
       compareTitle: "Other uses in your region",
+      compareUnit: "/ha/yr",
       compareYourChoice: "your choice",
       compareUpsell:
         "In your region, land for {use} leases for up to {ratio}x the value of your current choice.",

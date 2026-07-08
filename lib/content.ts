@@ -60,6 +60,10 @@ export type Content = {
     compareUpsell: string;
     compareCaveat: string;
     selectiveTag: string;
+    cropLabel: string;
+    cropPlaceholder: string;
+    crops: Record<string, { value: string; label: string }[]>;
+    cropNotes: Record<string, string>;
   };
   pricing: {
     eyebrow: string;
@@ -204,6 +208,47 @@ export const content: Record<Lang, Content> = {
       compareCaveat:
         "A comparação usa faixas regionais de mercado. Se um uso mais valorizado é viável na sua terra depende de solo, relevo, água e logística — a Palmo pode ajudar a verificar isso.",
       selectiveTag: "mercado seletivo — depende de projeto e rede elétrica na região",
+      cropLabel: "Cultura específica (opcional)",
+      cropPlaceholder: "Todas / não sei ainda",
+      crops: {
+        graos: [
+          { value: "soja", label: "Soja" },
+          { value: "milho", label: "Milho" },
+          { value: "algodao", label: "Algodão" },
+          { value: "arroz", label: "Arroz irrigado" },
+          { value: "feijao", label: "Feijão" },
+          { value: "sorgo", label: "Sorgo" },
+          { value: "trigo", label: "Trigo" },
+        ],
+        lavoura_permanente: [
+          { value: "cafe", label: "Café" },
+          { value: "cacau", label: "Cacau" },
+          { value: "citros", label: "Citros (laranja, limão...)" },
+          { value: "seringueira", label: "Seringueira" },
+          { value: "dende", label: "Dendê" },
+        ],
+        fruticultura: [
+          { value: "banana", label: "Banana" },
+          { value: "manga", label: "Manga" },
+          { value: "uva", label: "Uva" },
+          { value: "melao", label: "Melão" },
+          { value: "acai", label: "Açaí" },
+        ],
+        horticultura: [
+          { value: "hortalicas", label: "Hortaliças em geral" },
+          { value: "batata", label: "Batata" },
+          { value: "tomate", label: "Tomate" },
+          { value: "cebola", label: "Cebola" },
+        ],
+      },
+      cropNotes: {
+        soja: "Contratos de grãos são normalmente fixados em sacas de soja por hectare/ano.",
+        milho: "Mesmo para milho, os contratos costumam ser fixados em sacas de soja por hectare/ano (rotação soja/milho).",
+        algodao: "Áreas aptas a algodão costumam negociar no topo da faixa de grãos da região.",
+        arroz: "Arroz irrigado tem mercado próprio: normalmente 18–25 sacas de arroz/ha/ano por terra e água (referência RS).",
+        cafe: "Café costuma ser negociado em parceria (meação), não em valor fixo por hectare — os valores variam muito por região e produtividade.",
+        cacau: "Cacau costuma ser negociado em parceria, com partilha da produção — valores fixos por hectare são raros.",
+      },
     },
     pricing: {
       eyebrow: "Preços",
@@ -375,6 +420,47 @@ export const content: Record<Lang, Content> = {
       compareCaveat:
         "This comparison uses regional market ranges. Whether a higher-value use is viable on your land depends on soil, terrain, water and logistics — Palmo can help you verify that.",
       selectiveTag: "selective market — depends on projects and grid access in the region",
+      cropLabel: "Specific crop (optional)",
+      cropPlaceholder: "All / not sure yet",
+      crops: {
+        graos: [
+          { value: "soja", label: "Soybean" },
+          { value: "milho", label: "Corn" },
+          { value: "algodao", label: "Cotton" },
+          { value: "arroz", label: "Irrigated rice" },
+          { value: "feijao", label: "Beans" },
+          { value: "sorgo", label: "Sorghum" },
+          { value: "trigo", label: "Wheat" },
+        ],
+        lavoura_permanente: [
+          { value: "cafe", label: "Coffee" },
+          { value: "cacau", label: "Cocoa" },
+          { value: "citros", label: "Citrus (orange, lime...)" },
+          { value: "seringueira", label: "Rubber tree" },
+          { value: "dende", label: "Oil palm" },
+        ],
+        fruticultura: [
+          { value: "banana", label: "Banana" },
+          { value: "manga", label: "Mango" },
+          { value: "uva", label: "Grapes" },
+          { value: "melao", label: "Melon" },
+          { value: "acai", label: "Açaí" },
+        ],
+        horticultura: [
+          { value: "hortalicas", label: "General vegetables" },
+          { value: "batata", label: "Potato" },
+          { value: "tomate", label: "Tomato" },
+          { value: "cebola", label: "Onion" },
+        ],
+      },
+      cropNotes: {
+        soja: "Grain contracts are typically fixed in sacas of soybean per hectare/year.",
+        milho: "Even for corn, contracts are usually fixed in sacas of soybean per hectare/year (soy/corn rotation).",
+        algodao: "Cotton-suitable areas usually negotiate at the top of the region's grain range.",
+        arroz: "Irrigated rice has its own market: typically 18–25 sacas of rice/ha/year for land and water (RS reference).",
+        cafe: "Coffee is usually negotiated as a partnership (crop share), not fixed rent — values vary widely by region and yield.",
+        cacau: "Cocoa is usually negotiated as a partnership with production sharing — fixed per-hectare rents are rare.",
+      },
     },
     pricing: {
       eyebrow: "Pricing",

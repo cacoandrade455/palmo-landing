@@ -43,7 +43,7 @@ const table: Record<string, Record<string, Range>> = {
     default: { min: 800, max: 2000, note: "sacas" },
   },
   pecuaria_corte: {
-    ...group([...CO, "SP", "MG"], { min: 250, max: 600, note: "arroba" }),
+    ...group([...CO, "SP", "MG"], { min: 300, max: 800, note: "arroba" }),
     ...group(SUL, { min: 300, max: 700, note: "arroba" }),
     default: { min: 80, max: 400, note: "arroba" },
   },
@@ -73,11 +73,33 @@ const table: Record<string, Record<string, Range>> = {
   },
 };
 
+/**
+ * Crop-level overrides where a specific crop has its own lease market,
+ * distinct from its category benchmark.
+ * - arroz irrigado (RS/SC): quoted in sacas de arroz; ~18–25 sc/ha for
+ *   land + water (IRGA / market guides), converted at ~R$85–110/sc.
+ */
+const cropOverrides: Record<string, Record<string, Range>> = {
+  arroz: {
+    RS: { min: 1500, max: 2700 },
+    SC: { min: 1500, max: 2700 },
+  },
+};
+
 export type Estimate =
   | { kind: "range"; minPerHa: number; maxPerHa: number; note?: Range["note"] }
   | { kind: "consult" };
 
-export function estimateLease(purpose: string, uf: string): Estimate {
+export function estimateLease(
+  purpose: string,
+  uf: string,
+  crop?: string,
+): Estimate {
+  if (crop) {
+    const byUf = cropOverrides[crop];
+    const r = byUf?.[uf] ?? byUf?.default;
+    if (r) return { kind: "range", minPerHa: r.min, maxPerHa: r.max, note: r.note };
+  }
   const byUf = table[purpose];
   if (!byUf) return { kind: "consult" };
   const r = byUf[uf] ?? byUf.default;

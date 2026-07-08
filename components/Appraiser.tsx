@@ -19,6 +19,7 @@ type Query = {
   municipality: string;
   hectares: number;
   purpose: string;
+  crop: string;
 };
 
 function LeadSubmit({ label, pendingLabel }: { label: string; pendingLabel: string }) {
@@ -37,6 +38,7 @@ function LeadSubmit({ label, pendingLabel }: { label: string; pendingLabel: stri
 export function Appraiser() {
   const { t, lang } = useLanguage();
   const [query, setQuery] = useState<Query | null>(null);
+  const [purposeSel, setPurposeSel] = useState("");
   const [estimate, setEstimate] = useState<Estimate | null>(null);
   const [leadState, leadAction] = useActionState<WaitlistResult | null, FormData>(
     async (_prev, formData) => submitWaitlist(formData),
@@ -53,10 +55,11 @@ export function Appraiser() {
       municipality: String(fd.get("municipality") ?? "").trim(),
       hectares: Number(fd.get("hectares") ?? 0),
       purpose: String(fd.get("purpose") ?? ""),
+      crop: String(fd.get("crop") ?? ""),
     };
     if (!q.uf || !q.purpose || !q.hectares || q.hectares <= 0) return;
     setQuery(q);
-    setEstimate(estimateLease(q.purpose, q.uf));
+    setEstimate(estimateLease(q.purpose, q.uf, q.crop || undefined));
   }
 
   const purposeLabel =
@@ -142,7 +145,8 @@ export function Appraiser() {
                 id="ap-purpose"
                 name="purpose"
                 required
-                defaultValue=""
+                value={purposeSel}
+                onChange={(e) => setPurposeSel(e.target.value)}
                 className={inputCls}
               >
                 <option value="" disabled>
@@ -156,6 +160,28 @@ export function Appraiser() {
               </select>
             </div>
           </div>
+
+          {a.crops[purposeSel] && (
+            <div>
+              <label htmlFor="ap-crop" className="text-sm font-semibold text-deep">
+                {a.cropLabel}
+              </label>
+              <select
+                id="ap-crop"
+                name="crop"
+                key={purposeSel}
+                defaultValue=""
+                className={inputCls}
+              >
+                <option value="">{a.cropPlaceholder}</option>
+                {a.crops[purposeSel].map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <button
             type="submit"
@@ -173,7 +199,11 @@ export function Appraiser() {
                   {a.resultTitle}
                 </h2>
                 <p className="mt-1 text-sm text-deep/60">
-                  {purposeLabel} · {query.municipality}, {query.uf} · {query.hectares} ha
+                  {(query.crop &&
+                    a.crops[query.purpose]?.find((c) => c.value === query.crop)
+                      ?.label) ||
+                    purposeLabel}{" "}
+                  · {query.municipality}, {query.uf} · {query.hectares} ha
                 </p>
                 <p className="mt-4 text-3xl font-extrabold text-deep sm:text-5xl">
                   {formatBRL(estimate.minPerHa * query.hectares)} –{" "}
@@ -186,6 +216,11 @@ export function Appraiser() {
                   {formatBRL(estimate.minPerHa)} – {formatBRL(estimate.maxPerHa)}{" "}
                   {a.perHaYear}
                 </p>
+                {query.crop && a.cropNotes[query.crop] && (
+                  <p className="mt-2 rounded-xl bg-white px-4 py-2.5 text-sm text-deep/70">
+                    🌱 {a.cropNotes[query.crop]}
+                  </p>
+                )}
               </>
             ) : (
               <>
@@ -193,6 +228,11 @@ export function Appraiser() {
                 <p className="mt-2 text-sm leading-relaxed text-deep/70">
                   {a.consultBody}
                 </p>
+                {query.crop && a.cropNotes[query.crop] && (
+                  <p className="mt-3 rounded-xl bg-white px-4 py-2.5 text-sm text-deep/70">
+                    🌱 {a.cropNotes[query.crop]}
+                  </p>
+                )}
                 {(() => {
                   const comps = compareUses(query.uf);
                   const top = comps.find((c) => !c.selective) ?? comps[0];
@@ -319,6 +359,16 @@ export function Appraiser() {
                     <input type="hidden" name="state" value={query.uf} />
                     <input type="hidden" name="municipality" value={query.municipality} />
                     <input type="hidden" name="purpose" value={query.purpose} />
+                    {query.crop && (
+                      <input
+                        type="hidden"
+                        name="purposeDetail"
+                        value={
+                          a.crops[query.purpose]?.find((c) => c.value === query.crop)
+                            ?.label ?? query.crop
+                        }
+                      />
+                    )}
                     <div className="grid gap-3 sm:grid-cols-2">
                       <input
                         name="name"

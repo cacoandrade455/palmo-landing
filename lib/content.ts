@@ -62,6 +62,8 @@ export type Content = {
     selectiveTag: string;
     cropLabel: string;
     cropPlaceholder: string;
+    vtnPotential: string;
+    vtnLine: string;
     crops: Record<string, { value: string; label: string }[]>;
     cropNotes: Record<string, string>;
   };
@@ -210,6 +212,10 @@ export const content: Record<Lang, Content> = {
       selectiveTag: "mercado seletivo — depende de projeto e rede elétrica na região",
       cropLabel: "Cultura específica (opcional)",
       cropPlaceholder: "Todas / não sei ainda",
+      vtnPotential:
+        "Estimativa pelo valor oficial da terra no seu município (VTN {year} da Receita Federal × 2,5–6% ao ano):",
+      vtnLine:
+        "Valor oficial da terra (VTN {year}, Receita Federal) no seu município: {value}/ha.",
       crops: {
         graos: [
           { value: "soja", label: "Soja" },
@@ -422,6 +428,10 @@ export const content: Record<Lang, Content> = {
       selectiveTag: "selective market — depends on projects and grid access in the region",
       cropLabel: "Specific crop (optional)",
       cropPlaceholder: "All / not sure yet",
+      vtnPotential:
+        "Estimate from your municipality's official land value (Federal Revenue VTN {year} × 2.5–6%/year):",
+      vtnLine:
+        "Official land value (VTN {year}, Federal Revenue) in your municipality: {value}/ha.",
       crops: {
         graos: [
           { value: "soja", label: "Soybean" },

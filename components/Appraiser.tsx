@@ -13,6 +13,7 @@ import {
   UFS,
   type Estimate,
 } from "@/lib/appraisal-data";
+import { estimateFromVTN } from "@/lib/vtn";
 
 type Query = {
   uf: string;
@@ -221,6 +222,18 @@ export function Appraiser() {
                     🌱 {a.cropNotes[query.crop]}
                   </p>
                 )}
+                {(() => {
+                  const vtn = estimateFromVTN(query.uf, query.municipality, query.purpose);
+                  if (!vtn) return null;
+                  return (
+                    <p className="mt-2 text-sm font-semibold text-deep/60">
+                      🏛️{" "}
+                      {a.vtnLine
+                        .replace("{year}", String(vtn.year))
+                        .replace("{value}", formatBRL(vtn.vtnPerHa))}
+                    </p>
+                  );
+                })()}
               </>
             ) : (
               <>
@@ -234,6 +247,23 @@ export function Appraiser() {
                   </p>
                 )}
                 {(() => {
+                  const vtn = estimateFromVTN(query.uf, query.municipality, query.purpose);
+                  if (vtn) {
+                    return (
+                      <>
+                        <p className="mt-4 text-sm font-semibold text-deep/70">
+                          🏛️ {a.vtnPotential.replace("{year}", String(vtn.year))}
+                        </p>
+                        <p className="mt-2 text-3xl font-extrabold text-deep sm:text-5xl">
+                          {formatBRL(vtn.minPerHa * query.hectares)} –{" "}
+                          {formatBRL(vtn.maxPerHa * query.hectares)}
+                          <span className="ml-2 text-lg font-bold text-deep/50">
+                            /{lang === "en" ? "year" : "ano"}
+                          </span>
+                        </p>
+                      </>
+                    );
+                  }
                   const comps = compareUses(query.uf);
                   const top = comps.find((c) => !c.selective) ?? comps[0];
                   if (!top) return null;

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 import { LanguageProvider } from "@/lib/language-context";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
@@ -53,6 +54,7 @@ export default function RootLayout({
     <html lang="pt" className={`${nunito.variable} h-full antialiased`}>
       <body className="min-h-full">
         <LanguageProvider>{children}</LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );

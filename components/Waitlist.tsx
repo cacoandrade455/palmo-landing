@@ -1,49 +1,37 @@
 "use client";
 
-import { useEffect, useState, useActionState } from "react";
+import { useActionState, useState, type FormEvent } from "react";
 import { useFormStatus } from "react-dom";
-import { CheckCircle2, Plus, X } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { submitWaitlist, type WaitlistResult } from "@/app/actions";
 import { useLanguage } from "@/lib/language-context";
 
 const initialState: WaitlistResult | null = null;
 
+const UFS = [
+  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG",
+  "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO",
+] as const;
+
+const UF_NOMES: Record<string, string> = {
+  AC: "Acre", AL: "Alagoas", AP: "Amapá", AM: "Amazonas", BA: "Bahia",
+  CE: "Ceará", DF: "Distrito Federal", ES: "Espírito Santo", GO: "Goiás",
+  MA: "Maranhão", MT: "Mato Grosso", MS: "Mato Grosso do Sul", MG: "Minas Gerais",
+  PA: "Pará", PB: "Paraíba", PR: "Paraná", PE: "Pernambuco", PI: "Piauí",
+  RJ: "Rio de Janeiro", RN: "Rio Grande do Norte", RS: "Rio Grande do Sul",
+  RO: "Rondônia", RR: "Roraima", SC: "Santa Catarina", SP: "São Paulo",
+  SE: "Sergipe", TO: "Tocantins",
+};
+
 const inputCls =
-  "mt-1.5 w-full rounded-xl border border-deep/15 bg-white px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none disabled:cursor-not-allowed disabled:opacity-60";
+  "mt-1.5 w-full rounded-xl border border-deep/15 px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none";
 
-/** Brazilian states — full name shown to the user, sigla sent to the sheet. */
-const UF_OPTIONS: { sigla: string; nome: string }[] = [
-  { sigla: "AC", nome: "Acre" },
-  { sigla: "AL", nome: "Alagoas" },
-  { sigla: "AP", nome: "Amapá" },
-  { sigla: "AM", nome: "Amazonas" },
-  { sigla: "BA", nome: "Bahia" },
-  { sigla: "CE", nome: "Ceará" },
-  { sigla: "DF", nome: "Distrito Federal" },
-  { sigla: "ES", nome: "Espírito Santo" },
-  { sigla: "GO", nome: "Goiás" },
-  { sigla: "MA", nome: "Maranhão" },
-  { sigla: "MT", nome: "Mato Grosso" },
-  { sigla: "MS", nome: "Mato Grosso do Sul" },
-  { sigla: "MG", nome: "Minas Gerais" },
-  { sigla: "PA", nome: "Pará" },
-  { sigla: "PB", nome: "Paraíba" },
-  { sigla: "PR", nome: "Paraná" },
-  { sigla: "PE", nome: "Pernambuco" },
-  { sigla: "PI", nome: "Piauí" },
-  { sigla: "RJ", nome: "Rio de Janeiro" },
-  { sigla: "RN", nome: "Rio Grande do Norte" },
-  { sigla: "RS", nome: "Rio Grande do Sul" },
-  { sigla: "RO", nome: "Rondônia" },
-  { sigla: "RR", nome: "Roraima" },
-  { sigla: "SC", nome: "Santa Catarina" },
-  { sigla: "SP", nome: "São Paulo" },
-  { sigla: "SE", nome: "Sergipe" },
-  { sigla: "TO", nome: "Tocantins" },
-];
+type MuniCache = Record<string, string[] | "error" | undefined>;
 
-/** muni === "" means "the whole state". */
-type Region = { uf: string; muni: string };
+/** Accent-insensitive lowercase, for the municipality search box. */
+function norm(s: string) {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
 
 function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: string }) {
   const { pending } = useFormStatus();
@@ -66,117 +54,166 @@ export function Waitlist() {
   );
 
   const [role, setRole] = useState<"have" | "want">("have");
-  const [country, setCountry] = useState<string | null>(null);
-  // Single location (Tenho terra)
-  const [uf, setUf] = useState("");
-  const [muni, setMuni] = useState("");
-  // Region picker + chips (Procuro terra)
-  const [selUf, setSelUf] = useState("");
-  const [selMuni, setSelMuni] = useState("");
-  const [regions, setRegions] = useState<Region[]>([]);
-  const [regionError, setRegionError] = useState(false);
-  // per-UF municipality cache: string[] = loaded; "error" = IBGE unavailable
-  const [muniByUf, setMuniByUf] = useState<Record<string, string[] | "error">>({});
+  const [country, setCountry] = useState(lang === "en" ? "Brazil" : "Brasil");
 
-  const countryValue = country ?? (lang === "en" ? "Brazil" : "Brasil");
-  const isBrazil = ["brasil", "brazil"].includes(
-    countryValue
-      .trim()
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, ""),
-  );
+  // "Tenho terra" (one UF + one município).
+  const [ufSel, setUfSel] = useState("");
+  const [munSel, setMunSel] = useState("");
+  const [munText, setMunText] = useState(""); // fallback when the IBGE API is down
 
-  const activeUf = role === "have" ? uf : selUf;
+  // "Procuro terra" (multi-state + optional multi-município per state).
+  const [wantUfs, setWantUfs] = useState<string[]>([]);
+  const [wantMunis, setWantMunis] = useState<Record<string, string[]>>({});
+  const [wantFilter, setWantFilter] = useState<Record<string, string>>({});
+  const [brasilInteiro, setBrasilInteiro] = useState(false);
 
-  useEffect(() => {
-    if (!isBrazil || !activeUf || muniByUf[activeUf]) return;
-    let cancelled = false;
-    fetch(
-      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${activeUf}/municipios?orderBy=nome`,
-    )
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((list: { nome: string }[]) => {
-        if (!cancelled)
-          setMuniByUf((p) => ({ ...p, [activeUf]: list.map((m) => m.nome) }));
-      })
-      .catch(() => {
-        if (!cancelled) setMuniByUf((p) => ({ ...p, [activeUf]: "error" }));
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [activeUf, muniByUf, isBrazil]);
+  const [muniByUf, setMuniByUf] = useState<MuniCache>({});
+  const [localError, setLocalError] = useState<string | null>(null);
 
-  const muniEntry = activeUf ? muniByUf[activeUf] : undefined;
-  const municipalities = Array.isArray(muniEntry) ? muniEntry : [];
-  const muniFailed = muniEntry === "error";
-  const muniLoading = isBrazil && !!activeUf && muniEntry === undefined;
-
+  // Extra labels for the region UI (existing labels keep coming from lib/content.ts).
   const x =
     lang === "en"
       ? {
-          selectState: "Select the state...",
-          muniFirst: "Pick the state first",
-          muniLoading: "Loading municipalities...",
-          selectMuni: "Select the municipality...",
-          typeMuni: "Type the municipality",
-          wholeState: "Whole state",
-          whereLooking: "Where are you looking for land?",
-          multiHint: "You can add more than one region.",
-          addRegion: "Add another region",
-          removeRegion: "Remove",
-          needRegion: "Add at least one region (pick a state).",
+          whereWant: "Where are you looking for land?",
+          whereWantHint:
+            "Check every state you're interested in — and, if you want, specific municipalities.",
+          anywhere: "Anywhere in Brazil",
+          statesLabel: "States of interest",
+          wholeState: (uf: string) => `All of ${uf}`,
+          muniOptional: (nome: string) => `Municipalities in ${nome} (optional)`,
+          noneMeansAll: "None checked = the whole state",
+          searchMuni: "Search municipality…",
+          checkedLabel: "Checked:",
+          muniError: "Couldn't load the municipalities — we'll consider the whole state.",
+          retry: "Try again",
+          selectUf: "Select…",
+          selectMuni: "Select…",
+          selectMuniFirst: "Pick the state first",
+          loading: "Loading…",
+          muniFallback: "Municipality (type it)",
+          errMissing: "Please review the fields and try again.",
+          errNoRegion: "Check at least one state — or “Anywhere in Brazil”.",
+          successCta: "Meanwhile, see what your land could earn →",
         }
       : {
-          selectState: "Selecione o estado...",
-          muniFirst: "Escolha o estado primeiro",
-          muniLoading: "Carregando municípios...",
-          selectMuni: "Selecione o município...",
-          typeMuni: "Digite o município",
-          wholeState: "Todo o estado",
-          whereLooking: "Onde você procura terra?",
-          multiHint: "Você pode adicionar mais de uma região.",
-          addRegion: "Adicionar outra região",
-          removeRegion: "Remover",
-          needRegion: "Adicione pelo menos uma região (escolha um estado).",
+          whereWant: "Onde você procura terra?",
+          whereWantHint:
+            "Marque todos os estados que te interessam — e, se quiser, municípios específicos.",
+          anywhere: "Qualquer lugar do Brasil",
+          statesLabel: "Estados de interesse",
+          wholeState: (uf: string) => `Todo o estado de ${uf}`,
+          muniOptional: (nome: string) => `Municípios em ${nome} (opcional)`,
+          noneMeansAll: "Nenhum marcado = estado inteiro",
+          searchMuni: "Buscar município…",
+          checkedLabel: "Marcados:",
+          muniError: "Não deu para carregar os municípios — vamos considerar o estado inteiro.",
+          retry: "Tentar de novo",
+          selectUf: "Selecione…",
+          selectMuni: "Selecione…",
+          selectMuniFirst: "Escolha o estado primeiro",
+          loading: "Carregando…",
+          muniFallback: "Município (digite)",
+          errMissing: "Confira os campos e tente de novo.",
+          errNoRegion: "Marque pelo menos um estado — ou “Qualquer lugar do Brasil”.",
+          successCta: "Enquanto isso, veja quanto sua terra pode render →",
         };
 
-  function regionLabel(r: Region) {
-    return r.muni ? `${r.muni}/${r.uf}` : `${x.wholeState}/${r.uf}`;
-  }
-  function sameRegion(a: Region, b: Region) {
-    return a.uf === b.uf && a.muni === b.muni;
-  }
-  function addRegion() {
-    if (!selUf) return;
-    const r: Region = { uf: selUf, muni: selMuni };
-    setRegions((prev) => (prev.some((p) => sameRegion(p, r)) ? prev : [...prev, r]));
-    setSelUf("");
-    setSelMuni("");
-    setRegionError(false);
-  }
-  function removeRegion(r: Region) {
-    setRegions((prev) => prev.filter((p) => !sameRegion(p, r)));
+  const isBrasil = ["brasil", "brazil", "br"].includes(country.trim().toLowerCase());
+
+  const muniEntry = ufSel ? muniByUf[ufSel] : undefined;
+  const municipios = Array.isArray(muniEntry) ? muniEntry : [];
+  const muniFailed = muniEntry === "error";
+  const muniLoading = !!ufSel && muniEntry === undefined;
+
+  /** Loads a UF's municipalities from the IBGE API (cached per UF). */
+  function ensureMunicipios(uf: string) {
+    if (!uf || Array.isArray(muniByUf[uf])) return;
+    setMuniByUf((prev) => {
+      const next = { ...prev };
+      delete next[uf]; // clears a previous "error" so the UI shows "loading" while retrying
+      return next;
+    });
+    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios?orderBy=nome`)
+      .then((r) => {
+        if (!r.ok) throw new Error(String(r.status));
+        return r.json();
+      })
+      .then((list: { nome: string }[]) =>
+        setMuniByUf((prev) => ({ ...prev, [uf]: list.map((m) => m.nome) })),
+      )
+      .catch(() => setMuniByUf((prev) => ({ ...prev, [uf]: "error" })));
   }
 
-  // Regions actually submitted: the added chips + whatever is currently in
-  // the picker (so choosing BA/Salvador and hitting submit without clicking
-  // "Adicionar" still counts).
-  const pending: Region[] = selUf ? [{ uf: selUf, muni: selMuni }] : [];
-  const effectiveRegions = [
-    ...regions,
-    ...pending.filter((p) => !regions.some((r) => sameRegion(r, p))),
-  ];
-  const wantState = [...new Set(effectiveRegions.map((r) => r.uf))].join(", ");
-  const wantMunicipality = effectiveRegions.map(regionLabel).join("; ");
+  /** "Tenho terra": selecting the UF resets the município and loads the list. */
+  function loadMunicipios(uf: string) {
+    setUfSel(uf);
+    setMunSel("");
+    setMunText("");
+    ensureMunicipios(uf);
+  }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    if (isBrazil && role === "want" && effectiveRegions.length === 0) {
-      e.preventDefault();
-      setRegionError(true);
+  /** "Procuro terra": checks/unchecks a state of interest. */
+  function toggleWantUf(uf: string) {
+    setLocalError(null);
+    if (wantUfs.includes(uf)) {
+      setWantUfs((prev) => prev.filter((u) => u !== uf));
+      setWantMunis((prev) => {
+        const next = { ...prev };
+        delete next[uf];
+        return next;
+      });
+      setWantFilter((prev) => {
+        const next = { ...prev };
+        delete next[uf];
+        return next;
+      });
+    } else {
+      setWantUfs((prev) => (prev.includes(uf) ? prev : [...prev, uf]));
+      ensureMunicipios(uf);
     }
   }
+
+  /** "Procuro terra": checks/unchecks a município inside a checked state. */
+  function toggleWantMuni(uf: string, muni: string) {
+    setWantMunis((prev) => {
+      const atual = prev[uf] ?? [];
+      return {
+        ...prev,
+        [uf]: atual.includes(muni) ? atual.filter((m) => m !== muni) : [...atual, muni],
+      };
+    });
+  }
+
+  // States of interest in canonical UF order (stable output for the sheet).
+  const wantUfsOrdenados = UFS.filter((uf) => wantUfs.includes(uf));
+
+  // Values that go to the sheet (State / Municipality columns), pre-joined as
+  // text — same flat "a; b; c" format as the existing rows, no script changes.
+  const stateValue = brasilInteiro
+    ? lang === "en"
+      ? "Brazil"
+      : "Brasil"
+    : wantUfsOrdenados.join("; ");
+  const municipalityValue = brasilInteiro
+    ? lang === "en"
+      ? "Anywhere in Brazil"
+      : "Brasil inteiro"
+    : wantUfsOrdenados
+        .flatMap((uf) => {
+          const marcados = wantMunis[uf] ?? [];
+          return marcados.length > 0 ? marcados.map((m) => `${m}/${uf}`) : [x.wholeState(uf)];
+        })
+        .join("; ");
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    setLocalError(null);
+    if (role === "want" && isBrasil && !brasilInteiro && wantUfs.length === 0) {
+      e.preventDefault();
+      setLocalError(x.errNoRegion);
+    }
+  }
+
+  const serverError = state && !state.ok ? state.error : null;
 
   return (
     <section id="lista-de-espera" className="bg-primary py-20">
@@ -190,9 +227,17 @@ export function Waitlist() {
         <p className="mt-3 text-base text-white/80">{t.waitlist.subtitle}</p>
 
         {state?.ok ? (
-          <div className="mt-8 flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-8 text-deep shadow-sm">
-            <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
-            <p className="font-semibold">{t.waitlist.success}</p>
+          <div className="mt-8 rounded-2xl bg-white px-6 py-8 text-deep shadow-sm">
+            <div className="flex items-center justify-center gap-2">
+              <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+              <p className="font-semibold">{t.waitlist.success}</p>
+            </div>
+            <a
+              href="/quanto-vale"
+              className="mt-3 inline-block text-sm font-bold text-primary underline underline-offset-4"
+            >
+              {x.successCta}
+            </a>
           </div>
         ) : (
           <form
@@ -230,38 +275,6 @@ export function Waitlist() {
               />
             </div>
 
-            {/* The role comes BEFORE the location now — the location fields
-                change shape depending on this choice. */}
-            <fieldset>
-              <legend className="text-sm font-semibold text-deep">
-                {t.waitlist.roleLabel}
-              </legend>
-              <div className="mt-2 grid grid-cols-2 gap-3">
-                <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-deep/15 px-4 py-3 text-sm font-semibold text-deep transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/10">
-                  <input
-                    type="radio"
-                    name="role"
-                    value="have"
-                    checked={role === "have"}
-                    onChange={() => setRole("have")}
-                    className="accent-primary"
-                  />
-                  {t.waitlist.roleHave}
-                </label>
-                <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-deep/15 px-4 py-3 text-sm font-semibold text-deep transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/10">
-                  <input
-                    type="radio"
-                    name="role"
-                    value="want"
-                    checked={role === "want"}
-                    onChange={() => setRole("want")}
-                    className="accent-primary"
-                  />
-                  {t.waitlist.roleWant}
-                </label>
-              </div>
-            </fieldset>
-
             <div>
               <label htmlFor="country" className="text-sm font-semibold text-deep">
                 {t.waitlist.countryLabel}
@@ -271,14 +284,229 @@ export function Waitlist() {
                 name="country"
                 type="text"
                 required
-                value={countryValue}
+                value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 className={inputCls}
               />
             </div>
 
-            {!isBrazil ? (
-              /* Outside Brazil: free-text region, same as before */
+            <fieldset>
+              <legend className="text-sm font-semibold text-deep">{t.waitlist.roleLabel}</legend>
+              <div className="mt-2 grid grid-cols-2 gap-3">
+                {(["have", "want"] as const).map((r) => (
+                  <label
+                    key={r}
+                    className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-deep/15 px-4 py-3 text-sm font-semibold text-deep transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/10"
+                  >
+                    <input
+                      type="radio"
+                      name="role"
+                      value={r}
+                      checked={role === r}
+                      onChange={() => {
+                        setRole(r);
+                        setLocalError(null);
+                      }}
+                      className="accent-primary"
+                    />
+                    {r === "have" ? t.waitlist.roleHave : t.waitlist.roleWant}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            {isBrasil ? (
+              role === "have" ? (
+                /* ---------- Tenho terra: one UF + one município (IBGE) ---------- */
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label htmlFor="wl-uf" className="text-sm font-semibold text-deep">
+                      {t.waitlist.stateLabel}
+                    </label>
+                    <select
+                      id="wl-uf"
+                      name="state"
+                      required
+                      value={ufSel}
+                      onChange={(e) => loadMunicipios(e.target.value)}
+                      className={inputCls}
+                    >
+                      <option value="" disabled>
+                        {x.selectUf}
+                      </option>
+                      {UFS.map((uf) => (
+                        <option key={uf} value={uf}>
+                          {uf}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="wl-muni" className="text-sm font-semibold text-deep">
+                      {t.waitlist.municipalityLabel}
+                    </label>
+                    {muniFailed ? (
+                      <input
+                        id="wl-muni"
+                        name="municipality"
+                        type="text"
+                        required
+                        value={munText}
+                        onChange={(e) => setMunText(e.target.value)}
+                        placeholder={t.waitlist.municipalityPlaceholder}
+                        className={inputCls}
+                      />
+                    ) : (
+                      <select
+                        id="wl-muni"
+                        name="municipality"
+                        required
+                        disabled={!ufSel || muniLoading}
+                        value={munSel}
+                        onChange={(e) => setMunSel(e.target.value)}
+                        className={`${inputCls} disabled:opacity-60`}
+                      >
+                        <option value="" disabled>
+                          {!ufSel ? x.selectMuniFirst : muniLoading ? x.loading : x.selectMuni}
+                        </option>
+                        {municipios.map((m) => (
+                          <option key={m} value={m}>
+                            {m}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                /* ---------- Procuro terra: check states + optional municípios ---------- */
+                <div>
+                  <p className="text-sm font-semibold text-deep">{x.whereWant}</p>
+                  <p className="mt-0.5 text-xs text-deep/50">{x.whereWantHint}</p>
+
+                  <label className="mt-2 flex cursor-pointer items-center gap-2 text-sm font-semibold text-deep">
+                    <input
+                      type="checkbox"
+                      checked={brasilInteiro}
+                      onChange={(e) => {
+                        setBrasilInteiro(e.target.checked);
+                        setLocalError(null);
+                      }}
+                      className="h-4 w-4 accent-primary"
+                    />
+                    {x.anywhere}
+                  </label>
+
+                  {!brasilInteiro && (
+                    <>
+                      <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-deep/50">
+                        {x.statesLabel}
+                      </p>
+                      <div className="mt-1.5 grid grid-cols-5 gap-1.5 sm:grid-cols-9">
+                        {UFS.map((uf) => (
+                          <label
+                            key={uf}
+                            title={UF_NOMES[uf]}
+                            className="cursor-pointer rounded-lg border border-deep/15 py-1.5 text-center text-xs font-bold text-deep transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-white has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={wantUfs.includes(uf)}
+                              onChange={() => toggleWantUf(uf)}
+                              className="sr-only"
+                            />
+                            {uf}
+                          </label>
+                        ))}
+                      </div>
+
+                      {wantUfsOrdenados.map((uf) => {
+                        const entry = muniByUf[uf];
+                        const lista = Array.isArray(entry) ? entry : [];
+                        const carregando = entry === undefined;
+                        const falhou = entry === "error";
+                        const filtro = wantFilter[uf] ?? "";
+                        const marcados = wantMunis[uf] ?? [];
+                        const visiveis = filtro
+                          ? lista.filter((m) => norm(m).includes(norm(filtro)))
+                          : lista;
+                        return (
+                          <div
+                            key={uf}
+                            className="mt-3 rounded-xl border border-deep/15 p-3"
+                          >
+                            <p className="text-sm font-bold text-deep">
+                              {UF_NOMES[uf]} ({uf})
+                            </p>
+                            <p className="mt-0.5 text-xs text-deep/50">
+                              {x.muniOptional(UF_NOMES[uf] ?? uf)} — {x.noneMeansAll}
+                            </p>
+
+                            {carregando && (
+                              <p className="mt-2 text-xs text-deep/50">{x.loading}</p>
+                            )}
+
+                            {falhou && (
+                              <div className="mt-2">
+                                <p className="text-xs text-deep/60">{x.muniError}</p>
+                                <button
+                                  type="button"
+                                  onClick={() => ensureMunicipios(uf)}
+                                  className="mt-1 text-xs font-bold text-primary underline underline-offset-2"
+                                >
+                                  {x.retry}
+                                </button>
+                              </div>
+                            )}
+
+                            {!carregando && !falhou && (
+                              <>
+                                <input
+                                  type="text"
+                                  value={filtro}
+                                  onChange={(e) =>
+                                    setWantFilter((prev) => ({ ...prev, [uf]: e.target.value }))
+                                  }
+                                  placeholder={x.searchMuni}
+                                  aria-label={`${x.searchMuni} — ${UF_NOMES[uf]}`}
+                                  className="mt-2 w-full rounded-lg border border-deep/15 px-3 py-2 text-sm text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none"
+                                />
+                                <div className="mt-2 max-h-44 overflow-y-auto rounded-lg border border-deep/10">
+                                  {visiveis.map((m) => (
+                                    <label
+                                      key={m}
+                                      className="flex cursor-pointer items-center gap-2 px-2.5 py-1.5 text-sm text-deep transition-colors hover:bg-primary/5"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={marcados.includes(m)}
+                                        onChange={() => toggleWantMuni(uf, m)}
+                                        className="h-4 w-4 shrink-0 accent-primary"
+                                      />
+                                      {m}
+                                    </label>
+                                  ))}
+                                </div>
+                                {marcados.length > 0 && (
+                                  <p className="mt-1.5 text-xs text-deep/60">
+                                    <span className="font-bold">{x.checkedLabel}</span>{" "}
+                                    {marcados.join(", ")}
+                                  </p>
+                                )}
+                              </>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </>
+                  )}
+
+                  <input type="hidden" name="state" value={stateValue} />
+                  <input type="hidden" name="municipality" value={municipalityValue} />
+                </div>
+              )
+            ) : (
+              /* ---------- Outside Brazil: free-text state + city ---------- */
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label htmlFor="state" className="text-sm font-semibold text-deep">
@@ -294,10 +522,7 @@ export function Waitlist() {
                   />
                 </div>
                 <div>
-                  <label
-                    htmlFor="municipality"
-                    className="text-sm font-semibold text-deep"
-                  >
+                  <label htmlFor="municipality" className="text-sm font-semibold text-deep">
                     {t.waitlist.municipalityLabel}
                   </label>
                   <input
@@ -310,171 +535,34 @@ export function Waitlist() {
                   />
                 </div>
               </div>
-            ) : role === "have" ? (
-              /* Tenho terra: one state + one municipality (IBGE dropdowns) */
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label htmlFor="state" className="text-sm font-semibold text-deep">
-                    {t.waitlist.stateLabel}
-                  </label>
-                  <select
-                    id="state"
-                    name="state"
-                    required
-                    value={uf}
-                    onChange={(e) => {
-                      setUf(e.target.value);
-                      setMuni("");
-                    }}
-                    className={inputCls}
-                  >
-                    <option value="" disabled>
-                      {x.selectState}
-                    </option>
-                    {UF_OPTIONS.map((o) => (
-                      <option key={o.sigla} value={o.sigla}>
-                        {o.nome}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label
-                    htmlFor="municipality"
-                    className="text-sm font-semibold text-deep"
-                  >
-                    {t.waitlist.municipalityLabel}
-                  </label>
-                  {muniFailed ? (
-                    <input
-                      id="municipality"
-                      name="municipality"
-                      type="text"
-                      required
-                      placeholder={x.typeMuni}
-                      className={inputCls}
-                    />
-                  ) : (
-                    <select
-                      id="municipality"
-                      name="municipality"
-                      required
-                      disabled={!uf || muniLoading}
-                      value={muni}
-                      onChange={(e) => setMuni(e.target.value)}
-                      className={inputCls}
-                    >
-                      <option value="" disabled>
-                        {!uf ? x.muniFirst : muniLoading ? x.muniLoading : x.selectMuni}
-                      </option>
-                      {municipalities.map((m) => (
-                        <option key={m} value={m}>
-                          {m}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                </div>
-              </div>
-            ) : (
-              /* Procuro terra: multiple regions via picker + chips */
-              <div>
-                <p className="text-sm font-semibold text-deep">{x.whereLooking}</p>
-                <p className="mt-0.5 text-xs text-deep/50">{x.multiHint}</p>
-
-                {regions.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {regions.map((r) => (
-                      <span
-                        key={`${r.uf}|${r.muni}`}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-sm font-semibold text-deep"
-                      >
-                        {regionLabel(r)}
-                        <button
-                          type="button"
-                          onClick={() => removeRegion(r)}
-                          aria-label={`${x.removeRegion} ${regionLabel(r)}`}
-                          className="text-deep/50 transition-colors hover:text-deep"
-                        >
-                          <X className="h-3.5 w-3.5" aria-hidden="true" />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                <div className="mt-2 grid grid-cols-2 gap-3">
-                  <select
-                    aria-label={t.waitlist.stateLabel}
-                    value={selUf}
-                    onChange={(e) => {
-                      setSelUf(e.target.value);
-                      setSelMuni("");
-                      setRegionError(false);
-                    }}
-                    className={inputCls}
-                  >
-                    <option value="" disabled>
-                      {x.selectState}
-                    </option>
-                    {UF_OPTIONS.map((o) => (
-                      <option key={o.sigla} value={o.sigla}>
-                        {o.nome}
-                      </option>
-                    ))}
-                  </select>
-                  {muniFailed ? (
-                    <input
-                      aria-label={t.waitlist.municipalityLabel}
-                      type="text"
-                      value={selMuni}
-                      onChange={(e) => setSelMuni(e.target.value)}
-                      placeholder={x.typeMuni}
-                      className={inputCls}
-                    />
-                  ) : (
-                    <select
-                      aria-label={t.waitlist.municipalityLabel}
-                      disabled={!selUf || muniLoading}
-                      value={selMuni}
-                      onChange={(e) => setSelMuni(e.target.value)}
-                      className={inputCls}
-                    >
-                      <option value="">
-                        {!selUf ? x.muniFirst : muniLoading ? x.muniLoading : x.wholeState}
-                      </option>
-                      {municipalities.map((m) => (
-                        <option key={m} value={m}>
-                          {m}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={addRegion}
-                  disabled={!selUf}
-                  className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-primary/40 px-4 py-2 text-sm font-bold text-primary transition-colors hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <Plus className="h-4 w-4" aria-hidden="true" />
-                  {x.addRegion}
-                </button>
-
-                {regionError && (
-                  <p className="mt-2 text-sm font-semibold text-red-600">
-                    {x.needRegion}
-                  </p>
-                )}
-
-                <input type="hidden" name="state" value={wantState} />
-                <input type="hidden" name="municipality" value={wantMunicipality} />
-              </div>
             )}
 
-            {state && !state.ok && (
-              <p className="text-sm font-semibold text-red-600">{t.waitlist.error}</p>
+            <div>
+              <label htmlFor="wl-purpose" className="text-sm font-semibold text-deep">
+                {t.waitlist.purposeLabel}
+              </label>
+              <select
+                id="wl-purpose"
+                name="purpose"
+                required
+                defaultValue=""
+                className={inputCls}
+              >
+                <option value="" disabled>
+                  {t.waitlist.purposePlaceholder}
+                </option>
+                {t.waitlist.purposeOptions.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {(localError || serverError) && (
+              <p className="text-sm font-semibold text-red-600">
+                {localError ?? (serverError === "missing_fields" ? x.errMissing : t.waitlist.error)}
+              </p>
             )}
 
             <SubmitButton label={t.waitlist.submit} pendingLabel={t.waitlist.submitting} />

@@ -78,6 +78,7 @@ export type Content = {
     vtnLineApprox: string;
     crops: Record<string, { value: string; label: string }[]>;
     cropNotes: Record<string, string>;
+    cropFormation: Record<string, string>;
   };
   auth: {
     signIn: string;
@@ -382,6 +383,23 @@ export const content: Record<Lang, Content> = {
         camarao: "Viveiro de camarão formado (RN/CE) arrenda caro; terra nua apta à carcinicultura depende de licença e água salobra.",
         eucalipto: "Florestas plantadas usam contratos longos (7+ anos): arrendamento fixo ou parceria florestal com a indústria.",
         erva_mate: "Erval formado costuma arrendar por colheita — mercado tradicional no Sul (PR/SC/RS).",
+      },
+      cropFormation: {
+        banana: "Do plantio à primeira colheita: ~10–14 meses (Embrapa).",
+        mamao: "Do plantio à primeira colheita: ~8–10 meses (Embrapa).",
+        maracuja: "Do plantio à primeira colheita: ~7–9 meses (Embrapa).",
+        uva: "Do plantio à primeira colheita: ~1,5 ano; produção plena: ~3 anos (Embrapa).",
+        cafe: "Do plantio à primeira colheita: ~2–3 anos; produção plena: ~4–5 anos (Embrapa) — contratos de plantio costumam prever carência.",
+        caju: "Caju-anão clonal: primeira colheita ~2–3 anos; produção plena: ~7 anos (Embrapa) — contratos de plantio costumam prever carência.",
+        coco: "Coqueiro-anão: primeira colheita ~2,5–3 anos; produção plena: ~6 anos (Embrapa) — contratos de plantio costumam prever carência.",
+        acai: "Açaí de terra firme: primeira colheita ~3 anos; produção plena: ~5–6 anos (Embrapa) — contratos de plantio costumam prever carência.",
+        cacau: "Do plantio à primeira colheita: ~3–4 anos; produção plena: ~6–7 anos (Embrapa/CEPLAC) — contratos de plantio costumam prever carência.",
+        citros: "Do plantio à primeira colheita: ~3 anos; produção plena: ~7–8 anos (Embrapa/Fundecitrus) — contratos de plantio costumam prever carência.",
+        manga: "Manga enxertada: primeira colheita ~3–4 anos; produção plena: ~7 anos (Embrapa) — contratos de plantio costumam prever carência.",
+        dende: "Do plantio à primeira colheita: ~3 anos; produção plena: ~7–8 anos (Embrapa) — as integradoras costumam estruturar a carência.",
+        seringueira: "Do plantio ao início da sangria: ~6–7 anos (Embrapa) — contratos de plantio costumam prever carência longa.",
+        erva_mate: "Do plantio à primeira poda comercial: ~4–5 anos (Embrapa Florestas).",
+        eucalipto: "Do plantio ao corte: ~6–7 anos (Embrapa Florestas) — por isso os contratos florestais são longos.",
       },
     },
     auth: {
@@ -714,6 +732,23 @@ export const content: Record<Lang, Content> = {
         camarao: "Formed shrimp ponds (RN/CE) lease at a premium; bare land suited to shrimp farming depends on licensing and brackish water.",
         eucalipto: "Planted forests use long contracts (7+ years): fixed leases or forestry partnerships with the industry.",
         erva_mate: "A formed yerba-mate stand usually leases per harvest — a traditional market in the South (PR/SC/RS).",
+      },
+      cropFormation: {
+        banana: "Planting to first harvest: ~10–14 months (Embrapa).",
+        mamao: "Planting to first harvest: ~8–10 months (Embrapa).",
+        maracuja: "Planting to first harvest: ~7–9 months (Embrapa).",
+        uva: "Planting to first harvest: ~1.5 years; full yield: ~3 years (Embrapa).",
+        cafe: "Planting to first harvest: ~2–3 years; full yield: ~4–5 years (Embrapa) — planting leases usually include a grace period.",
+        caju: "Clonal dwarf cashew: first harvest ~2–3 years; full yield: ~7 years (Embrapa) — planting leases usually include a grace period.",
+        coco: "Dwarf coconut: first harvest ~2.5–3 years; full yield: ~6 years (Embrapa) — planting leases usually include a grace period.",
+        acai: "Upland açaí: first harvest ~3 years; full yield: ~5–6 years (Embrapa) — planting leases usually include a grace period.",
+        cacau: "Planting to first harvest: ~3–4 years; full yield: ~6–7 years (Embrapa/CEPLAC) — planting leases usually include a grace period.",
+        citros: "Planting to first harvest: ~3 years; full yield: ~7–8 years (Embrapa/Fundecitrus) — planting leases usually include a grace period.",
+        manga: "Grafted mango: first harvest ~3–4 years; full yield: ~7 years (Embrapa) — planting leases usually include a grace period.",
+        dende: "Planting to first harvest: ~3 years; full yield: ~7–8 years (Embrapa) — integrators usually structure the grace period.",
+        seringueira: "Planting to first tapping: ~6–7 years (Embrapa) — planting leases usually include a long grace period.",
+        erva_mate: "Planting to first commercial pruning: ~4–5 years (Embrapa Florestas).",
+        eucalipto: "Planting to harvest: ~6–7 years (Embrapa Florestas) — which is why forestry contracts run long.",
       },
     },
     auth: {

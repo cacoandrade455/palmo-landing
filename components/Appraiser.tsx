@@ -300,6 +300,11 @@ export function Appraiser() {
                     🌱 {a.cropNotes[query.crop]}
                   </p>
                 )}
+                {query.crop && a.cropFormation[query.crop] && (
+                  <p className="mt-2 rounded-xl bg-white px-4 py-2.5 text-sm text-deep/70">
+                    ⏳ {a.cropFormation[query.crop]}
+                  </p>
+                )}
                 {(() => {
                   const vtn = estimateFromVTN(query.uf, query.municipality, query.purpose);
                   if (!vtn) return null;
@@ -355,6 +360,11 @@ export function Appraiser() {
                 {query.crop && a.cropNotes[query.crop] && (
                   <p className="mt-3 rounded-xl bg-white px-4 py-2.5 text-sm text-deep/70">
                     🌱 {a.cropNotes[query.crop]}
+                  </p>
+                )}
+                {query.crop && a.cropFormation[query.crop] && (
+                  <p className="mt-2 rounded-xl bg-white px-4 py-2.5 text-sm text-deep/70">
+                    ⏳ {a.cropFormation[query.crop]}
                   </p>
                 )}
                 {(() => {

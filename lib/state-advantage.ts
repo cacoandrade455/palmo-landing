@@ -28,6 +28,14 @@
  *   produtividade, ~23 t/ha (Embrapa/IBGE).
  * - Melancia: BA maior volume — Teixeira de Freitas 59–71 t/ha (CEPEA);
  *   GO maior rendimento/ha (IBGE PAM 2023/24).
+ * - Abacaxi: PB maior produtora (safra 2024/25); SP maior rendimento,
+ *   R$128 mil/ha; média nacional R$77 mil/ha (IBGE).
+ * - Ovinos: BA 23% do rebanho nacional; PE 2º, RS 3º (IBGE PPM 2023).
+ * - Caprinos: BA 31%; com PE e PI, NE concentra 96% (IBGE PPM 2023).
+ * - Tilápia: PR líder com 27% da produção (Anuário Peixe BR 2026);
+ *   SP e MG no pódio; CE cresce 29% a.a.
+ * - Camarão: CE ~57% da produção nacional (IBGE/BNB-ETENE; ABCC 2026);
+ *   RN 2º, PB 3ª; Aracati/CE maior município produtor.
  */
 
 export type StateAdvantage = {
@@ -152,6 +160,31 @@ export const stateAdvantages: Record<string, StateAdvantage> = {
     ufs: ["BA", "GO", "RS"],
     factPt: "BA é a maior produtora de melancia em volume — Teixeira de Freitas colhe 59–71 t/ha (CEPEA); GO tem o maior rendimento por hectare (IBGE).",
     factEn: "BA is Brazil's largest watermelon producer by volume — Teixeira de Freitas harvests 59–71 t/ha (CEPEA); GO has the highest per-hectare returns (IBGE).",
+  },
+  abacaxi: {
+    ufs: ["PB", "PA", "SP", "MG"],
+    factPt: "PB é a maior produtora de abacaxi do país (safra 2024/25); SP tem o maior rendimento — R$128 mil/ha (IBGE).",
+    factEn: "PB is Brazil's largest pineapple producer (2024/25 season); SP has the highest returns — R$128k/ha (IBGE).",
+  },
+  ovinos: {
+    ufs: ["BA", "PE", "RS", "CE"],
+    factPt: "BA tem o maior rebanho ovino do Brasil (23%); PE é o 2º e RS o 3º — Casa Nova/BA lidera entre os municípios (IBGE PPM 2023).",
+    factEn: "BA has Brazil's largest sheep flock (23%); PE is 2nd and RS 3rd — Casa Nova/BA leads among municipalities (IBGE PPM 2023).",
+  },
+  caprinos: {
+    ufs: ["BA", "PE", "PI", "CE"],
+    factPt: "BA lidera a caprinocultura nacional (31% do rebanho); com PE e PI, o Nordeste concentra 96% dos caprinos do país (IBGE PPM 2023).",
+    factEn: "BA leads Brazil's goat farming (31% of the herd); with PE and PI, the Northeast holds 96% of the country's goats (IBGE PPM 2023).",
+  },
+  tilapia: {
+    ufs: ["PR", "SP", "MG", "SC"],
+    factPt: "PR lidera a tilápia nacional com 27% da produção (Anuário Peixe BR 2026); SP e MG completam o pódio — no NE, o CE cresce 29% ao ano.",
+    factEn: "PR leads Brazil's tilapia with 27% of output (Peixe BR 2026 yearbook); SP and MG complete the podium — in the NE, CE grows 29% a year.",
+  },
+  camarao: {
+    ufs: ["CE", "RN", "PB", "PE"],
+    factPt: "CE lidera a carcinicultura com ~57% do camarão cultivado no país (IBGE/BNB); RN e PB completam o pódio — Aracati/CE é o maior município produtor.",
+    factEn: "CE leads shrimp farming with ~57% of Brazil's farmed shrimp (IBGE/BNB); RN and PB complete the podium — Aracati/CE is the top producing municipality.",
   },
 };
 

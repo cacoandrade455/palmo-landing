@@ -279,45 +279,48 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
       sourceNote: "maracujá formado (IBGE PAM 2023/24: média nacional R$52 mil/ha)",
     },
   },
-  coco: {
-    // coqueiro-anão irrigado p/ coco verde: 20–40 mil frutos/ha × R$0,60–1,40
-    ...group2(["CE", "BA", "PE", "RN", "SE", "AL"], {
-      revMin: 15000,
-      revMax: 45000,
-      sourceNote: "coqueiro-anão irrigado (BNB/ETENE, Embrapa): 20–40 mil frutos/ha × R$0,60–1,40",
-    }),
-    default: {
-      revMin: 12000,
-      revMax: 40000,
-      sourceNote: "coqueiral anão formado (BNB/ETENE, Embrapa; preço APROCOCO)",
-    },
-  },
-  acai: {
-    PA: {
-      revMin: 25000,
-      revMax: 45000,
-      sourceNote: "açaí plantado em terra firme (Embrapa/Sedap-PA): 8–13 t/ha × ~R$3,6 mil/t",
-    },
-    default: {
-      revMin: 15000,
-      revMax: 40000,
-      sourceNote: "açaí plantado em terra firme (Embrapa); várzea manejada é mercado à parte",
-    },
-  },
-  caju: {
-    // faixa larga de propósito: cajueiral velho rende pouco; renovado
-    // com clones (Embrapa) multiplica a receita por 3–5×
-    ...group2(["CE", "PI", "RN"], {
-      revMin: 1650,
-      revMax: 8800,
-      sourceNote: "cajueiral: 300 kg/ha (tradicional) a 1.600 kg/ha (clonal, Embrapa) × R$5,50/kg (CONAB mar/2026)",
-    }),
-    default: {
-      revMin: 1650,
-      revMax: 8800,
-      sourceNote: "cajueiral tradicional a clonal (Embrapa) × R$5,50/kg de castanha (CONAB mar/2026)",
-    },
-  },
+  coco: (() => {
+    // coqueiro-anão irrigado p/ coco verde: 20–40 mil frutos/ha (BNB/ETENE,
+    // Embrapa) × preço vivo do fruto (lib/prices.json)
+    const p = price("fruto_coco") || 1.0;
+    const note = `coqueiro-anão irrigado (BNB/ETENE, Embrapa): 20–40 mil frutos/ha × R$${p.toFixed(2)}/fruto`;
+    const ne = { revMin: Math.round(20000 * p), revMax: Math.round(40000 * p), sourceNote: note };
+    return {
+      ...group2(["CE", "BA", "PE", "RN", "SE", "AL"], ne),
+      default: {
+        revMin: Math.round(15000 * p),
+        revMax: Math.round(40000 * p),
+        sourceNote: `coqueiral anão formado × R$${p.toFixed(2)}/fruto (BNB/ETENE; preço APROCOCO)`,
+      },
+    };
+  })(),
+  acai: (() => {
+    // terra firme plantado: 8–13 t/ha (Embrapa/Sedap-PA) × preço vivo do kg
+    const p = price("kg_acai") || 3.6;
+    return {
+      PA: {
+        revMin: Math.round(8000 * p),
+        revMax: Math.round(13000 * p),
+        sourceNote: `açaí plantado em terra firme (Embrapa/Sedap-PA): 8–13 t/ha × R$${p.toFixed(2)}/kg`,
+      },
+      default: {
+        revMin: 15000,
+        revMax: 40000,
+        sourceNote: "açaí plantado em terra firme (Embrapa); várzea manejada é mercado à parte",
+      },
+    };
+  })(),
+  caju: (() => {
+    // faixa larga de propósito: cajueiral velho rende pouco; renovado com
+    // clones (Embrapa) multiplica por 3–5×. Preço vivo da castanha (CONAB).
+    const p = price("kg_castanha_caju") || 5.5;
+    const ref = {
+      revMin: Math.round(300 * p),
+      revMax: Math.round(1600 * p),
+      sourceNote: `cajueiral: 300 kg/ha (tradicional) a 1.600 kg/ha (clonal, Embrapa) × R$${p.toFixed(2)}/kg de castanha (CONAB)`,
+    };
+    return { ...group2(["CE", "PI", "RN"], ref), default: ref };
+  })(),
 };
 
 /** group() for formed-crop refs (same idea, different value type). */

@@ -40,6 +40,18 @@ const SOURCES = {
   arroba_cacau: "Notícias Agrícolas / CEPLAC (cacau spot)",
   kg_manga: "CEPEA Hortifruti / Embrapa Semiárido",
   credito_carbono: "mercado voluntário (Aegro/ZS reports)",
+  kg_castanha_caju: "CONAB — Análise Mensal Castanha de Caju (conab.gov.br)",
+  fruto_coco: "CEPEA Hortifruti (hfbrasil.org.br) + APROCOCO — coco verde",
+  kg_acai: "CONAB/IBGE + boletins Sedap-PA — açaí fruto",
+};
+
+// Chaves que o motor lê e que podem ainda não existir no prices.json.
+// Na primeira rodada o script as SEMEIA com o valor de referência abaixo
+// (mesma fonte do modelo); depois entram no refresh mensal como as demais.
+const NEW_KEYS = {
+  kg_castanha_caju: { value: 5.5, unit: "R$/kg (castanha em casca, ao produtor)", source: "CONAB mar/2026", updatedAt: MONTH },
+  fruto_coco: { value: 1.0, unit: "R$/fruto (coco verde, ao produtor)", source: "BNB/ETENE + APROCOCO", updatedAt: MONTH },
+  kg_acai: { value: 3.6, unit: "R$/kg (fruto)", source: "IBGE 2022 (média nacional)", updatedAt: MONTH },
 };
 
 // ─── Tier 2 hook: openly fetchable series go here ────────────────────────────
@@ -90,6 +102,13 @@ async function promptManual(rl, current) {
 
 async function main() {
   const current = loadCurrent();
+
+  for (const [k, v] of Object.entries(NEW_KEYS)) {
+    if (!current.prices[k]) {
+      current.prices[k] = v;
+      console.log(`  + nova chave semeada: ${k} = ${v.value} (${v.source})`);
+    }
+  }
 
   console.log("Fetching openly-available series…");
   const fetched = await fetchOpenSeries();

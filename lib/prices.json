@@ -49,6 +49,24 @@
       "unit": "R$/crédito (tCO2e)",
       "source": "mercado voluntário BR (Aegro/ZS/Jusbrasil)",
       "updatedAt": "2026-07"
+    },
+    "kg_castanha_caju": {
+      "value": 5.5,
+      "unit": "R$/kg (castanha em casca, ao produtor)",
+      "source": "CONAB mar/2026",
+      "updatedAt": "2026-07"
+    },
+    "fruto_coco": {
+      "value": 1,
+      "unit": "R$/fruto (coco verde, ao produtor)",
+      "source": "BNB/ETENE + APROCOCO",
+      "updatedAt": "2026-07"
+    },
+    "kg_acai": {
+      "value": 3.6,
+      "unit": "R$/kg (fruto)",
+      "source": "IBGE 2022 (média nacional)",
+      "updatedAt": "2026-07"
     }
   }
 }

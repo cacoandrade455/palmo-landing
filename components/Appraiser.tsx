@@ -24,6 +24,7 @@ type Query = {
   hectares: number;
   purpose: string;
   crop: string;
+  variant: string;
 };
 
 function LeadSubmit({ label, pendingLabel }: { label: string; pendingLabel: string }) {
@@ -43,6 +44,7 @@ export function Appraiser() {
   const { t, lang } = useLanguage();
   const [query, setQuery] = useState<Query | null>(null);
   const [purposeSel, setPurposeSel] = useState("");
+  const [cropSel, setCropSel] = useState("");
   const [ufSel, setUfSel] = useState("");
   // per-UF cache: string[] = loaded; "error" = IBGE unavailable (free-text fallback)
   const [muniByUf, setMuniByUf] = useState<Record<string, string[] | "error">>({});
@@ -87,6 +89,7 @@ export function Appraiser() {
       hectares: Number(fd.get("hectares") ?? 0),
       purpose: String(fd.get("purpose") ?? ""),
       crop: String(fd.get("crop") ?? ""),
+      variant: String(fd.get("variant") ?? ""),
     };
     if (!q.uf || !q.purpose || !q.hectares || q.hectares <= 0) return;
     setQuery(q);
@@ -209,7 +212,10 @@ export function Appraiser() {
                 name="purpose"
                 required
                 value={purposeSel}
-                onChange={(e) => setPurposeSel(e.target.value)}
+                onChange={(e) => {
+                  setPurposeSel(e.target.value);
+                  setCropSel("");
+                }}
                 className={inputCls}
               >
                 <option value="" disabled>
@@ -232,14 +238,36 @@ export function Appraiser() {
               <select
                 id="ap-crop"
                 name="crop"
-                key={purposeSel}
-                defaultValue=""
+                value={cropSel}
+                onChange={(e) => setCropSel(e.target.value)}
                 className={inputCls}
               >
                 <option value="">{a.cropPlaceholder}</option>
                 {a.crops[purposeSel].map((c) => (
                   <option key={c.value} value={c.value}>
                     {c.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {cropSel && (a.cropVariants[cropSel]?.length ?? 0) > 0 && (
+            <div>
+              <label htmlFor="ap-variant" className="text-sm font-semibold text-deep">
+                {a.variantLabel}
+              </label>
+              <select
+                id="ap-variant"
+                name="variant"
+                key={cropSel}
+                defaultValue=""
+                className={inputCls}
+              >
+                <option value="">{a.variantPlaceholder}</option>
+                {(a.cropVariants[cropSel] ?? []).map((v) => (
+                  <option key={v.value} value={v.value}>
+                    {v.label}
                   </option>
                 ))}
               </select>
@@ -610,10 +638,17 @@ export function Appraiser() {
                       <input
                         type="hidden"
                         name="purposeDetail"
-                        value={
-                          a.crops[query.purpose]?.find((c) => c.value === query.crop)
-                            ?.label ?? query.crop
-                        }
+                        value={(() => {
+                          const cl =
+                            a.crops[query.purpose]?.find((c) => c.value === query.crop)
+                              ?.label ?? query.crop;
+                          const vl = query.variant
+                            ? a.cropVariants[query.crop]?.find(
+                                (v) => v.value === query.variant,
+                              )?.label
+                            : undefined;
+                          return vl ? `${cl} / ${vl}` : cl;
+                        })()}
                       />
                     )}
                     <div className="grid gap-3 sm:grid-cols-2">

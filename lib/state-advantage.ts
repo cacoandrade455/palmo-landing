@@ -36,6 +36,10 @@
  *   SP e MG no pódio; CE cresce 29% a.a.
  * - Camarão: CE ~57% da produção nacional (IBGE/BNB-ETENE; ABCC 2026);
  *   RN 2º, PB 3ª; Aracati/CE maior município produtor.
+ * - Extrativismo (IBGE PEVS): carnaúba — PI+CE ~96% do pó (100% NE);
+ *   babaçu — MA ~94% (Vargem Grande líder); pinhão — Sul ~97%;
+ *   castanha-da-amazônia — AC/AM/PA (Brasiléia/AC líder); piaçava —
+ *   BA ~96% (Ilhéus, Nilo Peçanha, Cairu).
  */
 
 export type StateAdvantage = {
@@ -185,6 +189,31 @@ export const stateAdvantages: Record<string, StateAdvantage> = {
     ufs: ["CE", "RN", "PB", "PE"],
     factPt: "CE lidera a carcinicultura com ~57% do camarão cultivado no país (IBGE/BNB); RN e PB completam o pódio — Aracati/CE é o maior município produtor.",
     factEn: "CE leads shrimp farming with ~57% of Brazil's farmed shrimp (IBGE/BNB); RN and PB complete the podium — Aracati/CE is the top producing municipality.",
+  },
+  carnauba: {
+    ufs: ["PI", "CE"],
+    factPt: "PI e CE concentram ~96% do pó de carnaúba do Brasil — 100% da produção é nordestina (IBGE PEVS).",
+    factEn: "PI and CE hold ~96% of Brazil's carnauba powder — 100% of production is Northeastern (IBGE PEVS).",
+  },
+  babacu: {
+    ufs: ["MA", "PI"],
+    factPt: "MA responde por ~94% das amêndoas de babaçu do país; PI é o 2º (IBGE PEVS) — Vargem Grande/MA lidera entre os municípios.",
+    factEn: "MA accounts for ~94% of Brazil's babassu kernels; PI is 2nd (IBGE PEVS) — Vargem Grande/MA leads among municipalities.",
+  },
+  pinhao: {
+    ufs: ["PR", "SC", "RS"],
+    factPt: "O Sul concentra ~97% do pinhão nacional (IBGE PEVS) — renda em pé das araucárias nativas.",
+    factEn: "The South holds ~97% of Brazil's pine nuts (IBGE PEVS) — standing income from native araucarias.",
+  },
+  castanha_amazonia: {
+    ufs: ["AC", "AM", "PA"],
+    factPt: "AC lidera a castanha-da-amazônia, com AM e PA no pódio (IBGE PEVS); Brasiléia/AC é o maior município produtor.",
+    factEn: "AC leads Brazil-nut output, with AM and PA on the podium (IBGE PEVS); Brasiléia/AC is the top producing municipality.",
+  },
+  piacava: {
+    ufs: ["BA"],
+    factPt: "BA concentra ~96% da piaçava do Brasil — Ilhéus, Nilo Peçanha e Cairu lideram (IBGE PEVS).",
+    factEn: "BA holds ~96% of Brazil's piassava — Ilhéus, Nilo Peçanha and Cairu lead (IBGE PEVS).",
   },
 };
 

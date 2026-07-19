@@ -80,6 +80,7 @@ export type Content = {
     cropNotes: Record<string, string>;
     cropFormation: Record<string, string>;
     formedMath: string;
+    nationalFallbackNote: string;
   };
   auth: {
     signIn: string;
@@ -250,6 +251,8 @@ export const content: Record<Lang, Content> = {
         "Vale para lavoura já plantada e produzindo. Terra nua (sem a lavoura) vale bem menos — veja abaixo.",
       formedMath:
         "🧮 A conta: faturamento estimado de {revMin} a {revMax} por hectare/ano × ~15% (praxe de mercado para lavoura formada) = a faixa acima.",
+      nationalFallbackNote:
+        "⚠️ Referência nacional ampla — seu estado ainda não tem faixa própria levantada para esse uso; trate como piso e teto largos.",
       rawLandLabel: "Terra nua (sem lavoura formada):",
       advantageLabel: "Vantagem regional",
       vtnPotential:
@@ -601,6 +604,8 @@ export const content: Record<Lang, Content> = {
         "Applies to an already planted, producing crop. Bare land (without the plantation) is worth much less — see below.",
       formedMath:
         "🧮 The math: estimated gross revenue of {revMin} to {revMax} per hectare/year × ~15% (market convention for formed crops) = the range above.",
+      nationalFallbackNote:
+        "⚠️ Broad national reference — your state doesn't have its own surveyed range for this use yet; treat it as a wide floor and ceiling.",
       rawLandLabel: "Bare land (no formed plantation):",
       advantageLabel: "Regional advantage",
       vtnPotential:

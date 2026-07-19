@@ -373,7 +373,14 @@ export function cropLandLeaseRef(crop: string, uf: string): CropLeaseRef | null 
 }
 
 export type Estimate =
-  | { kind: "range"; minPerHa: number; maxPerHa: number; note?: Range["note"] }
+  | {
+      kind: "range";
+      minPerHa: number;
+      maxPerHa: number;
+      note?: Range["note"];
+      /** true when the range came from the national default, not a surveyed state range */
+      fallback?: boolean;
+    }
   | { kind: "consult" };
 
 export function estimateLease(
@@ -383,14 +390,16 @@ export function estimateLease(
 ): Estimate {
   if (crop) {
     const byUf = cropOverrides[crop];
-    const r = byUf?.[uf] ?? byUf?.default;
-    if (r) return { kind: "range", minPerHa: r.min, maxPerHa: r.max, note: r.note };
+    const own = byUf?.[uf];
+    const r = own ?? byUf?.default;
+    if (r) return { kind: "range", minPerHa: r.min, maxPerHa: r.max, note: r.note, fallback: !own };
   }
   const byUf = table[purpose];
   if (!byUf) return { kind: "consult" };
-  const r = byUf[uf] ?? byUf.default;
+  const own = byUf[uf];
+  const r = own ?? byUf.default;
   if (!r) return { kind: "consult" };
-  return { kind: "range", minPerHa: r.min, maxPerHa: r.max, note: r.note };
+  return { kind: "range", minPerHa: r.min, maxPerHa: r.max, note: r.note, fallback: !own };
 }
 
 export type UseComparison = {
@@ -401,6 +410,8 @@ export type UseComparison = {
   mid: number;
   /** opportunistic markets (e.g. solar): real prices, but site-dependent demand */
   selective: boolean;
+  /** true when the range came from the national default, not a surveyed state range */
+  fallback: boolean;
 };
 
 /**
@@ -413,7 +424,8 @@ export type UseComparison = {
 export function compareUses(uf: string): UseComparison[] {
   const out: UseComparison[] = [];
   for (const [purpose, byUf] of Object.entries(table)) {
-    const r = byUf[uf] ?? byUf.default;
+    const own = byUf[uf];
+    const r = own ?? byUf.default;
     if (!r) continue;
     out.push({
       purpose,
@@ -421,6 +433,7 @@ export function compareUses(uf: string): UseComparison[] {
       maxPerHa: r.max,
       mid: (r.min + r.max) / 2,
       selective: !!r.selective,
+      fallback: !own,
     });
   }
   return out.sort((a, b) => b.mid - a.mid);

@@ -295,6 +295,11 @@ export function Appraiser() {
                   {formatBRL(estimate.minPerHa)} – {formatBRL(estimate.maxPerHa)}{" "}
                   {a.perHaYear}
                 </p>
+                {estimate.fallback && (
+                  <p className="mt-1.5 text-xs font-semibold leading-relaxed text-deep/50">
+                    {a.nationalFallbackNote}
+                  </p>
+                )}
                 {query.crop && a.cropNotes[query.crop] && (
                   <p className="mt-2 rounded-xl bg-white px-4 py-2.5 text-sm text-deep/70">
                     🌱 {a.cropNotes[query.crop]}
@@ -481,6 +486,11 @@ export function Appraiser() {
                           /{lang === "en" ? "year" : "ano"}
                         </span>
                       </p>
+                      {top.fallback && (
+                        <p className="mt-1.5 text-xs font-semibold leading-relaxed text-deep/50">
+                          {a.nationalFallbackNote}
+                        </p>
+                      )}
                     </>
                   );
                 })()}

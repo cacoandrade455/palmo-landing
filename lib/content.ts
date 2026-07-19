@@ -84,6 +84,11 @@ export type Content = {
     cropVariants: Record<string, { value: string; label: string }[]>;
     variantLabel: string;
     variantPlaceholder: string;
+    pevsPriceLine: string;
+    pevsWhereMuni: string;
+    pevsWhereUf: string;
+    pevsWhereBr: string;
+    pevsHint: string;
   };
   auth: {
     signIn: string;
@@ -273,6 +278,13 @@ export const content: Record<Lang, Content> = {
       },
       variantLabel: "Variedade (opcional)",
       variantPlaceholder: "Todas / não sei",
+      pevsPriceLine:
+        "💰 Preço médio pago ao produtor {where}: {price}/kg (IBGE PEVS {year}).",
+      pevsWhereMuni: "no seu município",
+      pevsWhereUf: "no seu estado",
+      pevsWhereBr: "no Brasil",
+      pevsHint:
+        "Renda em pé = densidade do seu extrativo × produção × esse preço. E a PGPM-Bio (CONAB) garante preço mínimo — se vender abaixo do piso, a CONAB paga a diferença.",
       rawLandLabel: "Terra nua (sem lavoura formada):",
       advantageLabel: "Vantagem regional",
       vtnPotential:
@@ -456,7 +468,7 @@ export const content: Record<Lang, Content> = {
         carnauba: "Carnaubal nativo em pé já rende: PI e CE concentram ~96% do pó de carnaúba do país, 100% nordestino (IBGE PEVS) — a extração arrenda por safra da palha.",
         babacu: "MA responde por ~94% das amêndoas de babaçu (IBGE PEVS); atenção à Lei do Babaçu Livre em vários municípios — o acesso das quebradeiras é protegido.",
         pinhao: "O Sul concentra ~97% do pinhão nacional (IBGE PEVS): araucárias nativas em pé rendem por colheita — o corte é proibido, a renda é da coleta.",
-        castanha_amazonia: "AC lidera a castanha-da-amazônia, com AM e PA no pódio (IBGE PEVS): castanhais nativos rendem por safra — o corte da árvore é proibido por lei.",
+        castanha_amazonia: "AC lidera a castanha-da-amazônia, com AM e PA no pódio (IBGE PEVS): castanhais nativos rendem por safra — o corte da árvore é proibido por lei. Piso PGPM-Bio 2024: R$3,66/kg (CONAB).",
         piacava: "BA concentra ~96% da piaçava do país — Ilhéus, Nilo Peçanha e Cairu lideram (IBGE PEVS); piaçavais nativos arrendam por corte da fibra.",
         pequi: "Pequi é renda em pé do cerrado (GO/MG/TO na PEVS/IBGE): coleta por safra em pequizais nativos — o corte da árvore é restrito por lei em GO/MG.",
         mangaba: "Mangaba é extrativismo do litoral nordestino (SE é referência na PEVS/IBGE); mangabais nativos rendem por safra.",
@@ -698,6 +710,13 @@ export const content: Record<Lang, Content> = {
       },
       variantLabel: "Variety (optional)",
       variantPlaceholder: "All / not sure",
+      pevsPriceLine:
+        "💰 Average price paid to producers {where}: {price}/kg (IBGE PEVS {year}).",
+      pevsWhereMuni: "in your municipality",
+      pevsWhereUf: "in your state",
+      pevsWhereBr: "in Brazil",
+      pevsHint:
+        "Standing income = your stand's density × output × this price. PGPM-Bio (CONAB) guarantees a floor price — sell below it and CONAB pays the difference.",
       rawLandLabel: "Bare land (no formed plantation):",
       advantageLabel: "Regional advantage",
       vtnPotential:
@@ -881,7 +900,7 @@ export const content: Record<Lang, Content> = {
         carnauba: "A standing carnauba grove already earns: PI and CE hold ~96% of Brazil's carnauba powder, 100% of it Northeastern (IBGE PEVS) — extraction leases per straw season.",
         babacu: "MA accounts for ~94% of babassu kernels (IBGE PEVS); note the Free Babassu Law in many municipalities — breaker women's access is protected.",
         pinhao: "The South holds ~97% of Brazil's pine nuts (IBGE PEVS): standing native araucarias earn per harvest — felling is banned, the income is the gathering.",
-        castanha_amazonia: "AC leads Brazil nuts, with AM and PA on the podium (IBGE PEVS): native groves earn per season — felling the tree is illegal.",
+        castanha_amazonia: "AC leads Brazil nuts, with AM and PA on the podium (IBGE PEVS): native groves earn per season — felling the tree is illegal. 2024 PGPM-Bio floor: R$3.66/kg (CONAB).",
         piacava: "BA holds ~96% of Brazil's piassava — Ilhéus, Nilo Peçanha and Cairu lead (IBGE PEVS); native stands lease per fiber cut.",
         pequi: "Pequi is standing cerrado income (GO/MG/TO in IBGE's PEVS): seasonal gathering from native stands — felling is restricted by law in GO/MG.",
         mangaba: "Mangaba is Northeast-coast extractivism (SE is the reference in IBGE's PEVS); native stands earn per season.",

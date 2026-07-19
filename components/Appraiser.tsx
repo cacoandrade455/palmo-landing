@@ -15,6 +15,7 @@ import {
 } from "@/lib/appraisal-data";
 import { cropLandLeaseRef, formedCropLeaseRef } from "@/lib/appraisal-data";
 import { estimateFromVTN } from "@/lib/vtn";
+import { pevsPriceRef, formatKg } from "@/lib/pevs";
 import { stateAdvantageFor } from "@/lib/state-advantage";
 import { pricesUpdatedLabel } from "@/lib/prices";
 
@@ -339,7 +340,11 @@ export function Appraiser() {
                   </p>
                 )}
                 {(() => {
-                  const vtn = estimateFromVTN(query.uf, query.municipality, query.purpose);
+                  const vtn = estimateFromVTN(
+                    query.uf,
+                    query.municipality,
+                    query.purpose === "extrativismo" ? "silvicultura" : query.purpose,
+                  );
                   if (!vtn) return null;
                   return (
                     <p className="mt-2 text-sm font-semibold text-deep/60">
@@ -363,32 +368,40 @@ export function Appraiser() {
                   ? formedCropLeaseRef(query.crop, query.uf)
                   : null;
                 const hasModel = !!(formed || cropRef);
+                // Extrativismo usa o campo de silvicultura do VTN — a proxy
+                // oficial mais próxima para vegetação nativa em pé.
+                const vtnHead = estimateFromVTN(
+                  query.uf,
+                  query.municipality,
+                  query.purpose === "extrativismo" ? "silvicultura" : query.purpose,
+                );
+                const hasNumbers = hasModel || !!vtnHead;
                 return (
               <>
-                {hasModel && (
+                {hasNumbers && (
                   <h2 className="text-sm font-bold uppercase tracking-wide text-primary">
                     {a.resultTitle}
                   </h2>
                 )}
-                <p className={hasModel ? "mt-1 text-sm text-deep/60" : "text-sm font-semibold text-deep/60"}>
+                <p className={hasNumbers ? "mt-1 text-sm text-deep/60" : "text-sm font-semibold text-deep/60"}>
                   {(query.crop &&
                     a.crops[query.purpose]?.find((c) => c.value === query.crop)
                       ?.label) ||
                     purposeLabel}{" "}
                   · {query.municipality}, {query.uf} · {query.hectares} ha
                 </p>
-                {!hasModel && (
+                {!hasNumbers && (
                   <>
                     <h2 className="mt-2 text-lg font-extrabold text-deep">{a.consultTitle}</h2>
                     <p className="mt-2 text-sm leading-relaxed text-deep/70">
                       {a.consultBody}
                     </p>
-                    {!query.crop && (a.crops[query.purpose]?.length ?? 0) > 0 && (
-                      <p className="mt-2 rounded-xl bg-accent/20 px-4 py-2.5 text-sm font-semibold text-deep">
-                        💡 {a.consultPickCrop}
-                      </p>
-                    )}
                   </>
+                )}
+                {!hasModel && !query.crop && (a.crops[query.purpose]?.length ?? 0) > 0 && (
+                  <p className="mt-2 rounded-xl bg-accent/20 px-4 py-2.5 text-sm font-semibold text-deep">
+                    💡 {a.consultPickCrop}
+                  </p>
                 )}
                 {query.crop && a.cropNotes[query.crop] && (
                   <p className="mt-3 rounded-xl bg-white px-4 py-2.5 text-sm text-deep/70">
@@ -400,8 +413,37 @@ export function Appraiser() {
                     ⏳ {a.cropFormation[query.crop]}
                   </p>
                 )}
+                {query.purpose === "extrativismo" &&
+                  query.crop &&
+                  (() => {
+                    const ref = pevsPriceRef(query.crop, query.uf, query.municipality);
+                    if (!ref) return null;
+                    const where =
+                      ref.scope === "muni"
+                        ? a.pevsWhereMuni
+                        : ref.scope === "uf"
+                          ? a.pevsWhereUf
+                          : a.pevsWhereBr;
+                    return (
+                      <div className="mt-3 rounded-xl bg-primary/10 px-4 py-3">
+                        <p className="text-sm font-bold text-deep">
+                          {a.pevsPriceLine
+                            .replace("{where}", where)
+                            .replace("{price}", formatKg(ref.price))
+                            .replace("{year}", ref.year)}
+                        </p>
+                        <p className="mt-1 text-sm leading-relaxed text-deep/70">
+                          {a.pevsHint}
+                        </p>
+                      </div>
+                    );
+                  })()}
                 {(() => {
-                  const vtn = estimateFromVTN(query.uf, query.municipality, query.purpose);
+                  const vtn = estimateFromVTN(
+                    query.uf,
+                    query.municipality,
+                    query.purpose === "extrativismo" ? "silvicultura" : query.purpose,
+                  );
                   if (formed) {
                     const raw = cropRef ?? vtn;
                     return (

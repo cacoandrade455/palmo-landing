@@ -58,6 +58,7 @@ export type Content = {
     leadTitle: string;
     leadSubtitle: string;
     heroLink: string;
+    heroLinkSub: string;
     compareTitle: string;
     compareUnit: string;
     compareYourChoice: string;
@@ -227,7 +228,8 @@ export const content: Record<Lang, Content> = {
         "Pela lei (Estatuto da Terra), o arrendamento é limitado a 15% do valor do imóvel por ano (30% em zonas de exploração intensiva).",
       leadTitle: "Quer receber propostas reais nessa faixa?",
       leadSubtitle: "Entre na lista de espera — é grátis.",
-      heroLink: "Quanto vale minha terra? →",
+      heroLink: "Quanto vale minha terra?",
+      heroLinkSub: "Descubra em 30 segundos — grátis, com dados oficiais.",
       compareTitle: "Outros usos na sua região",
       compareUnit: "/ha/ano",
       compareYourChoice: "sua escolha",
@@ -558,7 +560,8 @@ export const content: Record<Lang, Content> = {
         "By law (Estatuto da Terra), rural rent is capped at 15% of the property value per year (30% in intensive-use zones).",
       leadTitle: "Want to receive real offers in this range?",
       leadSubtitle: "Join the waitlist — it's free.",
-      heroLink: "How much is my land worth? →",
+      heroLink: "How much is my land worth?",
+      heroLinkSub: "Find out in 30 seconds — free, with official data.",
       compareTitle: "Other uses in your region",
       compareUnit: "/ha/yr",
       compareYourChoice: "your choice",

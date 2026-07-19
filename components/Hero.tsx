@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2 } from "lucide-react";
+import { ArrowRight, Calculator, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { PlotIcon } from "./PlotIcon";
 
@@ -42,11 +42,27 @@ export function Hero() {
             {t.hero.trustLine}
           </p>
 
+          {/* Calculator CTA — the strongest zero-commitment hook on the page,
+              promoted from a small text link to a full card-button. */}
           <Link
             href="/quanto-vale"
-            className="mt-3 inline-block text-sm font-bold text-deep/70 underline decoration-accent decoration-2 underline-offset-4 transition-colors hover:text-deep"
+            className="group mt-5 flex max-w-md items-center gap-4 rounded-2xl border-2 border-accent bg-accent/10 px-5 py-4 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-accent/20 hover:shadow-md"
           >
-            {t.appraiser.heroLink}
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent">
+              <Calculator className="h-5 w-5 text-deep" aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-base font-extrabold leading-snug text-deep sm:text-lg">
+                {t.appraiser.heroLink}
+              </span>
+              <span className="mt-0.5 block text-sm leading-snug text-deep/60">
+                {t.appraiser.heroLinkSub}
+              </span>
+            </span>
+            <ArrowRight
+              className="h-5 w-5 shrink-0 text-deep transition-transform group-hover:translate-x-1"
+              aria-hidden="true"
+            />
           </Link>
         </div>
 

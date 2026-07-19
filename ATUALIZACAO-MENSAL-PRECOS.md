@@ -49,6 +49,11 @@ Vercel republica em ~1 min e o site mostra "Preços atualizados em [mês]".
 ## Tiers (evolução do processo)
 
 - **Tier 1 (hoje):** refresh manual mensal via script acima. ~10 min/mês.
+- **Anual — setembro:** IBGE publica a PEVS nova → rodar
+  `node scripts/ingest-pevs.mjs` (1 comando; os 9 produtos do extrativismo
+  atualizam sozinhos para o ano novo) e publicar.
+- **Anual — janeiro:** sai a portaria PGPM-Bio (CONAB) com os pisos do ano →
+  atualizar o piso citado na nota da castanha (e adicionar outros se quiser).
 - **Tier 2 (quando quiser automatizar):** ligar `fetchOpenSeries()` no script
   a APIs abertas (CONAB, IBGE SIDRA, B3 delayed) + agendar com Vercel Cron ou
   GitHub Actions (grátis). Os modelos não mudam — só entram os fetches.

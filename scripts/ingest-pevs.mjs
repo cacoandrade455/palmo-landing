@@ -131,7 +131,10 @@ async function main() {
           const m = extrai(await j(base(`N6[N3[${uf.id}]]`, cod)));
           for (const [nome, d] of Object.entries(m.dados)) {
             const pr = preco(d);
-            if (pr) byMuni[`${nome} (${uf.sigla})`] = pr;
+            // SIDRA devolve "Granja - CE" — remove o sufixo para casar com o
+            // nome do dropdown (IBGE localidades): chave final "Granja (CE)"
+            const nomeLimpo = nome.replace(/\s*-\s*[A-Z]{2}$/, "");
+            if (pr) byMuni[`${nomeLimpo} (${uf.sigla})`] = pr;
           }
         } catch (e) {
           console.log(`     … municípios de ${uf.sigla} falharam (${e.message}) — segue`);

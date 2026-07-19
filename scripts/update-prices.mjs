@@ -133,7 +133,7 @@ async function main() {
   };
   fs.writeFileSync(OUT, JSON.stringify(outData, null, 2));
   console.log(`\n✅ Wrote ${OUT} (updatedAt ${MONTH}).`);
-  console.log("Next: git add lib/prices.json && git commit -m 'monthly price refresh' && git push");
+  console.log('Next: git add -A && git commit -m "atualizacao mensal de precos" && git push');
 }
 
 main().catch((e) => {

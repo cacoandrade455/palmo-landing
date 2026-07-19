@@ -79,6 +79,7 @@ export type Content = {
     crops: Record<string, { value: string; label: string }[]>;
     cropNotes: Record<string, string>;
     cropFormation: Record<string, string>;
+    formedMath: string;
   };
   auth: {
     signIn: string;
@@ -247,6 +248,8 @@ export const content: Record<Lang, Content> = {
         "Com lavoura FORMADA e em produção: na sua região, arrendamentos costumam ficar em ~15% do faturamento ({source}):",
       formedNote:
         "Vale para lavoura já plantada e produzindo. Terra nua (sem a lavoura) vale bem menos — veja abaixo.",
+      formedMath:
+        "🧮 A conta: faturamento estimado de {revMin} a {revMax} por hectare/ano × ~15% (praxe de mercado para lavoura formada) = a faixa acima.",
       rawLandLabel: "Terra nua (sem lavoura formada):",
       advantageLabel: "Vantagem regional",
       vtnPotential:
@@ -596,6 +599,8 @@ export const content: Record<Lang, Content> = {
         "With a FORMED, producing plantation: leases in your region typically run ~15% of gross revenue ({source}):",
       formedNote:
         "Applies to an already planted, producing crop. Bare land (without the plantation) is worth much less — see below.",
+      formedMath:
+        "🧮 The math: estimated gross revenue of {revMin} to {revMax} per hectare/year × ~15% (market convention for formed crops) = the range above.",
       rawLandLabel: "Bare land (no formed plantation):",
       advantageLabel: "Regional advantage",
       vtnPotential:

@@ -391,6 +391,11 @@ export function Appraiser() {
                         <p className="mt-3 rounded-xl bg-accent/20 px-4 py-2.5 text-sm font-semibold text-deep">
                           {a.formedNote}
                         </p>
+                        <p className="mt-2 text-sm leading-relaxed text-deep/60">
+                          {a.formedMath
+                            .replace("{revMin}", formatBRL(formed.revMin))
+                            .replace("{revMax}", formatBRL(formed.revMax))}
+                        </p>
                         {raw && (
                           <p className="mt-3 text-sm font-semibold text-deep/60">
                             {a.rawLandLabel}{" "}

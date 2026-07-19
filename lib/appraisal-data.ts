@@ -331,6 +331,9 @@ function group2(
 export type FormedLeaseRef = {
   minPerHa: number;
   maxPerHa: number;
+  /** gross revenue range the lease derives from — shown so the math is auditable */
+  revMin: number;
+  revMax: number;
   sourceNote: string;
 };
 
@@ -340,6 +343,8 @@ export function formedCropLeaseRef(crop: string, uf: string): FormedLeaseRef | n
   return {
     minPerHa: Math.round(r.revMin * REVENUE_SHARE),
     maxPerHa: Math.round(r.revMax * REVENUE_SHARE),
+    revMin: r.revMin,
+    revMax: r.revMax,
     sourceNote: r.sourceNote,
   };
 }

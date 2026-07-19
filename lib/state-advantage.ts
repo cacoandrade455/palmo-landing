@@ -23,6 +23,11 @@
  *   produtividade baiana (IBGE PAM 2023/24).
  * - Coco: CE maior produtor nacional — 24,7% da produção (BNB/ETENE 2021).
  * - Açaí: PA = 90,4% da produção nacional; AM 2º (IBGE/OIT 2022).
+ * - Caju: CE = 55,3% da castanha nacional; PI 2º com 23% (CONAB mar/2026).
+ * - Mandioca: PA lidera (18,6%), BA 2ª (15,6%), PR 3º; SP/PR maior
+ *   produtividade, ~23 t/ha (Embrapa/IBGE).
+ * - Melancia: BA maior volume — Teixeira de Freitas 59–71 t/ha (CEPEA);
+ *   GO maior rendimento/ha (IBGE PAM 2023/24).
  */
 
 export type StateAdvantage = {
@@ -132,6 +137,21 @@ export const stateAdvantages: Record<string, StateAdvantage> = {
     ufs: ["PA", "AM"],
     factPt: "PA responde por ~90% do açaí nacional; AM é o 2º produtor (IBGE/OIT 2022).",
     factEn: "PA accounts for ~90% of Brazil's açaí; AM is the 2nd producer (IBGE/OIT 2022).",
+  },
+  caju: {
+    ufs: ["CE", "PI", "RN"],
+    factPt: "CE concentra 55% da castanha de caju nacional; PI é o 2º, com 23% (CONAB mar/2026).",
+    factEn: "CE holds 55% of Brazil's cashew-nut output; PI is 2nd with 23% (CONAB Mar/2026).",
+  },
+  mandioca: {
+    ufs: ["PA", "BA", "PR", "SP"],
+    factPt: "PA lidera a mandioca nacional e BA é a 2ª; SP e PR têm a maior produtividade, ~23 t/ha (Embrapa/IBGE).",
+    factEn: "PA leads Brazil's cassava and BA is 2nd; SP and PR have the highest yields, ~23 t/ha (Embrapa/IBGE).",
+  },
+  melancia: {
+    ufs: ["BA", "GO", "RS"],
+    factPt: "BA é a maior produtora de melancia em volume — Teixeira de Freitas colhe 59–71 t/ha (CEPEA); GO tem o maior rendimento por hectare (IBGE).",
+    factEn: "BA is Brazil's largest watermelon producer by volume — Teixeira de Freitas harvests 59–71 t/ha (CEPEA); GO has the highest per-hectare returns (IBGE).",
   },
 };
 

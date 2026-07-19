@@ -148,6 +148,9 @@ const REF_HIGH = 0.06;
  * - acai: terra firme plantado/irrigado 8–13 t/ha (Embrapa/Sedap-PA,
  *   cv. BRS Pai d'Égua) × ~R$3,6 mil/t (IBGE 2022: R$7,0 bi / 1,95 mi t).
  *   Várzea manejada (~4–5 t/ha) é mercado extrativista distinto.
+ * - caju: castanha em casca R$5,50/kg ao produtor no CE (CONAB mar/2026);
+ *   cajueiral tradicional 300–500 kg/ha; clonal adensado até 1.606 kg/ha
+ *   (Embrapa). CE = 55,3% da produção nacional; PI 23% (CONAB 2026).
  */
 const REVENUE_SHARE = 0.15;
 
@@ -299,6 +302,20 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
       revMin: 15000,
       revMax: 40000,
       sourceNote: "açaí plantado em terra firme (Embrapa); várzea manejada é mercado à parte",
+    },
+  },
+  caju: {
+    // faixa larga de propósito: cajueiral velho rende pouco; renovado
+    // com clones (Embrapa) multiplica a receita por 3–5×
+    ...group2(["CE", "PI", "RN"], {
+      revMin: 1650,
+      revMax: 8800,
+      sourceNote: "cajueiral: 300 kg/ha (tradicional) a 1.600 kg/ha (clonal, Embrapa) × R$5,50/kg (CONAB mar/2026)",
+    }),
+    default: {
+      revMin: 1650,
+      revMax: 8800,
+      sourceNote: "cajueiral tradicional a clonal (Embrapa) × R$5,50/kg de castanha (CONAB mar/2026)",
     },
   },
 };

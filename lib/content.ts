@@ -51,6 +51,7 @@ export type Content = {
     totalForArea: string;
     consultTitle: string;
     consultBody: string;
+    consultPickCrop: string;
     consultPotential: string;
     disclaimer: string;
     legalNote: string;
@@ -216,6 +217,8 @@ export const content: Record<Lang, Content> = {
       consultTitle: "Esse mercado é muito específico",
       consultBody:
         "Para esse uso, os valores variam demais de região para região para darmos uma faixa confiável. Deixe seu contato e avisamos quando tivermos propostas reais na sua região.",
+      consultPickCrop:
+        "Dica: escolha a cultura específica no campo acima — para várias culturas (banana, açaí, cacau...) temos referências de mercado da sua região.",
       consultPotential:
         "Potencial da sua área com {use} — o uso mais valorizado com referência na sua região:",
       disclaimer:
@@ -274,6 +277,9 @@ export const content: Record<Lang, Content> = {
           { value: "uva", label: "Uva" },
           { value: "melao", label: "Melão" },
           { value: "acai", label: "Açaí" },
+          { value: "coco", label: "Coco" },
+          { value: "mamao", label: "Mamão" },
+          { value: "maracuja", label: "Maracujá" },
         ],
         horticultura: [
           { value: "hortalicas", label: "Hortaliças em geral" },
@@ -289,6 +295,14 @@ export const content: Record<Lang, Content> = {
         arroz: "Arroz irrigado tem mercado próprio: normalmente 18–25 sacas de arroz/ha/ano por terra e água (referência RS).",
         cafe: "Café costuma ser negociado em parceria (meação), não em valor fixo por hectare — os valores variam muito por região e produtividade.",
         cacau: "Cacau costuma ser negociado em parceria, com partilha da produção — valores fixos por hectare são raros.",
+        banana: "Bananal formado arrenda por fração do faturamento (~15%); terra nua para plantar banana vale bem menos e depende de água.",
+        manga: "Pomar de manga formado (Vale do São Francisco) arrenda por fração do faturamento — o preço da fruta é muito volátil.",
+        uva: "Parreiral formado de uva de mesa irrigada tem alto faturamento e alto custo; o arrendamento costuma ser fração do faturamento.",
+        melao: "Melão é cultura anual: no polo Mossoró/Açu (RN/CE), empresas arrendam terra nua por safra — terra irrigada com outorga de água vale prêmio.",
+        acai: "Açaí plantado em terra firme arrenda por fração do faturamento; açaizal de várzea manejado é mercado extrativista à parte.",
+        coco: "Coqueiral anão formado e irrigado arrenda por fração do faturamento; coqueiral gigante de sequeiro rende bem menos.",
+        mamao: "Mamão tem ciclo curto (~2 anos): a lavoura formada arrenda por fração do faturamento, normalmente em contratos por ciclo.",
+        maracuja: "Maracujá tem ciclo de 1,5–2 anos: o comum é parceria ou arrendamento por ciclo, como fração do faturamento.",
       },
     },
     auth: {
@@ -457,6 +471,8 @@ export const content: Record<Lang, Content> = {
       consultTitle: "This market is very specific",
       consultBody:
         "For this use, values vary too much between regions for a reliable range. Leave your contact and we'll let you know when there are real offers in your region.",
+      consultPickCrop:
+        "Tip: pick the specific crop in the field above — for several crops (banana, açaí, cocoa...) we have market references for your region.",
       consultPotential:
         "Your area's potential with {use} — the highest-value benchmarked use in your region:",
       disclaimer:
@@ -515,6 +531,9 @@ export const content: Record<Lang, Content> = {
           { value: "uva", label: "Grapes" },
           { value: "melao", label: "Melon" },
           { value: "acai", label: "Açaí" },
+          { value: "coco", label: "Coconut" },
+          { value: "mamao", label: "Papaya" },
+          { value: "maracuja", label: "Passion fruit" },
         ],
         horticultura: [
           { value: "hortalicas", label: "General vegetables" },
@@ -530,6 +549,14 @@ export const content: Record<Lang, Content> = {
         arroz: "Irrigated rice has its own market: typically 18–25 sacas of rice/ha/year for land and water (RS reference).",
         cafe: "Coffee is usually negotiated as a partnership (crop share), not fixed rent — values vary widely by region and yield.",
         cacau: "Cocoa is usually negotiated as a partnership with production sharing — fixed per-hectare rents are rare.",
+        banana: "A formed banana plantation leases as a share of gross revenue (~15%); bare land for planting is worth much less and depends on water.",
+        manga: "A formed mango orchard (São Francisco Valley) leases as a share of revenue — fruit prices are highly volatile.",
+        uva: "A formed irrigated table-grape vineyard has high revenue and high costs; leases usually run as a share of revenue.",
+        melao: "Melon is an annual crop: in the Mossoró/Açu hub (RN/CE) companies lease bare land per season — irrigated land with water rights earns a premium.",
+        acai: "Planted upland açaí leases as a share of revenue; managed floodplain açaí is a separate extractive market.",
+        coco: "A formed, irrigated dwarf-coconut grove leases as a share of revenue; rain-fed tall coconut yields far less.",
+        mamao: "Papaya has a short cycle (~2 years): formed plantations lease as a share of revenue, usually per cycle.",
+        maracuja: "Passion fruit runs 1.5–2-year cycles: partnerships or per-cycle leases as a share of revenue are the norm.",
       },
     },
     auth: {

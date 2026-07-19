@@ -314,30 +314,50 @@ export function Appraiser() {
                 })()}
               </>
             ) : (
+              (() => {
+                // A crop with its own market model (formed plantation or land
+                // reference) should HEADLINE the result — "market too specific"
+                // only shows when there is truly nothing crop-specific.
+                const cropRef = query.crop
+                  ? cropLandLeaseRef(query.crop, query.uf)
+                  : null;
+                const formed = query.crop
+                  ? formedCropLeaseRef(query.crop, query.uf)
+                  : null;
+                const hasModel = !!(formed || cropRef);
+                return (
               <>
-                <p className="text-sm font-semibold text-deep/60">
+                {hasModel && (
+                  <h2 className="text-sm font-bold uppercase tracking-wide text-primary">
+                    {a.resultTitle}
+                  </h2>
+                )}
+                <p className={hasModel ? "mt-1 text-sm text-deep/60" : "text-sm font-semibold text-deep/60"}>
                   {(query.crop &&
                     a.crops[query.purpose]?.find((c) => c.value === query.crop)
                       ?.label) ||
                     purposeLabel}{" "}
                   · {query.municipality}, {query.uf} · {query.hectares} ha
                 </p>
-                <h2 className="mt-2 text-lg font-extrabold text-deep">{a.consultTitle}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-deep/70">
-                  {a.consultBody}
-                </p>
+                {!hasModel && (
+                  <>
+                    <h2 className="mt-2 text-lg font-extrabold text-deep">{a.consultTitle}</h2>
+                    <p className="mt-2 text-sm leading-relaxed text-deep/70">
+                      {a.consultBody}
+                    </p>
+                    {!query.crop && (a.crops[query.purpose]?.length ?? 0) > 0 && (
+                      <p className="mt-2 rounded-xl bg-accent/20 px-4 py-2.5 text-sm font-semibold text-deep">
+                        💡 {a.consultPickCrop}
+                      </p>
+                    )}
+                  </>
+                )}
                 {query.crop && a.cropNotes[query.crop] && (
                   <p className="mt-3 rounded-xl bg-white px-4 py-2.5 text-sm text-deep/70">
                     🌱 {a.cropNotes[query.crop]}
                   </p>
                 )}
                 {(() => {
-                  const cropRef = query.crop
-                    ? cropLandLeaseRef(query.crop, query.uf)
-                    : null;
-                  const formed = query.crop
-                    ? formedCropLeaseRef(query.crop, query.uf)
-                    : null;
                   const vtn = estimateFromVTN(query.uf, query.municipality, query.purpose);
                   if (formed) {
                     const raw = cropRef ?? vtn;
@@ -450,6 +470,8 @@ export function Appraiser() {
                   );
                 })()}
               </>
+                );
+              })()
             )}
 
             {/* Regional use comparison */}

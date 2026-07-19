@@ -137,6 +137,17 @@ const REF_HIGH = 0.06;
  *   southern Bahia, jul/2026); range widened for productivity variation.
  * - cacau/BA: 60–150 arrobas/ha on productive farms × ~R$380/@ (spot,
  *   jul/2026) = R$22.8k–57k/ha gross (grower reference, southern Bahia).
+ * - mamao: IBGE PAM 2023/24 — rendimento médio nacional R$92,5 mil/ha;
+ *   ES lidera com R$184,6 mil/ha; CE 70 t/ha, ES 50–59 t/ha (Incaper/CNA).
+ *   CNA Campo Futuro rodou painéis de mamão em Itamaraju/Prado-BA (mar/2026).
+ * - maracuja: IBGE PAM 2023/24 — rendimento médio nacional R$52,2 mil/ha
+ *   (15,5 t/ha × ~R$3,4/kg); BA maior produtora (36%) com ~11 t/ha;
+ *   CE ~22 t/ha (Embrapa/IBGE).
+ * - coco: coqueiro-anão irrigado 20–40 mil frutos/ha (BNB/ETENE 2021,
+ *   Embrapa, CNA) × R$0,60–1,40/fruto (ETENE; APROCOCO 2024+).
+ * - acai: terra firme plantado/irrigado 8–13 t/ha (Embrapa/Sedap-PA,
+ *   cv. BRS Pai d'Égua) × ~R$3,6 mil/t (IBGE 2022: R$7,0 bi / 1,95 mi t).
+ *   Várzea manejada (~4–5 t/ha) é mercado extrativista distinto.
  */
 const REVENUE_SHARE = 0.15;
 
@@ -218,7 +229,87 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
       sourceNote: "viticultura de mesa irrigada (varia muito por região e cultivar)",
     },
   },
+  mamao: {
+    // mamoicultura formada (ciclo ~2 anos): rendimento médio nacional
+    // R$92,5 mil/ha; ES lidera com R$184,6 mil/ha (IBGE PAM 2023/24)
+    ES: {
+      revMin: 60000,
+      revMax: 130000,
+      sourceNote: "mamoicultura ES (IBGE PAM 2023/24: rendimento médio R$185 mil/ha; Incaper)",
+    },
+    BA: {
+      revMin: 50000,
+      revMax: 110000,
+      sourceNote: "mamoicultura BA (IBGE PAM 2023/24; painéis CNA Itamaraju/Prado 2026)",
+    },
+    CE: {
+      revMin: 50000,
+      revMax: 110000,
+      sourceNote: "mamoicultura irrigada (IBGE PAM 2023/24: CE lidera produtividade, 70 t/ha)",
+    },
+    RN: {
+      revMin: 50000,
+      revMax: 110000,
+      sourceNote: "mamoicultura irrigada (IBGE PAM 2023/24: RN 3º produtor, ~48 t/ha)",
+    },
+    default: {
+      revMin: 40000,
+      revMax: 100000,
+      sourceNote: "mamoicultura formada (IBGE PAM 2023/24: média nacional R$92,5 mil/ha)",
+    },
+  },
+  maracuja: {
+    // ciclo de ~1,5–2 anos; rendimento médio nacional R$52,2 mil/ha (IBGE)
+    BA: {
+      revMin: 35000,
+      revMax: 60000,
+      sourceNote: "maior produtora nacional, ~11 t/ha (IBGE PAM 2023/24; polos Livramento/Dom Basílio)",
+    },
+    CE: {
+      revMin: 45000,
+      revMax: 80000,
+      sourceNote: "maracujá irrigado CE, ~22 t/ha (IBGE PAM 2023/24; Embrapa)",
+    },
+    default: {
+      revMin: 30000,
+      revMax: 70000,
+      sourceNote: "maracujá formado (IBGE PAM 2023/24: média nacional R$52 mil/ha)",
+    },
+  },
+  coco: {
+    // coqueiro-anão irrigado p/ coco verde: 20–40 mil frutos/ha × R$0,60–1,40
+    ...group2(["CE", "BA", "PE", "RN", "SE", "AL"], {
+      revMin: 15000,
+      revMax: 45000,
+      sourceNote: "coqueiro-anão irrigado (BNB/ETENE, Embrapa): 20–40 mil frutos/ha × R$0,60–1,40",
+    }),
+    default: {
+      revMin: 12000,
+      revMax: 40000,
+      sourceNote: "coqueiral anão formado (BNB/ETENE, Embrapa; preço APROCOCO)",
+    },
+  },
+  acai: {
+    PA: {
+      revMin: 25000,
+      revMax: 45000,
+      sourceNote: "açaí plantado em terra firme (Embrapa/Sedap-PA): 8–13 t/ha × ~R$3,6 mil/t",
+    },
+    default: {
+      revMin: 15000,
+      revMax: 40000,
+      sourceNote: "açaí plantado em terra firme (Embrapa); várzea manejada é mercado à parte",
+    },
+  },
 };
+
+/** group() for formed-crop refs (same idea, different value type). */
+function group2(
+  states: string[],
+  ref: FormedCropRef,
+): Record<string, FormedCropRef> {
+  return Object.fromEntries(states.map((s) => [s, ref]));
+}
 
 export type FormedLeaseRef = {
   minPerHa: number;

@@ -16,6 +16,13 @@
  * - Frutas NE / cacau: BA lidera regionalmente banana, laranja, manga, e
  *   ~92,5% do cacau da área do BNB (BNB/ETENE 2023).
  * - Uva: PE lidera uva da área do BNB (85,2%) (BNB/ETENE 2023).
+ * - Melão: RN = 61,9% da produção nacional; polo Mossoró/Açu (IBGE PAM 2024).
+ * - Mamão: BA maior volume (31%); ES maior valor e rendimento
+ *   (R$184,6 mil/ha); CE maior produtividade, 70 t/ha (IBGE PAM 2023/24).
+ * - Maracujá: BA maior produtora (36%); CE 2º, com o dobro da
+ *   produtividade baiana (IBGE PAM 2023/24).
+ * - Coco: CE maior produtor nacional — 24,7% da produção (BNB/ETENE 2021).
+ * - Açaí: PA = 90,4% da produção nacional; AM 2º (IBGE/OIT 2022).
  */
 
 export type StateAdvantage = {
@@ -92,6 +99,39 @@ export const stateAdvantages: Record<string, StateAdvantage> = {
       "PE lidera a uva do Nordeste (85% da área do BNB); RS lidera vinho no Sul (BNB/ETENE).",
     factEn:
       "PE leads Northeast grapes (85% of BNB area); RS leads Southern wine (BNB/ETENE).",
+  },
+  melao: {
+    ufs: ["RN", "CE"],
+    factPt:
+      "RN responde por ~62% do melão nacional — polo Mossoró/Açu, líder em exportação (IBGE PAM 2024).",
+    factEn:
+      "RN accounts for ~62% of Brazil's melon — the Mossoró/Açu hub leads exports (IBGE PAM 2024).",
+  },
+  mamao: {
+    ufs: ["BA", "ES", "CE", "RN"],
+    factPt:
+      "BA é a maior produtora de mamão (31% do volume); ES lidera em valor e CE em produtividade, 70 t/ha (IBGE PAM 2023/24).",
+    factEn:
+      "BA is the largest papaya producer (31% of volume); ES leads in value and CE in yield, 70 t/ha (IBGE PAM 2023/24).",
+  },
+  maracuja: {
+    ufs: ["BA", "CE"],
+    factPt:
+      "BA é a maior produtora de maracujá do país (36%); CE é o 2º, com o dobro da produtividade baiana (IBGE PAM 2023/24).",
+    factEn:
+      "BA is Brazil's largest passion-fruit producer (36%); CE is 2nd, with twice Bahia's yield (IBGE PAM 2023/24).",
+  },
+  coco: {
+    ufs: ["CE", "BA", "PE", "RN"],
+    factPt:
+      "CE é o maior produtor de coco do Brasil (~25% da produção); o Nordeste concentra ~74% (BNB/ETENE).",
+    factEn:
+      "CE is Brazil's largest coconut producer (~25% of output); the Northeast holds ~74% (BNB/ETENE).",
+  },
+  acai: {
+    ufs: ["PA", "AM"],
+    factPt: "PA responde por ~90% do açaí nacional; AM é o 2º produtor (IBGE/OIT 2022).",
+    factEn: "PA accounts for ~90% of Brazil's açaí; AM is the 2nd producer (IBGE/OIT 2022).",
   },
 };
 

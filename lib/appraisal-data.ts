@@ -148,6 +148,12 @@ const REF_HIGH = 0.06;
  * - acai: terra firme plantado/irrigado 8–13 t/ha (Embrapa/Sedap-PA,
  *   cv. BRS Pai d'Égua) × ~R$3,6 mil/t (IBGE 2022: R$7,0 bi / 1,95 mi t).
  *   Várzea manejada (~4–5 t/ha) é mercado extrativista distinto.
+ * - goiaba: rendimento médio nacional ~R$49 mil/ha, ~26 t/ha; PR lidera
+ *   com R$113 mil/ha (IBGE 2024 / Embrapa).
+ * - abacate: ~17 t/ha e ~R$44 mil/ha médio; SP+MG = 68% do faturamento
+ *   (IBGE 2022); avocado de exportação no topo.
+ * - maca: SC R$72 mil/ha e 36 t/ha; PR R$73 mil/ha; RS R$45 mil/ha
+ *   (IBGE 2022/23); São Joaquim/SC = 42% da produção nacional.
  * - caju: castanha em casca R$5,50/kg ao produtor no CE (CONAB mar/2026);
  *   cajueiral tradicional 300–500 kg/ha; clonal adensado até 1.606 kg/ha
  *   (Embrapa). CE = 55,3% da produção nacional; PI 23% (CONAB 2026).
@@ -310,6 +316,57 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
       },
     };
   })(),
+  goiaba: {
+    PR: {
+      revMin: 80000,
+      revMax: 130000,
+      sourceNote: "goiabicultura PR: R$113 mil/ha de rendimento médio (IBGE 2024)",
+    },
+    default: {
+      revMin: 35000,
+      revMax: 90000,
+      sourceNote: "goiabicultura: média nacional ~R$49 mil/ha, ~26 t/ha (IBGE 2024/Embrapa)",
+    },
+  },
+  abacate: {
+    SP: {
+      revMin: 40000,
+      revMax: 80000,
+      sourceNote: "abacaticultura SP: ~17 t/ha, ~R$44 mil/ha médio (IBGE 2022); avocado de exportação no topo",
+    },
+    MG: {
+      revMin: 40000,
+      revMax: 80000,
+      sourceNote: "abacaticultura MG: SP+MG = 68% do faturamento nacional (IBGE 2022)",
+    },
+    default: {
+      revMin: 30000,
+      revMax: 70000,
+      sourceNote: "abacaticultura: ~17 t/ha, ~R$44 mil/ha médio (IBGE 2022)",
+    },
+  },
+  maca: {
+    SC: {
+      revMin: 55000,
+      revMax: 95000,
+      sourceNote: "pomares de SC: R$72 mil/ha médio, 36 t/ha (IBGE 2022/23); São Joaquim = 42% do país",
+    },
+    PR: {
+      revMin: 55000,
+      revMax: 95000,
+      sourceNote: "pomares do PR: R$73 mil/ha médio (IBGE 2022/23)",
+    },
+    RS: {
+      revMin: 35000,
+      revMax: 65000,
+      sourceNote: "pomares do RS: R$45 mil/ha médio (IBGE 2022/23)",
+    },
+    default: {
+      revMin: 30000,
+      revMax: 80000,
+      sourceNote: "macieiras do Sul (IBGE 2022/23) — SC/RS/PR fazem 98% da produção",
+    },
+  },
   caju: (() => {
     // faixa larga de propósito: cajueiral velho rende pouco; renovado com
     // clones (Embrapa) multiplica por 3–5×. Preço vivo da castanha (CONAB).

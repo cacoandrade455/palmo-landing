@@ -215,6 +215,31 @@ export const stateAdvantages: Record<string, StateAdvantage> = {
     factPt: "BA concentra ~96% da piaçava do Brasil — Ilhéus, Nilo Peçanha e Cairu lideram (IBGE PEVS).",
     factEn: "BA holds ~96% of Brazil's piassava — Ilhéus, Nilo Peçanha and Cairu lead (IBGE PEVS).",
   },
+  goiaba: {
+    ufs: ["SP", "PR", "BA", "CE"],
+    factPt: "SP tem a maior área de goiaba do país (28%); o PR lidera em produtividade e rendimento — R$113 mil/ha (IBGE 2024).",
+    factEn: "SP has Brazil's largest guava area (28%); PR leads yield and returns — R$113k/ha (IBGE 2024).",
+  },
+  abacate: {
+    ufs: ["SP", "MG"],
+    factPt: "SP lidera o abacate nacional; com MG, concentra 68% do faturamento (IBGE) — puxado pelo avocado de exportação.",
+    factEn: "SP leads Brazil's avocado; with MG it holds 68% of revenue (IBGE) — driven by export Hass.",
+  },
+  maca: {
+    ufs: ["SC", "RS", "PR"],
+    factPt: "SC lidera a maçã com 58% do valor nacional — São Joaquim sozinho faz 42% do país; com RS e PR, o Sul concentra 98% (IBGE/Epagri).",
+    factEn: "SC leads apples with 58% of national value — São Joaquim alone grows 42% of Brazil's crop; with RS and PR, the South holds 98% (IBGE/Epagri).",
+  },
+  pessego: {
+    ufs: ["RS", "SP", "SC"],
+    factPt: "RS concentra 64% do pêssego nacional (polo de Pelotas); SP é o 2º, com 17% (IBGE/Epagri).",
+    factEn: "RS holds 64% of Brazil's peaches (the Pelotas hub); SP is 2nd with 17% (IBGE/Epagri).",
+  },
+  fumo: {
+    ufs: ["RS", "SC", "PR"],
+    factPt: "RS, SC e PR concentram 98% do tabaco nacional; renda média ao produtor: ~R$46 mil/ha (Afubra/CONAB, safra 24/25).",
+    factEn: "RS, SC and PR hold 98% of Brazil's tobacco; average producer income: ~R$46k/ha (Afubra/CONAB, 24/25 season).",
+  },
 };
 
 /** Returns the advantage fact if the user's UF is among the leaders for this crop/purpose. */

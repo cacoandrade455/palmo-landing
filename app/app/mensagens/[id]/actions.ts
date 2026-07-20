@@ -29,6 +29,8 @@ export type ConvData = {
   counterpartName: string | null;
   messages: ConvMessage[];
   offers: ConvOffer[];
+  // contract for this conversation, if the draft has been generated
+  contractId: string | null;
   // contact only present when deal_status === 'closed'
   contact: { full_name: string | null; phone: string | null; email: string | null } | null;
 };
@@ -53,21 +55,28 @@ export async function getConversation(
   const iAmOwner = conv.owner_id === user.id;
   const otherId = iAmOwner ? conv.developer_id : conv.owner_id;
 
-  const [{ data: listing }, { data: other }, { data: msgs }, { data: offs }] =
-    await Promise.all([
-      supabase.from("listings").select("title").eq("id", conv.listing_id).single(),
-      supabase.from("public_profiles").select("display_name").eq("id", otherId).single(),
-      supabase
-        .from("messages")
-        .select("id, sender_id, body, created_at")
-        .eq("conversation_id", id)
-        .order("created_at", { ascending: true }),
-      supabase
-        .from("offers")
-        .select("id, from_id, price_per_ha_year, term_years, message, status, created_at")
-        .eq("conversation_id", id)
-        .order("created_at", { ascending: true }),
-    ]);
+  const [
+    { data: listing },
+    { data: other },
+    { data: msgs },
+    { data: offs },
+    contractRes,
+  ] = await Promise.all([
+    supabase.from("listings").select("title").eq("id", conv.listing_id).single(),
+    supabase.from("public_profiles").select("display_name").eq("id", otherId).single(),
+    supabase
+      .from("messages")
+      .select("id, sender_id, body, created_at")
+      .eq("conversation_id", id)
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("offers")
+      .select("id, from_id, price_per_ha_year, term_years, message, status, created_at")
+      .eq("conversation_id", id)
+      .order("created_at", { ascending: true }),
+    // graceful when the Lote B migration hasn't been applied yet
+    supabase.from("contracts").select("id").eq("conversation_id", id).maybeSingle(),
+  ]);
 
   // Contact reveal — only when closed, via the security-definer gate function.
   let contact: ConvData["contact"] = null;
@@ -90,6 +99,7 @@ export async function getConversation(
       counterpartName: other?.display_name ?? null,
       messages: (msgs ?? []) as ConvMessage[],
       offers: (offs ?? []) as ConvOffer[],
+      contractId: contractRes.error ? null : (contractRes.data?.id ?? null),
       contact,
     },
   };

@@ -34,6 +34,7 @@ export async function createListing(
     : descriptionRaw || null;
   const has_water = formData.get("has_water") === "on";
   const car_number = String(formData.get("car_number") ?? "").trim() || null;
+  const matricula = String(formData.get("matricula") ?? "").trim() || null;
   const publish = formData.get("publish") === "true";
 
   if (!title || !state || !municipality || !purpose || !hectares || hectares <= 0) {
@@ -55,6 +56,7 @@ export async function createListing(
       description,
       has_water,
       car_number,
+      matricula,
     })
     .select("id")
     .single();

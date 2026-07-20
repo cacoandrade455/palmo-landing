@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
-import { MapPin, Plus, LogOut } from "lucide-react";
+import { CheckCircle2, MapPin, Plus, LogOut, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { getSupabase } from "@/lib/supabase";
 import { getMyListings, updateListingStatus, type MyListing } from "./actions";
+import { getMyKyc, type KycSummary } from "../verificacao/actions";
 
 const STATUS_STYLES: Record<string, string> = {
   active: "bg-primary/10 text-primary",
@@ -21,6 +22,7 @@ export function AccountDashboard() {
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [listings, setListings] = useState<MyListing[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const [kyc, setKyc] = useState<KycSummary | null>(null);
 
   const label =
     lang === "en"
@@ -45,6 +47,14 @@ export function AccountDashboard() {
           } as Record<string, string>,
           signInPrompt: "Sign in to see your account.",
           signIn: "Sign in with Google",
+          verifiedBadge: "Identity verified",
+          verifyTitle: "Verify your identity",
+          verifyBody:
+            "Send your details and one document. Verified accounts build more trust in every deal.",
+          verifyCta: "Start verification",
+          verifyStatus: "See status",
+          kycPending: "Under review",
+          kycRejected: "Not approved",
         }
       : {
           title: "Minha conta",
@@ -67,6 +77,14 @@ export function AccountDashboard() {
           } as Record<string, string>,
           signInPrompt: "Entre para ver sua conta.",
           signIn: "Entrar com Google",
+          verifiedBadge: "Identidade verificada",
+          verifyTitle: "Verifique sua identidade",
+          verifyBody:
+            "Envie seus dados e um documento. Contas verificadas geram mais confiança em cada negócio.",
+          verifyCta: "Verificar agora",
+          verifyStatus: "Ver situação",
+          kycPending: "Em análise",
+          kycRejected: "Não aprovada",
         };
 
   useEffect(() => {
@@ -94,6 +112,9 @@ export function AccountDashboard() {
       if (res.ok) setListings(res.listings);
       setLoading(false);
     });
+    getMyKyc().then((res) => {
+      if (res.ok) setKyc(res.kyc);
+    });
   }, [user]);
 
   async function toggle(l: MyListing) {
@@ -113,7 +134,7 @@ export function AccountDashboard() {
 
   if (user === null) {
     return (
-      <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-deep/10 bg-white p-8 text-center shadow-sm">
         <p className="text-deep/70">{label.signInPrompt}</p>
         <button
           onClick={() => {
@@ -123,7 +144,7 @@ export function AccountDashboard() {
               options: { redirectTo: `${window.location.origin}/app/conta` },
             });
           }}
-          className="mt-5 rounded-full bg-primary px-6 py-3 text-base font-bold text-white hover:bg-primary-dark"
+          className="mt-6 rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
         >
           {label.signIn}
         </button>
@@ -153,6 +174,12 @@ export function AccountDashboard() {
               <p className="text-xs text-deep/50">{label.signedInAs}</p>
               <p className="truncate font-extrabold text-deep">{name}</p>
               <p className="truncate text-sm text-deep/60">{user?.email}</p>
+              {kyc?.status === "approved" && (
+                <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+                  <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+                  {label.verifiedBadge}
+                </span>
+              )}
             </div>
           </div>
           <button
@@ -164,6 +191,41 @@ export function AccountDashboard() {
           </button>
         </div>
       </div>
+
+      {/* Identity verification CTA (hidden once approved — badge above) */}
+      {kyc?.status !== "approved" && (
+        <div className="rounded-2xl border border-deep/10 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                <ShieldCheck className="h-5 w-5 text-primary" aria-hidden="true" />
+              </span>
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="font-extrabold text-deep">{label.verifyTitle}</h2>
+                  {kyc && (kyc.status === "pending" || kyc.status === "in_review") && (
+                    <span className="rounded-full bg-accent/20 px-2.5 py-1 text-xs font-bold text-deep">
+                      {label.kycPending}
+                    </span>
+                  )}
+                  {kyc?.status === "rejected" && (
+                    <span className="rounded-full bg-deep/10 px-2.5 py-1 text-xs font-bold text-deep/60">
+                      {label.kycRejected}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 text-sm text-deep/70">{label.verifyBody}</p>
+              </div>
+            </div>
+            <Link
+              href="/app/verificacao"
+              className="shrink-0 rounded-full bg-primary px-4 py-2 text-center text-sm font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
+            >
+              {kyc ? label.verifyStatus : label.verifyCta}
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Listings */}
       <div>

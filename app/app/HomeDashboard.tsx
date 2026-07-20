@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
-import { MapPin, MessageCircle, Search, Sprout } from "lucide-react";
+import { FileText, MapPin, MessageCircle, Search, Sprout } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { getSupabase } from "@/lib/supabase";
 import { getHomeSummary, type HomeSummary } from "./actions";
@@ -52,6 +52,20 @@ export function HomeDashboard() {
           openInbox: "Open inbox",
           messagesEmpty: "No conversations yet.",
           messagesEmptyHint: "Explore listings and message an owner to start one.",
+          contracts: "Contracts",
+          openContract: "Open contract room",
+          contractTypes: {
+            arrendamento: "Lease",
+            parceria: "Partnership",
+          } as Record<string, string>,
+          contractStatus: (status: string, v: number) =>
+            status === "discussion"
+              ? `Draft v${v} under discussion`
+              : status === "ready"
+                ? "Ready for signature"
+                : status === "signed"
+                  ? "Signed"
+                  : "Cancelled",
           welcomeTitle: "Welcome to Palmo",
           welcomeText:
             "Connect idle land to growers who want to expand. Sign in to list your land, explore listings and talk to the other side.",
@@ -87,6 +101,20 @@ export function HomeDashboard() {
           messagesEmpty: "Nenhuma conversa ainda.",
           messagesEmptyHint:
             "Explore os anúncios e mande mensagem para um dono para começar.",
+          contracts: "Contratos",
+          openContract: "Abrir sala do contrato",
+          contractTypes: {
+            arrendamento: "Arrendamento",
+            parceria: "Parceria",
+          } as Record<string, string>,
+          contractStatus: (status: string, v: number) =>
+            status === "discussion"
+              ? `Minuta v${v} em discussão`
+              : status === "ready"
+                ? "Pronta para assinatura"
+                : status === "signed"
+                  ? "Assinada"
+                  : "Cancelado",
           welcomeTitle: "Bem-vindo à Palmo",
           welcomeText:
             "Conectamos terra parada a produtores que querem expandir. Entre para anunciar sua terra, explorar anúncios e conversar com o outro lado.",
@@ -292,6 +320,50 @@ export function HomeDashboard() {
           </Link>
         )}
       </div>
+
+      {/* Contracts */}
+      {summary && summary.contractCount > 0 && summary.latestContract && (
+        <div className="rounded-2xl border border-deep/10 bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-extrabold text-deep">
+                {label.contracts}
+              </h2>
+              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+                {summary.contractCount}
+              </span>
+            </div>
+            <Link
+              href={`/app/contrato/${summary.latestContract.id}`}
+              className="rounded-full border border-deep/20 px-3 py-1 text-xs font-bold text-deep transition-colors hover:border-primary"
+            >
+              {label.openContract}
+            </Link>
+          </div>
+          <Link
+            href={`/app/contrato/${summary.latestContract.id}`}
+            className="mt-4 flex items-center gap-3 rounded-xl border border-deep/10 p-4 transition-colors hover:border-primary"
+          >
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <FileText className="h-5 w-5" aria-hidden="true" />
+            </span>
+            <span className="min-w-0">
+              <span className="block truncate font-extrabold text-deep">
+                {summary.latestContract.listingTitle ?? "—"}
+              </span>
+              <span className="block text-sm text-deep/60">
+                {label.contractTypes[summary.latestContract.type] ??
+                  summary.latestContract.type}{" "}
+                ·{" "}
+                {label.contractStatus(
+                  summary.latestContract.status,
+                  summary.latestContract.current_version,
+                )}
+              </span>
+            </span>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

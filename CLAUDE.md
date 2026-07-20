@@ -40,8 +40,9 @@ Por isso o **gate de contato é sagrado**: contatos só aparecem quando
    Vercel. O app permanece atrás da barreira até o Carlos decidir.
 4. **NUNCA tocar em**: `.env*`, `supabase/*.sql` (schema/policies),
    `lib/appraisal-data.ts`, `lib/prices.*`, `lib/pevs.*`,
-   `lib/state-advantage.ts`, `lib/vtn.ts`, `scripts/*` — são camadas de
-   dados oficiais calibradas manualmente. Se a tarefa parecer exigir isso,
+   `lib/state-advantage.ts`, `lib/vtn.ts`, `lib/contract-templates.ts`
+   (somente leitura), `docs/*` (especificações), `scripts/*` — são
+   camadas de dados oficiais e jurídicas calibradas manualmente. Se a tarefa parecer exigir isso,
    PARE e pergunte.
 5. **NUNCA editar `lib/content.ts`.** Strings novas de UI vão no padrão
    `label` inline do componente (`const label = lang === "en" ? {...} : {...}`,
@@ -83,6 +84,16 @@ exemplo), e pendências. **Não commitar, não pushar.**
   ser mergeado pelo Carlos. Nova branch `palmo-ai/passo4-confianca` a
   partir da `main` atualizada, novo PR — e o revisor-design roda de novo
   antes desse PR também.
+- **Lote B** (branch `palmo-ai/lote-b`, um PR): `passo6-contratos`,
+  `passo7-kyc` e `passo8-idiomas` EM PARALELO (arquivos disjuntos: o 6
+  é dono de Conversation/ListingForm/HomeDashboard e /app/contrato; o 7
+  é dono de AccountDashboard, /app/verificacao, /global e
+  lib/i18n-global.ts; o 8 é dono de lib/content-{zh,fr,ar}.ts,
+  lib/content-extra.ts, lib/language-context.tsx e components/Header.tsx).
+  Depois dos três: `revisor-design` na mesma branch (dicionários de
+  tradução fora do escopo dele), commit único, push, PR. Pré-requisito
+  humano: a migração `supabase/migration-lote-b.sql` aplicada pelo
+  Carlos ANTES do teste local.
 
 ## Sistema de design (fonte da verdade visual)
 Todo pixel novo obedece a isto. Em dúvida, copie de `components/Hero.tsx`,

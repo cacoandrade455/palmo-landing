@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Info } from "lucide-react";
 import { APP_ENABLED } from "@/lib/feature-flags";
 import { submitWaitlist, type WaitlistResult } from "@/app/actions";
-import { useLanguage } from "@/lib/language-context";
+import { useLanguage, type AppLang } from "@/lib/language-context";
 import {
   compareUses,
   estimateLease,
@@ -43,8 +43,64 @@ function LeadSubmit({ label, pendingLabel }: { label: string; pendingLabel: stri
   );
 }
 
+/**
+ * Rótulos inline extras da calculadora nos 5 idiomas (o grosso das strings vem
+ * de `lib/content.ts` + `lib/content-extra.ts`). Números, unidades e nomes de
+ * fontes nunca aparecem aqui — só o texto ao redor deles.
+ */
+const XL: Record<
+  AppLang,
+  {
+    year: string;
+    pricesUpdated: string;
+    listTitle: string;
+    listSub: string;
+    country: string;
+  }
+> = {
+  pt: {
+    year: "ano",
+    pricesUpdated: "Preços atualizados em ",
+    listTitle: "Anunciar minha terra por esse valor",
+    listSub: "Anúncio pré-preenchido com os dados da calculadora",
+    country: "Brasil",
+  },
+  en: {
+    year: "year",
+    pricesUpdated: "Prices updated ",
+    listTitle: "List my land at this value",
+    listSub: "Listing pre-filled with your calculator data",
+    country: "Brazil",
+  },
+  zh: {
+    year: "年",
+    pricesUpdated: "价格更新于 ",
+    listTitle: "按此价格发布我的土地",
+    listSub: "房源已用计算器的数据预先填写",
+    country: "Brazil",
+  },
+  fr: {
+    year: "an",
+    pricesUpdated: "Prix mis à jour le ",
+    listTitle: "Annoncer ma terre à cette valeur",
+    listSub: "Annonce pré-remplie avec les données du calculateur",
+    country: "Brazil",
+  },
+  ar: {
+    year: "سنة",
+    pricesUpdated: "حُدِّثت الأسعار في ",
+    listTitle: "أعلن عن أرضي بهذه القيمة",
+    listSub: "إعلان معبّأ مسبقًا ببيانات الحاسبة",
+    country: "Brazil",
+  },
+};
+
 export function Appraiser() {
   const { t, lang } = useLanguage();
+  const xl = XL[lang];
+  // `lib/prices.ts` e `lib/appraisal-data.ts` são camadas de dados calibradas
+  // (PT/EN apenas): idiomas adicionais reaproveitam a variante EN.
+  const dataLang: "pt" | "en" = lang === "pt" ? "pt" : "en";
   const [query, setQuery] = useState<Query | null>(null);
   const [purposeSel, setPurposeSel] = useState("");
   const [cropSel, setCropSel] = useState("");
@@ -111,16 +167,7 @@ export function Appraiser() {
   // price is the midpoint of the SAME per-ha range the result headlines:
   // range estimate, formed-crop model, crop land reference or VTN — in the
   // exact order the result block picks its headline. No numbers → no CTA.
-  const listCta =
-    lang === "en"
-      ? {
-          title: "List my land at this value",
-          sub: "Listing pre-filled with your calculator data",
-        }
-      : {
-          title: "Anunciar minha terra por esse valor",
-          sub: "Anúncio pré-preenchido com os dados da calculadora",
-        };
+  const listCta = { title: xl.listTitle, sub: xl.listSub };
   const listUrl = (() => {
     if (!APP_ENABLED || !query || !estimate) return null;
     const midOf = (min: number, max: number) => Math.round((min + max) / 2);
@@ -343,7 +390,7 @@ export function Appraiser() {
                     ⭐ {a.advantageLabel}
                   </p>
                   <p className="mt-1 text-sm font-semibold text-deep">
-                    {lang === "en" ? adv.factEn : adv.factPt}
+                    {dataLang === "en" ? adv.factEn : adv.factPt}
                   </p>
                 </div>
               );
@@ -364,7 +411,7 @@ export function Appraiser() {
                   {formatBRL(estimate.minPerHa * query.hectares)} –{" "}
                   {formatBRL(estimate.maxPerHa * query.hectares)}
                   <span className="ml-2 text-lg font-bold text-deep/50">
-                    /{lang === "en" ? "year" : "ano"}
+                    /{xl.year}
                   </span>
                 </p>
                 <p className="mt-2 text-base font-semibold text-deep/70">
@@ -503,7 +550,7 @@ export function Appraiser() {
                           {formatBRL(formed.minPerHa * query.hectares)} –{" "}
                           {formatBRL(formed.maxPerHa * query.hectares)}
                           <span className="ml-2 text-lg font-bold text-deep/50">
-                            /{lang === "en" ? "year" : "ano"}
+                            /{xl.year}
                           </span>
                         </p>
                         <p className="mt-1 text-sm font-semibold text-deep/60">
@@ -552,7 +599,7 @@ export function Appraiser() {
                           {formatBRL(cropRef.minPerHa * query.hectares)} –{" "}
                           {formatBRL(cropRef.maxPerHa * query.hectares)}
                           <span className="ml-2 text-lg font-bold text-deep/50">
-                            /{lang === "en" ? "year" : "ano"}
+                            /{xl.year}
                           </span>
                         </p>
                         {vtn && (
@@ -580,7 +627,7 @@ export function Appraiser() {
                           {formatBRL(vtn.minPerHa * query.hectares)} –{" "}
                           {formatBRL(vtn.maxPerHa * query.hectares)}
                           <span className="ml-2 text-lg font-bold text-deep/50">
-                            /{lang === "en" ? "year" : "ano"}
+                            /{xl.year}
                           </span>
                         </p>
                       </>
@@ -600,7 +647,7 @@ export function Appraiser() {
                         {formatBRL(top.minPerHa * query.hectares)} –{" "}
                         {formatBRL(top.maxPerHa * query.hectares)}
                         <span className="ml-2 text-lg font-bold text-deep/50">
-                          /{lang === "en" ? "year" : "ano"}
+                          /{xl.year}
                         </span>
                       </p>
                       {top.fallback && (
@@ -702,7 +749,7 @@ export function Appraiser() {
                           "{ratio}",
                           (
                             Math.round((topRealistic.mid / chosen.mid) * 10) / 10
-                          ).toLocaleString(lang === "en" ? "en-US" : "pt-BR"),
+                          ).toLocaleString(dataLang === "en" ? "en-US" : "pt-BR"),
                         )}
                     </p>
                   )}
@@ -718,8 +765,8 @@ export function Appraiser() {
               <span>
                 {a.disclaimer}
                 {estimate.kind === "range" && <> {a.legalNote}</>}{" "}
-                {lang === "en" ? "Prices updated " : "Preços atualizados em "}
-                {pricesUpdatedLabel(lang)}.
+                {xl.pricesUpdated}
+                {pricesUpdatedLabel(dataLang)}.
               </span>
             </p>
 
@@ -739,7 +786,7 @@ export function Appraiser() {
                   <p className="mt-1 text-sm text-deep/60">{a.leadSubtitle}</p>
                   <form action={leadAction} className="mt-4 space-y-3">
                     <input type="hidden" name="language" value={lang} />
-                    <input type="hidden" name="country" value={lang === "en" ? "Brazil" : "Brasil"} />
+                    <input type="hidden" name="country" value={xl.country} />
                     <input type="hidden" name="state" value={query.uf} />
                     <input type="hidden" name="municipality" value={query.municipality} />
                     <input type="hidden" name="purpose" value={query.purpose} />

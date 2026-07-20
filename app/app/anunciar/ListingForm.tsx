@@ -123,6 +123,9 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         water: "Has water source",
         car: "CAR number (optional)",
         carHint: "Listings with a CAR earn the Verified badge and more trust from producers.",
+        matricula: "Property record at the CRI (optional)",
+        matriculaHint:
+          "The Palmo standard contract requires the land registry (CRI) record number — you can also fill it in later, in the draft.",
         saveDraft: "Save as draft",
         publish: "Publish listing",
         submitting: "Saving…",
@@ -156,6 +159,9 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         water: "Tem água",
         car: "Número do CAR (opcional)",
         carHint: "Anúncios com CAR ganham o selo Verificado e mais confiança dos produtores.",
+        matricula: "Matrícula do imóvel no CRI (opcional)",
+        matriculaHint:
+          "O contrato padrão Palmo exige a matrícula do Cartório de Registro de Imóveis — dá para preencher depois, na minuta.",
         saveDraft: "Salvar rascunho",
         publish: "Publicar anúncio",
         submitting: "Salvando…",
@@ -355,9 +361,14 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
           {label.water}
         </label>
         <div>
-          <input name="car_number" placeholder={label.car} className={`${inputCls} mt-0`} />
+          <input name="car_number" aria-label={label.car} placeholder={label.car} className={`${inputCls} mt-0`} />
           <p className="mt-1.5 text-xs leading-relaxed text-deep/50">{label.carHint}</p>
         </div>
+      </div>
+
+      <div>
+        <input name="matricula" aria-label={label.matricula} placeholder={label.matricula} className={`${inputCls} mt-0`} />
+        <p className="mt-1.5 text-xs leading-relaxed text-deep/50">{label.matriculaHint}</p>
       </div>
 
       {error && <p className="text-sm font-semibold text-red-600">{error}</p>}

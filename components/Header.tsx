@@ -3,10 +3,60 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLanguage } from "@/lib/language-context";
+import { APP_LANGS, useLanguage, type AppLang } from "@/lib/language-context";
 import { AuthButton } from "./AuthButton";
 import { AppNav } from "./AppNav";
-import { LangToggle } from "./LangToggle";
+
+/**
+ * Seletor compacto de 5 idiomas (PT · EN · 中文 · FR · AR).
+ * Mobile-first: em telas pequenas vira um <select> em forma de pill (cabe em
+ * 390px sem estourar a barra); a partir de md vira o grupo segmentado.
+ */
+function LangSelect() {
+  const { lang, setLang } = useLanguage();
+
+  return (
+    <>
+      <label className="md:hidden">
+        <span className="sr-only">Idioma / Language</span>
+        <select
+          value={lang}
+          onChange={(e) => setLang(e.target.value as AppLang)}
+          className="rounded-full border border-deep/20 bg-white px-3 py-2 text-sm font-bold text-deep"
+        >
+          {APP_LANGS.map((l) => (
+            <option key={l.code} value={l.code}>
+              {l.label}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <div
+        className="hidden items-center rounded-full border border-deep/10 bg-white p-0.5 text-xs font-semibold md:inline-flex"
+        role="group"
+        aria-label="Idioma / Language"
+      >
+        {APP_LANGS.map((l) => (
+          <button
+            key={l.code}
+            type="button"
+            onClick={() => setLang(l.code)}
+            aria-pressed={lang === l.code}
+            title={l.name}
+            className={`rounded-full px-2 py-1 transition-colors ${
+              lang === l.code
+                ? "bg-primary text-white"
+                : "text-deep/60 hover:text-deep"
+            }`}
+          >
+            {l.label}
+          </button>
+        ))}
+      </div>
+    </>
+  );
+}
 
 export function Header() {
   const { t } = useLanguage();
@@ -47,7 +97,7 @@ export function Header() {
         )}
 
         <div className="flex items-center gap-3">
-          <LangToggle />
+          <LangSelect />
           <AuthButton />
           {!inApp && (
             <Link

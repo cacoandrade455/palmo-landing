@@ -4,7 +4,7 @@ import { useActionState, useState, type FormEvent } from "react";
 import { useFormStatus } from "react-dom";
 import { CheckCircle2 } from "lucide-react";
 import { submitWaitlist, type WaitlistResult } from "@/app/actions";
-import { useLanguage } from "@/lib/language-context";
+import { useLanguage, type AppLang } from "@/lib/language-context";
 
 const initialState: WaitlistResult | null = null;
 
@@ -32,6 +32,146 @@ type MuniCache = Record<string, string[] | "error" | undefined>;
 function norm(s: string) {
   return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
+
+/**
+ * Rótulos extras da UI de região nos 5 idiomas (os demais vêm de
+ * `lib/content.ts` + `lib/content-extra.ts`). Nomes de UF, municípios e
+ * fontes nunca são traduzidos — só o texto ao redor deles.
+ */
+type XLabels = {
+  whereWant: string;
+  whereWantHint: string;
+  anywhere: string;
+  statesLabel: string;
+  wholeState: (uf: string) => string;
+  muniOptional: (nome: string) => string;
+  noneMeansAll: string;
+  searchMuni: string;
+  checkedLabel: string;
+  muniError: string;
+  retry: string;
+  selectUf: string;
+  selectMuni: string;
+  selectMuniFirst: string;
+  loading: string;
+  muniFallback: string;
+  errMissing: string;
+  errNoRegion: string;
+  successCta: string;
+};
+
+const X_LABELS: Record<AppLang, XLabels> = {
+  pt: {
+    whereWant: "Onde você procura terra?",
+    whereWantHint:
+      "Marque todos os estados que te interessam — e, se quiser, municípios específicos.",
+    anywhere: "Qualquer lugar do Brasil",
+    statesLabel: "Estados de interesse",
+    wholeState: (uf: string) => `Todo o estado de ${uf}`,
+    muniOptional: (nome: string) => `Municípios em ${nome} (opcional)`,
+    noneMeansAll: "Nenhum marcado = estado inteiro",
+    searchMuni: "Buscar município…",
+    checkedLabel: "Marcados:",
+    muniError: "Não deu para carregar os municípios — vamos considerar o estado inteiro.",
+    retry: "Tentar de novo",
+    selectUf: "Selecione…",
+    selectMuni: "Selecione…",
+    selectMuniFirst: "Escolha o estado primeiro",
+    loading: "Carregando…",
+    muniFallback: "Município (digite)",
+    errMissing: "Confira os campos e tente de novo.",
+    errNoRegion: "Marque pelo menos um estado — ou “Qualquer lugar do Brasil”.",
+    successCta: "Enquanto isso, veja quanto sua terra pode render →",
+  },
+  en: {
+    whereWant: "Where are you looking for land?",
+    whereWantHint:
+      "Check every state you're interested in — and, if you want, specific municipalities.",
+    anywhere: "Anywhere in Brazil",
+    statesLabel: "States of interest",
+    wholeState: (uf: string) => `All of ${uf}`,
+    muniOptional: (nome: string) => `Municipalities in ${nome} (optional)`,
+    noneMeansAll: "None checked = the whole state",
+    searchMuni: "Search municipality…",
+    checkedLabel: "Checked:",
+    muniError: "Couldn't load the municipalities — we'll consider the whole state.",
+    retry: "Try again",
+    selectUf: "Select…",
+    selectMuni: "Select…",
+    selectMuniFirst: "Pick the state first",
+    loading: "Loading…",
+    muniFallback: "Municipality (type it)",
+    errMissing: "Please review the fields and try again.",
+    errNoRegion: "Check at least one state — or “Anywhere in Brazil”.",
+    successCta: "Meanwhile, see what your land could earn →",
+  },
+  zh: {
+    whereWant: "您在哪里寻找土地？",
+    whereWantHint:
+      "勾选所有您感兴趣的州——如需要，也可勾选具体的市。",
+    anywhere: "巴西境内任何地方",
+    statesLabel: "感兴趣的州",
+    wholeState: (uf: string) => `${uf} 全州`,
+    muniOptional: (nome: string) => `${nome} 的市（可选）`,
+    noneMeansAll: "未勾选任何市 = 整个州",
+    searchMuni: "搜索市…",
+    checkedLabel: "已勾选：",
+    muniError: "无法加载市列表——我们将按整个州处理。",
+    retry: "重试",
+    selectUf: "请选择…",
+    selectMuni: "请选择…",
+    selectMuniFirst: "请先选择州",
+    loading: "加载中…",
+    muniFallback: "市（请输入）",
+    errMissing: "请检查各字段后重试。",
+    errNoRegion: "请至少勾选一个州——或选择“巴西境内任何地方”。",
+    successCta: "在此期间，看看您的土地能带来多少收益 →",
+  },
+  fr: {
+    whereWant: "Où cherchez-vous une terre ?",
+    whereWantHint:
+      "Cochez tous les états qui vous intéressent — et, si vous le souhaitez, des municipalités précises.",
+    anywhere: "N'importe où au Brésil",
+    statesLabel: "États d'intérêt",
+    wholeState: (uf: string) => `Tout l'état du ${uf}`,
+    muniOptional: (nome: string) => `Municipalités du ${nome} (facultatif)`,
+    noneMeansAll: "Aucune cochée = l'état entier",
+    searchMuni: "Rechercher une municipalité…",
+    checkedLabel: "Cochées :",
+    muniError: "Impossible de charger les municipalités — nous prendrons l'état entier.",
+    retry: "Réessayer",
+    selectUf: "Sélectionnez…",
+    selectMuni: "Sélectionnez…",
+    selectMuniFirst: "Choisissez d'abord l'état",
+    loading: "Chargement…",
+    muniFallback: "Municipalité (à saisir)",
+    errMissing: "Veuillez vérifier les champs et réessayer.",
+    errNoRegion: "Cochez au moins un état — ou « N'importe où au Brésil ».",
+    successCta: "En attendant, voyez ce que votre terre pourrait rapporter →",
+  },
+  ar: {
+    whereWant: "أين تبحث عن أرض؟",
+    whereWantHint:
+      "حدِّد كل الولايات التي تهمّك — وإن شئت، بلديات بعينها.",
+    anywhere: "أي مكان في البرازيل",
+    statesLabel: "الولايات المهتمّ بها",
+    wholeState: (uf: string) => `ولاية ${uf} بأكملها`,
+    muniOptional: (nome: string) => `بلديات ${nome} (اختياري)`,
+    noneMeansAll: "لا شيء محدَّد = الولاية بأكملها",
+    searchMuni: "ابحث عن بلدية…",
+    checkedLabel: "المحدَّدة:",
+    muniError: "تعذّر تحميل البلديات — سنأخذ الولاية بأكملها.",
+    retry: "أعد المحاولة",
+    selectUf: "اختر…",
+    selectMuni: "اختر…",
+    selectMuniFirst: "اختر الولاية أولاً",
+    loading: "جارٍ التحميل…",
+    muniFallback: "البلدية (اكتبها)",
+    errMissing: "يرجى مراجعة الحقول والمحاولة مجددًا.",
+    errNoRegion: "حدِّد ولاية واحدة على الأقل — أو «أي مكان في البرازيل».",
+    successCta: "في هذه الأثناء، اطّلع على ما يمكن أن تدرّه أرضك →",
+  },
+};
 
 function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: string }) {
   const { pending } = useFormStatus();
@@ -70,53 +210,7 @@ export function Waitlist() {
   const [muniByUf, setMuniByUf] = useState<MuniCache>({});
   const [localError, setLocalError] = useState<string | null>(null);
 
-  // Extra labels for the region UI (existing labels keep coming from lib/content.ts).
-  const x =
-    lang === "en"
-      ? {
-          whereWant: "Where are you looking for land?",
-          whereWantHint:
-            "Check every state you're interested in — and, if you want, specific municipalities.",
-          anywhere: "Anywhere in Brazil",
-          statesLabel: "States of interest",
-          wholeState: (uf: string) => `All of ${uf}`,
-          muniOptional: (nome: string) => `Municipalities in ${nome} (optional)`,
-          noneMeansAll: "None checked = the whole state",
-          searchMuni: "Search municipality…",
-          checkedLabel: "Checked:",
-          muniError: "Couldn't load the municipalities — we'll consider the whole state.",
-          retry: "Try again",
-          selectUf: "Select…",
-          selectMuni: "Select…",
-          selectMuniFirst: "Pick the state first",
-          loading: "Loading…",
-          muniFallback: "Municipality (type it)",
-          errMissing: "Please review the fields and try again.",
-          errNoRegion: "Check at least one state — or “Anywhere in Brazil”.",
-          successCta: "Meanwhile, see what your land could earn →",
-        }
-      : {
-          whereWant: "Onde você procura terra?",
-          whereWantHint:
-            "Marque todos os estados que te interessam — e, se quiser, municípios específicos.",
-          anywhere: "Qualquer lugar do Brasil",
-          statesLabel: "Estados de interesse",
-          wholeState: (uf: string) => `Todo o estado de ${uf}`,
-          muniOptional: (nome: string) => `Municípios em ${nome} (opcional)`,
-          noneMeansAll: "Nenhum marcado = estado inteiro",
-          searchMuni: "Buscar município…",
-          checkedLabel: "Marcados:",
-          muniError: "Não deu para carregar os municípios — vamos considerar o estado inteiro.",
-          retry: "Tentar de novo",
-          selectUf: "Selecione…",
-          selectMuni: "Selecione…",
-          selectMuniFirst: "Escolha o estado primeiro",
-          loading: "Carregando…",
-          muniFallback: "Município (digite)",
-          errMissing: "Confira os campos e tente de novo.",
-          errNoRegion: "Marque pelo menos um estado — ou “Qualquer lugar do Brasil”.",
-          successCta: "Enquanto isso, veja quanto sua terra pode render →",
-        };
+  const x = X_LABELS[lang];
 
   const isBrasil = ["brasil", "brazil", "br"].includes(country.trim().toLowerCase());
 

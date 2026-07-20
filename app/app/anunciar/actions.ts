@@ -25,7 +25,13 @@ export async function createListing(
   const crop = String(formData.get("crop") ?? "").trim() || null;
   const priceRaw = String(formData.get("price_per_ha_year") ?? "").trim();
   const price_per_ha_year = priceRaw ? Number(priceRaw) : null;
-  const description = String(formData.get("description") ?? "").trim() || null;
+  const descriptionRaw = String(formData.get("description") ?? "").trim();
+  // Variety has no dedicated column yet (schema is untouchable for agents),
+  // so it is persisted non-destructively as a prefix inside the description.
+  const variant = String(formData.get("variant") ?? "").trim();
+  const description = variant
+    ? `Variedade: ${variant}.${descriptionRaw ? ` ${descriptionRaw}` : ""}`
+    : descriptionRaw || null;
   const has_water = formData.get("has_water") === "on";
   const car_number = String(formData.get("car_number") ?? "").trim() || null;
   const publish = formData.get("publish") === "true";

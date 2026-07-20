@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { MapPin, Droplet, MessageCircle, ArrowLeft } from "lucide-react";
+import { MapPin, Droplet, MessageCircle, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { startConversation, type ListingDetailData } from "./actions";
 
@@ -20,8 +20,8 @@ export function ListingDetail({
 
   const label =
     lang === "en"
-      ? { back: "Back to listings", owner: "Owner", contact: "Contact owner", yours: "This is your listing", water: "Water source", car: "CAR", perYear: "/ha/year", area: "Area", use: "Use", desc: "Description", signIn: "Sign in to contact", err: "Couldn't start the conversation." }
-      : { back: "Voltar aos anúncios", owner: "Proprietário", contact: "Falar com o dono", yours: "Este é o seu anúncio", water: "Fonte de água", car: "CAR", perYear: "/ha/ano", area: "Área", use: "Uso", desc: "Descrição", signIn: "Entre para conversar", err: "Não foi possível iniciar a conversa." };
+      ? { back: "Back to listings", owner: "Owner", contact: "Contact owner", yours: "This is your listing", water: "Water source", car: "CAR", perYear: "/ha/year", area: "Area", use: "Use", desc: "Description", signIn: "Sign in to contact", err: "Couldn't start the conversation.", verified: "Verified", verifiedHint: "CAR provided by the owner" }
+      : { back: "Voltar aos anúncios", owner: "Proprietário", contact: "Falar com o dono", yours: "Este é o seu anúncio", water: "Fonte de água", car: "CAR", perYear: "/ha/ano", area: "Área", use: "Uso", desc: "Descrição", signIn: "Entre para conversar", err: "Não foi possível iniciar a conversa.", verified: "Verificado", verifiedHint: "CAR informado pelo proprietário" };
 
   const purposeLabel = t.waitlist.purposeOptions.find((o) => o.value === listing.purpose)?.label ?? listing.purpose;
   const cropLabel = listing.crop
@@ -52,6 +52,19 @@ export function ListingDetail({
             {listing.hectares} ha
           </span>
         </div>
+
+        {listing.car_number && (
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <span
+              title={label.verifiedHint}
+              className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary"
+            >
+              <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+              {label.verified}
+            </span>
+            <span className="text-xs text-deep/50">{label.verifiedHint}</span>
+          </div>
+        )}
 
         <p className="mt-2 flex items-center gap-1.5 text-deep/60">
           <MapPin className="h-4 w-4" aria-hidden="true" />

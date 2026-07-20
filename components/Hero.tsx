@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Calculator, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
@@ -68,15 +69,16 @@ export function Hero() {
 
         <div className="relative">
           <div className="mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-deep/5 bg-white shadow-xl">
-            {/* Placeholder aerial photo area */}
-            <div
-              className="flex h-40 items-center justify-center bg-neutral text-center text-xs font-semibold uppercase tracking-wide text-deep/40"
-              style={{
-                backgroundImage:
-                  "repeating-linear-gradient(135deg, rgba(23,61,39,0.06) 0px, rgba(23,61,39,0.06) 2px, transparent 2px, transparent 14px)",
-              }}
-            >
-              {t.hero.card.photoLabel}
+            {/* Aerial photo — file lives at public/fazenda-aerea.jpg */}
+            <div className="relative h-40 bg-neutral">
+              <Image
+                src="/fazenda-aerea.jpg"
+                alt={t.hero.card.photoLabel}
+                fill
+                priority
+                sizes="(max-width: 640px) 100vw, 384px"
+                className="object-cover"
+              />
             </div>
 
             <div className="space-y-2 p-5">

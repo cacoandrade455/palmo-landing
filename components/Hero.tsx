@@ -79,6 +79,14 @@ export function Hero() {
                 sizes="(max-width: 640px) 100vw, 384px"
                 className="object-cover"
               />
+              <a
+                href="https://unsplash.com/@jpedroschmitz"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-1 right-2 text-[10px] font-medium text-white/80 drop-shadow-sm transition-colors hover:text-white"
+              >
+                📷 João Pedro Schmitz · Unsplash
+              </a>
             </div>
 
             <div className="space-y-2 p-5">

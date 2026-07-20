@@ -16,7 +16,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-deep/5 bg-white/90 backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
-        <Link href={inApp ? "/app/explorar" : "/"} className="flex items-center" aria-label="Palmo">
+        <Link href={inApp ? "/app" : "/"} className="flex items-center" aria-label="Palmo">
           <Image
             src="/palmo-logo.svg"
             alt="Palmo"

@@ -19,6 +19,7 @@ export type ListingPrefill = {
   hectares?: string;
   purpose?: string;
   crop?: string;
+  variant?: string;
   suggested?: string;
 };
 
@@ -27,12 +28,21 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
   const router = useRouter();
   const w = t.waitlist; // reuse purpose options
   const crops = t.appraiser.crops; // crop sub-options
+  const variants = t.appraiser.cropVariants; // variety sub-options (cafe/uva/banana)
   const [ufSel, setUfSel] = useState(() =>
     prefill?.uf && UFS.includes(prefill.uf) ? prefill.uf : "",
   );
   const [purposeSel, setPurposeSel] = useState(() =>
     prefill?.purpose && w.purposeOptions.some((o) => o.value === prefill.purpose)
       ? prefill.purpose
+      : "",
+  );
+  const [cropSel, setCropSel] = useState(() =>
+    prefill?.purpose &&
+    prefill?.crop &&
+    w.purposeOptions.some((o) => o.value === prefill.purpose) &&
+    (crops?.[prefill.purpose] ?? []).some((c) => c.value === prefill.crop)
+      ? prefill.crop
       : "",
   );
   const [muniSel, setMuniSel] = useState("");
@@ -103,6 +113,8 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         hectares: "Area (hectares)",
         purpose: "Intended use",
         crop: "Specific crop (optional)",
+        variety: "Variety (optional)",
+        varietyAll: "All / not sure",
         price: "Expected price (R$/ha/year, optional)",
         priceSuggested:
           "Suggested by the Palmo calculator (official sources) — adjust as you like.",
@@ -110,6 +122,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         descriptionPh: "Access, soil, infrastructure, distance to town…",
         water: "Has water source",
         car: "CAR number (optional)",
+        carHint: "Listings with a CAR earn the Verified badge and more trust from producers.",
         saveDraft: "Save as draft",
         publish: "Publish listing",
         submitting: "Saving…",
@@ -133,6 +146,8 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         hectares: "Área (hectares)",
         purpose: "Finalidade de uso",
         crop: "Cultura específica (opcional)",
+        variety: "Variedade (opcional)",
+        varietyAll: "Todas / não sei",
         price: "Preço esperado (R$/ha/ano, opcional)",
         priceSuggested:
           "Sugerido pela calculadora Palmo (fontes oficiais) — ajuste como quiser.",
@@ -140,6 +155,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         descriptionPh: "Acesso, solo, infraestrutura, distância da cidade…",
         water: "Tem água",
         car: "Número do CAR (opcional)",
+        carHint: "Anúncios com CAR ganham o selo Verificado e mais confiança dos produtores.",
         saveDraft: "Salvar rascunho",
         publish: "Publicar anúncio",
         submitting: "Salvando…",
@@ -159,6 +175,15 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
     setSubmitting(true);
     const fd = new FormData(form);
     fd.set("publish", publish ? "true" : "false");
+    // The variety lives inside the description (no dedicated column yet), so
+    // swap the slug value for its human-readable label before submitting.
+    const variantVal = String(fd.get("variant") ?? "");
+    if (variantVal) {
+      const vLabel = (variants?.[String(fd.get("crop") ?? "")] ?? []).find(
+        (v) => v.value === variantVal,
+      )?.label;
+      fd.set("variant", vLabel ?? variantVal);
+    }
     const res = await createListing(fd);
     setSubmitting(false);
     if (res.ok) {
@@ -263,7 +288,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         </div>
         <div>
           <label htmlFor="purpose" className="text-sm font-semibold text-deep">{label.purpose}</label>
-          <select id="purpose" name="purpose" required value={purposeSel} onChange={(e) => setPurposeSel(e.target.value)} className={inputCls}>
+          <select id="purpose" name="purpose" required value={purposeSel} onChange={(e) => { setPurposeSel(e.target.value); setCropSel(""); }} className={inputCls}>
             <option value="" disabled>{label.selectPurpose}</option>
             {w.purposeOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
@@ -276,10 +301,8 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
           <select
             id="crop"
             name="crop"
-            key={purposeSel}
-            defaultValue={
-              purposeSel && purposeSel === prefill?.purpose ? (prefill?.crop ?? "") : ""
-            }
+            value={cropSel}
+            onChange={(e) => setCropSel(e.target.value)}
             className={inputCls}
           >
             <option value="">{label.allCrops}</option>
@@ -288,11 +311,34 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         </div>
       )}
 
+      {cropSel && (variants?.[cropSel]?.length ?? 0) > 0 && (
+        <div>
+          <label htmlFor="variant" className="text-sm font-semibold text-deep">{label.variety}</label>
+          <select
+            id="variant"
+            name="variant"
+            key={cropSel}
+            defaultValue={
+              cropSel === prefill?.crop &&
+              (variants?.[cropSel] ?? []).some((v) => v.value === prefill?.variant)
+                ? prefill?.variant
+                : ""
+            }
+            className={inputCls}
+          >
+            <option value="">{label.varietyAll}</option>
+            {(variants?.[cropSel] ?? []).map((v) => (
+              <option key={v.value} value={v.value}>{v.label}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
       <div>
         <label htmlFor="price_per_ha_year" className="text-sm font-semibold text-deep">{label.price}</label>
         <input id="price_per_ha_year" name="price_per_ha_year" type="number" min="0" step="any" defaultValue={prefill?.suggested ?? ""} className={inputCls} />
         {prefill?.suggested && (
-          <p className="mt-1.5 text-xs leading-relaxed text-deep/55">
+          <p className="mt-1.5 text-xs leading-relaxed text-deep/50">
             {label.priceSuggested}
           </p>
         )}
@@ -310,6 +356,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         </label>
         <div>
           <input name="car_number" placeholder={label.car} className={`${inputCls} mt-0`} />
+          <p className="mt-1.5 text-xs leading-relaxed text-deep/50">{label.carHint}</p>
         </div>
       </div>
 

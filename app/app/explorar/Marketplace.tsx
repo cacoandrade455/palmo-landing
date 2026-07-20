@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Droplet, Image as ImageIcon, MapPin, Search } from "lucide-react";
+import { CheckCircle2, Droplet, Image as ImageIcon, MapPin, Search } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { UFS } from "@/lib/appraisal-data";
 import { browseListings, type BrowseListing } from "./actions";
@@ -55,6 +55,7 @@ export function Marketplace() {
           photoSoon: "Photo coming soon",
           perYear: "/ha/yr",
           water: "Water",
+          verified: "Verified",
           loading: "Loading listings…",
         }
       : {
@@ -78,6 +79,7 @@ export function Marketplace() {
           photoSoon: "Foto em breve",
           perYear: "/ha/ano",
           water: "Água",
+          verified: "Verificado",
           loading: "Carregando anúncios…",
         };
 
@@ -323,6 +325,12 @@ export function Marketplace() {
                       <p className="text-sm font-semibold text-deep/70">
                         {purposeLabel(l.purpose)}
                       </p>
+                      {l.car_number && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+                          <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+                          {label.verified}
+                        </span>
+                      )}
                       {(l.price_per_ha_year || l.has_water) && (
                         <div className="flex items-center gap-3 pt-1 text-sm">
                           {l.price_per_ha_year && (

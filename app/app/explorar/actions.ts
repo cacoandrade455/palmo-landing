@@ -12,6 +12,7 @@ export type BrowseListing = {
   crop: string | null;
   price_per_ha_year: number | null;
   has_water: boolean | null;
+  car_number: string | null;
   created_at: string;
 };
 
@@ -32,7 +33,7 @@ export async function browseListings(
   let q = supabase
     .from("listings")
     .select(
-      "id, title, state, municipality, hectares, purpose, crop, price_per_ha_year, has_water, created_at",
+      "id, title, state, municipality, hectares, purpose, crop, price_per_ha_year, has_water, car_number, created_at",
     )
     .eq("status", "active")
     .order("created_at", { ascending: false })

@@ -27,6 +27,7 @@ export default async function AnunciarPage({
     hectares: posNum("hectares"),
     purpose: str("purpose"),
     crop: str("crop"),
+    variant: str("variant"),
     suggested: posNum("suggested"),
   };
 

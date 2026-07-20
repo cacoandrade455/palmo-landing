@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
@@ -12,13 +12,33 @@ import { createListing } from "./actions";
 const inputCls =
   "mt-1.5 w-full rounded-xl border border-deep/15 bg-white px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none";
 
-export function ListingForm() {
+/** Optional pre-fill coming from the /quanto-vale calculator bridge. */
+export type ListingPrefill = {
+  uf?: string;
+  municipality?: string;
+  hectares?: string;
+  purpose?: string;
+  crop?: string;
+  suggested?: string;
+};
+
+export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
   const { t, lang } = useLanguage();
   const router = useRouter();
   const w = t.waitlist; // reuse purpose options
   const crops = t.appraiser.crops; // crop sub-options
-  const [ufSel, setUfSel] = useState("");
-  const [purposeSel, setPurposeSel] = useState("");
+  const [ufSel, setUfSel] = useState(() =>
+    prefill?.uf && UFS.includes(prefill.uf) ? prefill.uf : "",
+  );
+  const [purposeSel, setPurposeSel] = useState(() =>
+    prefill?.purpose && w.purposeOptions.some((o) => o.value === prefill.purpose)
+      ? prefill.purpose
+      : "",
+  );
+  const [muniSel, setMuniSel] = useState("");
+  // Municipality can only be selected once the IBGE list for the UF arrives,
+  // so the prefill waits for the fetch and is applied exactly once.
+  const pendingMuniRef = useRef(prefill?.municipality ?? "");
   const [muniByUf, setMuniByUf] = useState<Record<string, string[] | "error">>({});
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,6 +82,16 @@ export function ListingForm() {
   const municipalities = Array.isArray(muniEntry) ? muniEntry : [];
   const muniFailed = muniEntry === "error";
 
+  useEffect(() => {
+    const target = pendingMuniRef.current;
+    const loaded = Array.isArray(muniEntry) ? muniEntry : [];
+    if (!target || loaded.length === 0) return;
+    pendingMuniRef.current = "";
+    if (loaded.includes(target)) {
+      queueMicrotask(() => setMuniSel(target));
+    }
+  }, [muniEntry]);
+
   const label = lang === "en"
     ? {
         title: "List my land",
@@ -74,6 +104,8 @@ export function ListingForm() {
         purpose: "Intended use",
         crop: "Specific crop (optional)",
         price: "Expected price (R$/ha/year, optional)",
+        priceSuggested:
+          "Suggested by the Palmo calculator (official sources) — adjust as you like.",
         description: "Description (optional)",
         descriptionPh: "Access, soil, infrastructure, distance to town…",
         water: "Has water source",
@@ -102,6 +134,8 @@ export function ListingForm() {
         purpose: "Finalidade de uso",
         crop: "Cultura específica (opcional)",
         price: "Preço esperado (R$/ha/ano, opcional)",
+        priceSuggested:
+          "Sugerido pela calculadora Palmo (fontes oficiais) — ajuste como quiser.",
         description: "Descrição (opcional)",
         descriptionPh: "Acesso, solo, infraestrutura, distância da cidade…",
         water: "Tem água",
@@ -194,7 +228,17 @@ export function ListingForm() {
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor="state" className="text-sm font-semibold text-deep">{label.state}</label>
-          <select id="state" name="state" required value={ufSel} onChange={(e) => setUfSel(e.target.value)} className={inputCls}>
+          <select
+            id="state"
+            name="state"
+            required
+            value={ufSel}
+            onChange={(e) => {
+              setUfSel(e.target.value);
+              setMuniSel("");
+            }}
+            className={inputCls}
+          >
             <option value="" disabled>{label.selectUf}</option>
             {UFS.map((uf) => <option key={uf} value={uf}>{uf}</option>)}
           </select>
@@ -202,9 +246,9 @@ export function ListingForm() {
         <div>
           <label htmlFor="municipality" className="text-sm font-semibold text-deep">{label.municipality}</label>
           {muniFailed ? (
-            <input id="municipality" name="municipality" required className={inputCls} />
+            <input id="municipality" name="municipality" required defaultValue={prefill?.municipality ?? ""} className={inputCls} />
           ) : (
-            <select id="municipality" name="municipality" required key={ufSel} defaultValue="" disabled={!ufSel} className={inputCls}>
+            <select id="municipality" name="municipality" required value={muniSel} onChange={(e) => setMuniSel(e.target.value)} disabled={!ufSel} className={inputCls}>
               <option value="" disabled>{!ufSel ? label.selectMuniFirst : label.selectMuni}</option>
               {municipalities.map((m) => <option key={m} value={m}>{m}</option>)}
             </select>
@@ -215,7 +259,7 @@ export function ListingForm() {
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor="hectares" className="text-sm font-semibold text-deep">{label.hectares}</label>
-          <input id="hectares" name="hectares" type="number" min="1" step="any" required className={inputCls} />
+          <input id="hectares" name="hectares" type="number" min="1" step="any" required defaultValue={prefill?.hectares ?? ""} className={inputCls} />
         </div>
         <div>
           <label htmlFor="purpose" className="text-sm font-semibold text-deep">{label.purpose}</label>
@@ -229,7 +273,15 @@ export function ListingForm() {
       {crops?.[purposeSel] && (
         <div>
           <label htmlFor="crop" className="text-sm font-semibold text-deep">{label.crop}</label>
-          <select id="crop" name="crop" key={purposeSel} defaultValue="" className={inputCls}>
+          <select
+            id="crop"
+            name="crop"
+            key={purposeSel}
+            defaultValue={
+              purposeSel && purposeSel === prefill?.purpose ? (prefill?.crop ?? "") : ""
+            }
+            className={inputCls}
+          >
             <option value="">{label.allCrops}</option>
             {crops[purposeSel].map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
           </select>
@@ -238,7 +290,12 @@ export function ListingForm() {
 
       <div>
         <label htmlFor="price_per_ha_year" className="text-sm font-semibold text-deep">{label.price}</label>
-        <input id="price_per_ha_year" name="price_per_ha_year" type="number" min="0" step="any" className={inputCls} />
+        <input id="price_per_ha_year" name="price_per_ha_year" type="number" min="0" step="any" defaultValue={prefill?.suggested ?? ""} className={inputCls} />
+        {prefill?.suggested && (
+          <p className="mt-1.5 text-xs leading-relaxed text-deep/55">
+            {label.priceSuggested}
+          </p>
+        )}
       </div>
 
       <div>

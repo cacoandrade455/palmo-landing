@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { CheckCircle2, Info } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, CheckCircle2, Info } from "lucide-react";
+import { APP_ENABLED } from "@/lib/feature-flags";
 import { submitWaitlist, type WaitlistResult } from "@/app/actions";
 import { useLanguage } from "@/lib/language-context";
 import {
@@ -104,6 +106,51 @@ export function Appraiser() {
 
   const inputCls =
     "mt-1.5 w-full rounded-xl border border-deep/15 bg-white px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none";
+
+  // Bridge calculator → listing form (dark-launched app only). The suggested
+  // price is the midpoint of the SAME per-ha range the result headlines:
+  // range estimate, formed-crop model, crop land reference or VTN — in the
+  // exact order the result block picks its headline. No numbers → no CTA.
+  const listCta =
+    lang === "en"
+      ? {
+          title: "List my land at this value",
+          sub: "Listing pre-filled with your calculator data",
+        }
+      : {
+          title: "Anunciar minha terra por esse valor",
+          sub: "Anúncio pré-preenchido com os dados da calculadora",
+        };
+  const listUrl = (() => {
+    if (!APP_ENABLED || !query || !estimate) return null;
+    const midOf = (min: number, max: number) => Math.round((min + max) / 2);
+    let suggested: number | null = null;
+    if (estimate.kind === "range") {
+      suggested = midOf(estimate.minPerHa, estimate.maxPerHa);
+    } else {
+      const formed = query.crop ? formedCropLeaseRef(query.crop, query.uf) : null;
+      const cropRef = query.crop ? cropLandLeaseRef(query.crop, query.uf) : null;
+      const vtn = estimateFromVTN(
+        query.uf,
+        query.municipality,
+        query.purpose === "extrativismo" ? "silvicultura" : query.purpose,
+      );
+      if (formed) suggested = midOf(formed.minPerHa, formed.maxPerHa);
+      else if (cropRef) suggested = midOf(cropRef.minPerHa, cropRef.maxPerHa);
+      else if (vtn) suggested = midOf(vtn.minPerHa, vtn.maxPerHa);
+    }
+    if (suggested == null) return null;
+    const params = new URLSearchParams({
+      uf: query.uf,
+      municipality: query.municipality,
+      hectares: String(query.hectares),
+      purpose: query.purpose,
+      suggested: String(suggested),
+    });
+    if (query.crop) params.set("crop", query.crop);
+    if (query.variant) params.set("variant", query.variant);
+    return `/app/anunciar?${params.toString()}`;
+  })();
 
   return (
     <section className="bg-white py-16">
@@ -567,6 +614,26 @@ export function Appraiser() {
               </>
                 );
               })()
+            )}
+
+            {listUrl && (
+              <Link
+                href={listUrl}
+                className="group mt-6 flex items-center gap-4 rounded-2xl border-2 border-accent bg-accent/10 px-5 py-4 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-accent/20 hover:shadow-md"
+              >
+                <span className="min-w-0 flex-1">
+                  <span className="block text-base font-extrabold leading-snug text-deep sm:text-lg">
+                    {listCta.title}
+                  </span>
+                  <span className="mt-0.5 block text-sm leading-snug text-deep/60">
+                    {listCta.sub}
+                  </span>
+                </span>
+                <ArrowRight
+                  className="h-5 w-5 shrink-0 text-deep transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </Link>
             )}
 
             {/* Regional use comparison */}

@@ -105,6 +105,8 @@ export function Appraiser() {
   const [purposeSel, setPurposeSel] = useState("");
   const [cropSel, setCropSel] = useState("");
   const [ufSel, setUfSel] = useState("");
+  const [muniSel, setMuniSel] = useState("");
+  const [haInput, setHaInput] = useState("");
   // per-UF cache: string[] = loaded; "error" = IBGE unavailable (free-text fallback)
   const [muniByUf, setMuniByUf] = useState<Record<string, string[] | "error">>({});
 
@@ -138,6 +140,34 @@ export function Appraiser() {
   );
 
   const a = t.appraiser;
+
+  // Prefill bridge FROM the land-use recommender (/recomendar): it links here
+  // with uf/municipality/purpose/crop/hectares in the query string. We fill the
+  // form and, when hectares is present, compute the result immediately. Read in
+  // an effect (client-only, never during SSR); setState is deferred to satisfy
+  // react-hooks/set-state-in-effect.
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    const uf = sp.get("uf") ?? "";
+    const purpose = sp.get("purpose") ?? "";
+    if (!uf && !purpose) return;
+    const crop = sp.get("crop") ?? "";
+    const variant = sp.get("variant") ?? "";
+    const municipality = (sp.get("municipality") ?? "").trim();
+    const hectares = Number(sp.get("hectares") ?? 0);
+    const hasHa = Number.isFinite(hectares) && hectares > 0;
+    queueMicrotask(() => {
+      if (uf) setUfSel(uf);
+      if (purpose) setPurposeSel(purpose);
+      if (crop) setCropSel(crop);
+      if (municipality) setMuniSel(municipality);
+      if (hasHa) setHaInput(String(hectares));
+      if (uf && purpose && hasHa) {
+        setQuery({ uf, municipality, hectares, purpose, crop, variant });
+        setEstimate(estimateLease(purpose, uf, crop || undefined));
+      }
+    });
+  }, []);
 
   function handleCalculate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -226,7 +256,10 @@ export function Appraiser() {
                 name="uf"
                 required
                 value={ufSel}
-                onChange={(e) => setUfSel(e.target.value)}
+                onChange={(e) => {
+                  setUfSel(e.target.value);
+                  setMuniSel("");
+                }}
                 className={inputCls}
               >
                 <option value="" disabled>
@@ -252,6 +285,8 @@ export function Appraiser() {
                   name="municipality"
                   type="text"
                   required
+                  value={muniSel}
+                  onChange={(e) => setMuniSel(e.target.value)}
                   placeholder={a.municipalityLabel}
                   className={inputCls}
                 />
@@ -260,8 +295,8 @@ export function Appraiser() {
                   id="ap-municipality"
                   name="municipality"
                   required
-                  key={ufSel}
-                  defaultValue=""
+                  value={muniSel}
+                  onChange={(e) => setMuniSel(e.target.value)}
                   disabled={!ufSel || muniLoading}
                   className={`${inputCls} disabled:cursor-not-allowed disabled:bg-neutral/60 disabled:text-deep/40`}
                 >
@@ -294,6 +329,8 @@ export function Appraiser() {
                 min="1"
                 step="any"
                 required
+                value={haInput}
+                onChange={(e) => setHaInput(e.target.value)}
                 placeholder={a.hectaresPlaceholder}
                 className={inputCls}
               />

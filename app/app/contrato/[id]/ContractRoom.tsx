@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   CheckCircle2,
+  FileText,
   MessageSquare,
   Scale,
   ShieldCheck,
@@ -133,6 +134,7 @@ export function ContractRoom({ id }: { id: string }) {
     lang === "en"
       ? {
           back: "Back to conversation",
+          viewFull: "View full contract",
           legalBanner: "Draft subject to legal review.",
           typeArrendamento: "Rural lease",
           typeParceria: "Rural partnership",
@@ -179,6 +181,7 @@ export function ContractRoom({ id }: { id: string }) {
         }
       : {
           back: "Voltar à conversa",
+          viewFull: "Ver contrato completo",
           legalBanner: "Minuta sujeita a revisão jurídica.",
           typeArrendamento: "Arrendamento rural",
           typeParceria: "Parceria rural",
@@ -412,6 +415,13 @@ export function ContractRoom({ id }: { id: string }) {
             {data.developerName ?? "—"}
           </p>
         </div>
+        <button
+          onClick={() => router.push(`/app/contrato/${id}/completo`)}
+          className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 text-sm font-bold text-deep shadow-sm transition-colors hover:bg-accent-dark"
+        >
+          <FileText className="h-4 w-4" aria-hidden="true" />
+          {label.viewFull}
+        </button>
       </div>
 
       {data.status === "ready" && (

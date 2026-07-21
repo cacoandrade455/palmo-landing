@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Appraiser } from "@/components/Appraiser";
+import { RecommenderLink } from "@/components/RecommenderLink";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -14,6 +15,11 @@ export default function QuantoValePage() {
     <>
       <Header />
       <main>
+        <div className="bg-white pt-10">
+          <div className="mx-auto max-w-2xl px-6">
+            <RecommenderLink />
+          </div>
+        </div>
         <Appraiser />
       </main>
       <Footer />

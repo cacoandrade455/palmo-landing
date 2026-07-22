@@ -41,7 +41,7 @@ export function RecommenderLink({ className = "" }: { className?: string }) {
 
   return (
     <Link
-      href="/recomendar"
+      href="/quanto-vale?descobrir=1"
       className={`group flex items-center gap-4 rounded-2xl border-2 border-primary/30 bg-primary/5 px-5 py-4 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-primary/10 hover:shadow-md ${className}`}
     >
       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10">

@@ -4,10 +4,22 @@ import { useEffect, useState } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Info } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Info,
+  Droplets,
+  DropletOff,
+} from "lucide-react";
 import { APP_ENABLED } from "@/lib/feature-flags";
 import { submitWaitlist, type WaitlistResult } from "@/app/actions";
 import { useLanguage, type AppLang } from "@/lib/language-context";
+import {
+  recommendUses,
+  type RecommendResult,
+  type Recommendation,
+} from "@/lib/land-recommender";
+import { RecommenderRanking } from "@/components/RecommenderRanking";
 import {
   compareUses,
   estimateLease,
@@ -95,12 +107,69 @@ const XL: Record<
   },
 };
 
+/**
+ * Chrome for the two-mode switch that fuses the land-use RECOMMENDER (discovery)
+ * into the calculator (exact value). New inline strings (rule 5): PT/EN written
+ * here, the extra languages reuse the EN variant — same policy the calculator
+ * already follows for data-layer copy.
+ */
+type ModeCopy = {
+  modeDiscover: string;
+  modeCalc: string;
+  discoverBanner: string;
+  waterLabel: string;
+  waterYes: string;
+  waterNo: string;
+  hectaresOptional: string;
+  discoverSubmit: string;
+};
+
+const MODE_PT: ModeCopy = {
+  modeDiscover: "Não sei o que plantar",
+  modeCalc: "Já sei a cultura",
+  discoverBanner:
+    "Diga onde fica a terra e nós ranqueamos as vocações que a sua região comprovadamente faz — da maior renda para a menor. A decisão final é sua e do seu agrônomo.",
+  waterLabel: "Tem fonte de água para irrigar?",
+  waterYes: "Sim",
+  waterNo: "Não",
+  hectaresOptional: "opcional",
+  discoverSubmit: "Ver recomendações",
+};
+
+const MODE_EN: ModeCopy = {
+  modeDiscover: "I don't know what to plant",
+  modeCalc: "I know the crop",
+  discoverBanner:
+    "Tell us where the land is and we rank the vocations your region provably does — highest income first. The final decision is yours and your agronomist's.",
+  waterLabel: "Do you have a water source to irrigate?",
+  waterYes: "Yes",
+  waterNo: "No",
+  hectaresOptional: "optional",
+  discoverSubmit: "See recommendations",
+};
+
+const MODE: Record<AppLang, ModeCopy> = {
+  pt: MODE_PT,
+  en: MODE_EN,
+  zh: MODE_EN,
+  fr: MODE_EN,
+  ar: MODE_EN,
+};
+
 export function Appraiser() {
   const { t, lang } = useLanguage();
   const xl = XL[lang];
+  const mc = MODE[lang];
   // `lib/prices.ts` e `lib/appraisal-data.ts` são camadas de dados calibradas
   // (PT/EN apenas): idiomas adicionais reaproveitam a variante EN.
   const dataLang: "pt" | "en" = lang === "pt" ? "pt" : "en";
+  // Two modes in one tool: "discover" runs the land-use recommender (region →
+  // ranking of vocations by return); "calc" is the classic exact-value flow.
+  const [mode, setMode] = useState<"discover" | "calc">("calc");
+  const [water, setWater] = useState<"" | "yes" | "no">("");
+  const [recResult, setRecResult] = useState<
+    (RecommendResult & { hectares?: number; water: boolean }) | null
+  >(null);
   const [query, setQuery] = useState<Query | null>(null);
   const [purposeSel, setPurposeSel] = useState("");
   const [cropSel, setCropSel] = useState("");
@@ -148,26 +217,76 @@ export function Appraiser() {
   // react-hooks/set-state-in-effect.
   useEffect(() => {
     const sp = new URLSearchParams(window.location.search);
+    // `/recomendar` and the "discover" entry points redirect here with
+    // ?descobrir=1, opening the tool straight in discovery mode.
+    const wantDiscover =
+      sp.get("descobrir") === "1" || sp.get("mode") === "descobrir";
     const uf = sp.get("uf") ?? "";
     const purpose = sp.get("purpose") ?? "";
-    if (!uf && !purpose) return;
+    if (!wantDiscover && !uf && !purpose) return;
     const crop = sp.get("crop") ?? "";
     const variant = sp.get("variant") ?? "";
     const municipality = (sp.get("municipality") ?? "").trim();
     const hectares = Number(sp.get("hectares") ?? 0);
     const hasHa = Number.isFinite(hectares) && hectares > 0;
     queueMicrotask(() => {
+      if (wantDiscover) setMode("discover");
       if (uf) setUfSel(uf);
       if (purpose) setPurposeSel(purpose);
       if (crop) setCropSel(crop);
       if (municipality) setMuniSel(municipality);
       if (hasHa) setHaInput(String(hectares));
-      if (uf && purpose && hasHa) {
+      if (!wantDiscover && uf && purpose && hasHa) {
         setQuery({ uf, municipality, hectares, purpose, crop, variant });
         setEstimate(estimateLease(purpose, uf, crop || undefined));
       }
     });
   }, []);
+
+  function handleDiscover(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const uf = String(fd.get("uf") ?? "");
+    const municipality = String(fd.get("municipality") ?? "").trim();
+    const haRaw = Number(fd.get("hectares") ?? 0);
+    const hectares =
+      Number.isFinite(haRaw) && haRaw > 0 ? haRaw : undefined;
+    if (!uf || water === "") return;
+    const hasWater = water === "yes";
+    const res = recommendUses({ uf, municipality, water: hasWater, hectares });
+    setRecResult({ ...res, hectares, water: hasWater });
+  }
+
+  // Bridge a ranking card back to calculation mode, pre-filled — same tool, no
+  // navigation, so the calculator keeps its loaded municipality list and state.
+  function goToCalc(rec: Recommendation) {
+    const uf = recResult?.uf ?? ufSel;
+    const municipality = recResult?.municipality ?? muniSel;
+    const hectares = recResult?.hectares;
+    setMode("calc");
+    setUfSel(uf);
+    setMuniSel(municipality);
+    setPurposeSel(rec.purpose);
+    setCropSel(rec.cropValue);
+    if (hectares) setHaInput(String(hectares));
+    if (uf && rec.purpose && hectares && hectares > 0) {
+      setQuery({
+        uf,
+        municipality,
+        hectares,
+        purpose: rec.purpose,
+        crop: rec.cropValue,
+        variant: "",
+      });
+      setEstimate(estimateLease(rec.purpose, uf, rec.cropValue || undefined));
+    } else {
+      setQuery(null);
+      setEstimate(null);
+    }
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
 
   function handleCalculate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -242,6 +361,196 @@ export function Appraiser() {
           {a.subtitle}
         </p>
 
+        {/* One tool, two modes: discover the best use, or calculate its value. */}
+        <div className="mx-auto mt-8 grid max-w-md grid-cols-2 gap-1 rounded-full bg-neutral p-1">
+          <button
+            type="button"
+            onClick={() => setMode("discover")}
+            aria-pressed={mode === "discover"}
+            className={`rounded-full px-4 py-2.5 text-sm font-bold transition-colors ${
+              mode === "discover"
+                ? "bg-primary text-white shadow-sm"
+                : "text-deep/60 hover:text-deep"
+            }`}
+          >
+            {mc.modeDiscover}
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("calc")}
+            aria-pressed={mode === "calc"}
+            className={`rounded-full px-4 py-2.5 text-sm font-bold transition-colors ${
+              mode === "calc"
+                ? "bg-primary text-white shadow-sm"
+                : "text-deep/60 hover:text-deep"
+            }`}
+          >
+            {mc.modeCalc}
+          </button>
+        </div>
+
+        {mode === "discover" && (
+          <>
+            <p className="mx-auto mt-6 flex max-w-md items-start gap-2 rounded-xl bg-accent/20 px-4 py-2.5 text-sm font-semibold text-deep">
+              <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>{mc.discoverBanner}</span>
+            </p>
+
+            <form
+              onSubmit={handleDiscover}
+              className="mt-6 space-y-4 rounded-2xl border border-deep/10 bg-white p-6 shadow-sm sm:p-8"
+            >
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label
+                    htmlFor="disc-uf"
+                    className="text-sm font-semibold text-deep"
+                  >
+                    {a.stateLabel}
+                  </label>
+                  <select
+                    id="disc-uf"
+                    name="uf"
+                    required
+                    value={ufSel}
+                    onChange={(e) => {
+                      setUfSel(e.target.value);
+                      setMuniSel("");
+                    }}
+                    className={inputCls}
+                  >
+                    <option value="" disabled>
+                      UF
+                    </option>
+                    {UFS.map((uf) => (
+                      <option key={uf} value={uf}>
+                        {uf}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label
+                    htmlFor="disc-municipality"
+                    className="text-sm font-semibold text-deep"
+                  >
+                    {a.municipalityLabel}
+                  </label>
+                  {muniFailed ? (
+                    <input
+                      id="disc-municipality"
+                      name="municipality"
+                      type="text"
+                      value={muniSel}
+                      onChange={(e) => setMuniSel(e.target.value)}
+                      placeholder={a.municipalityLabel}
+                      className={inputCls}
+                    />
+                  ) : (
+                    <select
+                      id="disc-municipality"
+                      name="municipality"
+                      value={muniSel}
+                      onChange={(e) => setMuniSel(e.target.value)}
+                      disabled={!ufSel || muniLoading}
+                      className={`${inputCls} disabled:cursor-not-allowed disabled:bg-neutral/60 disabled:text-deep/40`}
+                    >
+                      <option value="">
+                        {!ufSel
+                          ? a.municipalitySelectState
+                          : muniLoading
+                            ? a.municipalityLoading
+                            : a.municipalityPlaceholder}
+                      </option>
+                      {municipalities.map((name) => (
+                        <option key={name} value={name}>
+                          {name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <span className="text-sm font-semibold text-deep">
+                  {mc.waterLabel}
+                </span>
+                <div className="mt-1.5 grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setWater("yes")}
+                    className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-base font-bold transition-colors ${
+                      water === "yes"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-deep/15 bg-white text-deep/70 hover:border-primary/40"
+                    }`}
+                    aria-pressed={water === "yes"}
+                  >
+                    <Droplets className="h-5 w-5" aria-hidden="true" />
+                    {mc.waterYes}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setWater("no")}
+                    className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-base font-bold transition-colors ${
+                      water === "no"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-deep/15 bg-white text-deep/70 hover:border-primary/40"
+                    }`}
+                    aria-pressed={water === "no"}
+                  >
+                    <DropletOff className="h-5 w-5" aria-hidden="true" />
+                    {mc.waterNo}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="disc-hectares"
+                  className="text-sm font-semibold text-deep"
+                >
+                  {a.hectaresLabel}{" "}
+                  <span className="font-normal text-deep/50">
+                    ({mc.hectaresOptional})
+                  </span>
+                </label>
+                <input
+                  id="disc-hectares"
+                  name="hectares"
+                  type="number"
+                  min="1"
+                  step="any"
+                  value={haInput}
+                  onChange={(e) => setHaInput(e.target.value)}
+                  placeholder={a.hectaresPlaceholder}
+                  className={inputCls}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={!ufSel || water === ""}
+                className="w-full rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {mc.discoverSubmit}
+              </button>
+            </form>
+
+            {recResult && (
+              <div className="mt-8">
+                <RecommenderRanking
+                  result={recResult}
+                  onCalcSelect={goToCalc}
+                />
+              </div>
+            )}
+          </>
+        )}
+
+        {mode === "calc" && (
+          <>
         <form
           onSubmit={handleCalculate}
           className="mt-8 space-y-4 rounded-2xl border border-deep/10 bg-white p-6 shadow-sm sm:p-8"
@@ -886,6 +1195,8 @@ export function Appraiser() {
               )}
             </div>
           </div>
+        )}
+          </>
         )}
       </div>
     </section>

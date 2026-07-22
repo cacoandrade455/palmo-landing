@@ -69,6 +69,8 @@ export type Recommendation = {
   revMax?: number;
   /** provenance of the income range (formed-crop models only) */
   sourceNote?: string;
+  /** the use is a proven regional vocation for this UF (drives the badge) */
+  regionalStrong: boolean;
 };
 
 export type KnownUse = {
@@ -355,9 +357,9 @@ export function recommendUses(input: RecommendInput): RecommendResult {
   const moisture = regionMoisture(uf, municipality);
 
   // 1) Collect every registered regional advantage for this UF. This is the
-  //    ONLY gate — no advantage, no recommendation.
-  type Draft = Recommendation & { _score: number };
-  const drafts: Draft[] = [];
+  //    ONLY gate — no advantage, no recommendation. Every entry here is, by
+  //    construction, a proven regional vocation (regionalStrong).
+  const drafts: Recommendation[] = [];
 
   for (const [key, adv] of Object.entries(stateAdvantages)) {
     if (!adv.ufs.includes(uf)) continue;
@@ -368,13 +370,9 @@ export function recommendUses(input: RecommendInput): RecommendResult {
     const fit = bucketOf(cropValue, purpose);
     const inc = incomeFor(cropValue, purpose, uf);
     const copy = waterCopy(fit, moisture, water);
+    // Water fit only decides whether a use is VIABLE right now (demoted); it no
+    // longer feeds the ranking order — that is settled purely by revenue below.
     const ws = waterScore(fit, moisture, water);
-
-    const mid =
-      inc.incomeMinPerHa != null && inc.incomeMaxPerHa != null
-        ? (inc.incomeMinPerHa + inc.incomeMaxPerHa) / 2
-        : 0;
-    const score = ws + Math.min(mid / 200, 40);
 
     drafts.push({
       rank: 0,
@@ -390,8 +388,8 @@ export function recommendUses(input: RecommendInput): RecommendResult {
       regionalFactEn: adv.factEn,
       waterWarningPt: copy.warnPt,
       waterWarningEn: copy.warnEn,
+      regionalStrong: true,
       ...inc,
-      _score: score,
     });
   }
 
@@ -421,14 +419,33 @@ export function recommendUses(input: RecommendInput): RecommendResult {
     (d) => d.cropValue || !purposesWithCrop.has(d.purpose),
   );
 
-  // 4) Rank: water fit dominates, revenue breaks ties inside a bucket.
-  pruned.sort((a, b) => b._score - a._score);
-
-  const recommendations: Recommendation[] = pruned.map((d, i) => {
-    const { _score, ...rec } = d;
-    void _score;
-    return { ...rec, rank: i + 1 };
+  // 4) Rank by RETURN, highest ceiling first. The order is settled by the
+  //    modeled gross-revenue range (revMax desc, revMin desc as the tiebreak),
+  //    NOT by regional vocation (which is now only a badge). Water viability
+  //    (`demoted`) merely sinks the currently-unviable uses to the bottom — it
+  //    never reorders the viable ones. Uses without a modeled revenue range
+  //    have no ceiling to compare, so they fall to the end, alphabetically.
+  pruned.sort((a, b) => {
+    // Water-unviable uses sink beneath every viable one.
+    if (a.demoted !== b.demoted) return a.demoted ? 1 : -1;
+    // A modeled revenue range beats none; entries without one go to the end.
+    const aHas = a.revMax != null;
+    const bHas = b.revMax != null;
+    if (aHas !== bHas) return aHas ? -1 : 1;
+    if (aHas && bHas) {
+      if (b.revMax! !== a.revMax!) return b.revMax! - a.revMax!; // higher ceiling first
+      const ar = a.revMin ?? 0;
+      const br = b.revMin ?? 0;
+      if (br !== ar) return br - ar; // higher floor breaks the tie
+    }
+    // No revenue ceiling on either side → deterministic alphabetical order.
+    return a.cropLabelPt.localeCompare(b.cropLabelPt);
   });
+
+  const recommendations: Recommendation[] = pruned.map((d, i) => ({
+    ...d,
+    rank: i + 1,
+  }));
 
   return { weakSignal: false, uf, municipality, moisture, recommendations };
 }

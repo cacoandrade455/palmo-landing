@@ -69,6 +69,7 @@ const XL: Record<
     listTitle: string;
     listSub: string;
     country: string;
+    bestUsesTitle: string;
   }
 > = {
   pt: {
@@ -77,6 +78,7 @@ const XL: Record<
     listTitle: "Anunciar minha terra por esse valor",
     listSub: "Anúncio pré-preenchido com os dados da calculadora",
     country: "Brasil",
+    bestUsesTitle: "Melhores usos para sua terra",
   },
   en: {
     year: "year",
@@ -84,6 +86,7 @@ const XL: Record<
     listTitle: "List my land at this value",
     listSub: "Listing pre-filled with your calculator data",
     country: "Brazil",
+    bestUsesTitle: "Best uses for your land",
   },
   zh: {
     year: "年",
@@ -91,6 +94,7 @@ const XL: Record<
     listTitle: "按此价格发布我的土地",
     listSub: "房源已用计算器的数据预先填写",
     country: "Brazil",
+    bestUsesTitle: "Best uses for your land",
   },
   fr: {
     year: "an",
@@ -98,6 +102,7 @@ const XL: Record<
     listTitle: "Annoncer ma terre à cette valeur",
     listSub: "Annonce pré-remplie avec les données du calculateur",
     country: "Brazil",
+    bestUsesTitle: "Best uses for your land",
   },
   ar: {
     year: "سنة",
@@ -105,6 +110,7 @@ const XL: Record<
     listTitle: "أعلن عن أرضي بهذه القيمة",
     listSub: "إعلان معبّأ مسبقًا ببيانات الحاسبة",
     country: "Brazil",
+    bestUsesTitle: "Best uses for your land",
   },
 };
 
@@ -1030,7 +1036,11 @@ export function Appraiser() {
               </Link>
             )}
 
-            {/* Regional use comparison */}
+            {/* Best uses for your land — ranked by return, each with the
+                sourced regional "why". The justification is NOT computed here:
+                we route the same land through the recommender engine and reuse,
+                verbatim, the fact it already exposes per use (regionalFact from
+                lib/state-advantage.ts). No engine → no fact line. */}
             {(() => {
               const comps = compareUses(query.uf)
                 .filter((c) => !c.selective || c.purpose === query.purpose)
@@ -1047,14 +1057,42 @@ export function Appraiser() {
                 topRealistic.mid >= chosen.mid * 1.5;
               const labelOf = (p: string) =>
                 t.waitlist.purposeOptions.find((o) => o.value === p)?.label ?? p;
+              // The "why" for each use, taken straight from the recommender
+              // engine (which reads lib/state-advantage.ts). We index by crop
+              // and by purpose so the chosen crop shows its own fact when it has
+              // one, and every other line shows its purpose's top-ranked fact.
+              const rec = recommendUses({
+                uf: query.uf,
+                municipality: query.municipality,
+                water: true,
+                hectares: query.hectares,
+              });
+              const factByCrop = new Map<string, { pt: string; en: string }>();
+              const factByPurpose = new Map<string, { pt: string; en: string }>();
+              if (!rec.weakSignal) {
+                for (const r of rec.recommendations) {
+                  const f = { pt: r.regionalFactPt, en: r.regionalFactEn };
+                  if (r.cropValue && !factByCrop.has(r.cropValue))
+                    factByCrop.set(r.cropValue, f);
+                  if (!factByPurpose.has(r.purpose)) factByPurpose.set(r.purpose, f);
+                }
+              }
+              const factFor = (purpose: string, isChosen: boolean) => {
+                const own =
+                  isChosen && query.crop ? factByCrop.get(query.crop) : undefined;
+                const f = own ?? factByPurpose.get(purpose);
+                if (!f) return null;
+                return dataLang === "en" ? f.en : f.pt;
+              };
               return (
                 <div className="mt-6">
                   <h3 className="text-sm font-bold uppercase tracking-wide text-deep/60">
-                    {a.compareTitle}
+                    {xl.bestUsesTitle}
                   </h3>
                   <ul className="mt-3 space-y-2">
                     {comps.map((c) => {
                       const isChosen = c.purpose === query.purpose;
+                      const why = factFor(c.purpose, isChosen);
                       return (
                         <li
                           key={c.purpose}
@@ -1074,6 +1112,11 @@ export function Appraiser() {
                             {c.selective && (
                               <span className="mt-0.5 block text-xs font-normal text-deep/50">
                                 {a.selectiveTag}
+                              </span>
+                            )}
+                            {why && (
+                              <span className="mt-0.5 block text-xs font-normal text-deep/50">
+                                {why}
                               </span>
                             )}
                           </span>

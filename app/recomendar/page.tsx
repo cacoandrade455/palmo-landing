@@ -1,22 +1,11 @@
-import type { Metadata } from "next";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { LandRecommender } from "./LandRecommender";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "O melhor uso da sua terra — Palmo",
-  description:
-    "Não sabe o que plantar? Informe onde fica a terra e receba um ranking das vocações que a sua região comprovadamente faz, com fontes oficiais. Grátis.",
-};
-
+/**
+ * The land-use recommender is no longer a parallel tool: it now lives INSIDE
+ * the calculator as its "discovery" mode. This route stays only as a permanent
+ * entry point, redirecting to the calculator opened straight in that mode. The
+ * engine (lib/land-recommender.ts) and all data layers are untouched.
+ */
 export default function RecomendarPage() {
-  return (
-    <>
-      <Header />
-      <main>
-        <LandRecommender />
-      </main>
-      <Footer />
-    </>
-  );
+  redirect("/quanto-vale?descobrir=1");
 }

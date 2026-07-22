@@ -121,12 +121,19 @@ export function RecommenderRanking({
     );
   }
 
-  function buildParams(rec: Recommendation) {
+  // Listing URL for a card — only meaningful while the dark-launched app is
+  // reachable. It MUST stay behind the APP_ENABLED check at the call site:
+  // computing it unconditionally left a dead binding inside the ranking's
+  // `.map` callback, and the production minifier (APP_ENABLED === false)
+  // inlined this body ahead of that binding's own declaration, crashing the
+  // page with "Cannot access 'c' before initialization" at Array.map.
+  function listHrefFor(rec: Recommendation): string | null {
+    if (!APP_ENABLED) return null;
     const p = new URLSearchParams({ uf: result.uf, purpose: rec.purpose });
     if (result.municipality) p.set("municipality", result.municipality);
     if (rec.cropValue) p.set("crop", rec.cropValue);
     if (result.hectares) p.set("hectares", String(result.hectares));
-    return p.toString();
+    return `/app/anunciar?${p.toString()}`;
   }
 
   if (result.weakSignal) {
@@ -196,7 +203,7 @@ export function RecommenderRanking({
 
       <ul className="mt-5 space-y-4">
         {result.recommendations.map((rec) => {
-          const listHref = `/app/anunciar?${buildParams(rec)}`;
+          const listHref = listHrefFor(rec);
           const hasIncome =
             rec.incomeMinPerHa != null && rec.incomeMaxPerHa != null;
           const warn =
@@ -318,7 +325,7 @@ export function RecommenderRanking({
                         aria-hidden="true"
                       />
                     </button>
-                    {APP_ENABLED && (
+                    {listHref && (
                       <Link
                         href={listHref}
                         className="flex items-center justify-center gap-2 rounded-full border border-deep/20 px-5 py-2.5 text-sm font-bold text-deep transition-colors hover:border-deep/40"

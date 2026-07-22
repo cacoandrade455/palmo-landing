@@ -23,10 +23,20 @@ const EN: Copy = { eyebrow: "Your region at a glance", sourcePrefix: "Source:" }
 // mesma política que o resto da calculadora já segue.
 const COPY: Record<AppLang, Copy> = { pt: PT, en: EN, zh: EN, fr: EN, ar: EN };
 
-export function RegionalPortrait({ retrato }: { retrato: RegiaoRetrato }) {
+export function RegionalPortrait({
+  retrato,
+}: {
+  retrato?: RegiaoRetrato | null;
+}) {
   const { lang } = useLanguage();
-  const c = COPY[lang];
-  const texto = lang === "pt" ? retrato.retratoPt : retrato.retratoEn;
+  const c = COPY[lang] ?? EN;
+  // O retrato é EXTRA: qualquer dado ausente some da tela em silêncio, nunca
+  // derruba a calculadora. Sem nome ou sem texto não há retrato para mostrar.
+  const texto =
+    (lang === "pt" ? retrato?.retratoPt : retrato?.retratoEn) ??
+    retrato?.retratoPt ??
+    retrato?.retratoEn;
+  if (!retrato?.nome || !texto) return null;
 
   return (
     <div className="rounded-2xl bg-neutral p-6 sm:p-8">
@@ -42,9 +52,11 @@ export function RegionalPortrait({ retrato }: { retrato: RegiaoRetrato }) {
             {retrato.nome}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-deep/70">{texto}</p>
-          <p className="mt-3 text-xs leading-relaxed text-deep/50">
-            {c.sourcePrefix} {retrato.fonte}
-          </p>
+          {retrato.fonte && (
+            <p className="mt-3 text-xs leading-relaxed text-deep/50">
+              {c.sourcePrefix} {retrato.fonte}
+            </p>
+          )}
         </div>
       </div>
     </div>

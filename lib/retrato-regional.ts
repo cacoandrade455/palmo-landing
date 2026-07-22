@@ -104,14 +104,22 @@ const BIOMA_POR_UF: Record<string, string> = {
   RS: "pampa",
 };
 
-/** Passos 2 e 3, sem rede: estático → bioma → null. */
+/**
+ * Passos 2 e 3, sem rede: estático → bioma → null. Nunca lança: o retrato é
+ * um extra e não pode derrubar a calculadora nem com entrada estranha.
+ */
 export function retratoEstatico(
   uf: string,
   municipality: string,
 ): RegiaoRetrato | null {
-  if (!uf) return null;
-  const key = `${norm(municipality)}/${norm(uf)}`;
-  return retratoPorMunicipio(key, BIOMA_POR_UF[norm(uf)]);
+  try {
+    if (!uf) return null;
+    const ufKey = norm(uf);
+    const key = `${norm(municipality ?? "")}/${ufKey}`;
+    return retratoPorMunicipio(key, BIOMA_POR_UF[ufKey]) ?? null;
+  } catch {
+    return null;
+  }
 }
 
 type IbgeMunicipio = {
@@ -148,8 +156,13 @@ export async function resolverRetrato(
       { signal: controller.signal },
     );
     if (!res.ok) return fallback;
-    const list: IbgeMunicipio[] = await res.json();
-    const hit = list.find((m) => norm(m.nome ?? "") === alvo);
+    // Só iteramos DEPOIS de confirmar que veio mesmo uma lista: um corpo
+    // inesperado (HTML de erro, objeto, null) degrada para o fallback.
+    const list: unknown = await res.json();
+    if (!Array.isArray(list)) return fallback;
+    const hit = (list as IbgeMunicipio[]).find(
+      (m) => norm(m?.nome ?? "") === alvo,
+    );
     if (!hit) return fallback;
 
     // (a) nome canônico do IBGE → mapa estático de municípios-âncora

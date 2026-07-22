@@ -317,9 +317,12 @@ export function Appraiser() {
       // afeta a tela — o ranking abaixo é renderizado do mesmo jeito.
       const seq = ++retratoSeq.current;
       setRetrato(retratoEstatico(uf, municipality));
-      void resolverRetrato(uf, municipality).then((r) => {
-        if (retratoSeq.current === seq) setRetrato(r);
-      });
+      void resolverRetrato(uf, municipality)
+        .then((r) => {
+          if (retratoSeq.current === seq) setRetrato(r ?? null);
+        })
+        // O retrato é extra: nem uma rejeição inesperada pode escapar daqui.
+        .catch(() => {});
       return;
     }
 

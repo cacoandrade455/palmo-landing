@@ -45,11 +45,11 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
   },
   "ba-vale-sao-francisco": {
     key: "ba-vale-sao-francisco",
-    nome: "Vale do São Francisco (BA)",
+    nome: "Vale do São Francisco (Petrolina-Juazeiro)",
     retratoPt:
-      "Você está no Vale do São Francisco baiano — semiárido irrigado pelo Velho Chico, um dos maiores polos de fruticultura de exportação do país. Com Petrolina/PE, lidera a exportação nacional de manga e uva; também goiaba, banana e coco. A água transforma o valor da terra aqui.",
+      "Você está no Vale do São Francisco — o eixo Petrolina/PE e Juazeiro/BA, cidades conurbadas nas duas margens do Velho Chico, formam um só polo de fruticultura irrigada de exportação, um dos maiores do país. Lidera a exportação nacional de manga e uva; também goiaba, banana e coco. A água transforma o valor da terra aqui.",
     retratoEn:
-      "You're in Bahia's São Francisco Valley — semi-arid land irrigated by the river, one of Brazil's largest export-fruit hubs. With Petrolina/PE it leads national mango and grape exports; also guava, banana and coconut. Water transforms land value here.",
+      "You're in the São Francisco Valley — the twin cities of Petrolina/PE and Juazeiro/BA, on opposite banks of the river, form a single irrigated export-fruit hub, one of Brazil's largest. It leads national mango and grape exports; also guava, banana and coconut. Water transforms land value here.",
     vocacoes: ["fruticultura", "manga", "uva"],
     agua: "irrigado",
     fonte: "Embrapa Semiárido / IBGE",

@@ -41,31 +41,57 @@ function norm(s: string): string {
  * MUNI_TO_REGIAO, e o que sobra cai no bioma — mais geral e honesto).
  */
 const MESO_TO_REGIAO: Record<string, string> = {
+  // ── Bahia ──
   "BA:EXTREMO OESTE BAIANO": "ba-extremo-oeste",
   "BA:VALE SAO-FRANCISCANO DA BAHIA": "ba-vale-sao-francisco",
   "BA:SUL BAIANO": "ba-sul-recôncavo",
   "BA:METROPOLITANA DE SALVADOR": "ba-sul-recôncavo",
   "BA:NORDESTE BAIANO": "ba-sertao-nordeste",
   "BA:CENTRO NORTE BAIANO": "ba-centro-norte",
+  // ── Minas Gerais (café) ──
   "MG:SUL/SUDOESTE DE MINAS": "mg-sul-de-minas",
-  "MG:TRIANGULO MINEIRO/ALTO PARANAIBA": "mg-cerrado-mineiro",
+  "MG:OESTE DE MINAS": "mg-sul-de-minas", // PAM 2024: café arábica 60,2%
   "MG:ZONA DA MATA": "mg-matas-de-minas",
+  "MG:VALE DO RIO DOCE": "mg-matas-de-minas", // PAM 2024: café 84,1%
+  // MG:Triângulo removido do café: cana lidera (27,7%), café é 3º (19,6%) —
+  // o retrato de Cerrado Mineiro superdimensionaria o café. Cai no bioma.
+  // ── São Paulo (cana × citros) ──
   "SP:RIBEIRAO PRETO": "sp-ribeirao-cana",
-  "SP:ARARAQUARA": "sp-citricola",
+  "SP:SAO JOSE DO RIO PRETO": "sp-ribeirao-cana", // PAM 2024: cana 63%
+  "SP:ARACATUBA": "sp-ribeirao-cana", // PAM 2024: cana 82,2%
+  "SP:PIRACICABA": "sp-ribeirao-cana", // PAM 2024: cana 65%
+  "SP:PRESIDENTE PRUDENTE": "sp-ribeirao-cana", // PAM 2024: cana 73,8%
+  "SP:BAURU": "sp-citricola", // PAM 2024: laranja lidera (41,1%)
+  // SP:Araraquara corrigido citros→cana: cana lidera 57,9%, laranja é 2ª (30%).
+  "SP:ARARAQUARA": "sp-ribeirao-cana",
+  // ── Centro-Oeste / MATOPIBA ──
   "MT:NORTE MATO-GROSSENSE": "mt-medio-norte",
   "GO:SUL GOIANO": "go-sudoeste",
-  "RS:NORDESTE RIO-GRANDENSE": "rs-serra-gaucha",
-  "RS:SUDOESTE RIO-GRANDENSE": "rs-metade-sul-arroz",
-  "SC:SERRANA": "sc-planalto-serrano",
-  "RN:OESTE POTIGUAR": "rn-assu-mossoro",
-  "CE:JAGUARIBE": "ce-baixo-jaguaribe",
-  "PE:MATA PERNAMBUCANA": "pe-zona-mata-cana",
-  "PA:NORDESTE PARAENSE": "pa-nordeste-acai",
-  "RO:LESTE RONDONIENSE": "ro-cafe-robusta",
   "MA:SUL MARANHENSE": "matopiba-fronteira",
+  "MA:LESTE MARANHENSE": "matopiba-fronteira", // PAM 2024: soja 84,4%
   "PI:SUDOESTE PIAUIENSE": "matopiba-fronteira",
   "TO:ORIENTAL DO TOCANTINS": "matopiba-fronteira",
   "TO:OCIDENTAL DO TOCANTINS": "matopiba-fronteira",
+  // ── Sul ──
+  "RS:NORDESTE RIO-GRANDENSE": "rs-serra-gaucha",
+  "RS:SUDOESTE RIO-GRANDENSE": "rs-metade-sul-arroz",
+  "RS:SUDESTE RIO-GRANDENSE": "rs-metade-sul-arroz", // PAM 2024: arroz 46,1%
+  "RS:METROPOLITANA DE PORTO ALEGRE": "rs-metade-sul-arroz", // PAM 2024: arroz 51,5%
+  "SC:SERRANA": "sc-planalto-serrano",
+  // ── Nordeste ──
+  "RN:OESTE POTIGUAR": "rn-assu-mossoro",
+  "CE:JAGUARIBE": "ce-baixo-jaguaribe",
+  "PE:MATA PERNAMBUCANA": "pe-zona-mata-cana",
+  "PE:METROPOLITANA DE RECIFE": "pe-zona-mata-cana", // PAM 2024: cana 91,1%
+  "PB:MATA PARAIBANA": "pe-zona-mata-cana", // PAM 2024: cana 57,2%
+  "AL:LESTE ALAGOANO": "pe-zona-mata-cana", // PAM 2024: cana 69,9%
+  // Vale do São Francisco: as duas margens do mesmo polo Petrolina-Juazeiro.
+  "PE:SAO FRANCISCO PERNAMBUCANO": "ba-vale-sao-francisco", // PAM 2024: uva 67,2%
+  // ── Norte ──
+  "PA:NORDESTE PARAENSE": "pa-nordeste-acai",
+  "PA:MARAJO": "pa-nordeste-acai", // PAM 2024: açaí 81,1%
+  "PA:METROPOLITANA DE BELEM": "pa-nordeste-acai", // PAM 2024: açaí 64,8%
+  "RO:LESTE RONDONIENSE": "ro-cafe-robusta",
 };
 
 /**

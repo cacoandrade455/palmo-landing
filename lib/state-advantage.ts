@@ -30,6 +30,9 @@
  *   GO maior rendimento/ha (IBGE PAM 2023/24).
  * - Abacaxi: PB maior produtora (safra 2024/25); SP maior rendimento,
  *   R$128 mil/ha; média nacional R$77 mil/ha (IBGE).
+ * - Goiaba: Nordeste = maior região produtora (47% do share); BA no top 5
+ *   nacional (8%, 45 mil t); PE lidera no NE (70,4% da área do BNB); SP maior
+ *   área (28%), PR maior produtividade (IBGE 2024 / BNB-ETENE).
  * - Ovinos: BA 23% do rebanho nacional; PE 2º, RS 3º (IBGE PPM 2023).
  * - Caprinos: BA 31%; com PE e PI, NE concentra 96% (IBGE PPM 2023).
  * - Tilápia: PR líder com 27% da produção (Anuário Peixe BR 2026);
@@ -216,9 +219,11 @@ export const stateAdvantages: Record<string, StateAdvantage> = {
     factEn: "BA holds ~96% of Brazil's piassava — Ilhéus, Nilo Peçanha and Cairu lead (IBGE PEVS).",
   },
   goiaba: {
-    ufs: ["SP", "PR", "BA", "CE"],
-    factPt: "SP tem a maior área de goiaba do país (28%); o PR lidera em produtividade e rendimento — R$113 mil/ha (IBGE 2024).",
-    factEn: "SP has Brazil's largest guava area (28%); PR leads yield and returns — R$113k/ha (IBGE 2024).",
+    ufs: ["SP", "PR", "BA", "CE", "PE"],
+    factPt:
+      "O Nordeste é a maior região produtora de goiaba do país (47%); a BA está no top 5 nacional e PE lidera no NE (IBGE 2024 / BNB-ETENE). SP tem a maior área e o PR a maior produtividade.",
+    factEn:
+      "The Northeast is Brazil's largest guava-producing region (47%); BA is in the national top 5 and PE leads the NE (IBGE 2024 / BNB-ETENE). SP has the largest area and PR the highest yield.",
   },
   abacate: {
     ufs: ["SP", "MG"],

@@ -7,6 +7,7 @@ import type { User } from "@supabase/supabase-js";
 import { useLanguage } from "@/lib/language-context";
 import { getSupabase } from "@/lib/supabase";
 import { UFS } from "@/lib/appraisal-data";
+import { sortOptionsByLabel } from "@/lib/sort-options";
 import { createListing } from "./actions";
 
 const inputCls =
@@ -296,7 +297,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
           <label htmlFor="purpose" className="text-sm font-semibold text-deep">{label.purpose}</label>
           <select id="purpose" name="purpose" required value={purposeSel} onChange={(e) => { setPurposeSel(e.target.value); setCropSel(""); }} className={inputCls}>
             <option value="" disabled>{label.selectPurpose}</option>
-            {w.purposeOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+            {sortOptionsByLabel(w.purposeOptions).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
       </div>
@@ -312,7 +313,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
             className={inputCls}
           >
             <option value="">{label.allCrops}</option>
-            {crops[purposeSel].map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+            {sortOptionsByLabel(crops[purposeSel]).map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
           </select>
         </div>
       )}
@@ -333,7 +334,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
             className={inputCls}
           >
             <option value="">{label.varietyAll}</option>
-            {(variants?.[cropSel] ?? []).map((v) => (
+            {sortOptionsByLabel(variants?.[cropSel] ?? []).map((v) => (
               <option key={v.value} value={v.value}>{v.label}</option>
             ))}
           </select>

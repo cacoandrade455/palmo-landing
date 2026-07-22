@@ -14,8 +14,8 @@ export default function QuantoValePage() {
     <>
       <Header />
       <main>
-        {/* Discovery (recommender) and calculation now live in one tool, the
-            Appraiser — the mode switch is at the top of it. */}
+        {/* One calculator: discovery (recommender) and exact value share a
+            single form — "Não sei / me recomende" is a land-use option. */}
         <Appraiser />
       </main>
       <Footer />

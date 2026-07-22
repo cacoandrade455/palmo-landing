@@ -1,0 +1,5116 @@
+{
+  "geradoEm": "2026-07-22T22:15:44.197Z",
+  "nivel": "mesorregiao",
+  "fontes": {
+    "valorProducaoLavouras": "SIDRA tabela 5457, variável 215, nível N8 (mesorregião), 2024",
+    "dominanciaLavouraPecuaria": "SIDRA tabela 6897, variável 1999, nível N8, 2017",
+    "malhaMunicipal": "scripts/out/muni-mesorregiao.json"
+  },
+  "observacoes": [
+    "valorProducaoTotalMilReais soma apenas lavouras (PAM não precifica pecuária).",
+    "dominancia compara valor vegetal e animal do Censo Agro 2017 (corte de 60%).",
+    "Valores em Mil Reais correntes do ano da pesquisa.",
+    "Café entra no ranking só como 'Café (em grão) Total'; arábica e canephora vão no campo cafe."
+  ],
+  "mesorregioes": [
+    {
+      "mesorregiaoId": 1101,
+      "mesorregiao": "Madeira-Guaporé",
+      "ufs": [
+        "RO"
+      ],
+      "qtdMunicipios": 10,
+      "valorProducaoTotalMilReais": 2590381,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 976128,
+        "participacao": 0.37682796468936425
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 976128,
+          "participacao": 0.37682796468936425
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 497910,
+          "participacao": 0.19221496760515153
+        },
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 416699,
+          "participacao": 0.1608639810128317
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 416699,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.16827518085373958
+    },
+    {
+      "mesorregiaoId": 1102,
+      "mesorregiao": "Leste Rondoniense",
+      "ufs": [
+        "RO"
+      ],
+      "qtdMunicipios": 42,
+      "valorProducaoTotalMilReais": 7592845,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 2751054,
+        "participacao": 0.36232189646963686
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 2751054,
+          "participacao": 0.36232189646963686
+        },
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 2484926,
+          "participacao": 0.32727205678503907
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 1082187,
+          "participacao": 0.14252720818085973
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 2484926,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.2623330267119838
+    },
+    {
+      "mesorregiaoId": 1201,
+      "mesorregiao": "Vale do Juruá",
+      "ufs": [
+        "AC"
+      ],
+      "qtdMunicipios": 8,
+      "valorProducaoTotalMilReais": 250430,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 173294,
+        "participacao": 0.6919857844507448
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 173294,
+          "participacao": 0.6919857844507448
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 30547,
+          "participacao": 0.12197819750029948
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 17649,
+          "participacao": 0.07047478337259913
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 7054,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6623329283110571
+    },
+    {
+      "mesorregiaoId": 1202,
+      "mesorregiao": "Vale do Acre",
+      "ufs": [
+        "AC"
+      ],
+      "qtdMunicipios": 14,
+      "valorProducaoTotalMilReais": 588067,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 156254,
+        "participacao": 0.2657078190070179
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 156254,
+          "participacao": 0.2657078190070179
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 116235,
+          "participacao": 0.19765604939573211
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 110909,
+          "participacao": 0.1885992582477847
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 37869,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.2107931339326767
+    },
+    {
+      "mesorregiaoId": 1301,
+      "mesorregiao": "Norte Amazonense",
+      "ufs": [
+        "AM"
+      ],
+      "qtdMunicipios": 6,
+      "valorProducaoTotalMilReais": 97416,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 53062,
+        "participacao": 0.5446949166461361
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 53062,
+          "participacao": 0.5446949166461361
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 15833,
+          "participacao": 0.1625297692370863
+        },
+        {
+          "produto": "Abacaxi*",
+          "valorMilReais": 14265,
+          "participacao": 0.14643385070214338
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.9368859568054825
+    },
+    {
+      "mesorregiaoId": 1302,
+      "mesorregiao": "Sudoeste Amazonense",
+      "ufs": [
+        "AM"
+      ],
+      "qtdMunicipios": 16,
+      "valorProducaoTotalMilReais": 205179,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 84266,
+        "participacao": 0.4106950516378382
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 84266,
+          "participacao": 0.4106950516378382
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 52898,
+          "participacao": 0.2578139088308258
+        },
+        {
+          "produto": "Açaí",
+          "valorMilReais": 13382,
+          "participacao": 0.06522109962520531
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 194,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7700270842261997
+    },
+    {
+      "mesorregiaoId": 1303,
+      "mesorregiao": "Centro Amazonense",
+      "ufs": [
+        "AM"
+      ],
+      "qtdMunicipios": 30,
+      "valorProducaoTotalMilReais": 1995337,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 599045,
+        "participacao": 0.3002224686857408
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 599045,
+          "participacao": 0.3002224686857408
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 373744,
+          "participacao": 0.18730871025796644
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 221981,
+          "participacao": 0.11124987909310557
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 1989,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5946975806277723
+    },
+    {
+      "mesorregiaoId": 1304,
+      "mesorregiao": "Sul Amazonense",
+      "ufs": [
+        "AM"
+      ],
+      "qtdMunicipios": 10,
+      "valorProducaoTotalMilReais": 807747,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 284593,
+        "participacao": 0.35232938036291067
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 284593,
+          "participacao": 0.35232938036291067
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 221630,
+          "participacao": 0.27438046814163347
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 101309,
+          "participacao": 0.12542169763552202
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 6186,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.4730990552262982
+    },
+    {
+      "mesorregiaoId": 1401,
+      "mesorregiao": "Norte de Roraima",
+      "ufs": [
+        "RR"
+      ],
+      "qtdMunicipios": 8,
+      "valorProducaoTotalMilReais": 1344381,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 759940,
+        "participacao": 0.5652713032986929
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 759940,
+          "participacao": 0.5652713032986929
+        },
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 165700,
+          "participacao": 0.12325375023895756
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 135184,
+          "participacao": 0.10055482783526397
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5271947343471942
+    },
+    {
+      "mesorregiaoId": 1402,
+      "mesorregiao": "Sul de Roraima",
+      "ufs": [
+        "RR"
+      ],
+      "qtdMunicipios": 7,
+      "valorProducaoTotalMilReais": 379586,
+      "produtoLider": {
+        "produto": "Banana (cacho)",
+        "valorMilReais": 111367,
+        "participacao": 0.2933906940719626
+      },
+      "top3": [
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 111367,
+          "participacao": 0.2933906940719626
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 79925,
+          "participacao": 0.21055834514444685
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 41244,
+          "participacao": 0.10865521910713251
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3191932101192817
+    },
+    {
+      "mesorregiaoId": 1501,
+      "mesorregiao": "Baixo Amazonas",
+      "ufs": [
+        "PA"
+      ],
+      "qtdMunicipios": 15,
+      "valorProducaoTotalMilReais": 3177996,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 1232705,
+        "participacao": 0.3878875240875067
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 1232705,
+          "participacao": 0.3878875240875067
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 710019,
+          "participacao": 0.22341721009088747
+        },
+        {
+          "produto": "Cacau (em amêndoa)",
+          "valorMilReais": 701796,
+          "participacao": 0.2208297304338961
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 689,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5713310556062503
+    },
+    {
+      "mesorregiaoId": 1502,
+      "mesorregiao": "Marajó",
+      "ufs": [
+        "PA"
+      ],
+      "qtdMunicipios": 16,
+      "valorProducaoTotalMilReais": 1688583,
+      "produtoLider": {
+        "produto": "Açaí",
+        "valorMilReais": 1369923,
+        "participacao": 0.8112855571801919
+      },
+      "top3": [
+        {
+          "produto": "Açaí",
+          "valorMilReais": 1369923,
+          "participacao": 0.8112855571801919
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 142199,
+          "participacao": 0.084212028665455
+        },
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 100298,
+          "participacao": 0.059397731707591515
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8415034148791384
+    },
+    {
+      "mesorregiaoId": 1503,
+      "mesorregiao": "Metropolitana de Belém",
+      "ufs": [
+        "PA"
+      ],
+      "qtdMunicipios": 11,
+      "valorProducaoTotalMilReais": 1649753,
+      "produtoLider": {
+        "produto": "Açaí",
+        "valorMilReais": 1068613,
+        "participacao": 0.6477412073201261
+      },
+      "top3": [
+        {
+          "produto": "Açaí",
+          "valorMilReais": 1068613,
+          "participacao": 0.6477412073201261
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 260219,
+          "participacao": 0.15773209686540954
+        },
+        {
+          "produto": "Pimenta-do-reino",
+          "valorMilReais": 103791,
+          "participacao": 0.06291305425721305
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3126686128400525
+    },
+    {
+      "mesorregiaoId": 1504,
+      "mesorregiao": "Nordeste Paraense",
+      "ufs": [
+        "PA"
+      ],
+      "qtdMunicipios": 49,
+      "valorProducaoTotalMilReais": 11571699,
+      "produtoLider": {
+        "produto": "Açaí",
+        "valorMilReais": 4849866,
+        "participacao": 0.41911442736282717
+      },
+      "top3": [
+        {
+          "produto": "Açaí",
+          "valorMilReais": 4849866,
+          "participacao": 0.41911442736282717
+        },
+        {
+          "produto": "Dendê (cacho de coco)",
+          "valorMilReais": 2166089,
+          "participacao": 0.1871885018785919
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 1909130,
+          "participacao": 0.1649826875033649
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 825,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7472762597542827
+    },
+    {
+      "mesorregiaoId": 1505,
+      "mesorregiao": "Sudoeste Paraense",
+      "ufs": [
+        "PA"
+      ],
+      "qtdMunicipios": 14,
+      "valorProducaoTotalMilReais": 7141004,
+      "produtoLider": {
+        "produto": "Cacau (em amêndoa)",
+        "valorMilReais": 5552963,
+        "participacao": 0.7776165648415825
+      },
+      "top3": [
+        {
+          "produto": "Cacau (em amêndoa)",
+          "valorMilReais": 5552963,
+          "participacao": 0.7776165648415825
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 646285,
+          "participacao": 0.0905033801969583
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 331495,
+          "participacao": 0.046421343553371484
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 357,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.38528980297801113
+    },
+    {
+      "mesorregiaoId": 1506,
+      "mesorregiao": "Sudeste Paraense",
+      "ufs": [
+        "PA"
+      ],
+      "qtdMunicipios": 39,
+      "valorProducaoTotalMilReais": 10729698,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 6104378,
+        "participacao": 0.5689235615019174
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 6104378,
+          "participacao": 0.5689235615019174
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 1190090,
+          "participacao": 0.11091551691389637
+        },
+        {
+          "produto": "Cacau (em amêndoa)",
+          "valorMilReais": 993803,
+          "participacao": 0.09262171218612117
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3519318086603818
+    },
+    {
+      "mesorregiaoId": 1601,
+      "mesorregiao": "Norte do Amapá",
+      "ufs": [
+        "AP"
+      ],
+      "qtdMunicipios": 5,
+      "valorProducaoTotalMilReais": 74479,
+      "produtoLider": {
+        "produto": "Açaí",
+        "valorMilReais": 42434,
+        "participacao": 0.5697444917359256
+      },
+      "top3": [
+        {
+          "produto": "Açaí",
+          "valorMilReais": 42434,
+          "participacao": 0.5697444917359256
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 14106,
+          "participacao": 0.1893956685777199
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 7683,
+          "participacao": 0.10315659447629533
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5804577512362527
+    },
+    {
+      "mesorregiaoId": 1602,
+      "mesorregiao": "Sul do Amapá",
+      "ufs": [
+        "AP"
+      ],
+      "qtdMunicipios": 11,
+      "valorProducaoTotalMilReais": 131994,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 41450,
+        "participacao": 0.3140294255799506
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 41450,
+          "participacao": 0.3140294255799506
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 23298,
+          "participacao": 0.17650802309195873
+        },
+        {
+          "produto": "Açaí",
+          "valorMilReais": 23084,
+          "participacao": 0.1748867372759368
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7883996512791811
+    },
+    {
+      "mesorregiaoId": 1701,
+      "mesorregiao": "Ocidental do Tocantins",
+      "ufs": [
+        "TO"
+      ],
+      "qtdMunicipios": 93,
+      "valorProducaoTotalMilReais": 7783056,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 4205213,
+        "participacao": 0.5403035774122659
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 4205213,
+          "participacao": 0.5403035774122659
+        },
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 1754792,
+          "participacao": 0.22546310857842985
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 748920,
+          "participacao": 0.09622441364934288
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 200,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.4407044445056098
+    },
+    {
+      "mesorregiaoId": 1702,
+      "mesorregiao": "Oriental do Tocantins",
+      "ufs": [
+        "TO"
+      ],
+      "qtdMunicipios": 46,
+      "valorProducaoTotalMilReais": 5035045,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 3218351,
+        "participacao": 0.6391901164736363
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 3218351,
+          "participacao": 0.6391901164736363
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 1091056,
+          "participacao": 0.21669240294773928
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 395616,
+          "participacao": 0.07857248544948456
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.735043510141374
+    },
+    {
+      "mesorregiaoId": 2101,
+      "mesorregiao": "Norte Maranhense",
+      "ufs": [
+        "MA"
+      ],
+      "qtdMunicipios": 60,
+      "valorProducaoTotalMilReais": 272441,
+      "produtoLider": {
+        "produto": "Arroz (em casca)",
+        "valorMilReais": 105778,
+        "participacao": 0.38826021046758746
+      },
+      "top3": [
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 105778,
+          "participacao": 0.38826021046758746
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 105132,
+          "participacao": 0.3858890548779369
+        },
+        {
+          "produto": "Melancia",
+          "valorMilReais": 21113,
+          "participacao": 0.07749567796330215
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5336016533518838
+    },
+    {
+      "mesorregiaoId": 2102,
+      "mesorregiao": "Oeste Maranhense",
+      "ufs": [
+        "MA"
+      ],
+      "qtdMunicipios": 52,
+      "valorProducaoTotalMilReais": 2243710,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 1585158,
+        "participacao": 0.7064896978664801
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1585158,
+          "participacao": 0.7064896978664801
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 466831,
+          "participacao": 0.2080620935860695
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 77330,
+          "participacao": 0.03446523837750868
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.36345210388595184
+    },
+    {
+      "mesorregiaoId": 2103,
+      "mesorregiao": "Centro Maranhense",
+      "ufs": [
+        "MA"
+      ],
+      "qtdMunicipios": 42,
+      "valorProducaoTotalMilReais": 985702,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 561266,
+        "participacao": 0.5694073868167052
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 561266,
+          "participacao": 0.5694073868167052
+        },
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 158318,
+          "participacao": 0.1606144656295716
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 115865,
+          "participacao": 0.11754566796049921
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.39362052646082696
+    },
+    {
+      "mesorregiaoId": 2104,
+      "mesorregiao": "Leste Maranhense",
+      "ufs": [
+        "MA"
+      ],
+      "qtdMunicipios": 44,
+      "valorProducaoTotalMilReais": 2156126,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 1820782,
+        "participacao": 0.8444692007795462
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1820782,
+          "participacao": 0.8444692007795462
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 107114,
+          "participacao": 0.049678914868611576
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 97441,
+          "participacao": 0.04519262788909368
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6807594708779464
+    },
+    {
+      "mesorregiaoId": 2105,
+      "mesorregiao": "Sul Maranhense",
+      "ufs": [
+        "MA"
+      ],
+      "qtdMunicipios": 19,
+      "valorProducaoTotalMilReais": 7310449,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 4371222,
+        "participacao": 0.5979416585766483
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 4371222,
+          "participacao": 0.5979416585766483
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 2070542,
+          "participacao": 0.28323048283354413
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 375864,
+          "participacao": 0.05141462583214793
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.847289461234919
+    },
+    {
+      "mesorregiaoId": 2201,
+      "mesorregiao": "Norte Piauiense",
+      "ufs": [
+        "PI"
+      ],
+      "qtdMunicipios": 32,
+      "valorProducaoTotalMilReais": 368447,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 99337,
+        "participacao": 0.2696100117520295
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 99337,
+          "participacao": 0.2696100117520295
+        },
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 87307,
+          "participacao": 0.23695945414130118
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 38752,
+          "participacao": 0.10517659256283808
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.40467446870995993
+    },
+    {
+      "mesorregiaoId": 2202,
+      "mesorregiao": "Centro-Norte Piauiense",
+      "ufs": [
+        "PI"
+      ],
+      "qtdMunicipios": 64,
+      "valorProducaoTotalMilReais": 614508,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 185357,
+        "participacao": 0.30163480377798174
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 185357,
+          "participacao": 0.30163480377798174
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 166862,
+          "participacao": 0.27153755524745
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 68202,
+          "participacao": 0.11098635005565428
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.45626784999698505
+    },
+    {
+      "mesorregiaoId": 2203,
+      "mesorregiao": "Sudoeste Piauiense",
+      "ufs": [
+        "PI"
+      ],
+      "qtdMunicipios": 62,
+      "valorProducaoTotalMilReais": 8971440,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 7117936,
+        "participacao": 0.7933994988541416
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 7117936,
+          "participacao": 0.7933994988541416
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 1386031,
+          "participacao": 0.1544937044666185
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 94326,
+          "participacao": 0.010514031192316952
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.9069686859705881
+    },
+    {
+      "mesorregiaoId": 2204,
+      "mesorregiao": "Sudeste Piauiense",
+      "ufs": [
+        "PI"
+      ],
+      "qtdMunicipios": 66,
+      "valorProducaoTotalMilReais": 390656,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 124354,
+        "participacao": 0.3183209780471822
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 124354,
+          "participacao": 0.3183209780471822
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 86787,
+          "participacao": 0.22215708961336827
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 84271,
+          "participacao": 0.21571664072739188
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3735616356989735
+    },
+    {
+      "mesorregiaoId": 2301,
+      "mesorregiao": "Noroeste Cearense",
+      "ufs": [
+        "CE"
+      ],
+      "qtdMunicipios": 47,
+      "valorProducaoTotalMilReais": 2869741,
+      "produtoLider": {
+        "produto": "Maracujá",
+        "valorMilReais": 646391,
+        "participacao": 0.22524367181567953
+      },
+      "top3": [
+        {
+          "produto": "Maracujá",
+          "valorMilReais": 646391,
+          "participacao": 0.22524367181567953
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 424203,
+          "participacao": 0.14781926313210844
+        },
+        {
+          "produto": "Batata-doce",
+          "valorMilReais": 311876,
+          "participacao": 0.10867740329179532
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 2394,
+        "canephoraMilReais": 172,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5085590200751045
+    },
+    {
+      "mesorregiaoId": 2302,
+      "mesorregiao": "Norte Cearense",
+      "ufs": [
+        "CE"
+      ],
+      "qtdMunicipios": 36,
+      "valorProducaoTotalMilReais": 1075113,
+      "produtoLider": {
+        "produto": "Coco-da-baía*",
+        "valorMilReais": 309386,
+        "participacao": 0.28777068084936186
+      },
+      "top3": [
+        {
+          "produto": "Coco-da-baía*",
+          "valorMilReais": 309386,
+          "participacao": 0.28777068084936186
+        },
+        {
+          "produto": "Castanha de caju",
+          "valorMilReais": 185929,
+          "participacao": 0.17293903059492352
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 184694,
+          "participacao": 0.17179031413442122
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 6066,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.2957252096920248
+    },
+    {
+      "mesorregiaoId": 2303,
+      "mesorregiao": "Metropolitana de Fortaleza",
+      "ufs": [
+        "CE"
+      ],
+      "qtdMunicipios": 11,
+      "valorProducaoTotalMilReais": 133115,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 25556,
+        "participacao": 0.19198437441310146
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 25556,
+          "participacao": 0.19198437441310146
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 22000,
+          "participacao": 0.16527063065770198
+        },
+        {
+          "produto": "Coco-da-baía*",
+          "valorMilReais": 20673,
+          "participacao": 0.15530180670848515
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.1047863909882159
+    },
+    {
+      "mesorregiaoId": 2304,
+      "mesorregiao": "Sertões Cearenses",
+      "ufs": [
+        "CE"
+      ],
+      "qtdMunicipios": 30,
+      "valorProducaoTotalMilReais": 337258,
+      "produtoLider": {
+        "produto": "Milho (em grão)",
+        "valorMilReais": 174562,
+        "participacao": 0.5175918732839547
+      },
+      "top3": [
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 174562,
+          "participacao": 0.5175918732839547
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 109991,
+          "participacao": 0.3261331087772566
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 14529,
+          "participacao": 0.04307977868575393
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.2576322704321238
+    },
+    {
+      "mesorregiaoId": 2305,
+      "mesorregiao": "Jaguaribe",
+      "ufs": [
+        "CE"
+      ],
+      "qtdMunicipios": 21,
+      "valorProducaoTotalMilReais": 928957,
+      "produtoLider": {
+        "produto": "Banana (cacho)",
+        "valorMilReais": 273980,
+        "participacao": 0.29493291939239386
+      },
+      "top3": [
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 273980,
+          "participacao": 0.29493291939239386
+        },
+        {
+          "produto": "Castanha de caju",
+          "valorMilReais": 129925,
+          "participacao": 0.13986115611379213
+        },
+        {
+          "produto": "Melão",
+          "valorMilReais": 107791,
+          "participacao": 0.1160344343171966
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3678415828699549
+    },
+    {
+      "mesorregiaoId": 2306,
+      "mesorregiao": "Centro-Sul Cearense",
+      "ufs": [
+        "CE"
+      ],
+      "qtdMunicipios": 14,
+      "valorProducaoTotalMilReais": 153683,
+      "produtoLider": {
+        "produto": "Banana (cacho)",
+        "valorMilReais": 44519,
+        "participacao": 0.2896807063891257
+      },
+      "top3": [
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 44519,
+          "participacao": 0.2896807063891257
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 39237,
+          "participacao": 0.2553112575886728
+        },
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 18804,
+          "participacao": 0.12235575828165769
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.31242001397243846
+    },
+    {
+      "mesorregiaoId": 2307,
+      "mesorregiao": "Sul Cearense",
+      "ufs": [
+        "CE"
+      ],
+      "qtdMunicipios": 25,
+      "valorProducaoTotalMilReais": 656382,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 176814,
+        "participacao": 0.2693766739490114
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 176814,
+          "participacao": 0.2693766739490114
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 130389,
+          "participacao": 0.19864804336499173
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 89607,
+          "participacao": 0.1365165406729618
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.4113714480923854
+    },
+    {
+      "mesorregiaoId": 2401,
+      "mesorregiao": "Oeste Potiguar",
+      "ufs": [
+        "RN"
+      ],
+      "qtdMunicipios": 62,
+      "valorProducaoTotalMilReais": 1556747,
+      "produtoLider": {
+        "produto": "Melão",
+        "valorMilReais": 800002,
+        "participacao": 0.5138933943665862
+      },
+      "top3": [
+        {
+          "produto": "Melão",
+          "valorMilReais": 800002,
+          "participacao": 0.5138933943665862
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 245612,
+          "participacao": 0.15777258603999236
+        },
+        {
+          "produto": "Mamão",
+          "valorMilReais": 129274,
+          "participacao": 0.08304111072640577
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5422477370582468
+    },
+    {
+      "mesorregiaoId": 2402,
+      "mesorregiao": "Central Potiguar",
+      "ufs": [
+        "RN"
+      ],
+      "qtdMunicipios": 37,
+      "valorProducaoTotalMilReais": 251702,
+      "produtoLider": {
+        "produto": "Maracujá",
+        "valorMilReais": 101335,
+        "participacao": 0.40259910529117765
+      },
+      "top3": [
+        {
+          "produto": "Maracujá",
+          "valorMilReais": 101335,
+          "participacao": 0.40259910529117765
+        },
+        {
+          "produto": "Melão",
+          "valorMilReais": 44220,
+          "participacao": 0.17568394371121404
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 27975,
+          "participacao": 0.11114333616737253
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.169308365256907
+    },
+    {
+      "mesorregiaoId": 2403,
+      "mesorregiao": "Agreste Potiguar",
+      "ufs": [
+        "RN"
+      ],
+      "qtdMunicipios": 43,
+      "valorProducaoTotalMilReais": 434817,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 143979,
+        "participacao": 0.3311255079723194
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 143979,
+          "participacao": 0.3311255079723194
+        },
+        {
+          "produto": "Abacaxi*",
+          "valorMilReais": 110504,
+          "participacao": 0.25413909759738007
+        },
+        {
+          "produto": "Batata-doce",
+          "valorMilReais": 36235,
+          "participacao": 0.08333390828785443
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 105,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3558158123370982
+    },
+    {
+      "mesorregiaoId": 2404,
+      "mesorregiao": "Leste Potiguar",
+      "ufs": [
+        "RN"
+      ],
+      "qtdMunicipios": 25,
+      "valorProducaoTotalMilReais": 1323155,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 605725,
+        "participacao": 0.45778839213848715
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 605725,
+          "participacao": 0.45778839213848715
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 195583,
+          "participacao": 0.14781563762371
+        },
+        {
+          "produto": "Coco-da-baía*",
+          "valorMilReais": 193072,
+          "participacao": 0.14591790077504146
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.45921674305258875
+    },
+    {
+      "mesorregiaoId": 2501,
+      "mesorregiao": "Sertão Paraibano",
+      "ufs": [
+        "PB"
+      ],
+      "qtdMunicipios": 83,
+      "valorProducaoTotalMilReais": 160946,
+      "produtoLider": {
+        "produto": "Feijão (em grão)",
+        "valorMilReais": 33871,
+        "participacao": 0.21044946752326868
+      },
+      "top3": [
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 33871,
+          "participacao": 0.21044946752326868
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 32467,
+          "participacao": 0.2017260447603544
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 26902,
+          "participacao": 0.16714923017658095
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 360,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.1824282494608341
+    },
+    {
+      "mesorregiaoId": 2502,
+      "mesorregiao": "Borborema",
+      "ufs": [
+        "PB"
+      ],
+      "qtdMunicipios": 44,
+      "valorProducaoTotalMilReais": 110243,
+      "produtoLider": {
+        "produto": "Tomate",
+        "valorMilReais": 50624,
+        "participacao": 0.45920375896882343
+      },
+      "top3": [
+        {
+          "produto": "Tomate",
+          "valorMilReais": 50624,
+          "participacao": 0.45920375896882343
+        },
+        {
+          "produto": "Cebola",
+          "valorMilReais": 20709,
+          "participacao": 0.18784866159302632
+        },
+        {
+          "produto": "Batata-doce",
+          "valorMilReais": 8954,
+          "participacao": 0.0812205763631251
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.16964695285198375
+    },
+    {
+      "mesorregiaoId": 2503,
+      "mesorregiao": "Agreste Paraibano",
+      "ufs": [
+        "PB"
+      ],
+      "qtdMunicipios": 66,
+      "valorProducaoTotalMilReais": 743836,
+      "produtoLider": {
+        "produto": "Banana (cacho)",
+        "valorMilReais": 211336,
+        "participacao": 0.2841163912475331
+      },
+      "top3": [
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 211336,
+          "participacao": 0.2841163912475331
+        },
+        {
+          "produto": "Abacaxi*",
+          "valorMilReais": 163840,
+          "participacao": 0.22026360649390456
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 63052,
+          "participacao": 0.0847659968057475
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 36,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3557819942781785
+    },
+    {
+      "mesorregiaoId": 2504,
+      "mesorregiao": "Mata Paraibana",
+      "ufs": [
+        "PB"
+      ],
+      "qtdMunicipios": 30,
+      "valorProducaoTotalMilReais": 2010565,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 1150874,
+        "participacao": 0.5724132271276979
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 1150874,
+          "participacao": 0.5724132271276979
+        },
+        {
+          "produto": "Abacaxi*",
+          "valorMilReais": 507969,
+          "participacao": 0.25264987702461744
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 97059,
+          "participacao": 0.04827449000654045
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8165183443977452
+    },
+    {
+      "mesorregiaoId": 2601,
+      "mesorregiao": "Sertão Pernambucano",
+      "ufs": [
+        "PE"
+      ],
+      "qtdMunicipios": 41,
+      "valorProducaoTotalMilReais": 587750,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 169437,
+        "participacao": 0.2882807316035729
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 169437,
+          "participacao": 0.2882807316035729
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 88748,
+          "participacao": 0.15099617184176947
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 67633,
+          "participacao": 0.11507103360272225
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 398,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.28043329309275994
+    },
+    {
+      "mesorregiaoId": 2602,
+      "mesorregiao": "São Francisco Pernambucano",
+      "ufs": [
+        "PE"
+      ],
+      "qtdMunicipios": 15,
+      "valorProducaoTotalMilReais": 6328499,
+      "produtoLider": {
+        "produto": "Uva",
+        "valorMilReais": 4253316,
+        "participacao": 0.6720892268451019
+      },
+      "top3": [
+        {
+          "produto": "Uva",
+          "valorMilReais": 4253316,
+          "participacao": 0.6720892268451019
+        },
+        {
+          "produto": "Manga",
+          "valorMilReais": 601941,
+          "participacao": 0.09511591927248468
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 506792,
+          "participacao": 0.08008091650168547
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8270471552747101
+    },
+    {
+      "mesorregiaoId": 2603,
+      "mesorregiao": "Agreste Pernambucano",
+      "ufs": [
+        "PE"
+      ],
+      "qtdMunicipios": 71,
+      "valorProducaoTotalMilReais": 1380487,
+      "produtoLider": {
+        "produto": "Banana (cacho)",
+        "valorMilReais": 317883,
+        "participacao": 0.2302687384959076
+      },
+      "top3": [
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 317883,
+          "participacao": 0.2302687384959076
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 218337,
+          "participacao": 0.1581594031671432
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 201426,
+          "participacao": 0.14590937835705806
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 12999,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.19865272708409965
+    },
+    {
+      "mesorregiaoId": 2604,
+      "mesorregiao": "Mata Pernambucana",
+      "ufs": [
+        "PE"
+      ],
+      "qtdMunicipios": 43,
+      "valorProducaoTotalMilReais": 2590005,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 1968555,
+        "participacao": 0.760058378265679
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 1968555,
+          "participacao": 0.760058378265679
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 366947,
+          "participacao": 0.14167810486852342
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 80966,
+          "participacao": 0.03126094351169206
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7250177347252035
+    },
+    {
+      "mesorregiaoId": 2605,
+      "mesorregiao": "Metropolitana de Recife",
+      "ufs": [
+        "PE"
+      ],
+      "qtdMunicipios": 15,
+      "valorProducaoTotalMilReais": 799604,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 728091,
+        "participacao": 0.9105644794173116
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 728091,
+          "participacao": 0.9105644794173116
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 36401,
+          "participacao": 0.04552378427321524
+        },
+        {
+          "produto": "Abacaxi*",
+          "valorMilReais": 17663,
+          "participacao": 0.022089684393774917
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8268104743275226
+    },
+    {
+      "mesorregiaoId": 2701,
+      "mesorregiao": "Sertão Alagoano",
+      "ufs": [
+        "AL"
+      ],
+      "qtdMunicipios": 26,
+      "valorProducaoTotalMilReais": 99828,
+      "produtoLider": {
+        "produto": "Tomate",
+        "valorMilReais": 19437,
+        "participacao": 0.19470489241495373
+      },
+      "top3": [
+        {
+          "produto": "Tomate",
+          "valorMilReais": 19437,
+          "participacao": 0.19470489241495373
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 17869,
+          "participacao": 0.1789978763473174
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 14353,
+          "participacao": 0.1437772969507553
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.2541206895998511
+    },
+    {
+      "mesorregiaoId": 2702,
+      "mesorregiao": "Agreste Alagoano",
+      "ufs": [
+        "AL"
+      ],
+      "qtdMunicipios": 24,
+      "valorProducaoTotalMilReais": 482934,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 143837,
+        "participacao": 0.29783987045848914
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 143837,
+          "participacao": 0.29783987045848914
+        },
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 62082,
+          "participacao": 0.12855172756525737
+        },
+        {
+          "produto": "Abacaxi*",
+          "valorMilReais": 53886,
+          "participacao": 0.11158046441128601
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3384939311369829
+    },
+    {
+      "mesorregiaoId": 2703,
+      "mesorregiao": "Leste Alagoano",
+      "ufs": [
+        "AL"
+      ],
+      "qtdMunicipios": 52,
+      "valorProducaoTotalMilReais": 3552664,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 2483199,
+        "participacao": 0.6989681546017299
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 2483199,
+          "participacao": 0.6989681546017299
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 242498,
+          "participacao": 0.0682580733781748
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 192271,
+          "participacao": 0.05412023202869734
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 100,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8462942381092585
+    },
+    {
+      "mesorregiaoId": 2801,
+      "mesorregiao": "Sertão Sergipano",
+      "ufs": [
+        "SE"
+      ],
+      "qtdMunicipios": 15,
+      "valorProducaoTotalMilReais": 600982,
+      "produtoLider": {
+        "produto": "Milho (em grão)",
+        "valorMilReais": 566336,
+        "participacao": 0.9423510188325108
+      },
+      "top3": [
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 566336,
+          "participacao": 0.9423510188325108
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 13198,
+          "participacao": 0.021960724281259673
+        },
+        {
+          "produto": "Goiaba",
+          "valorMilReais": 4823,
+          "participacao": 0.008025198758032686
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.29446147843010984
+    },
+    {
+      "mesorregiaoId": 2802,
+      "mesorregiao": "Agreste Sergipano",
+      "ufs": [
+        "SE"
+      ],
+      "qtdMunicipios": 18,
+      "valorProducaoTotalMilReais": 777994,
+      "produtoLider": {
+        "produto": "Milho (em grão)",
+        "valorMilReais": 415657,
+        "participacao": 0.5342676164597671
+      },
+      "top3": [
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 415657,
+          "participacao": 0.5342676164597671
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 100494,
+          "participacao": 0.12917066198453972
+        },
+        {
+          "produto": "Batata-doce",
+          "valorMilReais": 74465,
+          "participacao": 0.0957141057643118
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.32837965787080525
+    },
+    {
+      "mesorregiaoId": 2803,
+      "mesorregiao": "Leste Sergipano",
+      "ufs": [
+        "SE"
+      ],
+      "qtdMunicipios": 42,
+      "valorProducaoTotalMilReais": 1502632,
+      "produtoLider": {
+        "produto": "Laranja",
+        "valorMilReais": 618099,
+        "participacao": 0.4113442279946121
+      },
+      "top3": [
+        {
+          "produto": "Laranja",
+          "valorMilReais": 618099,
+          "participacao": 0.4113442279946121
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 287610,
+          "participacao": 0.19140414951897736
+        },
+        {
+          "produto": "Coco-da-baía*",
+          "valorMilReais": 174571,
+          "participacao": 0.11617681508180312
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5348362325335071
+    },
+    {
+      "mesorregiaoId": 2901,
+      "mesorregiao": "Extremo Oeste Baiano",
+      "ufs": [
+        "BA"
+      ],
+      "qtdMunicipios": 24,
+      "valorProducaoTotalMilReais": 23456572,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 14377517,
+        "participacao": 0.6129419507675716
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 14377517,
+          "participacao": 0.6129419507675716
+        },
+        {
+          "produto": "Algodão herbáceo (em caroço)",
+          "valorMilReais": 6351594,
+          "participacao": 0.2707809990308899
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 1457729,
+          "participacao": 0.062145866838513315
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 331226,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.91456967653373
+    },
+    {
+      "mesorregiaoId": 2902,
+      "mesorregiao": "Vale São-Franciscano da Bahia",
+      "ufs": [
+        "BA"
+      ],
+      "qtdMunicipios": 27,
+      "valorProducaoTotalMilReais": 4177547,
+      "produtoLider": {
+        "produto": "Manga",
+        "valorMilReais": 1779890,
+        "participacao": 0.4260610353396383
+      },
+      "top3": [
+        {
+          "produto": "Manga",
+          "valorMilReais": 1779890,
+          "participacao": 0.4260610353396383
+        },
+        {
+          "produto": "Uva",
+          "valorMilReais": 942819,
+          "participacao": 0.2256872274566869
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 503042,
+          "participacao": 0.1204156410448524
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7415549459979393
+    },
+    {
+      "mesorregiaoId": 2903,
+      "mesorregiao": "Centro Norte Baiano",
+      "ufs": [
+        "BA"
+      ],
+      "qtdMunicipios": 80,
+      "valorProducaoTotalMilReais": 1468227,
+      "produtoLider": {
+        "produto": "Cebola",
+        "valorMilReais": 517930,
+        "participacao": 0.35275880364548534
+      },
+      "top3": [
+        {
+          "produto": "Cebola",
+          "valorMilReais": 517930,
+          "participacao": 0.35275880364548534
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 250127,
+          "participacao": 0.17035989666448034
+        },
+        {
+          "produto": "Sisal ou agave (fibra)",
+          "valorMilReais": 146252,
+          "participacao": 0.09961129988755145
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 25611,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3685732886791372
+    },
+    {
+      "mesorregiaoId": 2904,
+      "mesorregiao": "Nordeste Baiano",
+      "ufs": [
+        "BA"
+      ],
+      "qtdMunicipios": 60,
+      "valorProducaoTotalMilReais": 2109680,
+      "produtoLider": {
+        "produto": "Milho (em grão)",
+        "valorMilReais": 835799,
+        "participacao": 0.3961733533047666
+      },
+      "top3": [
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 835799,
+          "participacao": 0.3961733533047666
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 585624,
+          "participacao": 0.27758901823973303
+        },
+        {
+          "produto": "Sisal ou agave (fibra)",
+          "valorMilReais": 187419,
+          "participacao": 0.08883764362367752
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.4870213472333516
+    },
+    {
+      "mesorregiaoId": 2905,
+      "mesorregiao": "Metropolitana de Salvador",
+      "ufs": [
+        "BA"
+      ],
+      "qtdMunicipios": 38,
+      "valorProducaoTotalMilReais": 371730,
+      "produtoLider": {
+        "produto": "Mandioca",
+        "valorMilReais": 105435,
+        "participacao": 0.28363328222096684
+      },
+      "top3": [
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 105435,
+          "participacao": 0.28363328222096684
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 75200,
+          "participacao": 0.20229736636806284
+        },
+        {
+          "produto": "Cacau (em amêndoa)",
+          "valorMilReais": 64943,
+          "participacao": 0.17470475883033385
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 133,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5208714251885668
+    },
+    {
+      "mesorregiaoId": 2906,
+      "mesorregiao": "Centro Sul Baiano",
+      "ufs": [
+        "BA"
+      ],
+      "qtdMunicipios": 118,
+      "valorProducaoTotalMilReais": 6090126,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 1378891,
+        "participacao": 0.22641419898373202
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 1378891,
+          "participacao": 0.22641419898373202
+        },
+        {
+          "produto": "Batata-inglesa",
+          "valorMilReais": 1329535,
+          "participacao": 0.21830993316066039
+        },
+        {
+          "produto": "Cacau (em amêndoa)",
+          "valorMilReais": 954991,
+          "participacao": 0.15680972774619112
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 1378633,
+        "canephoraMilReais": 258,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.4607019898377117
+    },
+    {
+      "mesorregiaoId": 2907,
+      "mesorregiao": "Sul Baiano",
+      "ufs": [
+        "BA"
+      ],
+      "qtdMunicipios": 70,
+      "valorProducaoTotalMilReais": 9672858,
+      "produtoLider": {
+        "produto": "Cacau (em amêndoa)",
+        "valorMilReais": 5456656,
+        "participacao": 0.5641203458171308
+      },
+      "top3": [
+        {
+          "produto": "Cacau (em amêndoa)",
+          "valorMilReais": 5456656,
+          "participacao": 0.5641203458171308
+        },
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 2286853,
+          "participacao": 0.23641957733691532
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 658550,
+          "participacao": 0.06808225655747246
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 643,
+        "canephoraMilReais": 2286210,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7009241384343297
+    },
+    {
+      "mesorregiaoId": 3101,
+      "mesorregiao": "Noroeste de Minas",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 19,
+      "valorProducaoTotalMilReais": 8574211,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 3551046,
+        "participacao": 0.4141542586250793
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 3551046,
+          "participacao": 0.4141542586250793
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 1060779,
+          "participacao": 0.12371738927348534
+        },
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 1045693,
+          "participacao": 0.12195792709090084
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 1045693,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7520179690910875
+    },
+    {
+      "mesorregiaoId": 3102,
+      "mesorregiao": "Norte de Minas",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 89,
+      "valorProducaoTotalMilReais": 3890885,
+      "produtoLider": {
+        "produto": "Banana (cacho)",
+        "valorMilReais": 1197849,
+        "participacao": 0.30786029399481096
+      },
+      "top3": [
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 1197849,
+          "participacao": 0.30786029399481096
+        },
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 556993,
+          "participacao": 0.14315329288837886
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 520215,
+          "participacao": 0.1337009446436993
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 554999,
+        "canephoraMilReais": 1994,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5935688154557877
+    },
+    {
+      "mesorregiaoId": 3103,
+      "mesorregiao": "Jequitinhonha",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 51,
+      "valorProducaoTotalMilReais": 918258,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 630801,
+        "participacao": 0.6869539933221382
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 630801,
+          "participacao": 0.6869539933221382
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 97050,
+          "participacao": 0.10568925073345399
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 35035,
+          "participacao": 0.03815376506384916
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 628162,
+        "canephoraMilReais": 2639,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5412500071604651
+    },
+    {
+      "mesorregiaoId": 3104,
+      "mesorregiao": "Vale do Mucuri",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 23,
+      "valorProducaoTotalMilReais": 191331,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 70472,
+        "participacao": 0.3683250492601826
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 70472,
+          "participacao": 0.3683250492601826
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 54290,
+          "participacao": 0.2837491049542416
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 18699,
+          "participacao": 0.09773115700017247
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 62256,
+        "canephoraMilReais": 8217,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.1849870158398908
+    },
+    {
+      "mesorregiaoId": 3105,
+      "mesorregiao": "Triângulo Mineiro/Alto Paranaíba",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 66,
+      "valorProducaoTotalMilReais": 33885130,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 9371495,
+        "participacao": 0.27656659425535624
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 9371495,
+          "participacao": 0.27656659425535624
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 6873871,
+          "participacao": 0.20285803831946345
+        },
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 6638222,
+          "participacao": 0.19590368990763796
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 6638222,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6665439130948071
+    },
+    {
+      "mesorregiaoId": 3106,
+      "mesorregiao": "Central Mineira",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 30,
+      "valorProducaoTotalMilReais": 1324754,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 627324,
+        "participacao": 0.4735399930855087
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 627324,
+          "participacao": 0.4735399930855087
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 363147,
+          "participacao": 0.2741241015313032
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 153860,
+          "participacao": 0.11614231774352068
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 40501,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3889880721364071
+    },
+    {
+      "mesorregiaoId": 3107,
+      "mesorregiao": "Metropolitana de Belo Horizonte",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 105,
+      "valorProducaoTotalMilReais": 969000,
+      "produtoLider": {
+        "produto": "Tangerina",
+        "valorMilReais": 207146,
+        "participacao": 0.21377296181630548
+      },
+      "top3": [
+        {
+          "produto": "Tangerina",
+          "valorMilReais": 207146,
+          "participacao": 0.21377296181630548
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 166652,
+          "participacao": 0.17198348813209494
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 160003,
+          "participacao": 0.1651217750257998
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 24434,
+        "canephoraMilReais": 176,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.32211264103182347
+    },
+    {
+      "mesorregiaoId": 3108,
+      "mesorregiao": "Vale do Rio Doce",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 102,
+      "valorProducaoTotalMilReais": 2556761,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 2148967,
+        "participacao": 0.8405036685087108
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 2148967,
+          "participacao": 0.8405036685087108
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 124521,
+          "participacao": 0.04870263587406097
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 83505,
+          "participacao": 0.03266046376646077
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 1773457,
+        "canephoraMilReais": 375511,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.4263389916114015
+    },
+    {
+      "mesorregiaoId": 3109,
+      "mesorregiao": "Oeste de Minas",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 44,
+      "valorProducaoTotalMilReais": 4219965,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 2540952,
+        "participacao": 0.6021263209528989
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 2540952,
+          "participacao": 0.6021263209528989
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 536586,
+          "participacao": 0.12715413516462815
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 452147,
+          "participacao": 0.10714472750366413
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 2540952,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.474303260064285
+    },
+    {
+      "mesorregiaoId": 3110,
+      "mesorregiao": "Sul/Sudoeste de Minas",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 146,
+      "valorProducaoTotalMilReais": 21107322,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 15014548,
+        "participacao": 0.7113431064348191
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 15014548,
+          "participacao": 0.7113431064348191
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1340928,
+          "participacao": 0.06352904456567252
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 1157393,
+          "participacao": 0.05483372073444466
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 15014548,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7112298739280105
+    },
+    {
+      "mesorregiaoId": 3111,
+      "mesorregiao": "Campo das Vertentes",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 36,
+      "valorProducaoTotalMilReais": 2491212,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 709038,
+        "participacao": 0.28461568104199886
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 709038,
+          "participacao": 0.28461568104199886
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 573182,
+          "participacao": 0.23008158277978752
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 429488,
+          "participacao": 0.17240122478536551
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 709038,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.544549005401742
+    },
+    {
+      "mesorregiaoId": 3112,
+      "mesorregiao": "Zona da Mata",
+      "ufs": [
+        "MG"
+      ],
+      "qtdMunicipios": 142,
+      "valorProducaoTotalMilReais": 6456407,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 5715046,
+        "participacao": 0.8851743702031176
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 5715046,
+          "participacao": 0.8851743702031176
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 147865,
+          "participacao": 0.022902056825104117
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 134602,
+          "participacao": 0.020847818298939332
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 5693510,
+        "canephoraMilReais": 21537,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5247182037194625
+    },
+    {
+      "mesorregiaoId": 3201,
+      "mesorregiao": "Noroeste Espírito-santense",
+      "ufs": [
+        "ES"
+      ],
+      "qtdMunicipios": 17,
+      "valorProducaoTotalMilReais": 6133513,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 5067193,
+        "participacao": 0.8261485709739264
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 5067193,
+          "participacao": 0.8261485709739264
+        },
+        {
+          "produto": "Pimenta-do-reino",
+          "valorMilReais": 668387,
+          "participacao": 0.10897294910763212
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 113048,
+          "participacao": 0.01843119921650121
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 156947,
+        "canephoraMilReais": 4910246,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7525829569728524
+    },
+    {
+      "mesorregiaoId": 3202,
+      "mesorregiao": "Litoral Norte Espírito-santense",
+      "ufs": [
+        "ES"
+      ],
+      "qtdMunicipios": 15,
+      "valorProducaoTotalMilReais": 7803288,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 4338736,
+        "participacao": 0.5560138239162773
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 4338736,
+          "participacao": 0.5560138239162773
+        },
+        {
+          "produto": "Pimenta-do-reino",
+          "valorMilReais": 1556036,
+          "participacao": 0.19940773684118798
+        },
+        {
+          "produto": "Mamão",
+          "valorMilReais": 739760,
+          "participacao": 0.0948010633466303
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 675,
+        "canephoraMilReais": 4338061,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8463850065162517
+    },
+    {
+      "mesorregiaoId": 3203,
+      "mesorregiao": "Central Espírito-santense",
+      "ufs": [
+        "ES"
+      ],
+      "qtdMunicipios": 24,
+      "valorProducaoTotalMilReais": 5029378,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 3506120,
+        "participacao": 0.6971279549876744
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 3506120,
+          "participacao": 0.6971279549876744
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 699283,
+          "participacao": 0.1390396585820354
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 340086,
+          "participacao": 0.06761989255927871
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 1715683,
+        "canephoraMilReais": 1790437,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.4408811165955857
+    },
+    {
+      "mesorregiaoId": 3204,
+      "mesorregiao": "Sul Espírito-santense",
+      "ufs": [
+        "ES"
+      ],
+      "qtdMunicipios": 22,
+      "valorProducaoTotalMilReais": 4263767,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 3826282,
+        "participacao": 0.8973947216158856
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 3826282,
+          "participacao": 0.8973947216158856
+        },
+        {
+          "produto": "Abacaxi*",
+          "valorMilReais": 136465,
+          "participacao": 0.03200573577308516
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 89868,
+          "participacao": 0.021077136719712872
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 2520607,
+        "canephoraMilReais": 1305675,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6676477771287976
+    },
+    {
+      "mesorregiaoId": 3301,
+      "mesorregiao": "Noroeste Fluminense",
+      "ufs": [
+        "RJ"
+      ],
+      "qtdMunicipios": 13,
+      "valorProducaoTotalMilReais": 439186,
+      "produtoLider": {
+        "produto": "Café (em grão) Total",
+        "valorMilReais": 317007,
+        "participacao": 0.721805795266698
+      },
+      "top3": [
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 317007,
+          "participacao": 0.721805795266698
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 87126,
+          "participacao": 0.19838064054865137
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 9093,
+          "participacao": 0.020704211882892443
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 315851,
+        "canephoraMilReais": 1157,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.28842420682720926
+    },
+    {
+      "mesorregiaoId": 3302,
+      "mesorregiao": "Norte Fluminense",
+      "ufs": [
+        "RJ"
+      ],
+      "qtdMunicipios": 9,
+      "valorProducaoTotalMilReais": 654689,
+      "produtoLider": {
+        "produto": "Abacaxi*",
+        "valorMilReais": 283060,
+        "participacao": 0.43235795927532006
+      },
+      "top3": [
+        {
+          "produto": "Abacaxi*",
+          "valorMilReais": 283060,
+          "participacao": 0.43235795927532006
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 264546,
+          "participacao": 0.40407888325601926
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 64817,
+          "participacao": 0.09900426003797223
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 360,
+        "canephoraMilReais": 28,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5852618670773267
+    },
+    {
+      "mesorregiaoId": 3303,
+      "mesorregiao": "Centro Fluminense",
+      "ufs": [
+        "RJ"
+      ],
+      "qtdMunicipios": 16,
+      "valorProducaoTotalMilReais": 447788,
+      "produtoLider": {
+        "produto": "Tomate",
+        "valorMilReais": 251857,
+        "participacao": 0.562446961508571
+      },
+      "top3": [
+        {
+          "produto": "Tomate",
+          "valorMilReais": 251857,
+          "participacao": 0.562446961508571
+        },
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 51873,
+          "participacao": 0.1158427648798092
+        },
+        {
+          "produto": "Caqui",
+          "valorMilReais": 42685,
+          "participacao": 0.09532412659562114
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 51873,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5883815268878518
+    },
+    {
+      "mesorregiaoId": 3304,
+      "mesorregiao": "Baixadas",
+      "ufs": [
+        "RJ"
+      ],
+      "qtdMunicipios": 10,
+      "valorProducaoTotalMilReais": 208406,
+      "produtoLider": {
+        "produto": "Laranja",
+        "valorMilReais": 77629,
+        "participacao": 0.3724892757406217
+      },
+      "top3": [
+        {
+          "produto": "Laranja",
+          "valorMilReais": 77629,
+          "participacao": 0.3724892757406217
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 44998,
+          "participacao": 0.21591508881702062
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 24331,
+          "participacao": 0.11674807827029932
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.41156393998461527
+    },
+    {
+      "mesorregiaoId": 3305,
+      "mesorregiao": "Sul Fluminense",
+      "ufs": [
+        "RJ"
+      ],
+      "qtdMunicipios": 14,
+      "valorProducaoTotalMilReais": 47726,
+      "produtoLider": {
+        "produto": "Banana (cacho)",
+        "valorMilReais": 21038,
+        "participacao": 0.4408079453547333
+      },
+      "top3": [
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 21038,
+          "participacao": 0.4408079453547333
+        },
+        {
+          "produto": "Palmito",
+          "valorMilReais": 12165,
+          "participacao": 0.25489251141935215
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 6384,
+          "participacao": 0.1337635670284541
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 293,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.1293322015137464
+    },
+    {
+      "mesorregiaoId": 3306,
+      "mesorregiao": "Metropolitana do Rio de Janeiro",
+      "ufs": [
+        "RJ"
+      ],
+      "qtdMunicipios": 30,
+      "valorProducaoTotalMilReais": 611162,
+      "produtoLider": {
+        "produto": "Laranja",
+        "valorMilReais": 158718,
+        "participacao": 0.25969873781419656
+      },
+      "top3": [
+        {
+          "produto": "Laranja",
+          "valorMilReais": 158718,
+          "participacao": 0.25969873781419656
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 112667,
+          "participacao": 0.1843488305882892
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 82331,
+          "participacao": 0.13471223669010834
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 13488,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6175251085665291
+    },
+    {
+      "mesorregiaoId": 3501,
+      "mesorregiao": "São José do Rio Preto",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 109,
+      "valorProducaoTotalMilReais": 18515635,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 11664790,
+        "participacao": 0.6299967567950006
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 11664790,
+          "participacao": 0.6299967567950006
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 3593114,
+          "participacao": 0.19405837282923324
+        },
+        {
+          "produto": "Limão",
+          "valorMilReais": 914591,
+          "participacao": 0.049395605389715234
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 5498,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7356399070908941
+    },
+    {
+      "mesorregiaoId": 3502,
+      "mesorregiao": "Ribeirão Preto",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 66,
+      "valorProducaoTotalMilReais": 24567644,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 14099163,
+        "participacao": 0.5738915379920028
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 14099163,
+          "participacao": 0.5738915379920028
+        },
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 4574064,
+          "participacao": 0.18618244386804042
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 2802168,
+          "participacao": 0.11405928871323599
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 4574064,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8991664352216692
+    },
+    {
+      "mesorregiaoId": 3503,
+      "mesorregiao": "Araçatuba",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 36,
+      "valorProducaoTotalMilReais": 7123211,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 5852680,
+        "participacao": 0.8216350744067528
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 5852680,
+          "participacao": 0.8216350744067528
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 340081,
+          "participacao": 0.04774265426083826
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 292886,
+          "participacao": 0.04111713102419681
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 6689,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7463761750823698
+    },
+    {
+      "mesorregiaoId": 3504,
+      "mesorregiao": "Bauru",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 56,
+      "valorProducaoTotalMilReais": 15439628,
+      "produtoLider": {
+        "produto": "Laranja",
+        "valorMilReais": 6348136,
+        "participacao": 0.411158610816271
+      },
+      "top3": [
+        {
+          "produto": "Laranja",
+          "valorMilReais": 6348136,
+          "participacao": 0.411158610816271
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 5915965,
+          "participacao": 0.38316758668019724
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 768742,
+          "participacao": 0.04979018924549218
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 362220,
+        "canephoraMilReais": 177,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7878720938719507
+    },
+    {
+      "mesorregiaoId": 3505,
+      "mesorregiao": "Araraquara",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 21,
+      "valorProducaoTotalMilReais": 6689231,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 3871067,
+        "participacao": 0.5787013484808643
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 3871067,
+          "participacao": 0.5787013484808643
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 2003753,
+          "participacao": 0.2995490812023086
+        },
+        {
+          "produto": "Amendoim (em casca)",
+          "valorMilReais": 178376,
+          "participacao": 0.026666144434240646
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 81114,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8165668953246429
+    },
+    {
+      "mesorregiaoId": 3506,
+      "mesorregiao": "Piracicaba",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 26,
+      "valorProducaoTotalMilReais": 4214287,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 2741077,
+        "participacao": 0.6504248524127569
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 2741077,
+          "participacao": 0.6504248524127569
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 766155,
+          "participacao": 0.181799436061189
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 185497,
+          "participacao": 0.04401622385945713
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 105179,
+        "canephoraMilReais": 2166,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6734019767040821
+    },
+    {
+      "mesorregiaoId": 3507,
+      "mesorregiao": "Campinas",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 49,
+      "valorProducaoTotalMilReais": 10355113,
+      "produtoLider": {
+        "produto": "Laranja",
+        "valorMilReais": 3472632,
+        "participacao": 0.33535433171999185
+      },
+      "top3": [
+        {
+          "produto": "Laranja",
+          "valorMilReais": 3472632,
+          "participacao": 0.33535433171999185
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 2056847,
+          "participacao": 0.19863105308459694
+        },
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 1961839,
+          "participacao": 0.18945606870731396
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 1961839,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7717926757203536
+    },
+    {
+      "mesorregiaoId": 3508,
+      "mesorregiao": "Presidente Prudente",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 54,
+      "valorProducaoTotalMilReais": 6826049,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 5037358,
+        "participacao": 0.7379610078978337
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 5037358,
+          "participacao": 0.7379610078978337
+        },
+        {
+          "produto": "Amendoim (em casca)",
+          "valorMilReais": 524549,
+          "participacao": 0.07684518526017027
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 251608,
+          "participacao": 0.03685997566088377
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 86304,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6046491289283866
+    },
+    {
+      "mesorregiaoId": 3509,
+      "mesorregiao": "Marília",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 20,
+      "valorProducaoTotalMilReais": 2015194,
+      "produtoLider": {
+        "produto": "Amendoim (em casca)",
+        "valorMilReais": 534046,
+        "participacao": 0.26500972114843535
+      },
+      "top3": [
+        {
+          "produto": "Amendoim (em casca)",
+          "valorMilReais": 534046,
+          "participacao": 0.26500972114843535
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 471604,
+          "participacao": 0.23402411876970655
+        },
+        {
+          "produto": "Café (em grão) Total",
+          "valorMilReais": 460674,
+          "participacao": 0.22860032334355898
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 460674,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.34520674845788096
+    },
+    {
+      "mesorregiaoId": 3510,
+      "mesorregiao": "Assis",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 35,
+      "valorProducaoTotalMilReais": 8095726,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 3648807,
+        "participacao": 0.4507078179276324
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 3648807,
+          "participacao": 0.4507078179276324
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1152148,
+          "participacao": 0.14231558726172303
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 965678,
+          "participacao": 0.1192824460709268
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 870631,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8651888097289293
+    },
+    {
+      "mesorregiaoId": 3511,
+      "mesorregiao": "Itapetininga",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 36,
+      "valorProducaoTotalMilReais": 9535241,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 2163722,
+        "participacao": 0.22691843866348002
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 2163722,
+          "participacao": 0.22691843866348002
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 1943265,
+          "participacao": 0.20379820499555282
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 1762812,
+          "participacao": 0.18487335558692225
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 19897,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7525679984654057
+    },
+    {
+      "mesorregiaoId": 3512,
+      "mesorregiao": "Macro Metropolitana Paulista",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 36,
+      "valorProducaoTotalMilReais": 2326409,
+      "produtoLider": {
+        "produto": "Uva",
+        "valorMilReais": 597058,
+        "participacao": 0.25664360823913596
+      },
+      "top3": [
+        {
+          "produto": "Uva",
+          "valorMilReais": 597058,
+          "participacao": 0.25664360823913596
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 214902,
+          "participacao": 0.09237498651354942
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 214308,
+          "participacao": 0.09211965737752906
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 18220,
+        "canephoraMilReais": 192,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6719459829180434
+    },
+    {
+      "mesorregiaoId": 3513,
+      "mesorregiao": "Vale do Paraíba Paulista",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 39,
+      "valorProducaoTotalMilReais": 309671,
+      "produtoLider": {
+        "produto": "Arroz (em casca)",
+        "valorMilReais": 73591,
+        "participacao": 0.2376425302982843
+      },
+      "top3": [
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 73591,
+          "participacao": 0.2376425302982843
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 55886,
+          "participacao": 0.18046894930426163
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 48292,
+          "participacao": 0.15594614930038653
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 58,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3423419100786335
+    },
+    {
+      "mesorregiaoId": 3514,
+      "mesorregiao": "Litoral Sul Paulista",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 17,
+      "valorProducaoTotalMilReais": 1910204,
+      "produtoLider": {
+        "produto": "Banana (cacho)",
+        "valorMilReais": 1667690,
+        "participacao": 0.8730428791898667
+      },
+      "top3": [
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 1667690,
+          "participacao": 0.8730428791898667
+        },
+        {
+          "produto": "Palmito",
+          "valorMilReais": 108695,
+          "participacao": 0.056902299440269206
+        },
+        {
+          "produto": "Tangerina",
+          "valorMilReais": 54410,
+          "participacao": 0.02848386873862687
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 188,
+        "canephoraMilReais": 138,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.9052519706264627
+    },
+    {
+      "mesorregiaoId": 3515,
+      "mesorregiao": "Metropolitana de São Paulo",
+      "ufs": [
+        "SP"
+      ],
+      "qtdMunicipios": 45,
+      "valorProducaoTotalMilReais": 97810,
+      "produtoLider": {
+        "produto": "Caqui",
+        "valorMilReais": 39320,
+        "participacao": 0.4020038850833248
+      },
+      "top3": [
+        {
+          "produto": "Caqui",
+          "valorMilReais": 39320,
+          "participacao": 0.4020038850833248
+        },
+        {
+          "produto": "Tomate",
+          "valorMilReais": 23389,
+          "participacao": 0.23912687864226562
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 13975,
+          "participacao": 0.14287905122175645
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 77,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8439694617928638
+    },
+    {
+      "mesorregiaoId": 4101,
+      "mesorregiao": "Noroeste Paranaense",
+      "ufs": [
+        "PR"
+      ],
+      "qtdMunicipios": 61,
+      "valorProducaoTotalMilReais": 6613607,
+      "produtoLider": {
+        "produto": "Cana-de-açúcar",
+        "valorMilReais": 2166894,
+        "participacao": 0.3276417845813941
+      },
+      "top3": [
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 2166894,
+          "participacao": 0.3276417845813941
+        },
+        {
+          "produto": "Mandioca",
+          "valorMilReais": 1377166,
+          "participacao": 0.208232209745756
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1348202,
+          "participacao": 0.20385275387545707
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 31723,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6096357370122961
+    },
+    {
+      "mesorregiaoId": 4102,
+      "mesorregiao": "Centro Ocidental Paranaense",
+      "ufs": [
+        "PR"
+      ],
+      "qtdMunicipios": 25,
+      "valorProducaoTotalMilReais": 6695544,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 3952312,
+        "participacao": 0.5902899002679991
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 3952312,
+          "participacao": 0.5902899002679991
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 2204658,
+          "participacao": 0.3292724235700639
+        },
+        {
+          "produto": "Trigo (em grão)",
+          "valorMilReais": 181644,
+          "participacao": 0.027129087643961415
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 3841,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8704219408059992
+    },
+    {
+      "mesorregiaoId": 4103,
+      "mesorregiao": "Norte Central Paranaense",
+      "ufs": [
+        "PR"
+      ],
+      "qtdMunicipios": 79,
+      "valorProducaoTotalMilReais": 12006466,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 5551534,
+        "participacao": 0.46237868828346324
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 5551534,
+          "participacao": 0.46237868828346324
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 3338973,
+          "participacao": 0.27809790158069825
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 1495340,
+          "participacao": 0.1245445579073809
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 168623,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.751092691265145
+    },
+    {
+      "mesorregiaoId": 4104,
+      "mesorregiao": "Norte Pioneiro Paranaense",
+      "ufs": [
+        "PR"
+      ],
+      "qtdMunicipios": 46,
+      "valorProducaoTotalMilReais": 5993285,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 2332162,
+        "participacao": 0.3891291670594674
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 2332162,
+          "participacao": 0.3891291670594674
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 1226108,
+          "participacao": 0.204580292777667
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 629173,
+          "participacao": 0.10497965639878631
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 603546,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7544722550518488
+    },
+    {
+      "mesorregiaoId": 4105,
+      "mesorregiao": "Centro Oriental Paranaense",
+      "ufs": [
+        "PR"
+      ],
+      "qtdMunicipios": 14,
+      "valorProducaoTotalMilReais": 5733489,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 3503967,
+        "participacao": 0.6111404417101001
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 3503967,
+          "participacao": 0.6111404417101001
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 753584,
+          "participacao": 0.13143550114075392
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 384409,
+          "participacao": 0.06704626101140161
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 1849,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.760023113013831
+    },
+    {
+      "mesorregiaoId": 4106,
+      "mesorregiao": "Oeste Paranaense",
+      "ufs": [
+        "PR"
+      ],
+      "qtdMunicipios": 50,
+      "valorProducaoTotalMilReais": 10199432,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 5723494,
+        "participacao": 0.5611581115497412
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 5723494,
+          "participacao": 0.5611581115497412
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 3659536,
+          "participacao": 0.35879801934068484
+        },
+        {
+          "produto": "Trigo (em grão)",
+          "valorMilReais": 398818,
+          "participacao": 0.03910198136523681
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 6206,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6513381547104695
+    },
+    {
+      "mesorregiaoId": 4107,
+      "mesorregiao": "Sudoeste Paranaense",
+      "ufs": [
+        "PR"
+      ],
+      "qtdMunicipios": 37,
+      "valorProducaoTotalMilReais": 5416160,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 3365835,
+        "participacao": 0.6214430519039319
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 3365835,
+          "participacao": 0.6214430519039319
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 693627,
+          "participacao": 0.12806619449942394
+        },
+        {
+          "produto": "Trigo (em grão)",
+          "valorMilReais": 556459,
+          "participacao": 0.1027405024962335
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5029648421442999
+    },
+    {
+      "mesorregiaoId": 4108,
+      "mesorregiao": "Centro-Sul Paranaense",
+      "ufs": [
+        "PR"
+      ],
+      "qtdMunicipios": 29,
+      "valorProducaoTotalMilReais": 9109652,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 5087385,
+        "participacao": 0.5584609598698173
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 5087385,
+          "participacao": 0.5584609598698173
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 1081921,
+          "participacao": 0.11876644684121852
+        },
+        {
+          "produto": "Batata-inglesa",
+          "valorMilReais": 973447,
+          "participacao": 0.10685885695743372
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7229265212277476
+    },
+    {
+      "mesorregiaoId": 4109,
+      "mesorregiao": "Sudeste Paranaense",
+      "ufs": [
+        "PR"
+      ],
+      "qtdMunicipios": 21,
+      "valorProducaoTotalMilReais": 6952494,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 2745125,
+        "participacao": 0.39484032636346034
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 2745125,
+          "participacao": 0.39484032636346034
+        },
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 2202758,
+          "participacao": 0.3168299030534942
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 612788,
+          "participacao": 0.08813930655675503
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.9083314525555559
+    },
+    {
+      "mesorregiaoId": 4110,
+      "mesorregiao": "Metropolitana de Curitiba",
+      "ufs": [
+        "PR"
+      ],
+      "qtdMunicipios": 37,
+      "valorProducaoTotalMilReais": 3255223,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 939435,
+        "participacao": 0.28859313171478573
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 939435,
+          "participacao": 0.28859313171478573
+        },
+        {
+          "produto": "Batata-inglesa",
+          "valorMilReais": 557959,
+          "participacao": 0.17140423252108997
+        },
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 330464,
+          "participacao": 0.10151808340012343
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8676541642139288
+    },
+    {
+      "mesorregiaoId": 4201,
+      "mesorregiao": "Oeste Catarinense",
+      "ufs": [
+        "SC"
+      ],
+      "qtdMunicipios": 118,
+      "valorProducaoTotalMilReais": 5707212,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 2676367,
+        "participacao": 0.4689447316833508
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 2676367,
+          "participacao": 0.4689447316833508
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 931357,
+          "participacao": 0.16318948726628693
+        },
+        {
+          "produto": "Trigo (em grão)",
+          "valorMilReais": 326586,
+          "participacao": 0.05722338683055755
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3931503087511131
+    },
+    {
+      "mesorregiaoId": 4202,
+      "mesorregiao": "Norte Catarinense",
+      "ufs": [
+        "SC"
+      ],
+      "qtdMunicipios": 26,
+      "valorProducaoTotalMilReais": 4152285,
+      "produtoLider": {
+        "produto": "Fumo (em folha)",
+        "valorMilReais": 1265563,
+        "participacao": 0.30478712323455637
+      },
+      "top3": [
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 1265563,
+          "participacao": 0.30478712323455637
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1134001,
+          "participacao": 0.27310288190719084
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 744293,
+          "participacao": 0.17924901590329181
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8492293284457316
+    },
+    {
+      "mesorregiaoId": 4203,
+      "mesorregiao": "Serrana",
+      "ufs": [
+        "SC"
+      ],
+      "qtdMunicipios": 30,
+      "valorProducaoTotalMilReais": 3451934,
+      "produtoLider": {
+        "produto": "Maçã",
+        "valorMilReais": 1327046,
+        "participacao": 0.38443550774725127
+      },
+      "top3": [
+        {
+          "produto": "Maçã",
+          "valorMilReais": 1327046,
+          "participacao": 0.38443550774725127
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1308877,
+          "participacao": 0.37917208150561393
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 307752,
+          "participacao": 0.0891535006173351
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7500944486695226
+    },
+    {
+      "mesorregiaoId": 4204,
+      "mesorregiao": "Vale do Itajaí",
+      "ufs": [
+        "SC"
+      ],
+      "qtdMunicipios": 54,
+      "valorProducaoTotalMilReais": 2568647,
+      "produtoLider": {
+        "produto": "Fumo (em folha)",
+        "valorMilReais": 841423,
+        "participacao": 0.3275744000635354
+      },
+      "top3": [
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 841423,
+          "participacao": 0.3275744000635354
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 528357,
+          "participacao": 0.20569467116345688
+        },
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 410593,
+          "participacao": 0.15984796665326143
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6504515690067468
+    },
+    {
+      "mesorregiaoId": 4205,
+      "mesorregiao": "Grande Florianópolis",
+      "ufs": [
+        "SC"
+      ],
+      "qtdMunicipios": 21,
+      "valorProducaoTotalMilReais": 633515,
+      "produtoLider": {
+        "produto": "Cebola",
+        "valorMilReais": 252954,
+        "participacao": 0.39928652044545115
+      },
+      "top3": [
+        {
+          "produto": "Cebola",
+          "valorMilReais": 252954,
+          "participacao": 0.39928652044545115
+        },
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 108968,
+          "participacao": 0.17200539845149682
+        },
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 66334,
+          "participacao": 0.10470786011380946
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6850482414637813
+    },
+    {
+      "mesorregiaoId": 4206,
+      "mesorregiao": "Sul Catarinense",
+      "ufs": [
+        "SC"
+      ],
+      "qtdMunicipios": 46,
+      "valorProducaoTotalMilReais": 3045715,
+      "produtoLider": {
+        "produto": "Arroz (em casca)",
+        "valorMilReais": 1556450,
+        "participacao": 0.5110294298711469
+      },
+      "top3": [
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 1556450,
+          "participacao": 0.5110294298711469
+        },
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 712563,
+          "participacao": 0.23395590198032318
+        },
+        {
+          "produto": "Banana (cacho)",
+          "valorMilReais": 227107,
+          "participacao": 0.07456607069276015
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5107217419710726
+    },
+    {
+      "mesorregiaoId": 4301,
+      "mesorregiao": "Noroeste Rio-grandense",
+      "ufs": [
+        "RS"
+      ],
+      "qtdMunicipios": 216,
+      "valorProducaoTotalMilReais": 29976910,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 21528501,
+        "participacao": 0.7181694510875204
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 21528501,
+          "participacao": 0.7181694510875204
+        },
+        {
+          "produto": "Trigo (em grão)",
+          "valorMilReais": 2940823,
+          "participacao": 0.09810293989607334
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 2446607,
+          "participacao": 0.08161638407694455
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7515619098220964
+    },
+    {
+      "mesorregiaoId": 4302,
+      "mesorregiao": "Nordeste Rio-grandense",
+      "ufs": [
+        "RS"
+      ],
+      "qtdMunicipios": 54,
+      "valorProducaoTotalMilReais": 8421267,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 2248648,
+        "participacao": 0.26702015266823864
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 2248648,
+          "participacao": 0.26702015266823864
+        },
+        {
+          "produto": "Maçã",
+          "valorMilReais": 1403092,
+          "participacao": 0.16661293365950752
+        },
+        {
+          "produto": "Uva",
+          "valorMilReais": 1282930,
+          "participacao": 0.1523440593915381
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.6752940490385139
+    },
+    {
+      "mesorregiaoId": 4303,
+      "mesorregiao": "Centro Ocidental Rio-grandense",
+      "ufs": [
+        "RS"
+      ],
+      "qtdMunicipios": 31,
+      "valorProducaoTotalMilReais": 6797549,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 4584151,
+        "participacao": 0.6743829283172508
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 4584151,
+          "participacao": 0.6743829283172508
+        },
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 1090651,
+          "participacao": 0.16044768489348146
+        },
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 319422,
+          "participacao": 0.04699076093456627
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8176952529206819
+    },
+    {
+      "mesorregiaoId": 4304,
+      "mesorregiao": "Centro Oriental Rio-grandense",
+      "ufs": [
+        "RS"
+      ],
+      "qtdMunicipios": 54,
+      "valorProducaoTotalMilReais": 5317803,
+      "produtoLider": {
+        "produto": "Fumo (em folha)",
+        "valorMilReais": 2406579,
+        "participacao": 0.4525513637868872
+      },
+      "top3": [
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 2406579,
+          "participacao": 0.4525513637868872
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1441762,
+          "participacao": 0.27111985908466335
+        },
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 707864,
+          "participacao": 0.13311211415691782
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5101082070482407
+    },
+    {
+      "mesorregiaoId": 4305,
+      "mesorregiao": "Metropolitana de Porto Alegre",
+      "ufs": [
+        "RS"
+      ],
+      "qtdMunicipios": 98,
+      "valorProducaoTotalMilReais": 7051480,
+      "produtoLider": {
+        "produto": "Arroz (em casca)",
+        "valorMilReais": 3628586,
+        "participacao": 0.5145850232858917
+      },
+      "top3": [
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 3628586,
+          "participacao": 0.5145850232858917
+        },
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 913268,
+          "participacao": 0.12951437145109962
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 707452,
+          "participacao": 0.10032673991842847
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7931988846304371
+    },
+    {
+      "mesorregiaoId": 4306,
+      "mesorregiao": "Sudoeste Rio-grandense",
+      "ufs": [
+        "RS"
+      ],
+      "qtdMunicipios": 19,
+      "valorProducaoTotalMilReais": 10869287,
+      "produtoLider": {
+        "produto": "Arroz (em casca)",
+        "valorMilReais": 6041788,
+        "participacao": 0.5558587237598933
+      },
+      "top3": [
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 6041788,
+          "participacao": 0.5558587237598933
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 3873083,
+          "participacao": 0.3563327566932403
+        },
+        {
+          "produto": "Trigo (em grão)",
+          "valorMilReais": 362351,
+          "participacao": 0.033337145297571036
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7040739873314944
+    },
+    {
+      "mesorregiaoId": 4307,
+      "mesorregiao": "Sudeste Rio-grandense",
+      "ufs": [
+        "RS"
+      ],
+      "qtdMunicipios": 25,
+      "valorProducaoTotalMilReais": 7312524,
+      "produtoLider": {
+        "produto": "Arroz (em casca)",
+        "valorMilReais": 3370833,
+        "participacao": 0.4609671024669457
+      },
+      "top3": [
+        {
+          "produto": "Arroz (em casca)",
+          "valorMilReais": 3370833,
+          "participacao": 0.4609671024669457
+        },
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1719944,
+          "participacao": 0.23520524513834073
+        },
+        {
+          "produto": "Fumo (em folha)",
+          "valorMilReais": 1468719,
+          "participacao": 0.20084980233911026
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.793655578279629
+    },
+    {
+      "mesorregiaoId": 5001,
+      "mesorregiao": "Pantanais Sul Mato-grossense",
+      "ufs": [
+        "MS"
+      ],
+      "qtdMunicipios": 7,
+      "valorProducaoTotalMilReais": 309292,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 208798,
+        "participacao": 0.675083739637624
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 208798,
+          "participacao": 0.675083739637624
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 46885,
+          "participacao": 0.15158814324327818
+        },
+        {
+          "produto": "Laranja",
+          "valorMilReais": 17521,
+          "participacao": 0.05664873323590652
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.11740966835200833
+    },
+    {
+      "mesorregiaoId": 5002,
+      "mesorregiao": "Centro Norte de Mato Grosso do Sul",
+      "ufs": [
+        "MS"
+      ],
+      "qtdMunicipios": 16,
+      "valorProducaoTotalMilReais": 6900312,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 5035623,
+        "participacao": 0.7297674366028667
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 5035623,
+          "participacao": 0.7297674366028667
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 1250370,
+          "participacao": 0.18120484986765817
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 358709,
+          "participacao": 0.051984460992488456
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5009552135199452
+    },
+    {
+      "mesorregiaoId": 5003,
+      "mesorregiao": "Leste de Mato Grosso do Sul",
+      "ufs": [
+        "MS"
+      ],
+      "qtdMunicipios": 18,
+      "valorProducaoTotalMilReais": 7303548,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 2973834,
+        "participacao": 0.4071766215543459
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 2973834,
+          "participacao": 0.4071766215543459
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 2504690,
+          "participacao": 0.34294154019388934
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 768052,
+          "participacao": 0.10516149137378163
+        }
+      ],
+      "cafe": null,
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.5301099496924114
+    },
+    {
+      "mesorregiaoId": 5004,
+      "mesorregiao": "Sudoeste de Mato Grosso do Sul",
+      "ufs": [
+        "MS"
+      ],
+      "qtdMunicipios": 38,
+      "valorProducaoTotalMilReais": 21177041,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 11013960,
+        "participacao": 0.5200896574738653
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 11013960,
+          "participacao": 0.5200896574738653
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 5134332,
+          "participacao": 0.2424480360594287
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 4072195,
+          "participacao": 0.1922929175988279
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 1607,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7860323054083138
+    },
+    {
+      "mesorregiaoId": 5101,
+      "mesorregiao": "Norte Mato-grossense",
+      "ufs": [
+        "MT"
+      ],
+      "qtdMunicipios": 55,
+      "valorProducaoTotalMilReais": 77049252,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 38769597,
+        "participacao": 0.503179407893538
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 38769597,
+          "participacao": 0.503179407893538
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 19596684,
+          "participacao": 0.25433970468655553
+        },
+        {
+          "produto": "Algodão herbáceo (em caroço)",
+          "valorMilReais": 15882066,
+          "participacao": 0.20612874995853303
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 37,
+        "canephoraMilReais": 204740,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.8285377784640935
+    },
+    {
+      "mesorregiaoId": 5102,
+      "mesorregiao": "Nordeste Mato-grossense",
+      "ufs": [
+        "MT"
+      ],
+      "qtdMunicipios": 25,
+      "valorProducaoTotalMilReais": 20286650,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 12840875,
+        "participacao": 0.6329716833484089
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 12840875,
+          "participacao": 0.6329716833484089
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 5075741,
+          "participacao": 0.250201043543414
+        },
+        {
+          "produto": "Algodão herbáceo (em caroço)",
+          "valorMilReais": 2211168,
+          "participacao": 0.10899621179445595
+        }
+      ],
+      "cafe": null,
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7497028923161406
+    },
+    {
+      "mesorregiaoId": 5103,
+      "mesorregiao": "Sudoeste Mato-grossense",
+      "ufs": [
+        "MT"
+      ],
+      "qtdMunicipios": 22,
+      "valorProducaoTotalMilReais": 3901160,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 1757740,
+        "participacao": 0.4505685488418829
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1757740,
+          "participacao": 0.4505685488418829
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 1313731,
+          "participacao": 0.3367539398537871
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 303451,
+          "participacao": 0.07778481272236976
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 2978,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.38735769698625566
+    },
+    {
+      "mesorregiaoId": 5104,
+      "mesorregiao": "Centro-Sul Mato-grossense",
+      "ufs": [
+        "MT"
+      ],
+      "qtdMunicipios": 17,
+      "valorProducaoTotalMilReais": 2023707,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 1238414,
+        "participacao": 0.611953212594511
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1238414,
+          "participacao": 0.611953212594511
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 374875,
+          "participacao": 0.18524173706964497
+        },
+        {
+          "produto": "Algodão herbáceo (em caroço)",
+          "valorMilReais": 251479,
+          "participacao": 0.12426650695975257
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 0,
+        "canephoraMilReais": 17,
+        "variedadePredominante": "canephora"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.36010266313261524
+    },
+    {
+      "mesorregiaoId": 5105,
+      "mesorregiao": "Sudeste Mato-grossense",
+      "ufs": [
+        "MT"
+      ],
+      "qtdMunicipios": 22,
+      "valorProducaoTotalMilReais": 17508465,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 9240591,
+        "participacao": 0.5277784774393415
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 9240591,
+          "participacao": 0.5277784774393415
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 3866497,
+          "participacao": 0.22083586425194898
+        },
+        {
+          "produto": "Algodão herbáceo (em caroço)",
+          "valorMilReais": 3841285,
+          "participacao": 0.21939587508099653
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 322,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7894589137375425
+    },
+    {
+      "mesorregiaoId": 5201,
+      "mesorregiao": "Noroeste Goiano",
+      "ufs": [
+        "GO"
+      ],
+      "qtdMunicipios": 23,
+      "valorProducaoTotalMilReais": 2511373,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 1966691,
+        "participacao": 0.7831138584352065
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1966691,
+          "participacao": 0.7831138584352065
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 163560,
+          "participacao": 0.06512772097175529
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 137448,
+          "participacao": 0.05473022127736501
+        }
+      ],
+      "cafe": null,
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.16208865870576605
+    },
+    {
+      "mesorregiaoId": 5202,
+      "mesorregiao": "Norte Goiano",
+      "ufs": [
+        "GO"
+      ],
+      "qtdMunicipios": 27,
+      "valorProducaoTotalMilReais": 2379369,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 1504926,
+        "participacao": 0.6324895381926889
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1504926,
+          "participacao": 0.6324895381926889
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 187587,
+          "participacao": 0.07883896949149123
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 159405,
+          "participacao": 0.06699465278399441
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 26864,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "indeterminado",
+      "dominanciaMotivo": "vegetal e animal entre 40% e 60% — mesorregião mista",
+      "participacaoVegetalCenso2017": 0.4335727774934256
+    },
+    {
+      "mesorregiaoId": 5203,
+      "mesorregiao": "Centro Goiano",
+      "ufs": [
+        "GO"
+      ],
+      "qtdMunicipios": 82,
+      "valorProducaoTotalMilReais": 5285318,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 1901603,
+        "participacao": 0.3597897042335012
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 1901603,
+          "participacao": 0.3597897042335012
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 1542337,
+          "participacao": 0.29181536475194114
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 525719,
+          "participacao": 0.09946780874868835
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 6537,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "pecuaria",
+      "dominanciaMotivo": "valor animal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.3505083033284384
+    },
+    {
+      "mesorregiaoId": 5204,
+      "mesorregiao": "Leste Goiano",
+      "ufs": [
+        "GO"
+      ],
+      "qtdMunicipios": 32,
+      "valorProducaoTotalMilReais": 10386234,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 4666084,
+        "participacao": 0.4492565832812933
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 4666084,
+          "participacao": 0.4492565832812933
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 1430378,
+          "participacao": 0.1377186379586672
+        },
+        {
+          "produto": "Batata-inglesa",
+          "valorMilReais": 751143,
+          "participacao": 0.0723210164531244
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 209848,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7128761930498474
+    },
+    {
+      "mesorregiaoId": 5205,
+      "mesorregiao": "Sul Goiano",
+      "ufs": [
+        "GO"
+      ],
+      "qtdMunicipios": 82,
+      "valorProducaoTotalMilReais": 39914679,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 20040610,
+        "participacao": 0.5020862124432969
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 20040610,
+          "participacao": 0.5020862124432969
+        },
+        {
+          "produto": "Cana-de-açúcar",
+          "valorMilReais": 9096793,
+          "participacao": 0.22790595409773934
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 7552692,
+          "participacao": 0.1892209129378192
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 83930,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7312921925894732
+    },
+    {
+      "mesorregiaoId": 5301,
+      "mesorregiao": "Distrito Federal",
+      "ufs": [
+        "DF"
+      ],
+      "qtdMunicipios": 1,
+      "valorProducaoTotalMilReais": 1618015,
+      "produtoLider": {
+        "produto": "Soja (em grão)",
+        "valorMilReais": 576554,
+        "participacao": 0.35633415017784137
+      },
+      "top3": [
+        {
+          "produto": "Soja (em grão)",
+          "valorMilReais": 576554,
+          "participacao": 0.35633415017784137
+        },
+        {
+          "produto": "Milho (em grão)",
+          "valorMilReais": 250740,
+          "participacao": 0.154967660992018
+        },
+        {
+          "produto": "Feijão (em grão)",
+          "valorMilReais": 215647,
+          "participacao": 0.13327873969029955
+        }
+      ],
+      "cafe": {
+        "arabicaMilReais": 38430,
+        "canephoraMilReais": 0,
+        "variedadePredominante": "arabica"
+      },
+      "dominancia": "lavoura",
+      "dominanciaMotivo": "valor vegetal ≥ 60%",
+      "participacaoVegetalCenso2017": 0.7029847000829751
+    }
+  ]
+}

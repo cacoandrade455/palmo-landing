@@ -39,9 +39,9 @@
       "updatedAt": "2026-07"
     },
     "kg_manga": {
-      "value": 0.55,
+      "value": 1.30,
       "unit": "R$/kg (médio, muito volátil)",
-      "source": "Embrapa Semiárido / CEPEA hortifruti",
+      "source": "CEPEA hortifruti / Embrapa Semiárido (Vale do São Francisco)",
       "updatedAt": "2026-07"
     },
     "credito_carbono": {

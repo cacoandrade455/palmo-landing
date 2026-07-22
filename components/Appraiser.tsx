@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
@@ -20,6 +20,9 @@ import {
   type Recommendation,
 } from "@/lib/land-recommender";
 import { RecommenderRanking } from "@/components/RecommenderRanking";
+import { RegionalPortrait } from "@/components/RegionalPortrait";
+import type { RegiaoRetrato } from "@/lib/regioes-agricolas";
+import { resolverRetrato, retratoEstatico } from "@/lib/retrato-regional";
 import {
   compareUses,
   estimateLease,
@@ -173,6 +176,12 @@ export function Appraiser() {
   const [recResult, setRecResult] = useState<
     (RecommendResult & { hectares?: number; water: boolean }) | null
   >(null);
+  // Retrato estratégico da região (acima do ranking). Resolvido de forma
+  // otimista: primeiro o estático (instantâneo, nunca trava), depois a API do
+  // IBGE refina se responder a tempo. `retratoSeq` descarta respostas de uma
+  // consulta anterior que chegarem fora de ordem.
+  const [retrato, setRetrato] = useState<RegiaoRetrato | null>(null);
+  const retratoSeq = useRef(0);
   const [query, setQuery] = useState<Query | null>(null);
   const [purposeSel, setPurposeSel] = useState("");
   const [cropSel, setCropSel] = useState("");
@@ -257,6 +266,8 @@ export function Appraiser() {
     const municipality = recResult?.municipality ?? muniSel;
     const hectares = recResult?.hectares;
     setRecResult(null);
+    retratoSeq.current++;
+    setRetrato(null);
     setUfSel(uf);
     setMuniSel(municipality);
     setPurposeSel(rec.purpose);
@@ -301,6 +312,14 @@ export function Appraiser() {
       setQuery(null);
       setEstimate(null);
       setRecResult({ ...res, hectares, water: hasWater });
+      // Retrato regional: mostra já o que o mapa estático souber (ou nada) e
+      // deixa a API do IBGE refinar em segundo plano. Falha/timeout da API não
+      // afeta a tela — o ranking abaixo é renderizado do mesmo jeito.
+      const seq = ++retratoSeq.current;
+      setRetrato(retratoEstatico(uf, municipality));
+      void resolverRetrato(uf, municipality).then((r) => {
+        if (retratoSeq.current === seq) setRetrato(r);
+      });
       return;
     }
 
@@ -314,6 +333,8 @@ export function Appraiser() {
     };
     if (!q.uf || !q.purpose || !q.hectares || q.hectares <= 0) return;
     setRecResult(null);
+    retratoSeq.current++;
+    setRetrato(null);
     setQuery(q);
     setEstimate(estimateLease(q.purpose, q.uf, q.crop || undefined));
   }
@@ -602,6 +623,13 @@ export function Appraiser() {
 
         {recResult && (
           <div className="mt-8">
+            {/* Retrato da região primeiro (contexto), ranking depois. Sem
+                retrato resolvido, só o ranking — exatamente como antes. */}
+            {retrato && (
+              <div className="mb-6">
+                <RegionalPortrait retrato={retrato} />
+              </div>
+            )}
             <RecommenderRanking result={recResult} onCalcSelect={goToCalc} />
           </div>
         )}

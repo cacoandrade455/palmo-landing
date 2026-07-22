@@ -32,6 +32,7 @@ import { estimateFromVTN } from "@/lib/vtn";
 import { pevsPriceRef, formatKg } from "@/lib/pevs";
 import { stateAdvantageFor } from "@/lib/state-advantage";
 import { pricesUpdatedLabel } from "@/lib/prices";
+import { sortOptionsByLabel } from "@/lib/sort-options";
 
 type Query = {
   uf: string;
@@ -662,7 +663,7 @@ export function Appraiser() {
                 <option value="" disabled>
                   {a.purposePlaceholder}
                 </option>
-                {t.waitlist.purposeOptions.map((opt) => (
+                {sortOptionsByLabel(t.waitlist.purposeOptions).map((opt) => (
                   <option key={opt.value} value={opt.value}>
                     {opt.label}
                   </option>
@@ -684,7 +685,7 @@ export function Appraiser() {
                 className={inputCls}
               >
                 <option value="">{a.cropPlaceholder}</option>
-                {a.crops[purposeSel].map((c) => (
+                {sortOptionsByLabel(a.crops[purposeSel]).map((c) => (
                   <option key={c.value} value={c.value}>
                     {c.label}
                   </option>
@@ -706,7 +707,7 @@ export function Appraiser() {
                 className={inputCls}
               >
                 <option value="">{a.variantPlaceholder}</option>
-                {(a.cropVariants[cropSel] ?? []).map((v) => (
+                {sortOptionsByLabel(a.cropVariants[cropSel] ?? []).map((v) => (
                   <option key={v.value} value={v.value}>
                     {v.label}
                   </option>

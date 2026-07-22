@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import { CheckCircle2 } from "lucide-react";
 import { submitWaitlist, type WaitlistResult } from "@/app/actions";
 import { useLanguage, type AppLang } from "@/lib/language-context";
+import { sortOptionsByLabel } from "@/lib/sort-options";
 
 const initialState: WaitlistResult | null = null;
 
@@ -645,7 +646,7 @@ export function Waitlist() {
                 <option value="" disabled>
                   {t.waitlist.purposePlaceholder}
                 </option>
-                {t.waitlist.purposeOptions.map((o) => (
+                {sortOptionsByLabel(t.waitlist.purposeOptions).map((o) => (
                   <option key={o.value} value={o.value}>
                     {o.label}
                   </option>

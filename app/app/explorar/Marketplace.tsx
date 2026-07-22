@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CheckCircle2, Droplet, Image as ImageIcon, MapPin, Search } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { UFS } from "@/lib/appraisal-data";
+import { sortOptionsByLabel } from "@/lib/sort-options";
 import { browseListings, type BrowseListing } from "./actions";
 
 const inputCls =
@@ -217,7 +218,7 @@ export function Marketplace() {
               className={`mt-1.5 ${inputCls}`}
             >
               <option value="">{label.allF}</option>
-              {t.waitlist.purposeOptions.map((o) => (
+              {sortOptionsByLabel(t.waitlist.purposeOptions).map((o) => (
                 <option key={o.value} value={o.value}>
                   {o.label}
                 </option>

@@ -137,23 +137,28 @@ const REF_HIGH = 0.06;
  *   southern Bahia, jul/2026); range widened for productivity variation.
  * - cacau/BA: 60–150 arrobas/ha on productive farms × ~R$380/@ (spot,
  *   jul/2026) = R$22.8k–57k/ha gross (grower reference, southern Bahia).
- * - mamao: IBGE PAM 2023/24 — rendimento médio nacional R$92,5 mil/ha;
- *   ES lidera com R$184,6 mil/ha; CE 70 t/ha, ES 50–59 t/ha (Incaper/CNA).
+ * - mamao: IBGE PAM 2024 — rendimento médio nacional R$77,6 mil/ha
+ *   (41,5 t/ha); ES lidera em volume, R$119,4 mil/ha (59,1 t/ha); CE tem o
+ *   maior R$/ha, R$125,5 mil (71,3 t/ha); BA R$46,7 mil/ha (35,9 t/ha);
+ *   RN é o 4º produtor, R$65,0 mil/ha (39,3 t/ha). Incaper/CNA no ES.
  *   CNA Campo Futuro rodou painéis de mamão em Itamaraju/Prado-BA (mar/2026).
- * - maracuja: IBGE PAM 2023/24 — rendimento médio nacional R$52,2 mil/ha
- *   (15,5 t/ha × ~R$3,4/kg); BA maior produtora (36%) com ~11 t/ha;
- *   CE ~22 t/ha (Embrapa/IBGE).
+ * - maracuja: IBGE PAM 2024 — rendimento médio nacional R$54,3 mil/ha
+ *   (15,6 t/ha); BA maior produtora (36% da produção) com 13,5 t/ha;
+ *   CE 24,2 t/ha e R$103,9 mil/ha (Embrapa/IBGE).
  * - coco: coqueiro-anão irrigado 20–40 mil frutos/ha (BNB/ETENE 2021,
  *   Embrapa, CNA) × R$0,60–1,40/fruto (ETENE; APROCOCO 2024+).
  * - acai: terra firme plantado/irrigado 8–13 t/ha (Embrapa/Sedap-PA,
- *   cv. BRS Pai d'Égua) × ~R$3,6 mil/t (IBGE 2022: R$7,0 bi / 1,95 mi t).
+ *   cv. BRS Pai d'Égua) × ~R$4,5 mil/t (IBGE PAM 2024: R$7,77 bi /
+ *   1,74 mi t ≈ R$4,46/kg; média PA 6,5 t/ha, R$29,9 mil/ha).
  *   Várzea manejada (~4–5 t/ha) é mercado extrativista distinto.
- * - goiaba: rendimento médio nacional ~R$49 mil/ha, ~26 t/ha; PR lidera
- *   com R$113 mil/ha (IBGE 2024 / Embrapa).
- * - abacate: ~17 t/ha e ~R$44 mil/ha médio; SP+MG = 68% do faturamento
- *   (IBGE 2022); avocado de exportação no topo.
- * - maca: SC R$72 mil/ha e 36 t/ha; PR R$73 mil/ha; RS R$45 mil/ha
- *   (IBGE 2022/23); São Joaquim/SC = 42% da produção nacional.
+ * - goiaba: rendimento médio nacional ~R$60,3 mil/ha, ~24,2 t/ha; PR tem o
+ *   maior R$/ha, R$106,2 mil (30,2 t/ha) e PE é a maior em valor
+ *   (IBGE PAM 2024 / Embrapa).
+ * - abacate: ~16,9 t/ha e ~R$45,7 mil/ha médio; SP+MG = 61% do faturamento
+ *   (IBGE PAM 2024); avocado de exportação no topo.
+ * - maca: SC R$99,0 mil/ha e 29,0 t/ha; PR R$109,9 mil/ha; RS R$90,9 mil/ha
+ *   (IBGE PAM 2024); São Joaquim/SC = 25% da produção e 27% da área
+ *   nacional; SC+RS+PR = 98% do valor.
  * - caju: castanha em casca R$5,50/kg ao produtor no CE (CONAB mar/2026);
  *   cajueiral tradicional 300–500 kg/ha; clonal adensado até 1.606 kg/ha
  *   (Embrapa). CE = 55,3% da produção nacional; PI 23% (CONAB 2026).
@@ -223,14 +228,16 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
   uva: {
     // uva de mesa irrigada (Vale do São Francisco / Nordeste): alta receita, alto custo
     BA: {
-      revMin: 40000,
-      revMax: 90000,
-      sourceNote: "viticultura de mesa irrigada (Vale do São Francisco, mercado 2026)",
+      revMin: 120000,
+      revMax: 280000,
+      sourceNote:
+        "viticultura de mesa irrigada do Vale do São Francisco (IBGE PAM 2024: BA 31,8 t/ha e R$270,7 mil/ha)",
     },
     PE: {
-      revMin: 40000,
-      revMax: 90000,
-      sourceNote: "viticultura de mesa irrigada (Vale do São Francisco, mercado 2026)",
+      revMin: 120000,
+      revMax: 280000,
+      sourceNote:
+        "viticultura de mesa irrigada do Vale do São Francisco (IBGE PAM 2024: PE 49,8 t/ha e R$284,0 mil/ha)",
     },
     default: {
       revMin: 30000,
@@ -240,49 +247,57 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
   },
   mamao: {
     // mamoicultura formada (ciclo ~2 anos): rendimento médio nacional
-    // R$92,5 mil/ha; ES lidera com R$184,6 mil/ha (IBGE PAM 2023/24)
+    // R$77,6 mil/ha (41,5 t/ha); ES lidera em volume e CE em R$/ha (PAM 2024)
     ES: {
       revMin: 60000,
       revMax: 130000,
-      sourceNote: "mamoicultura ES (IBGE PAM 2023/24: rendimento médio R$185 mil/ha; Incaper)",
+      sourceNote:
+        "mamoicultura ES (IBGE PAM 2024: 59,1 t/ha e R$119,4 mil/ha; Incaper)",
     },
     BA: {
-      revMin: 50000,
-      revMax: 110000,
-      sourceNote: "mamoicultura BA (IBGE PAM 2023/24; painéis CNA Itamaraju/Prado 2026)",
+      revMin: 35000,
+      revMax: 80000,
+      sourceNote:
+        "mamoicultura BA (IBGE PAM 2024: 35,9 t/ha e R$46,7 mil/ha; painéis CNA Itamaraju/Prado 2026)",
     },
     CE: {
-      revMin: 50000,
-      revMax: 110000,
-      sourceNote: "mamoicultura irrigada (IBGE PAM 2023/24: CE lidera produtividade, 70 t/ha)",
+      revMin: 70000,
+      revMax: 140000,
+      sourceNote:
+        "mamoicultura irrigada (IBGE PAM 2024: CE lidera produtividade, 71,3 t/ha e R$125,5 mil/ha)",
     },
     RN: {
-      revMin: 50000,
-      revMax: 110000,
-      sourceNote: "mamoicultura irrigada (IBGE PAM 2023/24: RN 3º produtor, ~48 t/ha)",
+      revMin: 40000,
+      revMax: 90000,
+      sourceNote:
+        "mamoicultura irrigada (IBGE PAM 2024: RN 4º produtor, 39,3 t/ha e R$65,0 mil/ha)",
     },
     default: {
       revMin: 40000,
       revMax: 100000,
-      sourceNote: "mamoicultura formada (IBGE PAM 2023/24: média nacional R$92,5 mil/ha)",
+      sourceNote:
+        "mamoicultura formada (IBGE PAM 2024: média nacional R$77,6 mil/ha, 41,5 t/ha)",
     },
   },
   maracuja: {
-    // ciclo de ~1,5–2 anos; rendimento médio nacional R$52,2 mil/ha (IBGE)
+    // ciclo de ~1,5–2 anos; rendimento médio nacional R$54,3 mil/ha (IBGE)
     BA: {
       revMin: 35000,
       revMax: 60000,
-      sourceNote: "maior produtora nacional, ~11 t/ha (IBGE PAM 2023/24; polos Livramento/Dom Basílio)",
+      sourceNote:
+        "maior produtora nacional (36% da produção), 13,5 t/ha (IBGE PAM 2024; polos Livramento/Dom Basílio)",
     },
     CE: {
       revMin: 45000,
       revMax: 80000,
-      sourceNote: "maracujá irrigado CE, ~22 t/ha (IBGE PAM 2023/24; Embrapa)",
+      sourceNote:
+        "maracujá irrigado CE, 24,2 t/ha e R$103,9 mil/ha (IBGE PAM 2024; Embrapa)",
     },
     default: {
       revMin: 30000,
       revMax: 70000,
-      sourceNote: "maracujá formado (IBGE PAM 2023/24: média nacional R$52 mil/ha)",
+      sourceNote:
+        "maracujá formado (IBGE PAM 2024: média nacional R$54,3 mil/ha, 15,6 t/ha)",
     },
   },
   coco: (() => {
@@ -320,51 +335,57 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
     PR: {
       revMin: 80000,
       revMax: 130000,
-      sourceNote: "goiabicultura PR: R$113 mil/ha de rendimento médio (IBGE 2024)",
+      sourceNote:
+        "goiabicultura PR: R$106,2 mil/ha de rendimento médio, 30,2 t/ha (IBGE PAM 2024)",
     },
     default: {
       revMin: 35000,
       revMax: 90000,
-      sourceNote: "goiabicultura: média nacional ~R$49 mil/ha, ~26 t/ha (IBGE 2024/Embrapa)",
+      sourceNote:
+        "goiabicultura: média nacional ~R$60,3 mil/ha, ~24,2 t/ha; PE é a maior produtora em valor (IBGE PAM 2024/Embrapa)",
     },
   },
   abacate: {
     SP: {
       revMin: 40000,
       revMax: 80000,
-      sourceNote: "abacaticultura SP: ~17 t/ha, ~R$44 mil/ha médio (IBGE 2022); avocado de exportação no topo",
+      sourceNote:
+        "abacaticultura SP: ~16,9 t/ha, ~R$45,7 mil/ha médio (IBGE PAM 2024); avocado de exportação no topo",
     },
     MG: {
       revMin: 40000,
       revMax: 80000,
-      sourceNote: "abacaticultura MG: SP+MG = 68% do faturamento nacional (IBGE 2022)",
+      sourceNote:
+        "abacaticultura MG: SP+MG = 61% do faturamento nacional (IBGE PAM 2024)",
     },
     default: {
       revMin: 30000,
       revMax: 70000,
-      sourceNote: "abacaticultura: ~17 t/ha, ~R$44 mil/ha médio (IBGE 2022)",
+      sourceNote: "abacaticultura: ~16,9 t/ha, ~R$45,7 mil/ha médio (IBGE PAM 2024)",
     },
   },
   maca: {
     SC: {
-      revMin: 55000,
-      revMax: 95000,
-      sourceNote: "pomares de SC: R$72 mil/ha médio, 36 t/ha (IBGE 2022/23); São Joaquim = 42% do país",
+      revMin: 70000,
+      revMax: 120000,
+      sourceNote:
+        "pomares de SC: R$99,0 mil/ha médio, 29,0 t/ha (IBGE PAM 2024); São Joaquim = 25% da produção nacional",
     },
     PR: {
-      revMin: 55000,
-      revMax: 95000,
-      sourceNote: "pomares do PR: R$73 mil/ha médio (IBGE 2022/23)",
+      revMin: 75000,
+      revMax: 130000,
+      sourceNote: "pomares do PR: R$109,9 mil/ha médio, 28,0 t/ha (IBGE PAM 2024)",
     },
     RS: {
-      revMin: 35000,
-      revMax: 65000,
-      sourceNote: "pomares do RS: R$45 mil/ha médio (IBGE 2022/23)",
+      revMin: 65000,
+      revMax: 115000,
+      sourceNote: "pomares do RS: R$90,9 mil/ha médio, 31,8 t/ha (IBGE PAM 2024)",
     },
     default: {
       revMin: 30000,
       revMax: 80000,
-      sourceNote: "macieiras do Sul (IBGE 2022/23) — SC/RS/PR fazem 98% da produção",
+      sourceNote:
+        "macieiras do Sul (IBGE PAM 2024) — SC/RS/PR fazem 98% do valor da produção",
     },
   },
   caju: (() => {

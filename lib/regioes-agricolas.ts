@@ -93,12 +93,12 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "mg-sul-de-minas",
     nome: "Sul de Minas",
     retratoPt:
-      "Você está no Sul de Minas — a maior região cafeeira do Brasil, com 30% do café nacional e 55% do mineiro. Predominam pequenas e médias propriedades (95% com menos de 50 ha) de café arábica de qualidade. A sub-região Mantiqueira de Minas é celeiro de cafés premiados.",
+      "Você está no Sul de Minas — a maior região cafeeira do Brasil, com 30% do café arábica nacional e 42% do mineiro. Predominam pequenas e médias propriedades (95% com menos de 50 ha) de café arábica de qualidade. A sub-região Mantiqueira de Minas é celeiro de cafés premiados.",
     retratoEn:
-      "You're in South Minas — Brazil's largest coffee region, with 30% of national and 55% of state coffee. Small and mid-sized farms dominate (95% under 50 ha) growing quality arabica. The Mantiqueira de Minas sub-region yields award-winning coffees.",
+      "You're in South Minas — Brazil's largest coffee region, with 30% of national arabica and 42% of the state's. Small and mid-sized farms dominate (95% under 50 ha) growing quality arabica. The Mantiqueira de Minas sub-region yields award-winning coffees.",
     vocacoes: ["lavoura_permanente", "cafe"],
     agua: "humid",
-    fonte: "IMA / CECAFÉ / IBGE",
+    fonte: "IBGE PAM 2024 / IMA",
   },
   "mg-cerrado-mineiro": {
     key: "mg-cerrado-mineiro",
@@ -109,7 +109,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "You're in the Cerrado Mineiro — flat plateaus allowing mechanized harvest and irrigation, Brazil's first coffee Geographical Indication, with full-bodied arabica. The Triângulo adds grains, sugarcane and the zebu cattle of Uberaba/Uberlândia.",
     vocacoes: ["lavoura_permanente", "cafe", "graos"],
     agua: "irrigado",
-    fonte: "IMA / CONAB / IBGE",
+    fonte: "INPI (IG) / IMA / CONAB / IBGE",
   },
   "mg-matas-de-minas": {
     key: "mg-matas-de-minas",
@@ -128,12 +128,12 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "sp-ribeirao-cana",
     nome: "Nordeste Paulista (Ribeirão Preto)",
     retratoPt:
-      "Você está no coração canavieiro de São Paulo — Ribeirão Preto e região concentram a maior produção de cana e etanol do país (SP faz cerca de metade da cana nacional). Terra de usina, com forte cadeia sucroenergética.",
+      "Você está no coração canavieiro de São Paulo — Ribeirão Preto e região concentram a maior produção de cana e etanol do país (SP faz mais da metade da cana nacional, 55%). Terra de usina, com forte cadeia sucroenergética.",
     retratoEn:
-      "You're in São Paulo's sugarcane heartland — Ribeirão Preto and region hold Brazil's largest cane and ethanol output (SP grows about half the national crop). Mill country, with a strong sugar-energy chain.",
+      "You're in São Paulo's sugarcane heartland — Ribeirão Preto and region hold Brazil's largest cane and ethanol output (SP grows more than half the national crop, 55%). Mill country, with a strong sugar-energy chain.",
     vocacoes: ["cana"],
     agua: "mista",
-    fonte: "CONAB / UNICA",
+    fonte: "IBGE PAM 2024 / CONAB / UNICA",
   },
   "sp-citricola": {
     key: "sp-citricola",
@@ -152,12 +152,12 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "mt-medio-norte",
     nome: "Médio-Norte de Mato Grosso",
     retratoPt:
-      "Você está no Médio-Norte de Mato Grosso — Sorriso, o maior produtor agrícola do Brasil (R$3,9 bi), Sinop e Lucas do Rio Verde. Soja e milho safrinha em larga escala com agricultura de precisão. MT responde por 28% da soja nacional.",
+      "Você está no Médio-Norte de Mato Grosso — Sorriso, o maior produtor agrícola do Brasil (R$7,2 bi), Sinop e Lucas do Rio Verde. Soja e milho safrinha em larga escala com agricultura de precisão. MT responde por 27% da soja nacional.",
     retratoEn:
-      "You're in Mid-Northern Mato Grosso — Sorriso, Brazil's largest agricultural producer (R$3.9bn), Sinop and Lucas do Rio Verde. Large-scale soybeans and second-crop maize with precision farming. MT accounts for 28% of national soy.",
+      "You're in Mid-Northern Mato Grosso — Sorriso, Brazil's largest agricultural producer (R$7.2bn), Sinop and Lucas do Rio Verde. Large-scale soybeans and second-crop maize with precision farming. MT accounts for 27% of national soy.",
     vocacoes: ["graos"],
     agua: "mista",
-    fonte: "CONAB / IBGE PAM / MAPA",
+    fonte: "IBGE PAM 2024 / CONAB / MAPA",
   },
   "mt-parecis": {
     key: "mt-parecis",
@@ -174,12 +174,12 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "go-sudoeste",
     nome: "Sudoeste de Goiás",
     retratoPt:
-      "Você está no Sudoeste Goiano — Rio Verde (2º maior produtor de soja do Brasil), Jataí e Mineiros. Grãos, pecuária intensiva e forte agroindústria cooperativa.",
+      "Você está no Sudoeste Goiano — Rio Verde (4º maior produtor de soja do Brasil), Jataí e Mineiros. Grãos, pecuária intensiva e forte agroindústria cooperativa.",
     retratoEn:
-      "You're in Southwestern Goiás — Rio Verde (Brazil's 2nd-largest soy producer), Jataí and Mineiros. Grains, intensive livestock and a strong cooperative agroindustry.",
+      "You're in Southwestern Goiás — Rio Verde (Brazil's 4th-largest soy producer), Jataí and Mineiros. Grains, intensive livestock and a strong cooperative agroindustry.",
     vocacoes: ["graos", "pecuaria_corte"],
     agua: "mista",
-    fonte: "IBGE PAM / CONAB",
+    fonte: "IBGE PAM 2024 / CONAB",
   },
 
   // ── SUL ──
@@ -187,9 +187,9 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "rs-serra-gaucha",
     nome: "Serra Gaúcha",
     retratoPt:
-      "Você está na Serra Gaúcha — Caxias do Sul, Bento Gonçalves e Farroupilha, herança da colonização italiana. Faz 90% do vinho, 85% do espumante e 90% do suco de uva do Brasil. Terra de uva e vinho por excelência.",
+      "Você está na Serra Gaúcha — Caxias do Sul, Bento Gonçalves e Farroupilha, herança da colonização italiana. O Rio Grande do Sul faz 90% do vinho, 85% do espumante e 90% do suco de uva do Brasil, e a Serra é o núcleo dessa produção. Terra de uva e vinho por excelência.",
     retratoEn:
-      "You're in the Serra Gaúcha — Caxias do Sul, Bento Gonçalves and Farroupilha, an Italian-immigrant legacy. It makes 90% of Brazil's wine, 85% of its sparkling wine and 90% of its grape juice. Grape and wine country par excellence.",
+      "You're in the Serra Gaúcha — Caxias do Sul, Bento Gonçalves and Farroupilha, an Italian-immigrant legacy. Rio Grande do Sul makes 90% of Brazil's wine, 85% of its sparkling wine and 90% of its grape juice, and the Serra is the core of that output. Grape and wine country par excellence.",
     vocacoes: ["fruticultura", "uva"],
     agua: "humid",
     fonte: "Ibravin / IBGE",
@@ -198,23 +198,23 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "rs-campos-cima-serra",
     nome: "Campos de Cima da Serra (Vacaria)",
     retratoPt:
-      "Você está nos Campos de Cima da Serra — Vacaria, Bom Jesus e Muitos Capões, o grande polo de maçã do Rio Grande do Sul (88% da maçã gaúcha, 37% da nacional). Clima frio ideal para a fruticultura de clima temperado.",
+      "Você está nos Campos de Cima da Serra — Vacaria, Bom Jesus e Muitos Capões, o grande polo de maçã do Rio Grande do Sul (84% da maçã gaúcha, 42% da nacional). Clima frio ideal para a fruticultura de clima temperado.",
     retratoEn:
-      "You're in the Campos de Cima da Serra — Vacaria, Bom Jesus and Muitos Capões, Rio Grande do Sul's main apple hub (88% of state apples, 37% of national). Cold climate ideal for temperate fruit.",
+      "You're in the Campos de Cima da Serra — Vacaria, Bom Jesus and Muitos Capões, Rio Grande do Sul's main apple hub (84% of state apples, 42% of national). Cold climate ideal for temperate fruit.",
     vocacoes: ["fruticultura", "maca"],
     agua: "humid",
-    fonte: "Atlas RS / IBGE PAM",
+    fonte: "IBGE PAM 2024",
   },
   "sc-planalto-serrano": {
     key: "sc-planalto-serrano",
     nome: "Planalto Serrano Catarinense (São Joaquim)",
     retratoPt:
-      "Você está no Planalto Serrano de Santa Catarina — São Joaquim, entre 900 e 1400m de altitude, responde por 35% do plantio nacional de maçã e produz vinhos de altitude premium. O clima mais frio do Brasil dá à fruta e à uva um ciclo longo e nobre.",
+      "Você está no Planalto Serrano de Santa Catarina — São Joaquim, entre 900 e 1400m de altitude, responde por 27% da área e 25% da produção nacional de maçã e produz vinhos de altitude premium. O clima mais frio do Brasil dá à fruta e à uva um ciclo longo e nobre.",
     retratoEn:
-      "You're in Santa Catarina's Highland Plateau — São Joaquim, at 900–1400m, grows 35% of Brazil's apple planting and produces premium high-altitude wines. Brazil's coldest climate gives fruit and grapes a long, refined cycle.",
+      "You're in Santa Catarina's Highland Plateau — São Joaquim, at 900–1400m, accounts for 27% of Brazil's apple area and 25% of its production, and makes premium high-altitude wines. Brazil's coldest climate gives fruit and grapes a long, refined cycle.",
     vocacoes: ["fruticultura", "maca", "uva"],
     agua: "humid",
-    fonte: "Epagri / IBGE / Ibravin",
+    fonte: "IBGE PAM 2024 / Epagri / Ibravin",
   },
   "rs-metade-sul-arroz": {
     key: "rs-metade-sul-arroz",
@@ -233,12 +233,12 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "rn-assu-mossoro",
     nome: "Assu-Mossoró / Chapada do Apodi (RN)",
     retratoPt:
-      "Você está no polo Assu-Mossoró, no Rio Grande do Norte — o maior produtor e exportador de melão do Brasil (RN faz 71,5% do melão nacional). Um aquífero sob a Chapada do Apodi garante a irrigação; também melancia, manga e mamão para exportação.",
+      "Você está no polo Assu-Mossoró, no Rio Grande do Norte — o maior produtor e exportador de melão do Brasil (RN faz 61,9% do melão nacional). Um aquífero sob a Chapada do Apodi garante a irrigação; também melancia, manga e mamão para exportação.",
     retratoEn:
-      "You're in the Assu-Mossoró hub of Rio Grande do Norte — Brazil's largest melon producer and exporter (RN grows 71.5% of national melon). An aquifer under the Apodi Plateau ensures irrigation; also watermelon, mango and papaya for export.",
+      "You're in the Assu-Mossoró hub of Rio Grande do Norte — Brazil's largest melon producer and exporter (RN grows 61.9% of national melon). An aquifer under the Apodi Plateau ensures irrigation; also watermelon, mango and papaya for export.",
     vocacoes: ["fruticultura", "manga"],
     agua: "irrigado",
-    fonte: "BNB/ETENE / IBGE",
+    fonte: "IBGE PAM 2024 / BNB-ETENE",
   },
   "ce-baixo-jaguaribe": {
     key: "ce-baixo-jaguaribe",
@@ -255,12 +255,12 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "ce-rn-sertao-caju",
     nome: "Sertão do Caju (CE/RN)",
     retratoPt:
-      "Você está no sertão do cajueiro — o Ceará tem 279 mil hectares e o Rio Grande do Norte 58 mil de caju de sequeiro, base da castanha. A carnaúba (renda em pé, como em Granja/CE) complementa a economia da caatinga.",
+      "Você está no sertão do cajueiro — o Ceará tem 283 mil hectares e o Rio Grande do Norte 62 mil de caju de sequeiro, base da castanha. A carnaúba (renda em pé, como em Granja/CE) complementa a economia da caatinga.",
     retratoEn:
-      "You're in cashew backlands — Ceará has 279,000 hectares and Rio Grande do Norte 58,000 of rainfed cashew, the base for cashew nuts. Carnauba wax (standing income, as in Granja/CE) rounds out the caatinga economy.",
+      "You're in cashew backlands — Ceará has 283,000 hectares and Rio Grande do Norte 62,000 of rainfed cashew, the base for cashew nuts. Carnauba wax (standing income, as in Granja/CE) rounds out the caatinga economy.",
     vocacoes: ["lavoura_permanente", "extrativismo"],
     agua: "dry",
-    fonte: "BNB / IBGE PEVS",
+    fonte: "IBGE PAM 2024 / IBGE PEVS / BNB",
   },
   "pe-zona-mata-cana": {
     key: "pe-zona-mata-cana",
@@ -450,6 +450,11 @@ export const MUNI_TO_REGIAO: Record<string, string> = {
   "LIMOEIRO DO NORTE/CE": "ce-baixo-jaguaribe",
   "GRANJA/CE": "ce-rn-sertao-caju",
   "PACAJUS/CE": "ce-rn-sertao-caju",
+  "IPOJUCA/PE": "pe-zona-mata-cana",
+  "ESCADA/PE": "pe-zona-mata-cana",
+  "RIO LARGO/AL": "pe-zona-mata-cana",
+  "CORURIPE/AL": "pe-zona-mata-cana",
+  "SANTA RITA/PB": "pe-zona-mata-cana",
   // Norte
   "TOME-ACU/PA": "pa-nordeste-acai",
   "IGARAPE-MIRI/PA": "pa-nordeste-acai",
@@ -457,6 +462,9 @@ export const MUNI_TO_REGIAO: Record<string, string> = {
   "CACOAL/RO": "ro-cafe-robusta",
   "BALSAS/MA": "matopiba-fronteira",
   "URUCUI/PI": "matopiba-fronteira",
+  "CAMPOS LINDOS/TO": "matopiba-fronteira",
+  "PORTO NACIONAL/TO": "matopiba-fronteira",
+  "LAGOA DA CONFUSAO/TO": "matopiba-fronteira",
 };
 
 /** Resolve o retrato: 1) região curada por município; 2) bioma; 3) null. */

@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# saída bruta dos scripts de ingestão (dado oficial rebaixável a qualquer
+# momento com `node scripts/ingest-*.mjs`; o app consome os .ts gerados)
+/scripts/out/

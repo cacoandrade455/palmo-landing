@@ -48,11 +48,14 @@ const MESO_TO_REGIAO: Record<string, string> = {
   "BA:METROPOLITANA DE SALVADOR": "ba-sul-recôncavo",
   "BA:NORDESTE BAIANO": "ba-sertao-nordeste",
   "BA:CENTRO NORTE BAIANO": "ba-centro-norte",
+  // PENDENTE DE VALIDAÇÃO FACTUAL (24/jul): retratos novos, PAM/PPM 2024.
+  "BA:CENTRO SUL BAIANO": "ba-centro-sul",
   // ── Minas Gerais (café) ──
   "MG:SUL/SUDOESTE DE MINAS": "mg-sul-de-minas",
   "MG:OESTE DE MINAS": "mg-sul-de-minas", // PAM 2024: café arábica 60,2%
   "MG:ZONA DA MATA": "mg-matas-de-minas",
   "MG:VALE DO RIO DOCE": "mg-matas-de-minas", // PAM 2024: café 84,1%
+  "MG:NORTE DE MINAS": "mg-norte-de-minas", // PAM 2024: banana 30,8%
   // MG:Triângulo removido do café: cana lidera (27,7%), café é 3º (19,6%) —
   // o retrato de Cerrado Mineiro superdimensionaria o café. Cai no bioma.
   // ── São Paulo (cana × citros) ──
@@ -73,6 +76,8 @@ const MESO_TO_REGIAO: Record<string, string> = {
   "TO:ORIENTAL DO TOCANTINS": "matopiba-fronteira",
   "TO:OCIDENTAL DO TOCANTINS": "matopiba-fronteira",
   // ── Sul ──
+  "RS:NOROESTE RIO-GRANDENSE": "rs-noroeste-graos", // PAM 2024: soja 71,8%
+  "PR:NORTE CENTRAL PARANAENSE": "pr-norte-central", // PAM 2024: soja 46,2%
   "RS:NORDESTE RIO-GRANDENSE": "rs-serra-gaucha",
   "RS:SUDOESTE RIO-GRANDENSE": "rs-metade-sul-arroz",
   "RS:SUDESTE RIO-GRANDENSE": "rs-metade-sul-arroz", // PAM 2024: arroz 46,1%

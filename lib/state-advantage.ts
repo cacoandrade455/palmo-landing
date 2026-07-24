@@ -7,13 +7,22 @@
  * - Soja: CONAB safra 2024/25 — MT maior volume (50,59 mi t); PR 21,48 mi t;
  *   BA maior rendimento entre grandes produtores (3.894 kg/ha, +23,7% vs média
  *   nacional); GO 4.122 kg/ha, produtividade recorde da série na 24/25.
- *   (Embrapa Soja / agrocontexto / CONAB)
- * - Grãos (geral): MT, PR, RS, GO = 67% da safra nacional (CNA/CONAB 2025).
+ *   RS é o 3º produtor nacional (2ª maior área, 7,1 mi ha) com 22,4 mi t
+ *   recordes na 25/26 (CONAB 25/26). MATOPIBA (12º lev. 24/25): TO 5,12 mi t,
+ *   MA 4,32 mi t, PI 3,96 mi t — a fronteira que mais cresce (+114% da soja
+ *   em dez safras, CONAB). (Embrapa Soja / agrocontexto / CONAB)
+ * - Grãos (geral): MT, PR, RS, GO = 67% da safra nacional (CNA/CONAB 2025);
+ *   no MATOPIBA, MA (8,79 mi t de grãos na 24/25), TO e PI somam >13 mi t só
+ *   de soja (CONAB 12º lev. 24/25).
  * - Milho: MT lidera; PR, GO, MS relevantes (IBGE/CONAB).
  * - Algodão: MT = 70,8% da produção nacional (CONAB 2025).
  * - Café: MG lidera arábica (24,8 mi sacas); ES lidera conilon (11,8 mi das
  *   15,1 mi sacas); SP 4,6 mi sacas, 100% arábica — Mogiana e Centro-Oeste
- *   paulista (CONAB, 1º levantamento 2025).
+ *   paulista (CONAB, 1º levantamento 2025). BA: 4ª produtora do país e líder
+ *   do NE — 3,68 mi sacas em 2025 (maior volume desde 2017), arábica no
+ *   Planalto (Vitória da Conquista, Chapada Diamantina) e conilon no
+ *   Sul/Extremo Sul, 2ª maior do país na variedade, com cerrado irrigado no
+ *   Oeste (CONAB, 2º levantamento 2025).
  * - Cana: SP domina (~50% nacional) (CONAB/UNICA).
  * - Laranja/citros: cinturão citrícola de SP + Triângulo/Sudoeste de MG é o
  *   maior polo de laranja para suco do mundo e fez ~80,9% da produção
@@ -48,6 +57,11 @@
  * - Goiaba: Nordeste = maior região produtora (47% do share); BA no top 5
  *   nacional (8%, 45 mil t); PE lidera no NE (70,4% da área do BNB); SP maior
  *   área (28%), PR maior produtividade (IBGE 2024 / BNB-ETENE).
+ * - Suínos: SC lidera o abate nacional com 28,2% em 2025; PR 21,2% e RS
+ *   17,9% — o Sul concentra 67% (IBGE, abate 2025). Oeste Catarinense é o
+ *   núcleo da integração.
+ * - Frango de corte: PR lidera o abate com 34,4% em 2025; SC 13,7% e RS
+ *   11,4% — Sul ~60% do abate nacional (IBGE, abate 2025).
  * - Ovinos: BA 23% do rebanho nacional (4,66 mi cabeças); PE 2º com 16,9%
  *   (3,52 mi), RS 3º (3,35 mi), CE 4º (2,55 mi); NE = 71,2% dos ovinos
  *   (IBGE PPM 2023).
@@ -82,11 +96,11 @@ export type StateAdvantage = {
 export const stateAdvantages: Record<string, StateAdvantage> = {
   // by purpose
   graos: {
-    ufs: ["MT", "PR", "RS", "GO"],
+    ufs: ["MT", "PR", "RS", "GO", "MA", "PI", "TO"],
     factPt:
-      "MT, PR, RS e GO concentram ~67% da safra nacional de grãos (CONAB/CNA).",
+      "MT, PR, RS e GO concentram ~67% da safra nacional de grãos; no MATOPIBA, a fronteira que mais cresce, TO, MA e PI colheram juntos mais de 13 mi t só de soja na 24/25 (CONAB/CNA).",
     factEn:
-      "MT, PR, RS and GO account for ~67% of Brazil's grain harvest (CONAB/CNA).",
+      "MT, PR, RS and GO account for ~67% of Brazil's grain harvest; in MATOPIBA, the fastest-growing frontier, TO, MA and PI together harvested over 13 M t of soybeans alone in 24/25 (CONAB/CNA).",
   },
   cana: {
     ufs: ["SP"],
@@ -95,11 +109,11 @@ export const stateAdvantages: Record<string, StateAdvantage> = {
   },
   // by specific crop
   soja: {
-    ufs: ["BA", "MT", "GO", "PR"],
+    ufs: ["BA", "MT", "GO", "PR", "RS", "MA", "PI", "TO"],
     factPt:
-      "MT é o maior produtor de soja em volume (50,6 mi t) e o PR colhe 21,5 mi t; BA e GO têm os maiores rendimentos — BA ~3.894 kg/ha (+24% vs a média) e GO ~4.122 kg/ha (CONAB 2024/25).",
+      "MT é o maior produtor de soja (50,6 mi t) e o PR o 2º (21,5 mi t); o RS é o 3º, com 22,4 mi t recordes na 25/26. BA e GO têm os maiores rendimentos (~3.900 e ~4.100 kg/ha) e a fronteira do MATOPIBA — TO (5,1 mi t), MA (4,3 mi t) e PI (4,0 mi t) — é a que mais cresce no país (CONAB 2024/25 e 25/26).",
     factEn:
-      "MT is the largest soybean producer by volume (50.6 M t) and PR harvests 21.5 M t; BA and GO have the highest yields — BA ~3,894 kg/ha (+24% vs average) and GO ~4,122 kg/ha (CONAB 2024/25).",
+      "MT is the largest soybean producer (50.6 M t) and PR is 2nd (21.5 M t); RS ranks 3rd, with a record 22.4 M t in 25/26. BA and GO have the highest yields (~3,900 and ~4,100 kg/ha) and the MATOPIBA frontier — TO (5.1 M t), MA (4.3 M t) and PI (4.0 M t) — is the country's fastest-growing (CONAB 2024/25 and 25/26).",
   },
   milho: {
     ufs: ["MT", "PR", "GO", "MS"],
@@ -112,11 +126,11 @@ export const stateAdvantages: Record<string, StateAdvantage> = {
     factEn: "MT accounts for ~70% of national cotton; BA is the 2nd hub (CONAB 2025).",
   },
   cafe: {
-    ufs: ["MG", "ES", "SP"],
+    ufs: ["MG", "ES", "SP", "BA"],
     factPt:
-      "MG lidera o café arábica (24,8 mi de sacas) e o ES lidera o conilon (11,8 mi); SP produz 4,6 mi de sacas, 100% arábica — Mogiana e Centro-Oeste paulista (CONAB 2025).",
+      "MG lidera o café arábica (24,8 mi de sacas) e o ES lidera o conilon (11,8 mi); SP produz 4,6 mi de sacas, 100% arábica. A BA é a 4ª produtora do país e a maior do Nordeste — 3,7 mi de sacas em 2025, com arábica no Planalto (Vitória da Conquista, Chapada Diamantina) e conilon no Sul, onde é a 2ª do país na variedade (CONAB 2025).",
     factEn:
-      "MG leads arabica coffee (24.8 M bags) and ES leads conilon (11.8 M); SP produces 4.6 M bags, 100% arabica — the Mogiana and West-Central São Paulo regions (CONAB 2025).",
+      "MG leads arabica coffee (24.8 M bags) and ES leads conilon (11.8 M); SP produces 4.6 M bags, 100% arabica. BA is Brazil's 4th-largest producer and the Northeast's biggest — 3.7 M bags in 2025, with arabica on the Planalto highlands (Vitória da Conquista, Chapada Diamantina) and conilon in the south, where it ranks 2nd nationally in the variety (CONAB 2025).",
   },
   citros: {
     ufs: ["SP", "MG"],
@@ -215,6 +229,20 @@ export const stateAdvantages: Record<string, StateAdvantage> = {
     ufs: ["BA", "PE", "PI", "CE"],
     factPt: "BA lidera a caprinocultura nacional (31% do rebanho); com PE e PI, o Nordeste concentra 96% dos caprinos do país (IBGE PPM 2023).",
     factEn: "BA leads Brazil's goat farming (31% of the herd); with PE and PI, the Northeast holds 96% of the country's goats (IBGE PPM 2023).",
+  },
+  suinos: {
+    ufs: ["SC", "PR", "RS"],
+    factPt:
+      "SC lidera o abate nacional de suínos (28,2% em 2025), seguida de PR (21,2%) e RS (17,9%) — o Sul concentra 67% do abate do país; o Oeste Catarinense é o coração da integração (IBGE 2025).",
+    factEn:
+      "SC leads Brazil's hog slaughter (28.2% in 2025), followed by PR (21.2%) and RS (17.9%) — the South holds 67% of the national total; western Santa Catarina is the heart of the integration system (IBGE 2025).",
+  },
+  frango_corte: {
+    ufs: ["PR", "SC", "RS"],
+    factPt:
+      "PR lidera o abate de frangos do país (34,4% em 2025); SC (13,7%) e RS (11,4%) completam o tripé do Sul, que responde por ~60% do abate nacional (IBGE 2025).",
+    factEn:
+      "PR leads Brazil's chicken slaughter (34.4% in 2025); SC (13.7%) and RS (11.4%) complete the Southern tripod, which accounts for ~60% of the national total (IBGE 2025).",
   },
   tilapia: {
     ufs: ["PR", "SP", "MG", "SC"],

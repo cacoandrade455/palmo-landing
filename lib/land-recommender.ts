@@ -27,6 +27,7 @@ import {
   formedCropLeaseRef,
 } from "./appraisal-data";
 import { stateAdvantages } from "./state-advantage";
+import { retratoPorMunicipio } from "./regioes-agricolas";
 import { content } from "./content";
 
 export type WaterFit = "needsIrrigation" | "rainfed_ok" | "neutral";
@@ -39,6 +40,12 @@ export type RecommendInput = {
   water: boolean;
   /** optional — only used by the UI for the total-per-area line and the CTA */
   hectares?: number;
+  /**
+   * Restrict the ranking to the municipality's CURATED micro-region vocations
+   * (lib/regioes-agricolas.ts). Default true. Pass false only where a broad
+   * UF-level fact index is wanted instead of a ranking.
+   */
+  scopeToRegion?: boolean;
 };
 
 export type Recommendation = {
@@ -348,6 +355,33 @@ function incomeFor(cropValue: string, purpose: string, uf: string): Income {
 }
 
 // ---------------------------------------------------------------------------
+// MICRO-REGION GATE. `stateAdvantages` only knows UFs, so on its own it will
+// happily offer a Bahia landowner every Bahian vocation at once — western-Bahia
+// cotton to a farmer in Irecê, São Francisco grapes to one in Ilhéus. The
+// curated portraits already carry the finer truth in their `vocacoes` field, so
+// we reuse it as a filter instead of inventing a second data source.
+//
+// Only CURATED regions filter (retratoPorMunicipio without a bioma hint returns
+// null when the municipality is not mapped). Unmapped municipalities keep the
+// previous UF-level behaviour — the degradation is deliberate and safe.
+// ---------------------------------------------------------------------------
+function regionVocations(uf: string, municipality: string): Set<string> | null {
+  if (!uf || !municipality) return null;
+  try {
+    const muni = municipality
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .trim()
+      .toUpperCase();
+    const regiao = retratoPorMunicipio(`${muni}/${uf.trim().toUpperCase()}`);
+    if (!regiao?.vocacoes?.length) return null;
+    return new Set(regiao.vocacoes);
+  } catch {
+    return null; // the gate is an extra: it can never break the ranking
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Public API.
 // ---------------------------------------------------------------------------
 export function recommendUses(input: RecommendInput): RecommendResult {
@@ -393,9 +427,22 @@ export function recommendUses(input: RecommendInput): RecommendResult {
     });
   }
 
+  // 1b) Micro-region gate. The UF advantages above are a coarse net; the
+  //     curated portrait for this municipality knows which of them actually
+  //     belong here. An advantage survives when the region lists either the
+  //     crop itself ("algodao") or its purpose ("graos").
+  const vocacoes =
+    input.scopeToRegion === false ? null : regionVocations(uf, municipality);
+  const scoped = vocacoes
+    ? drafts.filter((d) => vocacoes.has(d.cropValue) || vocacoes.has(d.purpose))
+    : drafts;
+
   // 2) Anti-invention gate: no registered vocation → weak signal, never a
   //    forced ranking. Offer the benchmarked uses as an honest fallback.
-  if (drafts.length === 0) {
+  //    A region that filters down to nothing takes the SAME honest path: we
+  //    would rather say "no registered vocation here yet" than rank a crop
+  //    that provably belongs to another corner of the state.
+  if (scoped.length === 0) {
     const known: KnownUse[] = compareUses(uf)
       .slice(0, 4)
       .map((c) => ({
@@ -413,9 +460,9 @@ export function recommendUses(input: RecommendInput): RecommendResult {
   // 3) Drop the generic purpose-level entry (e.g. "graos") when specific crops
   //    of the same purpose already matched, to avoid a redundant card.
   const purposesWithCrop = new Set(
-    drafts.filter((d) => d.cropValue).map((d) => d.purpose),
+    scoped.filter((d) => d.cropValue).map((d) => d.purpose),
   );
-  const pruned = drafts.filter(
+  const pruned = scoped.filter(
     (d) => d.cropValue || !purposesWithCrop.has(d.purpose),
   );
 

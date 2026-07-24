@@ -11,6 +11,25 @@
  * - Retrato: RICO nas regiões curadas (REGIOES); onde a mesorregião não
  *   tem retrato próprio, cai no retrato geral por bioma (BIOMA_FALLBACK).
  *
+ * CONTRATO DO CAMPO `vocacoes` (auditoria autorizada 24/jul):
+ * `vocacoes` deixou de ser documental e passou a ser CONSUMIDO por
+ * lib/land-recommender.ts como filtro de microrregião: no modo
+ * "Não sei / me recomende", só entram no ranking as vantagens estaduais
+ * (lib/state-advantage.ts) cuja cultura OU cujo purpose esteja listado aqui.
+ * Sem esse filtro o motor recomendava qualquer cultura do ESTADO — foi o que
+ * pôs algodão do Oeste baiano em 1º lugar em Irecê, contradizendo o próprio
+ * retrato exibido logo acima.
+ *
+ * REGRA PARA EDITAR `vocacoes` — uma cultura só entra se:
+ *   (a) o retrato desta região a nomeia; OU
+ *   (b) o fato fonteado da própria vantagem aponta geograficamente para cá
+ *       (ex.: piaçava cita "Ilhéus, Nilo Peçanha e Cairu" → entra no
+ *       Sul/Recôncavo, não no Sertão).
+ * Purposes amplos ("graos", "fruticultura", "lavoura_permanente") arrastam
+ * TODAS as culturas daquele grupo: só use quando o retrato afirmar a vocação
+ * ampla. Ao adicionar uma vantagem nova em state-advantage.ts, adicione-a
+ * também às regiões onde ela realmente ocorre, ou ela não aparecerá.
+ *
  * Arquivo mantido por humano — agentes: SOMENTE LEITURA.
  */
 
@@ -39,7 +58,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no Extremo Oeste Baiano, fronteira agrícola do MATOPIBA — chapadões de Cerrado com solo fértil e produção de grãos em larga escala. São Desidério é o 2º maior produtor agrícola do Brasil (56% soja). Vocação de soja, milho e algodão com alta tecnologia.",
     retratoEn:
       "You're in Western Bahia, the MATOPIBA agricultural frontier — fertile Cerrado plateaus with large-scale grain farming. São Desidério is Brazil's 2nd-largest agricultural producer (56% soybeans). Vocation for soybeans, maize and cotton with advanced technology.",
-    vocacoes: ["graos", "algodao"],
+    vocacoes: ["graos", "soja", "milho", "algodao"],
     agua: "mista",
     fonte: "IBGE PAM / MAPA",
   },
@@ -50,7 +69,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no Vale do São Francisco — o eixo Petrolina/PE e Juazeiro/BA, cidades conurbadas nas duas margens do Velho Chico, formam um só polo de fruticultura irrigada de exportação, um dos maiores do país. Lidera a exportação nacional de manga e uva; também goiaba, banana e coco. A água transforma o valor da terra aqui.",
     retratoEn:
       "You're in the São Francisco Valley — the twin cities of Petrolina/PE and Juazeiro/BA, on opposite banks of the river, form a single irrigated export-fruit hub, one of Brazil's largest. It leads national mango and grape exports; also guava, banana and coconut. Water transforms land value here.",
-    vocacoes: ["fruticultura", "manga", "uva"],
+    vocacoes: ["fruticultura", "manga", "uva", "goiaba", "banana", "coco"],
     agua: "irrigado",
     fonte: "Embrapa Semiárido / IBGE",
   },
@@ -61,7 +80,8 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está na zona cacaueira do Sul da Bahia — clima quente e úmido de Mata Atlântica, berço do cacau-cabruca (cultivado sob a sombra da mata nativa). A chuva farta dispensa irrigação; a região diversifica com café robusta e banana. Cadeia de beneficiamento consolidada.",
     retratoEn:
       "You're in the cocoa zone of Southern Bahia — warm, humid Atlantic Forest climate, home of cabruca cocoa (grown under native forest shade). Ample rainfall removes the need for irrigation; the region diversifies with robusta coffee and banana. Consolidated processing chain.",
-    vocacoes: ["lavoura_permanente", "cacau", "cafe", "banana"],
+    // piaçava explícita: o fato do IBGE PEVS nomeia Ilhéus, Nilo Peçanha e Cairu.
+    vocacoes: ["lavoura_permanente", "cacau", "cafe", "banana", "piacava"],
     agua: "humid",
     fonte: "CEPLAC / IBGE",
   },
@@ -72,7 +92,9 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no sertão semiárido baiano — Polígono das Secas, chuva abaixo de 800mm/ano. A vocação consolidada é a pecuária de caprinos e ovinos (a Bahia lidera o rebanho nacional), com sequeiro de milho e feijão e palma forrageira. Onde há irrigação, a fruticultura muda o jogo.",
     retratoEn:
       "You're in Bahia's semi-arid backlands — the Drought Polygon, under 800mm of rain a year. The established vocation is goat and sheep ranching (Bahia leads the national herd), with rainfed maize and beans and forage cactus. Where there's irrigation, fruit growing changes everything.",
-    vocacoes: ["pecuaria_corte", "extrativismo"],
+    // Sem "extrativismo" amplo: a piaçava baiana é litorânea (Ilhéus/Cairu),
+    // não do sertão.
+    vocacoes: ["pecuaria_corte", "ovinos", "caprinos", "milho", "feijao"],
     agua: "dry",
     fonte: "IBGE / SUDENE",
   },
@@ -83,7 +105,9 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no Centro-Norte baiano — polo de feijão, mandioca e cebola de sequeiro, com bacias leiteiras em pontos. Irecê é referência em feijão e mandioca no semiárido.",
     retratoEn:
       "You're in North-Central Bahia — a hub for rainfed beans, cassava and onion, with dairy basins in places. Irecê is a benchmark for beans and cassava in the semi-arid.",
-    vocacoes: ["graos", "pecuaria_leite"],
+    // Irecê: feijão, mandioca e cebola de sequeiro. NÃO usar "graos" amplo —
+    // arrastava soja e algodão, que na BA pertencem ao Extremo Oeste.
+    vocacoes: ["feijao", "mandioca", "cebola", "pecuaria_leite"],
     agua: "dry",
     fonte: "IBGE PAM",
   },
@@ -96,7 +120,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no Sul de Minas — a maior região cafeeira do Brasil, com 30% do café arábica nacional e 42% do mineiro. Predominam pequenas e médias propriedades (95% com menos de 50 ha) de café arábica de qualidade. A sub-região Mantiqueira de Minas é celeiro de cafés premiados.",
     retratoEn:
       "You're in South Minas — Brazil's largest coffee region, with 30% of national arabica and 42% of the state's. Small and mid-sized farms dominate (95% under 50 ha) growing quality arabica. The Mantiqueira de Minas sub-region yields award-winning coffees.",
-    vocacoes: ["lavoura_permanente", "cafe"],
+    vocacoes: ["cafe"],
     agua: "humid",
     fonte: "IBGE PAM 2024 / IMA",
   },
@@ -107,7 +131,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no Cerrado Mineiro — planaltos planos que permitem colheita mecanizada e irrigação, primeira Indicação Geográfica de café do Brasil, com arábica encorpado. O Triângulo soma grãos, cana e a pecuária zebuína de Uberaba/Uberlândia.",
     retratoEn:
       "You're in the Cerrado Mineiro — flat plateaus allowing mechanized harvest and irrigation, Brazil's first coffee Geographical Indication, with full-bodied arabica. The Triângulo adds grains, sugarcane and the zebu cattle of Uberaba/Uberlândia.",
-    vocacoes: ["lavoura_permanente", "cafe", "graos"],
+    vocacoes: ["cafe", "citros", "graos", "cana", "pecuaria_corte"],
     agua: "irrigado",
     fonte: "INPI (IG) / IMA / CONAB / IBGE",
   },
@@ -118,7 +142,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está nas Matas de Minas, leste do estado — relevo acidentado que impede máquinas, agricultura familiar e colheita manual de cafés especiais doces, com notas de chocolate e caramelo. Mais de 60 municípios produtores.",
     retratoEn:
       "You're in Matas de Minas, eastern Minas — rugged terrain that rules out machinery, family farming and hand-picked sweet specialty coffees with chocolate and caramel notes. Over 60 producing municipalities.",
-    vocacoes: ["lavoura_permanente", "cafe"],
+    vocacoes: ["cafe"],
     agua: "humid",
     fonte: "IMA / Embrapa Café",
   },
@@ -142,7 +166,8 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no cinturão citrícola paulista (Bebedouro, Matão, Araraquara) — a maior produção de laranja e suco do mundo. Cadeia de exportação de suco consolidada.",
     retratoEn:
       "You're in São Paulo's citrus belt (Bebedouro, Matão, Araraquara) — the world's largest orange and juice production. A consolidated juice-export chain.",
-    vocacoes: ["fruticultura", "citros"],
+    // Só citros: "fruticultura" amplo arrastava abacate, pêssego e goiaba.
+    vocacoes: ["citros"],
     agua: "mista",
     fonte: "Fundecitrus / IBGE",
   },
@@ -155,7 +180,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no Médio-Norte de Mato Grosso — Sorriso, o maior produtor agrícola do Brasil (R$7,2 bi), Sinop e Lucas do Rio Verde. Soja e milho safrinha em larga escala com agricultura de precisão. MT responde por 27% da soja nacional.",
     retratoEn:
       "You're in Mid-Northern Mato Grosso — Sorriso, Brazil's largest agricultural producer (R$7.2bn), Sinop and Lucas do Rio Verde. Large-scale soybeans and second-crop maize with precision farming. MT accounts for 27% of national soy.",
-    vocacoes: ["graos"],
+    vocacoes: ["graos", "soja", "milho", "algodao"],
     agua: "mista",
     fonte: "IBGE PAM 2024 / CONAB / MAPA",
   },
@@ -166,7 +191,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está na Chapada dos Parecis — Campo Novo do Parecis, Sapezal e Diamantino, um dos maiores polos de algodão do país, com soja, milho e etanol de milho em áreas irrigadas de alta tecnologia.",
     retratoEn:
       "You're on the Parecis Plateau — Campo Novo do Parecis, Sapezal and Diamantino, one of Brazil's top cotton hubs, with soybeans, maize and corn ethanol in high-tech irrigated areas.",
-    vocacoes: ["algodao", "graos"],
+    vocacoes: ["graos", "algodao", "soja", "milho"],
     agua: "irrigado",
     fonte: "CONAB / IBGE",
   },
@@ -177,7 +202,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no Sudoeste Goiano — Rio Verde (4º maior produtor de soja do Brasil), Jataí e Mineiros. Grãos, pecuária intensiva e forte agroindústria cooperativa.",
     retratoEn:
       "You're in Southwestern Goiás — Rio Verde (Brazil's 4th-largest soy producer), Jataí and Mineiros. Grains, intensive livestock and a strong cooperative agroindustry.",
-    vocacoes: ["graos", "pecuaria_corte"],
+    vocacoes: ["graos", "soja", "milho", "pecuaria_corte"],
     agua: "mista",
     fonte: "IBGE PAM 2024 / CONAB",
   },
@@ -190,7 +215,8 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está na Serra Gaúcha — Caxias do Sul, Bento Gonçalves e Farroupilha, herança da colonização italiana. O Rio Grande do Sul faz 90% do vinho, 85% do espumante e 90% do suco de uva do Brasil, e a Serra é o núcleo dessa produção. Terra de uva e vinho por excelência.",
     retratoEn:
       "You're in the Serra Gaúcha — Caxias do Sul, Bento Gonçalves and Farroupilha, an Italian-immigrant legacy. Rio Grande do Sul makes 90% of Brazil's wine, 85% of its sparkling wine and 90% of its grape juice, and the Serra is the core of that output. Grape and wine country par excellence.",
-    vocacoes: ["fruticultura", "uva"],
+    // Só uva: a maçã gaúcha é de Vacaria (Campos de Cima da Serra).
+    vocacoes: ["uva"],
     agua: "humid",
     fonte: "Ibravin / IBGE",
   },
@@ -201,7 +227,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está nos Campos de Cima da Serra — Vacaria, Bom Jesus e Muitos Capões, o grande polo de maçã do Rio Grande do Sul (84% da maçã gaúcha, 42% da nacional). Clima frio ideal para a fruticultura de clima temperado.",
     retratoEn:
       "You're in the Campos de Cima da Serra — Vacaria, Bom Jesus and Muitos Capões, Rio Grande do Sul's main apple hub (84% of state apples, 42% of national). Cold climate ideal for temperate fruit.",
-    vocacoes: ["fruticultura", "maca"],
+    vocacoes: ["maca"],
     agua: "humid",
     fonte: "IBGE PAM 2024",
   },
@@ -212,7 +238,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no Planalto Serrano de Santa Catarina — São Joaquim, entre 900 e 1400m de altitude, responde por 27% da área e 25% da produção nacional de maçã e produz vinhos de altitude premium. O clima mais frio do Brasil dá à fruta e à uva um ciclo longo e nobre.",
     retratoEn:
       "You're in Santa Catarina's Highland Plateau — São Joaquim, at 900–1400m, accounts for 27% of Brazil's apple area and 25% of its production, and makes premium high-altitude wines. Brazil's coldest climate gives fruit and grapes a long, refined cycle.",
-    vocacoes: ["fruticultura", "maca", "uva"],
+    vocacoes: ["maca", "uva", "pessego"],
     agua: "humid",
     fonte: "IBGE PAM 2024 / Epagri / Ibravin",
   },
@@ -223,7 +249,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está na Metade Sul gaúcha — Uruguaiana, Itaqui e a planície costeira, maior polo de arroz irrigado do Brasil, com pecuária de corte extensiva no pampa e vinhos finos da Campanha (Sant'Ana do Livramento, Bagé).",
     retratoEn:
       "You're in the southern half of Rio Grande do Sul — Uruguaiana, Itaqui and the coastal plain, Brazil's largest irrigated-rice hub, with extensive beef ranching on the pampa and fine Campanha wines (Sant'Ana do Livramento, Bagé).",
-    vocacoes: ["graos", "pecuaria_corte"],
+    vocacoes: ["pecuaria_corte", "ovinos", "pessego", "uva", "arroz"],
     agua: "irrigado",
     fonte: "IRGA / IBGE",
   },
@@ -236,7 +262,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no polo Assu-Mossoró, no Rio Grande do Norte — o maior produtor e exportador de melão do Brasil (RN faz 61,9% do melão nacional). Um aquífero sob a Chapada do Apodi garante a irrigação; também melancia, manga e mamão para exportação.",
     retratoEn:
       "You're in the Assu-Mossoró hub of Rio Grande do Norte — Brazil's largest melon producer and exporter (RN grows 61.9% of national melon). An aquifer under the Apodi Plateau ensures irrigation; also watermelon, mango and papaya for export.",
-    vocacoes: ["fruticultura", "manga"],
+    vocacoes: ["fruticultura", "melao", "mamao", "melancia", "manga"],
     agua: "irrigado",
     fonte: "IBGE PAM 2024 / BNB-ETENE",
   },
@@ -247,7 +273,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no litoral leste do Ceará (Aracati, Icapuí, Limoeiro) — fruticultura irrigada de exportação (melão e melancia em larga escala) e carcinicultura no litoral. O Ceará concentra parcela expressiva do maracujá e do coco do Nordeste.",
     retratoEn:
       "You're on Ceará's eastern coast (Aracati, Icapuí, Limoeiro) — export irrigated fruit (large-scale melon and watermelon) and coastal shrimp farming. Ceará holds a major share of the Northeast's passion fruit and coconut.",
-    vocacoes: ["fruticultura", "aquicultura"],
+    vocacoes: ["fruticultura", "aquicultura", "melao", "maracuja", "coco", "camarao"],
     agua: "irrigado",
     fonte: "BNB/ETENE / ABRAFRUTAS",
   },
@@ -258,7 +284,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no sertão do cajueiro — o Ceará tem 283 mil hectares e o Rio Grande do Norte 62 mil de caju de sequeiro, base da castanha. A carnaúba (renda em pé, como em Granja/CE) complementa a economia da caatinga.",
     retratoEn:
       "You're in cashew backlands — Ceará has 283,000 hectares and Rio Grande do Norte 62,000 of rainfed cashew, the base for cashew nuts. Carnauba wax (standing income, as in Granja/CE) rounds out the caatinga economy.",
-    vocacoes: ["lavoura_permanente", "extrativismo"],
+    vocacoes: ["lavoura_permanente", "caju", "extrativismo", "carnauba"],
     agua: "dry",
     fonte: "IBGE PAM 2024 / IBGE PEVS / BNB",
   },
@@ -269,7 +295,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está na Zona da Mata nordestina — o litoral úmido histórico da cana-de-açúcar, que moldou a economia de Pernambuco, Alagoas e Paraíba por séculos. O coco também marca presença no litoral.",
     retratoEn:
       "You're in the Northeast's Zona da Mata — the humid coast historically defined by sugarcane, which shaped the economy of Pernambuco, Alagoas and Paraíba for centuries. Coconut is also present along the coast.",
-    vocacoes: ["cana"],
+    vocacoes: ["cana", "coco"],
     agua: "humid",
     fonte: "CONAB / IBGE",
   },
@@ -282,7 +308,9 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está no nordeste do Pará (Belém, Tomé-Açu, Igarapé-Miri) — o maior polo de açaí do Brasil, com dendê agroflorestal em Tomé-Açu, pimenta-do-reino e cacau. Economia de floresta e várzea.",
     retratoEn:
       "You're in northeastern Pará (Belém, Tomé-Açu, Igarapé-Miri) — Brazil's largest açaí hub, with agroforestry oil palm in Tomé-Açu, black pepper and cocoa. A forest-and-floodplain economy.",
-    vocacoes: ["extrativismo", "lavoura_permanente", "cacau"],
+    // açaí tem purpose "fruticultura" — sem citá-lo, o maior polo de açaí do
+    // país ficava de fora do próprio retrato.
+    vocacoes: ["acai", "cacau", "lavoura_permanente", "extrativismo", "mandioca"],
     agua: "humid",
     fonte: "IBGE PAM",
   },
@@ -293,7 +321,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está em Rondônia (Ji-Paraná, Cacoal, Cone Sul) — polo de café robusta/conilon com Indicação Geográfica 'Matas de Rondônia', pecuária de leite e corte e cacau em expansão.",
     retratoEn:
       "You're in Rondônia (Ji-Paraná, Cacoal, southern cone) — a robusta/conilon coffee hub with the 'Matas de Rondônia' Geographical Indication, dairy and beef cattle, and expanding cocoa.",
-    vocacoes: ["lavoura_permanente", "cafe", "pecuaria_corte"],
+    vocacoes: ["lavoura_permanente", "cafe", "pecuaria_corte", "cacau"],
     agua: "humid",
     fonte: "CONAB / IBGE",
   },
@@ -304,7 +332,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "Você está na fronteira do MATOPIBA em Tocantins, sul do Maranhão ou Piauí — a última grande fronteira de grãos do Brasil, com soja e arroz em expansão acelerada (Balsas/MA e Uruçuí/PI como polos).",
     retratoEn:
       "You're on the MATOPIBA frontier in Tocantins, southern Maranhão or Piauí — Brazil's last great grain frontier, with rapidly expanding soybeans and rice (Balsas/MA and Uruçuí/PI as hubs).",
-    vocacoes: ["graos"],
+    vocacoes: ["graos", "soja", "arroz"],
     agua: "mista",
     fonte: "CONAB",
   },

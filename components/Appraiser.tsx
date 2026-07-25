@@ -128,6 +128,21 @@ const XL: Record<
 const RECOMMEND = "__recommend__";
 
 /**
+ * Impressão digital de um ranking, para decidir se vale REDESENHAR a lista
+ * quando a resolução assíncrona do IBGE chega. Sem isso, a tela piscaria uma
+ * lista idêntica; com isso, o único movimento visível acontece quando o
+ * conteúdo mudou de fato.
+ */
+function rankingSignature(result: RecommendResult): string {
+  if (result.weakSignal) {
+    return `weak:${result.known.map((k) => k.purpose).join(",")}`;
+  }
+  return result.recommendations
+    .map((r) => `${r.purpose}/${r.cropValue}/${r.waterFit}${r.demoted ? "!" : ""}`)
+    .join(",");
+}
+
+/**
  * Inline strings (rule 5) for the single-form calculator: the "recommend me"
  * option label and the discreet water toggle that the recommender needs.
  * PT/EN written here; the extra languages reuse the EN variant — same policy
@@ -319,7 +334,25 @@ export function Appraiser() {
       setRetrato(retratoEstatico(uf, municipality));
       void resolverRetrato(uf, municipality)
         .then((r) => {
-          if (retratoSeq.current === seq) setRetrato(r ?? null);
+          if (retratoSeq.current !== seq) return;
+          setRetrato(r ?? null);
+          // Retrato e ranking têm de contar a MESMA história: se a API do IBGE
+          // resolveu uma região curada, o ranking é refeito com ela. O mapa
+          // offline (lib/muni-regiao-gerado.ts) já espelha essa resolução, então
+          // na prática os dois coincidem e nada na tela se mexe; só quando o
+          // resultado muda de verdade — malha do IBGE mais nova que o mapa, ou
+          // município digitado com grafia diferente — a lista é trocada, e aí
+          // ela troca junto com o retrato, num movimento só.
+          const refeito = recommendUses({
+            uf,
+            municipality,
+            water: hasWater,
+            hectares,
+            regionKey: r?.key,
+          });
+          if (rankingSignature(refeito) !== rankingSignature(res)) {
+            setRecResult({ ...refeito, hectares, water: hasWater });
+          }
         })
         // O retrato é extra: nem uma rejeição inesperada pode escapar daqui.
         .catch(() => {});

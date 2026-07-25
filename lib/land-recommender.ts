@@ -27,7 +27,11 @@ import {
   formedCropLeaseRef,
 } from "./appraisal-data";
 import { stateAdvantages } from "./state-advantage";
-import { retratoPorMunicipio } from "./regioes-agricolas";
+import {
+  REGIOES,
+  retratoPorMunicipio,
+  type RegiaoRetrato,
+} from "./regioes-agricolas";
 import { content } from "./content";
 
 export type WaterFit = "needsIrrigation" | "rainfed_ok" | "neutral";
@@ -46,6 +50,15 @@ export type RecommendInput = {
    * UF-level fact index is wanted instead of a ranking.
    */
   scopeToRegion?: boolean;
+  /**
+   * Curated region already resolved by the caller (a key of REGIOES). The UI
+   * resolves município→mesorregião against the LIVE IBGE API to draw the
+   * regional portrait; passing that same key here makes the ranking use the
+   * exact region the portrait shows, instead of re-deriving it from the
+   * offline map. Unknown keys (e.g. a biome fallback like "caatinga") are
+   * ignored and the offline resolution takes over.
+   */
+  regionKey?: string;
 };
 
 export type Recommendation = {
@@ -139,15 +152,25 @@ function labelFor(
 // Which regional vocations depend on a water source vs. thrive on rainfall vs.
 // are indifferent. Keyed by crop value, falling back to the purpose.
 // ---------------------------------------------------------------------------
+//
+// The irrigation set describes SEMI-ARID fruit growing, which is where these
+// crops earn their money in Brazil. It is NOT a property of the plant: the same
+// grape that is drip-irrigated in the São Francisco Valley is rainfed in the
+// Serra Gaúcha, and coastal coconut in the humid Zona da Mata needs no pump
+// either. So the set is read through the region's water regime (`agua`) — see
+// `bucketOf` — instead of being applied blindly.
 const NEEDS_IRRIGATION = new Set([
   "manga", // Vale do São Francisco is irrigated fruit
   "melao", // Mossoró/Açu hub, irrigated per season
-  "uva", // irrigated table grapes
+  "uva", // table grapes in the semi-arid; rainfed wine grapes in the south
   "mamao", // irrigated (CE 70 t/ha)
   "coco", // dwarf coconut is grown irrigated
   "tilapia", // needs a water body
   "camarao", // needs brackish/coastal water
 ]);
+// Aquaculture needs a standing body of water, not rainfall: no regional climate
+// ever waives it. These never leave the irrigation bucket.
+const NEEDS_WATER_BODY = new Set(["tilapia", "camarao"]);
 const RAINFED_OK = new Set([
   "cacau", // humid south Bahia / Pará
   "cafe", // humid highlands
@@ -162,9 +185,19 @@ const RAINFED_OK = new Set([
   "abacaxi",
 ]);
 
-function bucketOf(cropValue: string, purpose: string): WaterFit {
+function bucketOf(
+  cropValue: string,
+  purpose: string,
+  regiao: RegiaoRetrato | null,
+): WaterFit {
   const k = cropValue || purpose;
-  if (NEEDS_IRRIGATION.has(k)) return "needsIrrigation";
+  if (NEEDS_IRRIGATION.has(k)) {
+    // In a region whose curated water regime is naturally humid, an
+    // "irrigated fruit" is grown rainfed — Serra Gaúcha and São Joaquim wine
+    // grapes, Zona da Mata coconut. Only aquaculture is never waived.
+    if (regiao?.agua === "humid" && !NEEDS_WATER_BODY.has(k)) return "rainfed_ok";
+    return "needsIrrigation";
+  }
   if (RAINFED_OK.has(k)) return "rainfed_ok";
   return "neutral"; // grains-of-dryland, cattle, cassava, extractivism, cane...
 }
@@ -363,19 +396,31 @@ function incomeFor(cropValue: string, purpose: string, uf: string): Income {
 //
 // Only CURATED regions filter (retratoPorMunicipio without a bioma hint returns
 // null when the municipality is not mapped). Unmapped municipalities keep the
-// previous UF-level behaviour — the degradation is deliberate and safe.
+// previous UF-level behaviour — the degradation is deliberate and safe. The
+// biome fallback is deliberately NOT consulted here: "caatinga" or "cerrado"
+// vocations are far too coarse to filter a ranking with.
+//
+// The resolution has two doors, in this order:
+//   1. `regionKey` — the region the UI already resolved against the live IBGE
+//      API to draw the portrait. Passing it keeps ranking and portrait telling
+//      the same story even when the offline map is a month behind.
+//   2. the offline município→região map, which now mirrors the online path for
+//      every municipality of every curated mesorregião (see
+//      lib/muni-regiao-gerado.ts), not just the hand-picked anchors.
 // ---------------------------------------------------------------------------
-function regionVocations(uf: string, municipality: string): Set<string> | null {
-  if (!uf || !municipality) return null;
+function regionOf(input: RecommendInput): RegiaoRetrato | null {
   try {
+    const direct = input.regionKey ? REGIOES[input.regionKey] : undefined;
+    if (direct) return direct;
+    const uf = input.uf;
+    const municipality = input.municipality ?? "";
+    if (!uf || !municipality) return null;
     const muni = municipality
       .normalize("NFD")
       .replace(/\p{Diacritic}/gu, "")
       .trim()
       .toUpperCase();
-    const regiao = retratoPorMunicipio(`${muni}/${uf.trim().toUpperCase()}`);
-    if (!regiao?.vocacoes?.length) return null;
-    return new Set(regiao.vocacoes);
+    return retratoPorMunicipio(`${muni}/${uf.trim().toUpperCase()}`);
   } catch {
     return null; // the gate is an extra: it can never break the ranking
   }
@@ -389,6 +434,11 @@ export function recommendUses(input: RecommendInput): RecommendResult {
   const municipality = input.municipality ?? "";
   const water = !!input.water;
   const moisture = regionMoisture(uf, municipality);
+  // Curated region (or null). Feeds BOTH the micro-region gate below and the
+  // water bucket, so a rainfed-wine region never demands a pump. The bucket
+  // reads it even when `scopeToRegion` is off: climate is a fact about the
+  // land, not a preference about how wide the ranking should be.
+  const regiao = regionOf(input);
 
   // 1) Collect every registered regional advantage for this UF. This is the
   //    ONLY gate — no advantage, no recommendation. Every entry here is, by
@@ -401,7 +451,7 @@ export function recommendUses(input: RecommendInput): RecommendResult {
     const isCrop = !!CROP_PURPOSE[key];
     const purpose = isCrop ? CROP_PURPOSE[key] : key;
     const cropValue = isCrop ? key : "";
-    const fit = bucketOf(cropValue, purpose);
+    const fit = bucketOf(cropValue, purpose, regiao);
     const inc = incomeFor(cropValue, purpose, uf);
     const copy = waterCopy(fit, moisture, water);
     // Water fit only decides whether a use is VIABLE right now (demoted); it no
@@ -432,7 +482,9 @@ export function recommendUses(input: RecommendInput): RecommendResult {
   //     belong here. An advantage survives when the region lists either the
   //     crop itself ("algodao") or its purpose ("graos").
   const vocacoes =
-    input.scopeToRegion === false ? null : regionVocations(uf, municipality);
+    input.scopeToRegion === false || !regiao?.vocacoes?.length
+      ? null
+      : new Set(regiao.vocacoes);
   const scoped = vocacoes
     ? drafts.filter((d) => vocacoes.has(d.cropValue) || vocacoes.has(d.purpose))
     : drafts;
@@ -458,9 +510,16 @@ export function recommendUses(input: RecommendInput): RecommendResult {
   }
 
   // 3) Drop the generic purpose-level entry (e.g. "graos") when specific crops
-  //    of the same purpose already matched, to avoid a redundant card.
+  //    of the same purpose already matched, to avoid a redundant card. Only a
+  //    crop the region names EXPLICITLY silences the generic card: when a crop
+  //    got in merely by riding the broad purpose, the purpose is still the
+  //    headline. Without this, a grain mesorregião that lists "graos" would
+  //    show "Fumo" alone — tobacco rides the graos purpose, then evicts the
+  //    very grain card the region is known for.
   const purposesWithCrop = new Set(
-    scoped.filter((d) => d.cropValue).map((d) => d.purpose),
+    scoped
+      .filter((d) => d.cropValue && (!vocacoes || vocacoes.has(d.cropValue)))
+      .map((d) => d.purpose),
   );
   const pruned = scoped.filter(
     (d) => d.cropValue || !purposesWithCrop.has(d.purpose),

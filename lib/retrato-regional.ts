@@ -48,11 +48,14 @@ const MESO_TO_REGIAO: Record<string, string> = {
   "BA:METROPOLITANA DE SALVADOR": "ba-sul-recôncavo",
   "BA:NORDESTE BAIANO": "ba-sertao-nordeste",
   "BA:CENTRO NORTE BAIANO": "ba-centro-norte",
+  // PENDENTE DE VALIDAÇÃO FACTUAL (24/jul): retratos novos, PAM/PPM 2024.
+  "BA:CENTRO SUL BAIANO": "ba-centro-sul",
   // ── Minas Gerais (café) ──
   "MG:SUL/SUDOESTE DE MINAS": "mg-sul-de-minas",
   "MG:OESTE DE MINAS": "mg-sul-de-minas", // PAM 2024: café arábica 60,2%
   "MG:ZONA DA MATA": "mg-matas-de-minas",
   "MG:VALE DO RIO DOCE": "mg-matas-de-minas", // PAM 2024: café 84,1%
+  "MG:NORTE DE MINAS": "mg-norte-de-minas", // PAM 2024: banana 30,8%
   // MG:Triângulo removido do café: cana lidera (27,7%), café é 3º (19,6%) —
   // o retrato de Cerrado Mineiro superdimensionaria o café. Cai no bioma.
   // ── São Paulo (cana × citros) ──
@@ -73,6 +76,8 @@ const MESO_TO_REGIAO: Record<string, string> = {
   "TO:ORIENTAL DO TOCANTINS": "matopiba-fronteira",
   "TO:OCIDENTAL DO TOCANTINS": "matopiba-fronteira",
   // ── Sul ──
+  "RS:NOROESTE RIO-GRANDENSE": "rs-noroeste-graos", // PAM 2024: soja 71,8%
+  "PR:NORTE CENTRAL PARANAENSE": "pr-norte-central", // PAM 2024: soja 46,2%
   "RS:NORDESTE RIO-GRANDENSE": "rs-serra-gaucha",
   "RS:SUDOESTE RIO-GRANDENSE": "rs-metade-sul-arroz",
   "RS:SUDESTE RIO-GRANDENSE": "rs-metade-sul-arroz", // PAM 2024: arroz 46,1%
@@ -81,10 +86,12 @@ const MESO_TO_REGIAO: Record<string, string> = {
   // ── Nordeste ──
   "RN:OESTE POTIGUAR": "rn-assu-mossoro",
   "CE:JAGUARIBE": "ce-baixo-jaguaribe",
+  // Zona da Mata dividida por UF (25/jul): cada UF promete só o que o ranking
+  // daquela UF entrega (abacaxi é paraibano; camarão é de PE e PB, não de AL).
   "PE:MATA PERNAMBUCANA": "pe-zona-mata-cana",
   "PE:METROPOLITANA DE RECIFE": "pe-zona-mata-cana", // PAM 2024: cana 91,1%
-  "PB:MATA PARAIBANA": "pe-zona-mata-cana", // PAM 2024: cana 57,2%
-  "AL:LESTE ALAGOANO": "pe-zona-mata-cana", // PAM 2024: cana 69,9%
+  "PB:MATA PARAIBANA": "pb-zona-mata", // PAM 2024: cana 57,2%
+  "AL:LESTE ALAGOANO": "al-zona-mata", // PAM 2024: cana 69,9%
   // Vale do São Francisco: as duas margens do mesmo polo Petrolina-Juazeiro.
   "PE:SAO FRANCISCO PERNAMBUCANO": "ba-vale-sao-francisco", // PAM 2024: uva 67,2%
   // ── Norte ──

@@ -3,11 +3,16 @@
  * Fonte da verdade: docs/regioes/vocacoes-microrregionais.md (curado e
  * fonteado). Retratos das regiões fortes validados com produtor de campo.
  *
- * ARQUITETURA (decisão 22/jul):
- * - Resolução município→mesorregião: a UI tenta a API do IBGE primeiro
- *   (dado fresco); se falhar, usa o mapa estático MUNI_TO_MESO abaixo
- *   como fallback. O script scripts/ingest-mesorregioes.mjs (rodar local,
- *   mensal) regenera MUNI_TO_MESO a partir da malha oficial do IBGE.
+ * ARQUITETURA (decisão 22/jul, cobertura fechada em 24/jul):
+ * - Resolução município→região: a UI tenta a API do IBGE primeiro (dado
+ *   fresco, lib/retrato-regional.ts); se falhar, usa os mapas estáticos
+ *   daqui. São dois, nesta ordem: MUNI_TO_REGIAO (âncoras escritas à mão,
+ *   mais finas que a mesorregião) e MUNI_REGIAO_GERADO
+ *   (lib/muni-regiao-gerado.ts, todos os municípios de toda mesorregião
+ *   curada). O segundo é GERADO por scripts/ingest-mesorregioes.mjs
+ *   (rodar local, mensal) cruzando a malha oficial do IBGE com a tabela
+ *   MESO_TO_REGIAO — não carrega nenhum fato que um humano não tenha
+ *   escrito.
  * - Retrato: RICO nas regiões curadas (REGIOES); onde a mesorregião não
  *   tem retrato próprio, cai no retrato geral por bioma (BIOMA_FALLBACK).
  *
@@ -32,6 +37,8 @@
  *
  * Arquivo mantido por humano — agentes: SOMENTE LEITURA.
  */
+
+import { regiaoGeradaDe } from "./muni-regiao-gerado";
 
 export type RegiaoRetrato = {
   /** chave estável da região (slug) */
@@ -112,6 +119,28 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     fonte: "IBGE PAM",
   },
 
+  // PENDENTE DE VALIDAÇÃO FACTUAL (24/jul) — retrato novo, números tirados
+  // direto do SIDRA/IBGE (PAM 2024 t/1612+1613 v/215 e PPM 2024 t/3939 v/105,
+  // agregados por mesorregião). Carlos valida antes do merge.
+  "ba-centro-sul": {
+    key: "ba-centro-sul",
+    nome: "Centro Sul Baiano",
+    retratoPt:
+      "Você está no Centro Sul Baiano — um mosaico, não uma cultura só. O café arábica de Vitória da Conquista e da Chapada lidera (R$1,38 bi, 23% do valor), seguido da batata e do tomate irrigados de Ibicoara e Mucugê (R$1,33 bi só de batata) e da borda cacaueira de Jequié (R$955 mi). Livramento de Nossa Senhora soma maracujá e manga irrigados; a região tem 28% do rebanho bovino baiano.",
+    retratoEn:
+      "You're in south-central Bahia — a mosaic, not a single crop. Arabica coffee from Vitória da Conquista and the Chapada leads (R$1.38bn, 23% of crop value), followed by irrigated potato and tomato in Ibicoara and Mucugê (R$1.33bn in potato alone) and the cocoa edge around Jequié (R$955m). Livramento de Nossa Senhora adds irrigated passion fruit and mango; the region holds 28% of Bahia's cattle herd.",
+    // Só o que a PAM 2024 mostra NESTA mesorregião. Fora de propósito:
+    // "algodao" (1,2%, e o fato da vantagem aponta para o Oeste) e
+    // caprinos/ovinos (5,7% e 5,8% do rebanho estadual — vocação do sertão,
+    // não daqui, conforme PPM 2024).
+    vocacoes: [
+      "cafe", "cacau", "batata", "tomate", "maracuja", "banana", "manga",
+      "mandioca", "cebola", "feijao", "alho",
+    ],
+    agua: "mista",
+    fonte: "IBGE PAM 2024 / IBGE PPM 2024",
+  },
+
   // ── MINAS GERAIS (macrorregiões cafeeiras IMA 2000) ──
   "mg-sul-de-minas": {
     key: "mg-sul-de-minas",
@@ -145,6 +174,22 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     vocacoes: ["cafe"],
     agua: "humid",
     fonte: "IMA / Embrapa Café",
+  },
+
+  // PENDENTE DE VALIDAÇÃO FACTUAL (24/jul) — ver nota em "ba-centro-sul".
+  "mg-norte-de-minas": {
+    key: "mg-norte-de-minas",
+    nome: "Norte de Minas (Jaíba / Janaúba)",
+    retratoPt:
+      "Você está no Norte de Minas — onde a água decide tudo. A banana irrigada do eixo Jaíba–Janaúba é a maior lavoura da região (R$1,2 bi, 31% do valor; Jaíba sozinha faz R$427 mi), acompanhada de manga, limão e mamão nos mesmos perímetros. Nas serras do Alto Rio Pardo o café arábica de sequeiro responde por R$555 mi, e nas chapadas do oeste a soja de Cerrado soma R$520 mi (Chapada Gaúcha, Buritizeiro).",
+    retratoEn:
+      "You're in northern Minas Gerais — where water decides everything. Irrigated banana along the Jaíba–Janaúba axis is the region's biggest crop (R$1.2bn, 31% of crop value; Jaíba alone accounts for R$427m), alongside mango, lime and papaya in the same schemes. In the Alto Rio Pardo highlands rainfed arabica coffee brings R$555m, and on the western plateaus Cerrado soybeans add R$520m (Chapada Gaúcha, Buritizeiro).",
+    vocacoes: [
+      "banana", "manga", "mamao", "limao_tahiti", "cafe", "soja", "milho",
+      "cana", "feijao",
+    ],
+    agua: "mista",
+    fonte: "IBGE PAM 2024",
   },
 
   // ── SÃO PAULO ──
@@ -208,6 +253,22 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
   },
 
   // ── SUL ──
+  // PENDENTE DE VALIDAÇÃO FACTUAL (24/jul) — ver nota em "ba-centro-sul".
+  "rs-noroeste-graos": {
+    key: "rs-noroeste-graos",
+    nome: "Noroeste Rio-Grandense (Missões / Planalto)",
+    retratoPt:
+      "Você está no Noroeste gaúcho — a maior mesorregião agrícola do Rio Grande do Sul, com 216 municípios de terra de grão. A soja responde por 72% do valor das lavouras (R$21,5 bi; Cruz Alta, Palmeira das Missões, Santa Bárbara do Sul), com trigo e aveia no inverno e milho na sequência. É também a bacia leiteira do estado: 68% do leite gaúcho sai daqui (Santo Cristo, Augusto Pestana, Ijuí).",
+    retratoEn:
+      "You're in northwestern Rio Grande do Sul — the state's largest farming mesoregion, 216 municipalities of grain country. Soybeans account for 72% of crop value (R$21.5bn; Cruz Alta, Palmeira das Missões, Santa Bárbara do Sul), with winter wheat and oats and a maize crop after. It is also the state's dairy basin: 68% of Rio Grande do Sul's milk comes from here (Santo Cristo, Augusto Pestana, Ijuí).",
+    // "graos" amplo é proposital: a vocação de grãos vale para a mesorregião
+    // inteira (soja+trigo+milho = 90% do valor). Ele arrasta o fumo, que é a
+    // 6ª lavoura da região (R$514 mi em Barros Cassal, Lagoão e Tunas) — real,
+    // ainda que menor.
+    vocacoes: ["graos", "soja", "milho", "trigo", "pecuaria_leite"],
+    agua: "mista",
+    fonte: "IBGE PAM 2024 / IBGE PPM 2024",
+  },
   "rs-serra-gaucha": {
     key: "rs-serra-gaucha",
     nome: "Serra Gaúcha",
@@ -254,6 +315,22 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     fonte: "IRGA / IBGE",
   },
 
+  // PENDENTE DE VALIDAÇÃO FACTUAL (24/jul) — ver nota em "ba-centro-sul".
+  "pr-norte-central": {
+    key: "pr-norte-central",
+    nome: "Norte Central Paranaense (Londrina / Maringá)",
+    retratoPt:
+      "Você está no Norte Central do Paraná — terra roxa de Londrina, Maringá e Apucarana, colonizada pelo café e hoje dominada pelos grãos. A soja faz 46% do valor das lavouras (R$5,6 bi) e o milho, 28% (R$3,3 bi), quase sempre em duas safras no mesmo ano; a cana soma 12% no eixo Colorado–Porecatu. Infraestrutura, cooperativas e agroindústria são as mais densas do estado.",
+    retratoEn:
+      "You're in north-central Paraná — the red soil of Londrina, Maringá and Apucarana, settled on coffee and now dominated by grain. Soybeans make up 46% of crop value (R$5.6bn) and maize 28% (R$3.3bn), usually two harvests in the same year; sugarcane adds 12% along the Colorado–Porecatu axis. Infrastructure, cooperatives and agroindustry are the densest in the state.",
+    // Sem "graos" amplo: soja e milho já são vantagens registradas para o PR e
+    // entram nominalmente. O purpose amplo só arrastaria o fumo, que não é
+    // lavoura desta mesorregião (fora das 12 maiores na PAM 2024).
+    vocacoes: ["soja", "milho", "trigo", "cana"],
+    agua: "mista",
+    fonte: "IBGE PAM 2024",
+  },
+
   // ── NORDESTE (fora BA) ──
   "rn-assu-mossoro": {
     key: "rn-assu-mossoro",
@@ -288,16 +365,46 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     agua: "dry",
     fonte: "IBGE PAM 2024 / IBGE PEVS / BNB",
   },
+  // DIVISÃO POR UF (25/jul): a antiga região única PE/AL/PB herdava para as
+  // três UFs vocações que só valem em uma delas (abacaxi é da Mata paraibana;
+  // o camarão relevante é de PE e PB, não de AL). Uma região por UF deixa cada
+  // retrato prometer só o que o ranking daquela UF entrega.
+  // PENDENTE DE VALIDAÇÃO FACTUAL (25/jul) — números IBGE PAM 2024 (SIDRA
+  // t.5457) e PPM 2024; Carlos valida antes do merge.
   "pe-zona-mata-cana": {
     key: "pe-zona-mata-cana",
-    nome: "Zona da Mata (PE/AL/PB)",
+    nome: "Zona da Mata de Pernambuco",
     retratoPt:
-      "Você está na Zona da Mata nordestina — o litoral úmido histórico da cana-de-açúcar, que moldou a economia de Pernambuco, Alagoas e Paraíba por séculos. O coco também marca presença no litoral.",
+      "Você está na Zona da Mata pernambucana — o litoral úmido histórico da cana-de-açúcar, que ainda domina o valor das lavouras (PE colheu 16,1 mi t em 2024, 8º do país). O coco marca presença no litoral e os estuários concentram 98% do camarão cultivado do estado (Goiana, Sirinhaém, Itapissuma).",
     retratoEn:
-      "You're in the Northeast's Zona da Mata — the humid coast historically defined by sugarcane, which shaped the economy of Pernambuco, Alagoas and Paraíba for centuries. Coconut is also present along the coast.",
+      "You're in Pernambuco's Zona da Mata — the humid coast historically defined by sugarcane, which still dominates crop value (PE harvested 16.1 M t in 2024, 8th in Brazil). Coconut is present along the coast and the estuaries concentrate 98% of the state's farmed shrimp (Goiana, Sirinhaém, Itapissuma).",
+    vocacoes: ["cana", "coco", "camarao", "aquicultura"],
+    agua: "humid",
+    fonte: "IBGE PAM 2024 / CONAB",
+  },
+  "pb-zona-mata": {
+    key: "pb-zona-mata",
+    nome: "Zona da Mata Paraibana",
+    retratoPt:
+      "Você está na Mata paraibana — a cana responde por 57% do valor das lavouras, mas divide o mapa com o abacaxi, que faz da PB a maior produtora do país em volume (25% do valor regional; Sapé, Mari e Itapororoca). Os estuários concentram 62% do camarão paraibano (Santa Rita, Pilar) e o coco acompanha o litoral.",
+    retratoEn:
+      "You're in Paraíba's Mata — sugarcane makes up 57% of crop value but shares the map with pineapple, which makes PB Brazil's largest producer by volume (25% of regional crop value; Sapé, Mari and Itapororoca). The estuaries concentrate 62% of Paraíba's farmed shrimp (Santa Rita, Pilar) and coconut lines the coast.",
+    // abacaxi e camarão mantidos da região antiga (24/jul, PAM/PPM 2024): sem
+    // eles o filtro zerava o ranking em 29 municípios da Mata paraibana.
+    vocacoes: ["cana", "abacaxi", "coco", "camarao", "aquicultura"],
+    agua: "humid",
+    fonte: "IBGE PAM 2024 / CONAB",
+  },
+  "al-zona-mata": {
+    key: "al-zona-mata",
+    nome: "Leste Alagoano (Zona da Mata / Litoral)",
+    retratoPt:
+      "Você está no leste de Alagoas — o coração canavieiro do Nordeste: AL é o maior produtor de cana da região (18,7 mi t em 2024, 7º do país) e a cultura responde por 70% do valor das lavouras da faixa. O coco marca presença no litoral.",
+    retratoEn:
+      "You're in eastern Alagoas — the Northeast's sugarcane heartland: AL is the region's largest cane producer (18.7 M t in 2024, 7th in Brazil) and the crop accounts for 70% of the strip's crop value. Coconut is present along the coast.",
     vocacoes: ["cana", "coco"],
     agua: "humid",
-    fonte: "CONAB / IBGE",
+    fonte: "IBGE PAM 2024 / CONAB",
   },
 
   // ── NORTE ──
@@ -402,11 +509,12 @@ export const BIOMA_FALLBACK: Record<string, RegiaoRetrato> = {
 };
 
 /**
- * Mapa estático município(cod IBGE 7 díg ou nome+UF)→região, usado como
- * FALLBACK quando a API do IBGE não responde. Populado pelo script
- * scripts/ingest-mesorregioes.mjs (rodar local). Aqui vão os municípios-
- * âncora já conhecidos da pesquisa; o script completa os 5.570.
+ * ÂNCORAS escritas à mão: município→região pesquisado caso a caso. Têm
+ * PRECEDÊNCIA sobre o mapa gerado porque são mais finas que a mesorregião —
+ * Araraquara/SP é o exemplo vivo: a mesorregião inteira é canavieira, mas o
+ * município é do cinturão citrícola.
  * Chave: "NOME/UF" normalizado maiúsculo sem acento.
+ * Este mapa é do humano; quem cresce sozinho é MUNI_REGIAO_GERADO.
  */
 export const MUNI_TO_REGIAO: Record<string, string> = {
   // Bahia
@@ -480,9 +588,9 @@ export const MUNI_TO_REGIAO: Record<string, string> = {
   "PACAJUS/CE": "ce-rn-sertao-caju",
   "IPOJUCA/PE": "pe-zona-mata-cana",
   "ESCADA/PE": "pe-zona-mata-cana",
-  "RIO LARGO/AL": "pe-zona-mata-cana",
-  "CORURIPE/AL": "pe-zona-mata-cana",
-  "SANTA RITA/PB": "pe-zona-mata-cana",
+  "RIO LARGO/AL": "al-zona-mata",
+  "CORURIPE/AL": "al-zona-mata",
+  "SANTA RITA/PB": "pb-zona-mata",
   // Norte
   "TOME-ACU/PA": "pa-nordeste-acai",
   "IGARAPE-MIRI/PA": "pa-nordeste-acai",
@@ -495,13 +603,21 @@ export const MUNI_TO_REGIAO: Record<string, string> = {
   "LAGOA DA CONFUSAO/TO": "matopiba-fronteira",
 };
 
-/** Resolve o retrato: 1) região curada por município; 2) bioma; 3) null. */
+/**
+ * Resolve o retrato: 1) âncora escrita à mão; 2) mapa gerado da mesorregião;
+ * 3) bioma; 4) null.
+ *
+ * Os passos 1 e 2 devolvem SEMPRE uma região curada de REGIOES — é o que o
+ * ranking usa como filtro de microrregião. O passo 3 só entra quando quem
+ * chama passa `biomaHint`, e devolve um retrato de bioma: bom para exibir,
+ * grosso demais para filtrar ranking (por isso o recomendador não o pede).
+ */
 export function retratoPorMunicipio(
   nomeUf: string,
   biomaHint?: string,
 ): RegiaoRetrato | null {
   const key = nomeUf.trim().toUpperCase();
-  const regKey = MUNI_TO_REGIAO[key];
+  const regKey = MUNI_TO_REGIAO[key] ?? regiaoGeradaDe(key);
   if (regKey && REGIOES[regKey]) return REGIOES[regKey];
   if (biomaHint && BIOMA_FALLBACK[biomaHint]) return BIOMA_FALLBACK[biomaHint];
   return null;

@@ -365,19 +365,46 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     agua: "dry",
     fonte: "IBGE PAM 2024 / IBGE PEVS / BNB",
   },
+  // DIVISÃO POR UF (25/jul): a antiga região única PE/AL/PB herdava para as
+  // três UFs vocações que só valem em uma delas (abacaxi é da Mata paraibana;
+  // o camarão relevante é de PE e PB, não de AL). Uma região por UF deixa cada
+  // retrato prometer só o que o ranking daquela UF entrega.
+  // PENDENTE DE VALIDAÇÃO FACTUAL (25/jul) — números IBGE PAM 2024 (SIDRA
+  // t.5457) e PPM 2024; Carlos valida antes do merge.
   "pe-zona-mata-cana": {
     key: "pe-zona-mata-cana",
-    nome: "Zona da Mata (PE/AL/PB)",
+    nome: "Zona da Mata de Pernambuco",
     retratoPt:
-      "Você está na Zona da Mata nordestina — o litoral úmido histórico da cana-de-açúcar, que moldou a economia de Pernambuco, Alagoas e Paraíba por séculos. O coco marca presença no litoral. Na Mata paraibana a cana divide o mapa com o abacaxi (25% do valor das lavouras, R$508 mi em Sapé, Mari e Itapororoca), e os estuários das três UFs concentram a carcinicultura — 98% do camarão pernambucano (Goiana, Sirinhaém, Itapissuma) e 62% do paraibano (Santa Rita, Pilar).",
+      "Você está na Zona da Mata pernambucana — o litoral úmido histórico da cana-de-açúcar, que ainda domina o valor das lavouras (PE colheu 16,1 mi t em 2024, 8º do país). O coco marca presença no litoral e os estuários concentram 98% do camarão cultivado do estado (Goiana, Sirinhaém, Itapissuma).",
     retratoEn:
-      "You're in the Northeast's Zona da Mata — the humid coast historically defined by sugarcane, which shaped the economy of Pernambuco, Alagoas and Paraíba for centuries. Coconut is present along the coast. In Paraíba's Mata, cane shares the map with pineapple (25% of crop value, R$508m in Sapé, Mari and Itapororoca), and the estuaries concentrate shrimp farming — 98% of Pernambuco's farmed shrimp (Goiana, Sirinhaém, Itapissuma) and 62% of Paraíba's (Santa Rita, Pilar).",
-    // abacaxi e camarão acrescentados 24/jul com PAM/PPM 2024 por mesorregião:
-    // sem eles o filtro zerava o ranking em 29 municípios da Mata paraibana,
-    // onde são a 2ª lavoura e a aquicultura dominante.
-    vocacoes: ["cana", "coco", "abacaxi", "camarao", "aquicultura"],
+      "You're in Pernambuco's Zona da Mata — the humid coast historically defined by sugarcane, which still dominates crop value (PE harvested 16.1 M t in 2024, 8th in Brazil). Coconut is present along the coast and the estuaries concentrate 98% of the state's farmed shrimp (Goiana, Sirinhaém, Itapissuma).",
+    vocacoes: ["cana", "coco", "camarao", "aquicultura"],
     agua: "humid",
-    fonte: "CONAB / IBGE",
+    fonte: "IBGE PAM 2024 / CONAB",
+  },
+  "pb-zona-mata": {
+    key: "pb-zona-mata",
+    nome: "Zona da Mata Paraibana",
+    retratoPt:
+      "Você está na Mata paraibana — a cana responde por 57% do valor das lavouras, mas divide o mapa com o abacaxi, que faz da PB a maior produtora do país em volume (25% do valor regional; Sapé, Mari e Itapororoca). Os estuários concentram 62% do camarão paraibano (Santa Rita, Pilar) e o coco acompanha o litoral.",
+    retratoEn:
+      "You're in Paraíba's Mata — sugarcane makes up 57% of crop value but shares the map with pineapple, which makes PB Brazil's largest producer by volume (25% of regional crop value; Sapé, Mari and Itapororoca). The estuaries concentrate 62% of Paraíba's farmed shrimp (Santa Rita, Pilar) and coconut lines the coast.",
+    // abacaxi e camarão mantidos da região antiga (24/jul, PAM/PPM 2024): sem
+    // eles o filtro zerava o ranking em 29 municípios da Mata paraibana.
+    vocacoes: ["cana", "abacaxi", "coco", "camarao", "aquicultura"],
+    agua: "humid",
+    fonte: "IBGE PAM 2024 / CONAB",
+  },
+  "al-zona-mata": {
+    key: "al-zona-mata",
+    nome: "Leste Alagoano (Zona da Mata / Litoral)",
+    retratoPt:
+      "Você está no leste de Alagoas — o coração canavieiro do Nordeste: AL é o maior produtor de cana da região (18,7 mi t em 2024, 7º do país) e a cultura responde por 70% do valor das lavouras da faixa. O coco marca presença no litoral.",
+    retratoEn:
+      "You're in eastern Alagoas — the Northeast's sugarcane heartland: AL is the region's largest cane producer (18.7 M t in 2024, 7th in Brazil) and the crop accounts for 70% of the strip's crop value. Coconut is present along the coast.",
+    vocacoes: ["cana", "coco"],
+    agua: "humid",
+    fonte: "IBGE PAM 2024 / CONAB",
   },
 
   // ── NORTE ──
@@ -561,9 +588,9 @@ export const MUNI_TO_REGIAO: Record<string, string> = {
   "PACAJUS/CE": "ce-rn-sertao-caju",
   "IPOJUCA/PE": "pe-zona-mata-cana",
   "ESCADA/PE": "pe-zona-mata-cana",
-  "RIO LARGO/AL": "pe-zona-mata-cana",
-  "CORURIPE/AL": "pe-zona-mata-cana",
-  "SANTA RITA/PB": "pe-zona-mata-cana",
+  "RIO LARGO/AL": "al-zona-mata",
+  "CORURIPE/AL": "al-zona-mata",
+  "SANTA RITA/PB": "pb-zona-mata",
   // Norte
   "TOME-ACU/PA": "pa-nordeste-acai",
   "IGARAPE-MIRI/PA": "pa-nordeste-acai",

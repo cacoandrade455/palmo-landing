@@ -86,10 +86,12 @@ const MESO_TO_REGIAO: Record<string, string> = {
   // ── Nordeste ──
   "RN:OESTE POTIGUAR": "rn-assu-mossoro",
   "CE:JAGUARIBE": "ce-baixo-jaguaribe",
+  // Zona da Mata dividida por UF (25/jul): cada UF promete só o que o ranking
+  // daquela UF entrega (abacaxi é paraibano; camarão é de PE e PB, não de AL).
   "PE:MATA PERNAMBUCANA": "pe-zona-mata-cana",
   "PE:METROPOLITANA DE RECIFE": "pe-zona-mata-cana", // PAM 2024: cana 91,1%
-  "PB:MATA PARAIBANA": "pe-zona-mata-cana", // PAM 2024: cana 57,2%
-  "AL:LESTE ALAGOANO": "pe-zona-mata-cana", // PAM 2024: cana 69,9%
+  "PB:MATA PARAIBANA": "pb-zona-mata", // PAM 2024: cana 57,2%
+  "AL:LESTE ALAGOANO": "al-zona-mata", // PAM 2024: cana 69,9%
   // Vale do São Francisco: as duas margens do mesmo polo Petrolina-Juazeiro.
   "PE:SAO FRANCISCO PERNAMBUCANO": "ba-vale-sao-francisco", // PAM 2024: uva 67,2%
   // ── Norte ──

@@ -84,9 +84,9 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "ba-sul-recôncavo",
     nome: "Sul Baiano / Recôncavo",
     retratoPt:
-      "Você está na zona cacaueira do Sul da Bahia — clima quente e úmido de Mata Atlântica, berço do cacau-cabruca (cultivado sob a sombra da mata nativa). A chuva farta dispensa irrigação; a região diversifica com café robusta e banana. Cadeia de beneficiamento consolidada.",
+      "Você está no Sul da Bahia — clima quente e úmido de Mata Atlântica, terra do cacau-cabruca (cultivado sob a sombra da mata nativa) e também polo de café robusta, com banana e piaçava no litoral. A chuva farta dispensa irrigação; cadeia de beneficiamento consolidada.",
     retratoEn:
-      "You're in the cocoa zone of Southern Bahia — warm, humid Atlantic Forest climate, home of cabruca cocoa (grown under native forest shade). Ample rainfall removes the need for irrigation; the region diversifies with robusta coffee and banana. Consolidated processing chain.",
+      "You're in Southern Bahia — warm, humid Atlantic Forest climate, land of cabruca cocoa (grown under native forest shade) and also a robusta coffee hub, with banana and piassava along the coast. Ample rainfall removes the need for irrigation; consolidated processing chain.",
     // piaçava explícita: o fato do IBGE PEVS nomeia Ilhéus, Nilo Peçanha e Cairu.
     vocacoes: ["lavoura_permanente", "cacau", "cafe", "banana", "piacava"],
     agua: "humid",

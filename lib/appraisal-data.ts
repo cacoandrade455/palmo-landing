@@ -1,16 +1,27 @@
 /**
  * Reference lease-value benchmarks (R$/ha/year) by land use and state.
  *
- * SOURCES (compiled Jul/2026 — update periodically):
- * - Grãos: sindicatos rurais / IMEA / Scot Consultoria / Embrapa references.
- *   Typical ranges quoted in sacas de soja/ha/ano: MT 13–25, Sul 15–25,
- *   GO/MS 12–22, Matopiba 10–20; converted at ~R$120/saca.
- * - Pecuária: market guides; extensive pasture R$50–150/ha/ano low end,
- *   formed pasture in Centro-Oeste/SP/Sul commonly R$250–700/ha/ano.
- * - Cana: CNA Campo Futuro — contracts set in t de cana/ha × ATR; SP panels
- *   24,5–30 t/ha at top regions; converted ≈ R$2.000–4.500/ha/ano SP.
- * - Silvicultura: market guides, R$150–700/ha/ano depending on region.
- * - Solar: market guides, R$1.000–6.000/ha/ano depending on irradiance/grid.
+ * SOURCES (reauditoria geral 27/jul/2026 — manifesto em docs/fontes-jul2026.md):
+ * - Grãos: guias de arrendamento 2026 (ContratoRural/InvestidorRural/Scot).
+ *   Convenção vigente pós-aperto de margens 25/26: CO 8–14 sc de soja/ha/ano
+ *   (picos 15–20 em terras top do Sul, herança da bonança 20/21–22/23);
+ *   convertido a ~R$140/saca (CEPEA Paranaguá jul/2026). As faixas em R$
+ *   abaixo (1.400–3.000 CO/Sul) seguem compatíveis com os guias 2026
+ *   (R$1.800–3.500) — mantidas levemente conservadoras.
+ * - Pecuária: guias 2026 (CompreRural): pasto formado CO R$400–900/ha/ano
+ *   (1–2 @/ha); extensivo R$50–150 no piso. Faixa mantida conservadora.
+ *   pecuaria_leite: SEM guia dedicado localizado na reauditoria jul/2026 —
+ *   faixa ampla mantida como referência de baixa confiança (disclaimer na UI).
+ * - Cana: fórmula t/ha × ATR × R$/kg (CNA). Pecege/Canaoeste: arrendamento
+ *   médio SP R$2.217 (25/26) → projetado R$2.075 (26/27); Consecana-SP
+ *   ~R$1,12/kg ATR 25/26 → ~R$1,02 26/27, viés de baixa. A média de mercado
+ *   está no PISO da faixa SP; o teto 4.500 é só de região prime. Faixa
+ *   AL/PE/PB sem confirmação específica em 2026 (mantida, baixa confiança).
+ * - Silvicultura: guias 2026: eucalipto R$100–300 em áreas comuns; MS
+ *   aquecido (efeito Arauco) chega a R$1.000–1.600/ha/ano. Faixa 200–700
+ *   mantida de propósito (conservadora); o pico de MS é mercado seletivo.
+ * - Solar: guias 2025/26 (Sunne/TabEnergia): R$1.000–5.000 média R$2.500,
+ *   contratos de 20–25 anos até R$8.000 nos melhores pontos. Confirmado.
  * - Legal ceiling note: Estatuto da Terra caps rent at 15% of land value
  *   (30% for intensive high-yield zones).
  *
@@ -21,8 +32,8 @@
 import { price } from "./prices";
 
 // Live reference price (from lib/prices.json, refreshed monthly). Falls back
-// to 130 if the price book is unavailable.
-export const SACA_SOJA_BRL = price("saca_soja") || 130;
+// to 140 if the price book is unavailable (CEPEA Paranaguá, média jul/2026).
+export const SACA_SOJA_BRL = price("saca_soja") || 140;
 
 type Range = { min: number; max: number; note?: "sacas" | "arroba" | "atr"; selective?: boolean };
 
@@ -68,8 +79,12 @@ const table: Record<string, Record<string, Range>> = {
     default: { min: 150, max: 500 },
   },
   reflorestamento_carbono: {
-    // Crédito de carbono: ~140 créditos/ha/ano × ~R$25/crédito ≈ R$3.500/ha/ano
-    // (Jusbrasil/Notícias Agrícolas/Aegro 2025); faixa ampla por bioma e metodologia.
+    // Crédito de carbono (reescrito na reauditoria jul/2026 — a justificativa
+    // antiga "140 créditos/ha/ANO" confundia estoque acumulado com fluxo anual):
+    // sequestro real 5–15 tCO2e/ha/ano em projetos ARR/regenerativos
+    // (Aegro/McKinsey 2025-26) × mercado voluntário R$50–200/tCO2e (ARR
+    // US$20–38) ≈ R$1.500–5.250/ha/ano — a MESMA faixa, agora com a conta
+    // defensável. Floresta nativa estoca 100–200 tCO2e/ha ACUMULADO em décadas.
     // Requer certificação (Verra/Gold Standard) e projeto de anos — não é renda passiva.
     // selective: mercado que depende de certificação e comprador, como solar.
     default: { min: 1500, max: 5250, selective: true },
@@ -87,8 +102,10 @@ const table: Record<string, Record<string, Range>> = {
 /**
  * Crop-level overrides where a specific crop has its own lease market,
  * distinct from its category benchmark.
- * - arroz irrigado (RS/SC): quoted in sacas de arroz; ~18–25 sc/ha for
- *   land + water (IRGA / market guides), converted at ~R$85–110/sc.
+ * - arroz irrigado (RS/SC): a referência atual de mercado é % da produção
+ *   (terra + água = 20–35% da safra, IRGA); a convenção em sacas usada aqui
+ *   (~15–25 sc/ha × R$95–115/sc, CEPEA/IRGA 2026) é aproximada e produz a
+ *   mesma faixa em R$. Reauditoria jul/2026: faixa compatível, mantida.
  */
 const cropOverrides: Record<string, Record<string, Range>> = {
   arroz: {
@@ -176,27 +193,29 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
     BA: {
       revMin: 35000,
       revMax: 45000,
-      sourceNote: "produtores do sul da Bahia (2026)",
+      sourceNote:
+        "produtores do sul da Bahia (2026) — fazenda formada; a média censitária da BA é R$25,2 mil/ha (IBGE PAM 2024, inclui bananal não tecnificado)",
     },
     default: {
       revMin: 25000,
       revMax: 45000,
-      sourceNote: "referência de fruticultura irrigada (varia muito por região)",
+      sourceNote:
+        "fruticultura formada (IBGE PAM 2024: média nacional R$34,2 mil/ha; SP irrigada R$47,5 mil/ha)",
     },
   },
   cacau: (() => {
-    const p = price("arroba_cacau") || 380;
+    const p = price("arroba_cacau") || 310;
     const rev = { revMin: Math.round(60 * p), revMax: Math.round(150 * p) };
-    const note = `sul da Bahia: 60–150 @/ha × R$${p}/@`;
+    const note = `sul da Bahia: 60–150 @/ha (lavoura tecnificada/clonada — a média censitária da BA é ~21 @/ha, IBGE PAM 2024; CEPLAC leva assistidos a 90–200 @/ha) × R$${p}/@ (spot jul/2026, muito volátil)`;
     return {
       BA: { ...rev, sourceNote: note },
       default: { ...rev, sourceNote: note },
     };
   })(),
   cafe: (() => {
-    const p = price("saca_cafe_arabica") || 1550;
+    const p = price("saca_cafe_arabica") || 1700;
     const rev = { revMin: Math.round(25 * p), revMax: Math.round(45 * p) };
-    const note = `cafeicultura formada (CEPEA): 25–45 sc/ha × R$${p}/sc`;
+    const note = `cafeicultura formada: 25–45 sc/ha (CONAB 2º lev. 2026: média nacional 34,4 sc/ha na safra recorde; teto = irrigado de cerrado) × R$${p}/sc (CEPEA)`;
     return {
       MG: { ...rev, sourceNote: note },
       SP: { ...rev, sourceNote: note },
@@ -205,9 +224,9 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
     };
   })(),
   citros: (() => {
-    const p = price("caixa_laranja") || 42;
+    const p = price("caixa_laranja") || 31;
     const rev = { revMin: Math.round(650 * p), revMax: Math.round(950 * p) };
-    const note = `citricultura formada (Fundecitrus/CEPEA): 650–950 cx/ha × R$${p}/cx`;
+    const note = `citricultura formada (Fundecitrus: 687 cx/ha em 24/25 e 869 cx/ha em 25/26; safra 26/27 estimada em queda de 12,9%) — 650–950 cx/ha × R$${p}/cx (CEPEA indústria)`;
     return {
       SP: { ...rev, sourceNote: note },
       MG: { ...rev, sourceNote: note },
@@ -215,10 +234,14 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
     };
   })(),
   manga: (() => {
-    const p = price("kg_manga") || 0.55; // R$/kg (very volatile)
-    // 20–30 t/ha; widen the top to reflect export-price spikes
-    const rev = { revMin: Math.round(20 * 1000 * p), revMax: Math.round(30 * 1000 * p * 1.6) };
-    const note = `manga formada Vale do São Francisco (Embrapa): 20–30 t/ha × ~R$${p}/kg, preço muito volátil`;
+    // Reauditoria jul/2026: fallback antigo de R$0,55/kg subestimava a receita
+    // em 3–5× contra o preço médio REALIZADO da PAM 2024 (BA ~R$2,41/kg,
+    // PE ~R$1,15/kg); o multiplicador 1.6 de "pico de exportação" saiu junto —
+    // com preço médio realista a faixa 20–30 t/ha × preço já abraça a média
+    // censitária (BA R$55,3 mil/ha; PE R$31,9 mil/ha; PAM 2024).
+    const p = price("kg_manga") || 2; // R$/kg (média anual; spot jul/2026 R$3,7–4,2 é entressafra)
+    const rev = { revMin: Math.round(20 * 1000 * p), revMax: Math.round(30 * 1000 * p) };
+    const note = `manga formada Vale do São Francisco (Embrapa: ~28 t/ha média do Vale): 20–30 t/ha × ~R$${p.toFixed(2)}/kg (média anual realizada, PAM 2024/CEPEA; preço muito volátil na entressafra)`;
     return {
       BA: { ...rev, sourceNote: note },
       PE: { ...rev, sourceNote: note },
@@ -280,12 +303,16 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
     },
   },
   maracuja: {
-    // ciclo de ~1,5–2 anos; rendimento médio nacional R$54,3 mil/ha (IBGE)
+    // ciclo de ~1,5–2 anos; rendimento médio nacional R$54,3 mil/ha (IBGE).
+    // Reauditoria jul/2026: piso da BA baixado de 35k para 30k — a média
+    // censitária baiana é R$31,8 mil/ha (PAM 2024) e o piso não deve ficar
+    // acima dela. Fato novo da PAM 2024: o CE ultrapassou a BA em VALOR de
+    // produção (R$691 mi vs R$620 mi); a BA segue maior em volume.
     BA: {
-      revMin: 35000,
+      revMin: 30000,
       revMax: 60000,
       sourceNote:
-        "maior produtora nacional (36% da produção), 13,5 t/ha (IBGE PAM 2024; polos Livramento/Dom Basílio)",
+        "maior produtora nacional em volume (36%), 13,5 t/ha e média de R$31,8 mil/ha (IBGE PAM 2024; polos Livramento/Dom Basílio)",
     },
     CE: {
       revMin: 45000,
@@ -346,11 +373,15 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
     },
   },
   abacate: {
+    // Reauditoria jul/2026: a nota de SP usava os números NACIONAIS como se
+    // fossem estaduais; corrigida para os da UF (PAM 2024: SP 15,6 t/ha e
+    // R$37,1 mil/ha) e o piso baixado de 40k para 35k para não ficar acima
+    // da média censitária paulista.
     SP: {
-      revMin: 40000,
+      revMin: 35000,
       revMax: 80000,
       sourceNote:
-        "abacaticultura SP: ~16,9 t/ha, ~R$45,7 mil/ha médio (IBGE PAM 2024); avocado de exportação no topo",
+        "abacaticultura SP: 15,6 t/ha e R$37,1 mil/ha médio na UF (IBGE PAM 2024); avocado de exportação no topo",
     },
     MG: {
       revMin: 40000,
@@ -399,6 +430,42 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
     };
     return { ...group2(["CE", "PI", "RN"], ref), default: ref };
   })(),
+  // pessego: modelo ADICIONADO na reauditoria jul/2026 — a lacuna anterior era
+  // deliberada, mas a PAM 2024 (SIDRA t.1613) dá base defensável por UF:
+  // Brasil R$47,8 mil/ha (12,4 t/ha); RS R$34,0 mil/ha (10,9 t/ha, 65% do
+  // volume, polo de Pelotas); SC R$51,4 mil/ha; PR R$59,2 mil/ha; SP R$123,9
+  // mil/ha (21,2 t/ha — pêssego de mesa perto do mercado, área pequena).
+  pessego: {
+    RS: {
+      revMin: 25000,
+      revMax: 45000,
+      sourceNote:
+        "pessegocultura RS (IBGE PAM 2024: 10,9 t/ha e R$34,0 mil/ha; polo de Pelotas, 65% do volume nacional)",
+    },
+    SC: {
+      revMin: 35000,
+      revMax: 65000,
+      sourceNote: "pomares de SC (IBGE PAM 2024: 12,6 t/ha e R$51,4 mil/ha)",
+    },
+    SP: {
+      revMin: 80000,
+      revMax: 140000,
+      sourceNote:
+        "pêssego de mesa SP (IBGE PAM 2024: 21,2 t/ha e R$123,9 mil/ha — área pequena, perto do mercado)",
+    },
+    default: {
+      revMin: 30000,
+      revMax: 80000,
+      sourceNote: "pessegocultura formada (IBGE PAM 2024: média nacional R$47,8 mil/ha, 12,4 t/ha)",
+    },
+  },
+  // GENGIBRE segue deliberadamente SEM modelo (busca documentada na
+  // reauditoria jul/2026): produtividade tem fonte boa (ES maior produtor,
+  // média 50,9 t/ha — SEAG-ES/Incaper), mas NÃO existe série oficial de preço
+  // ao produtor (ausente da PAM/classificação c81; sem indicador CEPEA/CONAB/
+  // CEASA consolidado). O farmgate documentado oscilou R$0,57–1,57/kg entre
+  // anos (boom-bust de exportação) — a receita implícita variaria de ~R$9 mil
+  // a ~R$90 mil/ha, banda inútil para decisão. Sem preço defensável, sem modelo.
 };
 
 /** group() for formed-crop refs (same idea, different value type). */

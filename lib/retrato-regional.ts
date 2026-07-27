@@ -70,6 +70,8 @@ const MESO_TO_REGIAO: Record<string, string> = {
   // ── Centro-Oeste / MATOPIBA ──
   "MT:NORTE MATO-GROSSENSE": "mt-medio-norte",
   "GO:SUL GOIANO": "go-sudoeste",
+  // Reauditoria jul/2026 (lista priorizada do PR #19).
+  "GO:CENTRO GOIANO": "go-centro-goiano",
   "MA:SUL MARANHENSE": "matopiba-fronteira",
   "MA:LESTE MARANHENSE": "matopiba-fronteira", // PAM 2024: soja 84,4%
   "PI:SUDOESTE PIAUIENSE": "matopiba-fronteira",
@@ -86,6 +88,9 @@ const MESO_TO_REGIAO: Record<string, string> = {
   // ── Nordeste ──
   "RN:OESTE POTIGUAR": "rn-assu-mossoro",
   "CE:JAGUARIBE": "ce-baixo-jaguaribe",
+  // Reauditoria jul/2026: 3 mesorregiões novas (lista priorizada do PR #19).
+  "PB:SERTAO PARAIBANO": "pb-sertao-paraibano",
+  "PE:AGRESTE PERNAMBUCANO": "pe-agreste",
   // Zona da Mata dividida por UF (25/jul): cada UF promete só o que o ranking
   // daquela UF entrega (abacaxi é paraibano; camarão é de PE e PB, não de AL).
   "PE:MATA PERNAMBUCANA": "pe-zona-mata-cana",

@@ -73,12 +73,20 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "ba-vale-sao-francisco",
     nome: "Vale do São Francisco (Petrolina-Juazeiro)",
     retratoPt:
-      "Você está no Vale do São Francisco — o eixo Petrolina/PE e Juazeiro/BA, cidades conurbadas nas duas margens do Velho Chico, formam um só polo de fruticultura irrigada de exportação, um dos maiores do país. Lidera a exportação nacional de manga e uva; também goiaba, banana e coco. A água transforma o valor da terra aqui.",
+      "Você está no Vale do São Francisco — o eixo Petrolina/PE e Juazeiro/BA, cidades conurbadas nas duas margens do Velho Chico, formam um só polo de fruticultura irrigada de exportação, um dos maiores do país. Lidera a exportação nacional de manga e uva; também goiaba, banana e coco. A água transforma o valor da terra aqui — e, fora dos perímetros, o sertão do Vale vive do sequeiro: caprinos e ovinos e a melancia de sequeiro plantada na quadra chuvosa (Embrapa Semiárido).",
     retratoEn:
-      "You're in the São Francisco Valley — the twin cities of Petrolina/PE and Juazeiro/BA, on opposite banks of the river, form a single irrigated export-fruit hub, one of Brazil's largest. It leads national mango and grape exports; also guava, banana and coconut. Water transforms land value here.",
-    vocacoes: ["fruticultura", "manga", "uva", "goiaba", "banana", "coco"],
+      "You're in the São Francisco Valley — the twin cities of Petrolina/PE and Juazeiro/BA, on opposite banks of the river, form a single irrigated export-fruit hub, one of Brazil's largest. It leads national mango and grape exports; also guava, banana and coconut. Water transforms land value here — and, outside the irrigation schemes, the Valley's backlands live off rainfed farming: goats and sheep, and rainy-season watermelon (Embrapa Semiárido).",
+    // Vocações de sequeiro adicionadas na reauditoria jul/2026 (caso
+    // Xique-Xique): sem água, o retrato antes só oferecia fruticultura
+    // rebaixada. Melancia de sequeiro: Embrapa Semiárido CT 180/2020 e
+    // IT 11/1999 (Massaroca/Juazeiro). Caprinos/ovinos: PPM 2024 (o sertão
+    // do Vale é território clássico do rebanho baiano, líder nacional).
+    vocacoes: [
+      "fruticultura", "manga", "uva", "goiaba", "banana", "coco",
+      "melancia", "caprinos", "ovinos",
+    ],
     agua: "irrigado",
-    fonte: "Embrapa Semiárido / IBGE",
+    fonte: "Embrapa Semiárido / IBGE PAM 2024 / IBGE PPM 2024",
   },
   "ba-sul-recôncavo": {
     key: "ba-sul-recôncavo",
@@ -114,9 +122,13 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "You're in North-Central Bahia — a hub for rainfed beans, cassava and onion, with dairy basins in places. Irecê is a benchmark for beans and cassava in the semi-arid.",
     // Irecê: feijão, mandioca e cebola de sequeiro. NÃO usar "graos" amplo —
     // arrastava soja e algodão, que na BA pertencem ao Extremo Oeste.
-    vocacoes: ["feijao", "mandioca", "cebola", "pecuaria_leite"],
+    // "pecuaria_leite" saiu na reauditoria jul/2026: a vocação virou vantagem
+    // estadual (MG/PR/RS/SC/GO, PPM 2024) e a BA não pode entrar honestamente
+    // no fato — como vocacao aqui, viraria divergência retrato×ranking. As
+    // "bacias leiteiras em pontos" seguem no texto, como contexto.
+    vocacoes: ["feijao", "mandioca", "cebola"],
     agua: "dry",
-    fonte: "IBGE PAM",
+    fonte: "IBGE PAM 2024",
   },
 
   // PENDENTE DE VALIDAÇÃO FACTUAL (24/jul) — retrato novo, números tirados
@@ -142,16 +154,20 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
   },
 
   // ── MINAS GERAIS (macrorregiões cafeeiras IMA 2000) ──
+  // Reauditoria jul/2026: os antigos "30% do arábica nacional / 42% do
+  // mineiro / 95% <50 ha" não foram confirmáveis em fonte pública 2024/25
+  // (a Emater-MG usa recorte regional diferente) — decisão conservadora:
+  // retrato reescrito só com o que é verificável; lacuna documentada no PR.
   "mg-sul-de-minas": {
     key: "mg-sul-de-minas",
     nome: "Sul de Minas",
     retratoPt:
-      "Você está no Sul de Minas — a maior região cafeeira do Brasil, com 30% do café arábica nacional e 42% do mineiro. Predominam pequenas e médias propriedades (95% com menos de 50 ha) de café arábica de qualidade. A sub-região Mantiqueira de Minas é celeiro de cafés premiados.",
+      "Você está no Sul de Minas — a maior região cafeeira do Brasil, coração do arábica mineiro (MG lidera a safra nacional com 33,4 mi de sacas — CONAB 2026). Predominam pequenas e médias propriedades de café de qualidade; a sub-região Mantiqueira de Minas é celeiro de cafés premiados.",
     retratoEn:
-      "You're in South Minas — Brazil's largest coffee region, with 30% of national arabica and 42% of the state's. Small and mid-sized farms dominate (95% under 50 ha) growing quality arabica. The Mantiqueira de Minas sub-region yields award-winning coffees.",
+      "You're in South Minas — Brazil's largest coffee region, the heart of Minas arabica (MG leads the national crop with 33.4 M bags — CONAB 2026). Small and mid-sized quality-coffee farms dominate; the Mantiqueira de Minas sub-region yields award-winning coffees.",
     vocacoes: ["cafe"],
     agua: "humid",
-    fonte: "IBGE PAM 2024 / IMA",
+    fonte: "CONAB 2º lev. 2026 / Emater-MG / IMA",
   },
   "mg-cerrado-mineiro": {
     key: "mg-cerrado-mineiro",
@@ -222,9 +238,9 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "mt-medio-norte",
     nome: "Médio-Norte de Mato Grosso",
     retratoPt:
-      "Você está no Médio-Norte de Mato Grosso — Sorriso, o maior produtor agrícola do Brasil (R$7,2 bi), Sinop e Lucas do Rio Verde. Soja e milho safrinha em larga escala com agricultura de precisão. MT responde por 27% da soja nacional.",
+      "Você está no Médio-Norte de Mato Grosso — Sorriso, o maior produtor agrícola do Brasil (R$7,2 bi na PAM 2024), Sinop e Lucas do Rio Verde. Soja e milho safrinha em larga escala com agricultura de precisão. MT responde por ~29% da soja nacional (CONAB 2025/26).",
     retratoEn:
-      "You're in Mid-Northern Mato Grosso — Sorriso, Brazil's largest agricultural producer (R$7.2bn), Sinop and Lucas do Rio Verde. Large-scale soybeans and second-crop maize with precision farming. MT accounts for 27% of national soy.",
+      "You're in Mid-Northern Mato Grosso — Sorriso, Brazil's largest agricultural producer (R$7.2bn in PAM 2024), Sinop and Lucas do Rio Verde. Large-scale soybeans and second-crop maize with precision farming. MT accounts for ~29% of national soy (CONAB 2025/26).",
     vocacoes: ["graos", "soja", "milho", "algodao"],
     agua: "mista",
     fonte: "IBGE PAM 2024 / CONAB / MAPA",
@@ -277,9 +293,11 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     retratoEn:
       "You're in the Serra Gaúcha — Caxias do Sul, Bento Gonçalves and Farroupilha, an Italian-immigrant legacy. Rio Grande do Sul makes 90% of Brazil's wine, 85% of its sparkling wine and 90% of its grape juice, and the Serra is the core of that output. Grape and wine country par excellence.",
     // Só uva: a maçã gaúcha é de Vacaria (Campos de Cima da Serra).
+    // Fonte trocada na reauditoria jul/2026: a Ibravin foi extinta; os
+    // 90/85/90% seguem repetidos por fontes oficiais gaúchas em 2025/26.
     vocacoes: ["uva"],
     agua: "humid",
-    fonte: "Ibravin / IBGE",
+    fonte: "SEAPI-RS / Embrapa Uva e Vinho / IBGE",
   },
   "rs-campos-cima-serra": {
     key: "rs-campos-cima-serra",
@@ -301,7 +319,7 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
       "You're in Santa Catarina's Highland Plateau — São Joaquim, at 900–1400m, accounts for 27% of Brazil's apple area and 25% of its production, and makes premium high-altitude wines. Brazil's coldest climate gives fruit and grapes a long, refined cycle.",
     vocacoes: ["maca", "uva", "pessego"],
     agua: "humid",
-    fonte: "IBGE PAM 2024 / Epagri / Ibravin",
+    fonte: "IBGE PAM 2024 / Epagri / Vinhos de Altitude SC",
   },
   "rs-metade-sul-arroz": {
     key: "rs-metade-sul-arroz",
@@ -347,10 +365,13 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     key: "ce-baixo-jaguaribe",
     nome: "Baixo Jaguaribe / Litoral (CE)",
     retratoPt:
-      "Você está no litoral leste do Ceará (Aracati, Icapuí, Limoeiro) — fruticultura irrigada de exportação (melão e melancia em larga escala) e carcinicultura no litoral. O Ceará concentra parcela expressiva do maracujá e do coco do Nordeste.",
+      "Você está no litoral leste do Ceará (Aracati, Icapuí, Limoeiro) — fruticultura irrigada de exportação (melão e melancia em larga escala) e carcinicultura no litoral. O Ceará é o maior produtor nacional de coco (IBGE PAM 2024) e o 2º de maracujá; no sequeiro, o cajueiro dos tabuleiros costeiros complementa a renda (Embrapa).",
     retratoEn:
-      "You're on Ceará's eastern coast (Aracati, Icapuí, Limoeiro) — export irrigated fruit (large-scale melon and watermelon) and coastal shrimp farming. Ceará holds a major share of the Northeast's passion fruit and coconut.",
-    vocacoes: ["fruticultura", "aquicultura", "melao", "maracuja", "coco", "camarao"],
+      "You're on Ceará's eastern coast (Aracati, Icapuí, Limoeiro) — export irrigated fruit (large-scale melon and watermelon) and coastal shrimp farming. Ceará is Brazil's largest coconut producer (IBGE PAM 2024) and 2nd in passion fruit; on rainfed land, the coastal-tableland cashew groves round out the income (Embrapa).",
+    // caju adicionado na reauditoria jul/2026 (vocação de sequeiro da Fase 6):
+    // Aracati/Beberibe/Cascavel são cinturão histórico do cajueiro cearense —
+    // sem ele, o ranking sem água ficava 100% rebaixado nesta região.
+    vocacoes: ["fruticultura", "aquicultura", "melao", "maracuja", "coco", "camarao", "caju"],
     agua: "irrigado",
     fonte: "BNB/ETENE / ABRAFRUTAS",
   },
@@ -442,6 +463,54 @@ export const REGIOES: Record<string, RegiaoRetrato> = {
     vocacoes: ["graos", "soja", "arroz"],
     agua: "mista",
     fonte: "CONAB",
+  },
+
+  // ── RETRATOS NOVOS (reauditoria jul/2026 — as 3 próximas mesorregiões da
+  // lista priorizada do PR #19: PB Sertão 83 municípios, GO Centro 82,
+  // PE Agreste 71; SC Oeste e MG Metropolitana seguem vetadas pelos motivos
+  // do PR #19). Números extraídos da API SIDRA: PAM 2024 t.5457 (N8/N6) e
+  // PPM 2024 t.3939. PENDENTE DE VALIDAÇÃO FACTUAL pelo Carlos antes do merge.
+  "pb-sertao-paraibano": {
+    key: "pb-sertao-paraibano",
+    nome: "Sertão Paraibano",
+    retratoPt:
+      "Você está no Sertão Paraibano — o semiárido de Patos, Sousa e Cajazeiras, onde a renda da terra é o rebanho: 681 mil bovinos, 271 mil ovinos e 190 mil caprinos (PPM 2024). As lavouras somam R$161 mi (PAM 2024), puxadas por feijão e milho de sequeiro e pela ilha irrigada de Sousa, onde o coco e a banana do perímetro de São Gonçalo mudam o patamar.",
+    retratoEn:
+      "You're in the Paraíba backlands — the semi-arid of Patos, Sousa and Cajazeiras, where land income is the herd: 681k cattle, 271k sheep and 190k goats (PPM 2024). Crops total R$161m (PAM 2024), led by rainfed beans and maize and by Sousa's irrigated island, where coconut and banana from the São Gonçalo scheme change the scale.",
+    // feijão/milho ficam SÓ no texto: as vantagens de feijao/milho não cobrem
+    // a PB (PB não é líder nacional) e listá-los aqui viraria divergência
+    // retrato×ranking. coco cobre PB (9ª nacional, fato do coco); ovinos e
+    // caprinos cobrem PB pela frase regional do NE (PPM 2024).
+    vocacoes: ["coco", "pecuaria_corte", "ovinos", "caprinos"],
+    agua: "dry",
+    fonte: "IBGE PAM 2024 / IBGE PPM 2024",
+  },
+  "go-centro-goiano": {
+    key: "go-centro-goiano",
+    nome: "Centro Goiano (Anápolis / Vale do São Patrício)",
+    retratoPt:
+      "Você está no Centro Goiano — Anápolis, Ceres e o Vale do São Patrício. Soja (R$1,9 bi, 36% do valor das lavouras) e cana (R$1,5 bi, 29%; Goianésia e São Luiz do Norte) dominam, com um cinturão de frutas — banana, laranja, abacaxi e a melancia de Uruana — e força pecuária: 29,5 milhões de galináceos no polo avícola de Itaberaí e 4,6 milhões de bovinos (IBGE PAM/PPM 2024).",
+    retratoEn:
+      "You're in Central Goiás — Anápolis, Ceres and the São Patrício Valley. Soybeans (R$1.9bn, 36% of crop value) and sugarcane (R$1.5bn, 29%; Goianésia and São Luiz do Norte) dominate, with a fruit belt — banana, orange, pineapple and Uruana's watermelon — and livestock muscle: 29.5 million poultry in the Itaberaí hub and 4.6 million cattle (IBGE PAM/PPM 2024).",
+    // banana/citros/abacaxi/frango ficam só no texto: as vantagens dessas
+    // culturas não cobrem GO. melancia cobre (GO líder nacional, Uruana).
+    vocacoes: ["soja", "milho", "cana", "melancia", "pecuaria_corte"],
+    agua: "mista",
+    fonte: "IBGE PAM 2024 / IBGE PPM 2024",
+  },
+  "pe-agreste": {
+    key: "pe-agreste",
+    nome: "Agreste Pernambucano",
+    retratoPt:
+      "Você está no Agreste Pernambucano — Caruaru, Garanhuns e os brejos de altitude. A banana lidera as lavouras (R$318 mi, 23% do valor; São Vicente Férrer), seguida de mandioca, feijão e do tomate de Bezerros e Gravatá. É a potência pecuária do interior de PE: 49,7 milhões de galináceos (São Bento do Una), 1,4 milhão de bovinos na bacia leiteira de Garanhuns e quase 1 milhão de ovinos e caprinos (IBGE PAM/PPM 2024).",
+    retratoEn:
+      "You're in Pernambuco's Agreste — Caruaru, Garanhuns and the highland brejos. Banana leads the crops (R$318m, 23% of value; São Vicente Férrer), followed by cassava, beans and the tomatoes of Bezerros and Gravatá. It's inland PE's livestock powerhouse: 49.7 million poultry (São Bento do Una), 1.4 million cattle in the Garanhuns dairy basin and nearly 1 million sheep and goats (IBGE PAM/PPM 2024).",
+    // mandioca/feijão/tomate/leite/avicultura ficam só no texto: as vantagens
+    // dessas chaves não cobrem PE. banana cobre (PE 5º nacional); ovinos e
+    // caprinos cobrem PE nominalmente (2º rebanho nos dois, PPM 2024).
+    vocacoes: ["banana", "ovinos", "caprinos", "pecuaria_corte"],
+    agua: "mista",
+    fonte: "IBGE PAM 2024 / IBGE PPM 2024",
   },
 };
 

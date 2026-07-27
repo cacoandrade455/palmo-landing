@@ -148,58 +148,157 @@ function labelFor(
 }
 
 // ---------------------------------------------------------------------------
-// WATER-FIT buckets (crop agronomy classification — engine logic, not data).
-// Which regional vocations depend on a water source vs. thrive on rainfall vs.
-// are indifferent. Keyed by crop value, falling back to the purpose.
-// ---------------------------------------------------------------------------
+// WATER PROFILE por cultura (reauditoria jul/2026 — substitui os sets binários
+// NEEDS_IRRIGATION / RAINFED_OK). Cada linha tem dossiê com fonte primária em
+// docs/hidrico-jul2026.md (Embrapa prioritária; Embrapa Semiárido para o
+// semiárido). Chave = cultura, com fallback no purpose.
 //
-// The irrigation set describes SEMI-ARID fruit growing, which is where these
-// crops earn their money in Brazil. It is NOT a property of the plant: the same
-// grape that is drip-irrigated in the São Francisco Valley is rainfed in the
-// Serra Gaúcha, and coastal coconut in the humid Zona da Mata needs no pump
-// either. So the set is read through the region's water regime (`agua`) — see
-// `bucketOf` — instead of being applied blindly.
-const NEEDS_IRRIGATION = new Set([
-  "manga", // Vale do São Francisco is irrigated fruit
-  "melao", // Mossoró/Açu hub, irrigated per season
-  "uva", // table grapes in the semi-arid; rainfed wine grapes in the south
-  "mamao", // irrigated (CE 70 t/ha)
-  "coco", // dwarf coconut is grown irrigated
-  "tilapia", // needs a water body
-  "camarao", // needs brackish/coastal water
-]);
-// Aquaculture needs a standing body of water, not rainfall: no regional climate
-// ever waives it. These never leave the irrigation bucket.
-const NEEDS_WATER_BODY = new Set(["tilapia", "camarao"]);
-const RAINFED_OK = new Set([
-  "cacau", // humid south Bahia / Pará
-  "cafe", // humid highlands
-  "banana", // rainfed in humid zones
-  "citros", // rainfed in SP
-  "acai", // humid Amazon
-  "goiaba",
-  "maracuja",
-  "abacate",
-  "maca",
-  "pessego",
-  "abacaxi",
+// Os cinco perfis:
+// - agua_sempre: exige corpo d'água/irrigação em QUALQUER clima (aquicultura,
+//   mamão, cebola, batata, tomate, arroz irrigado).
+// - irrigacao_semiarido: de sequeiro no clima úmido, irrigada no semiárido
+//   (manga, uva, melão, coco, goiaba, banana, maracujá, café, citros, cana).
+//   É atributo da ECONOMIA, não da planta: a mesma uva gotejada em Petrolina
+//   é de sequeiro na Serra Gaúcha e na Campanha.
+// - umido_obrigatorio: exige clima úmido — no semiárido não se sustenta NEM
+//   com irrigação plena como prática econômica registrada (cacau, açaí, maçã,
+//   pêssego, pinhão, castanha, piaçava, trigo; em maçã/pêssego/trigo o
+//   limitante real é frio/inverno, que a água não compra).
+// - sequeiro_semiarido_ok: adaptada ao sequeiro do semiárido — NUNCA é
+//   rebaixada por falta d'água (caju clonal Embrapa, carnaúba, mandioca,
+//   feijão-caupi, melancia de sequeiro, abacaxi de Itaberaba, caprinos,
+//   ovinos, pecuária de caatinga). `riscoInteranual` marca as anuais que
+//   cabem na quadra chuvosa mas quebram em ano seco (melancia, feijão, milho).
+// - neutro: indiferente ao recorte (grãos de sequeiro do Cerrado, suínos,
+//   aves, leite, fumo — fumo sem fonte oficial de regime hídrico, mantido
+//   neutro por conservadorismo).
+// ---------------------------------------------------------------------------
+export type WaterProfile =
+  | "agua_sempre"
+  | "irrigacao_semiarido"
+  | "umido_obrigatorio"
+  | "sequeiro_semiarido_ok"
+  | "neutro";
+
+type WaterProfileEntry = { profile: WaterProfile; riscoInteranual?: boolean };
+
+const WATER_PROFILE: Record<string, WaterProfileEntry> = {
+  // agua_sempre
+  tilapia: { profile: "agua_sempre" }, // vazão de abastecimento é requisito de projeto (Embrapa Pesca)
+  camarao: { profile: "agua_sempre" }, // água salobra COSTEIRA — açude no sertão não habilita
+  aquicultura: { profile: "agua_sempre" },
+  mamao: { profile: "agua_sempre" }, // irrigação imprescindível até no ES úmido (Incaper); déficit induz flor estéril
+  cebola: { profile: "agua_sempre" }, // 350–650mm bem distribuídos, baixa tolerância a déficit (Embrapa Hortaliças)
+  batata: { profile: "agua_sempre" }, // "altamente sensível ao déficit hídrico"; pivô é a regra (Embrapa Hortaliças)
+  tomate: { profile: "agua_sempre" }, // industrial de GO 100% irrigado, plantio na estação seca (Embrapa)
+  arroz: { profile: "agua_sempre" }, // RS/SC inundação (IRGA/Epagri); exceção regional MATOPIBA abaixo
+  // irrigacao_semiarido
+  manga: { profile: "irrigacao_semiarido" },
+  melao: { profile: "irrigacao_semiarido" },
+  uva: { profile: "irrigacao_semiarido" },
+  coco: { profile: "irrigacao_semiarido" }, // anão irrigado no semiárido; gigante do litoral úmido é sequeiro
+  goiaba: { profile: "irrigacao_semiarido" }, // sequeiro só com 800–1.000mm; <600mm não produz (Embrapa, Plantar Goiaba)
+  banana: { profile: "irrigacao_semiarido" }, // ≥1.100mm; polo Jaíba/Janaúba é 100% perímetro irrigado (Embrapa/SEAPA-MG)
+  maracuja: { profile: "irrigacao_semiarido" }, // ≥70mm/mês; polo Livramento/Dom Basílio irrigado por barragem (Embrapa/SEINFRA-BA)
+  cafe: { profile: "irrigacao_semiarido" }, // arábica de altitude é sequeiro; conilon ES e cerrado irrigado no seco
+  citros: { profile: "irrigacao_semiarido" }, // maioria do cinturão SP é sequeiro subúmido; irrigado no semiárido (Jaíba)
+  cana: { profile: "irrigacao_semiarido" }, // Zona da Mata é sequeiro com salvamento; no sertão só irrigada (Embrapa)
+  // umido_obrigatorio
+  cacau: { profile: "umido_obrigatorio" }, // déficit hídrico anual >100mm já desaconselha (Embrapa)
+  acai: { profile: "umido_obrigatorio" }, // várzea/Amazônia úmida; terra firme exige irrigação pesada DENTRO do úmido
+  maca: { profile: "umido_obrigatorio" }, // limitante real: horas de frio — irrigar não resolve
+  pessego: { profile: "umido_obrigatorio" }, // idem maçã (clima temperado úmido)
+  abacate: { profile: "umido_obrigatorio" }, // ~1.300mm bem distribuídos; polos subúmidos SP/MG
+  pinhao: { profile: "umido_obrigatorio" }, // araucária restrita ao subtropical chuvoso de altitude
+  castanha_amazonia: { profile: "umido_obrigatorio" }, // 1.400–2.800mm, extrativismo de floresta
+  piacava: { profile: "umido_obrigatorio" }, // endêmica da Mata Atlântica litorânea baiana (UESC)
+  trigo: { profile: "umido_obrigatorio" }, // inverno temperado (ZARC trigo de sequeiro Sul); inviável no semiárido mesmo com água
+  // sequeiro_semiarido_ok
+  melancia: { profile: "sequeiro_semiarido_ok", riscoInteranual: true }, // ciclo 65–85 dias cabe na quadra chuvosa (Embrapa Semiárido CT 180/2020; IT 11/1999 Massaroca-Juazeiro)
+  abacaxi: { profile: "sequeiro_semiarido_ok" }, // sistema Embrapa de sequeiro p/ Itaberaba-BA, 600–800mm, "cultivo não irrigado"
+  caju: { profile: "sequeiro_semiarido_ok" }, // clones Embrapa PARA sequeiro; produz com 600–800mm/ano
+  carnauba: { profile: "sequeiro_semiarido_ok" }, // extrativismo de população nativa, zero irrigação
+  babacu: { profile: "sequeiro_semiarido_ok" }, // extrativismo da Mata dos Cocais (transição)
+  mandioca: { profile: "sequeiro_semiarido_ok" }, // "a cultura que melhor se adapta ao Semiárido" (Embrapa)
+  feijao: { profile: "sequeiro_semiarido_ok", riscoInteranual: true }, // caupi/macassar do sertão (Embrapa Meio-Norte); a 3ª safra irrigada é outro mercado
+  pecuaria_corte: { profile: "sequeiro_semiarido_ok" }, // caatinga como pastagem nativa (Embrapa) — com suplementação na seca
+  ovinos: { profile: "sequeiro_semiarido_ok" }, // Embrapa Caprinos e Ovinos (Sobral-CE), sistemas sobre caatinga
+  caprinos: { profile: "sequeiro_semiarido_ok" }, // os mais adaptados do bioma (Embrapa)
+  // neutro com risco marcado
+  milho: { profile: "neutro", riscoInteranual: true }, // >70% da área familiar do semiárido é milho+caupi (Embrapa), mas quebra com veranico
+};
+
+// Exceções por região curada: o perfil NACIONAL não vale em toda parte.
+// arroz: no MATOPIBA o sistema registrado é terras altas/sequeiro em rotação
+// com soja (Embrapa Arroz e Feijão) — não exige o corpo d'água do RS.
+const REGIONAL_PROFILE_OVERRIDE: Record<string, Record<string, WaterProfile>> = {
+  arroz: { "matopiba-fronteira": "neutro" },
+};
+
+// Regiões curadas do semiárido (delimitação SUDENE). Necessário porque o campo
+// `agua` da região é ambíguo para este fim: "irrigado" descreve tanto o Vale do
+// São Francisco (semiárido) quanto a Metade Sul do RS (pampa úmido) — e é essa
+// ambiguidade que fazia a uva da Campanha "pedir irrigação" (lacuna nº 4 do
+// PR #19, corrigida aqui: fora do semiárido, uva é sequeiro — Embrapa Uva e Vinho).
+const REGIOES_SEMIARIDAS = new Set([
+  "ba-vale-sao-francisco",
+  "ba-sertao-nordeste",
+  "ba-centro-norte",
+  "ce-rn-sertao-caju",
+  "rn-assu-mossoro",
+  "ce-baixo-jaguaribe",
 ]);
 
-function bucketOf(
+/** Contexto climático efetivo: município curado (DRY/HUMID) > região curada. */
+type ClimaContexto = "umido" | "semiarido" | "indefinido";
+
+function climaDe(regiao: RegiaoRetrato | null, moisture: Moisture): ClimaContexto {
+  if (moisture === "dry") return "semiarido";
+  if (moisture === "humid") return "umido";
+  if (regiao) {
+    if (regiao.agua === "dry" || REGIOES_SEMIARIDAS.has(regiao.key)) return "semiarido";
+    if (regiao.agua === "humid") return "umido";
+  }
+  return "indefinido";
+}
+
+function profileOf(
   cropValue: string,
   purpose: string,
   regiao: RegiaoRetrato | null,
-): WaterFit {
+): WaterProfileEntry {
   const k = cropValue || purpose;
-  if (NEEDS_IRRIGATION.has(k)) {
-    // In a region whose curated water regime is naturally humid, an
-    // "irrigated fruit" is grown rainfed — Serra Gaúcha and São Joaquim wine
-    // grapes, Zona da Mata coconut. Only aquaculture is never waived.
-    if (regiao?.agua === "humid" && !NEEDS_WATER_BODY.has(k)) return "rainfed_ok";
-    return "needsIrrigation";
+  const override = regiao ? REGIONAL_PROFILE_OVERRIDE[k]?.[regiao.key] : undefined;
+  if (override) return { profile: override };
+  return WATER_PROFILE[k] ?? WATER_PROFILE[purpose] ?? { profile: "neutro" };
+}
+
+/**
+ * Viabilidade hídrica: perfil × contexto climático × água declarada.
+ * `fit` mantém os três valores históricos (a UI os conhece); `demoted` é o
+ * único efeito no ranking (afunda, nunca reordena viáveis).
+ */
+function bucketOf(
+  entry: WaterProfileEntry,
+  clima: ClimaContexto,
+  water: boolean,
+): { fit: WaterFit; demoted: boolean } {
+  switch (entry.profile) {
+    case "agua_sempre":
+      return { fit: "needsIrrigation", demoted: !water };
+    case "irrigacao_semiarido":
+      if (clima === "umido") return { fit: "rainfed_ok", demoted: false };
+      if (clima === "semiarido") return { fit: "needsIrrigation", demoted: !water };
+      return { fit: "rainfed_ok", demoted: false }; // indefinido: viável, com caveat
+    case "umido_obrigatorio":
+      // No semiárido a água não compra o clima: rebaixada MESMO com fonte.
+      if (clima === "semiarido") return { fit: "rainfed_ok", demoted: true };
+      return { fit: "rainfed_ok", demoted: false };
+    case "sequeiro_semiarido_ok":
+      return { fit: clima === "semiarido" ? "neutral" : "rainfed_ok", demoted: false };
+    case "neutro":
+      return { fit: "neutral", demoted: false };
   }
-  if (RAINFED_OK.has(k)) return "rainfed_ok";
-  return "neutral"; // grains-of-dryland, cattle, cassava, extractivism, cane...
 }
 
 // ---------------------------------------------------------------------------
@@ -270,24 +369,11 @@ export function regionMoisture(uf: string, municipality?: string): Moisture {
 }
 
 // ---------------------------------------------------------------------------
-// Water/region scoring. The water fit is the DECISIVE lever; a small
-// revenue term only breaks ties inside the same bucket.
+// Copy hídrica por perfil × contexto × água. O blurb de clima seco agora é
+// CONDICIONADO ao atributo real da cultura (reauditoria jul/2026): só quem é
+// `sequeiro_semiarido_ok` recebe "adaptada ao sequeiro"; soja e cana nunca
+// mais ganham crédito de caatinga por engano.
 // ---------------------------------------------------------------------------
-function waterScore(fit: WaterFit, moisture: Moisture, water: boolean): number {
-  if (fit === "needsIrrigation") {
-    return water ? 400 : -900; // no water source → drops below everything
-  }
-  if (fit === "rainfed_ok") {
-    if (moisture === "humid") return 500; // natural humidity → prime vocation
-    if (moisture === "dry") return water ? 250 : -700; // caatinga needs water
-    return water ? 300 : 120; // unknown: viable, but modest without confidence
-  }
-  // neutral — dryland grains, cattle, cassava, extractivism, cane
-  if (moisture === "dry") return 250; // exactly the sertão economy
-  if (moisture === "humid") return 150;
-  return 180;
-}
-
 type WaterCopy = {
   reasonPt: string;
   reasonEn: string;
@@ -295,58 +381,99 @@ type WaterCopy = {
   warnEn?: string;
 };
 
-function waterCopy(fit: WaterFit, moisture: Moisture, water: boolean): WaterCopy {
-  if (fit === "needsIrrigation") {
-    if (water) {
-      return {
-        reasonPt: "Fruticultura de alto valor — e você indicou ter fonte de água para irrigar.",
-        reasonEn: "High-value fruit — and you indicated you have a water source to irrigate.",
-      };
-    }
-    return {
-      reasonPt: "Vocação de alto valor da sua região, mas depende de irrigação.",
-      reasonEn: "High-value vocation for your region, but it depends on irrigation.",
-      warnPt: "Requer irrigação — você indicou não ter fonte de água. Sem água garantida, priorize as opções acima.",
-      warnEn: "Requires irrigation — you indicated no water source. Without secured water, prioritize the options above.",
-    };
-  }
-  if (fit === "rainfed_ok") {
-    if (moisture === "humid") {
-      return {
-        reasonPt: "Cultura perene que prospera com a umidade natural da sua região.",
-        reasonEn: "Perennial crop that thrives on your region's natural rainfall.",
-      };
-    }
-    if (moisture === "dry") {
+function waterCopy(
+  entry: WaterProfileEntry,
+  clima: ClimaContexto,
+  water: boolean,
+): WaterCopy {
+  switch (entry.profile) {
+    case "agua_sempre":
       if (water) {
         return {
-          reasonPt: "Perene de valor que, no seu clima seco, pede irrigação — que você indicou ter.",
-          reasonEn: "Valuable perennial that, in your dry climate, needs irrigation — which you indicated you have.",
+          reasonPt: "Uso que depende de água o ano todo — e você indicou ter fonte para isso.",
+          reasonEn: "A use that depends on water year-round — and you indicated you have a source for it.",
         };
       }
       return {
-        reasonPt: "Registrada na sua região, mas no clima seco não se sustenta sem água.",
-        reasonEn: "Registered in your region, but in a dry climate it can't hold up without water.",
-        warnPt: "No semiárido, sem irrigação esta cultura perene não vinga — confirme a disponibilidade de água.",
-        warnEn: "In the semi-arid, without irrigation this perennial won't take — confirm water availability.",
+        reasonPt: "Uso de valor registrado na sua região, mas depende de água garantida em qualquer clima.",
+        reasonEn: "A valuable use registered in your region, but it depends on secured water in any climate.",
+        warnPt: "Requer água o ano todo (irrigação ou corpo d'água) — você indicou não ter fonte. Sem ela, priorize as opções acima.",
+        warnEn: "Requires year-round water (irrigation or a water body) — you indicated no source. Without it, prioritize the options above.",
       };
-    }
-    return {
-      reasonPt: "Perene registrada na sua região; confirme a disponibilidade de chuva ou água na sua terra.",
-      reasonEn: "Perennial registered in your region; confirm rainfall or water availability on your land.",
-    };
+    case "irrigacao_semiarido":
+      if (clima === "umido") {
+        return {
+          reasonPt: "Cultura que prospera de sequeiro com a umidade natural da sua região.",
+          reasonEn: "A crop that thrives rainfed on your region's natural moisture.",
+        };
+      }
+      if (clima === "semiarido") {
+        if (water) {
+          return {
+            reasonPt: "Cultura de alto valor que no semiárido é irrigada — e você indicou ter fonte de água.",
+            reasonEn: "A high-value crop that is irrigated in the semi-arid — and you indicated you have a water source.",
+          };
+        }
+        return {
+          reasonPt: "Vocação de alto valor da sua região, mas no semiárido depende de irrigação.",
+          reasonEn: "A high-value vocation for your region, but in the semi-arid it depends on irrigation.",
+          warnPt: "No semiárido esta cultura não vinga sem irrigação — você indicou não ter fonte de água. Priorize as vocações de sequeiro.",
+          warnEn: "In the semi-arid this crop won't take without irrigation — you indicated no water source. Prioritize the rainfed vocations.",
+        };
+      }
+      return {
+        reasonPt: "Viável de sequeiro na maior parte das regiões; confirme o regime de chuva da sua terra.",
+        reasonEn: "Viable rainfed in most regions; confirm your land's rainfall pattern.",
+      };
+    case "umido_obrigatorio":
+      if (clima === "semiarido") {
+        return {
+          reasonPt: "Cultura de clima úmido registrada no seu estado — mas fora do alcance do semiárido.",
+          reasonEn: "A humid-climate crop registered in your state — but out of the semi-arid's reach.",
+          warnPt: "Exige clima úmido: no semiárido não se sustenta nem com irrigação. Considere as vocações de sequeiro da sua região.",
+          warnEn: "Requires a humid climate: in the semi-arid it doesn't hold up even with irrigation. Consider your region's rainfed vocations.",
+        };
+      }
+      if (clima === "umido") {
+        return {
+          reasonPt: "Cultura que prospera com a umidade natural da sua região.",
+          reasonEn: "A crop that thrives on your region's natural moisture.",
+        };
+      }
+      return {
+        reasonPt: "Cultura de clima úmido registrada na sua região; confirme o regime de chuva da sua terra.",
+        reasonEn: "A humid-climate crop registered in your region; confirm your land's rainfall pattern.",
+      };
+    case "sequeiro_semiarido_ok":
+      if (clima === "semiarido") {
+        const base: WaterCopy = {
+          reasonPt: "Adaptada ao sequeiro do semiárido (Embrapa) — não depende de irrigação.",
+          reasonEn: "Adapted to semi-arid rainfed farming (Embrapa) — it doesn't depend on irrigation.",
+        };
+        if (entry.riscoInteranual) {
+          base.warnPt = "Sequeiro dependente da quadra chuvosa: a safra varia com o ano — em ano seco há risco de frustração.";
+          base.warnEn = "Rainfed and tied to the rainy season: harvests vary by year — in a dry year there is crop-failure risk.";
+        }
+        return base;
+      }
+      return {
+        reasonPt: "Uso consolidado e resiliente na sua região.",
+        reasonEn: "A consolidated, resilient use in your region.",
+      };
+    case "neutro":
+      if (clima === "semiarido" && entry.riscoInteranual) {
+        return {
+          reasonPt: "Sequeiro tradicional da sua região.",
+          reasonEn: "Traditional rainfed cropping in your region.",
+          warnPt: "No semiárido a safra de sequeiro depende da chuva do ano — risco de frustração em ano seco.",
+          warnEn: "In the semi-arid, rainfed harvests depend on the year's rainfall — crop-failure risk in dry years.",
+        };
+      }
+      return {
+        reasonPt: "Uso consolidado e resiliente na sua região.",
+        reasonEn: "A consolidated, resilient use in your region.",
+      };
   }
-  // neutral
-  if (moisture === "dry") {
-    return {
-      reasonPt: "Adaptada ao clima seco da sua região (sequeiro, pecuária ou extrativismo da caatinga).",
-      reasonEn: "Suited to your region's dry climate (dryland cropping, cattle or caatinga extractivism).",
-    };
-  }
-  return {
-    reasonPt: "Uso consolidado e resiliente na sua região.",
-    reasonEn: "A consolidated, resilient use in your region.",
-  };
 }
 
 // ---------------------------------------------------------------------------
@@ -444,6 +571,7 @@ export function recommendUses(input: RecommendInput): RecommendResult {
   //    ONLY gate — no advantage, no recommendation. Every entry here is, by
   //    construction, a proven regional vocation (regionalStrong).
   const drafts: Recommendation[] = [];
+  const clima = climaDe(regiao, moisture);
 
   for (const [key, adv] of Object.entries(stateAdvantages)) {
     if (!adv.ufs.includes(uf)) continue;
@@ -451,12 +579,12 @@ export function recommendUses(input: RecommendInput): RecommendResult {
     const isCrop = !!CROP_PURPOSE[key];
     const purpose = isCrop ? CROP_PURPOSE[key] : key;
     const cropValue = isCrop ? key : "";
-    const fit = bucketOf(cropValue, purpose, regiao);
+    const entry = profileOf(cropValue, purpose, regiao);
+    // Viabilidade hídrica: perfil da cultura × contexto climático × água
+    // declarada. Só decide o `demoted` — a ordem é assunto da receita, abaixo.
+    const { fit, demoted } = bucketOf(entry, clima, water);
     const inc = incomeFor(cropValue, purpose, uf);
-    const copy = waterCopy(fit, moisture, water);
-    // Water fit only decides whether a use is VIABLE right now (demoted); it no
-    // longer feeds the ranking order — that is settled purely by revenue below.
-    const ws = waterScore(fit, moisture, water);
+    const copy = waterCopy(entry, clima, water);
 
     drafts.push({
       rank: 0,
@@ -465,13 +593,13 @@ export function recommendUses(input: RecommendInput): RecommendResult {
       cropLabelPt: labelFor(cropValue, purpose, "pt"),
       cropLabelEn: labelFor(cropValue, purpose, "en"),
       waterFit: fit,
-      demoted: ws < 0,
+      demoted,
       scoreReasonPt: copy.reasonPt,
       scoreReasonEn: copy.reasonEn,
       regionalFactPt: adv.factPt,
       regionalFactEn: adv.factEn,
-      waterWarningPt: copy.warnPt,
-      waterWarningEn: copy.warnEn,
+      waterWarningPt: demoted || entry.riscoInteranual ? copy.warnPt : undefined,
+      waterWarningEn: demoted || entry.riscoInteranual ? copy.warnEn : undefined,
       regionalStrong: true,
       ...inc,
     });
@@ -525,12 +653,15 @@ export function recommendUses(input: RecommendInput): RecommendResult {
     (d) => d.cropValue || !purposesWithCrop.has(d.purpose),
   );
 
-  // 4) Rank by RETURN, highest ceiling first. The order is settled by the
-  //    modeled gross-revenue range (revMax desc, revMin desc as the tiebreak),
-  //    NOT by regional vocation (which is now only a badge). Water viability
-  //    (`demoted`) merely sinks the currently-unviable uses to the bottom — it
-  //    never reorders the viable ones. Uses without a modeled revenue range
-  //    have no ceiling to compare, so they fall to the end, alphabetically.
+  // 4) REGRA DE ORDENAÇÃO (explicitada na reauditoria jul/2026):
+  //    a) viáveis antes de rebaixadas — `demoted` afunda, nunca reordena;
+  //    b) entre viáveis, teto de receita modelada desc (revMax, depois revMin);
+  //    c) cultura SEM faixa de receita nunca ultrapassa uma com faixa: cai
+  //       para o fim do bloco viável, em ordem alfabética determinística.
+  //    Consequência assumida: uma cultura sem faixa pode LIDERAR por
+  //    eliminação quando todas as demais estão rebaixadas — é o caso da
+  //    melancia de sequeiro em Xique-Xique sem água, e é o comportamento
+  //    honesto (a alternativa seria esconder a única vocação viável).
   pruned.sort((a, b) => {
     // Water-unviable uses sink beneath every viable one.
     if (a.demoted !== b.demoted) return a.demoted ? 1 : -1;

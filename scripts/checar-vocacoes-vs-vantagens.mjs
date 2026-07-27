@@ -22,6 +22,20 @@
  * geram card, o que pode ser intencional (ex.: "batata" documenta o retrato
  * sem ter vantagem própria).
  *
+ * CHECAGENS HÍDRICAS (guarda estendido, reauditoria jul/2026):
+ *   H1. Blurb seco × fato irrigado: cultura com perfil `sequeiro_semiarido_ok`
+ *       (que ganha o blurb "adaptada ao sequeiro") cujo factPt fala em
+ *       "irrigad..." SEM mencionar "sequeiro" — o usuário leria os dois
+ *       textos se contradizendo.
+ *   H2. Região seca sem cultura hídrica não classificada: em região com
+ *       agua:"dry" ou do conjunto semiárido do motor, toda vocação que é
+ *       chave de vantagem precisa ter entrada EXPLÍCITA em WATER_PROFILE
+ *       (ou override regional) — sem isso ela cai no neutro implícito e
+ *       aparece não-rebaixada num sertão sem água.
+ *   H3 (INFO). Frescor: fato citando ano de edição anterior ao do manifesto
+ *       (docs/fontes-jul2026.md; edições-âncora de 2024+) vira INFO até ser
+ *       reescrito ou justificado.
+ *
  * Uso:
  *   node scripts/checar-vocacoes-vs-vantagens.mjs            # relatório
  *   node scripts/checar-vocacoes-vs-vantagens.mjs --strict   # exit 1 se houver divergência
@@ -35,6 +49,9 @@ const ARQ_VANTAGENS = "lib/state-advantage.ts";
 const ARQ_REGIOES = "lib/regioes-agricolas.ts";
 const ARQ_GERADO = "lib/muni-regiao-gerado.ts";
 const ARQ_RESOLVEDOR = "lib/retrato-regional.ts";
+const ARQ_MOTOR = "lib/land-recommender.ts";
+/** Ano-âncora do manifesto (docs/fontes-jul2026.md): PAM/PPM/PEVS 2024. */
+const ANO_MANIFESTO = 2024;
 
 /** stateAdvantages: chave → lista de UFs. */
 async function lerVantagens() {
@@ -104,11 +121,63 @@ async function lerAlcance(srcRegioes) {
   return alcance;
 }
 
+/** WATER_PROFILE do motor: chave → perfil; e overrides regionais chave→região. */
+async function lerPerfisHidricos() {
+  const src = await readFile(ARQ_MOTOR, "utf8");
+  const ini = src.indexOf("const WATER_PROFILE");
+  if (ini < 0) throw new Error(`WATER_PROFILE não encontrado em ${ARQ_MOTOR}`);
+  const corpo = src.slice(ini, src.indexOf("\n};", ini));
+  const perfis = {};
+  for (const m of corpo.matchAll(/^ {2}([a-z_]+):\s*\{\s*profile:\s*"([a-z_]+)"/gm)) {
+    perfis[m[1]] = m[2];
+  }
+  if (!Object.keys(perfis).length) throw new Error("WATER_PROFILE veio vazio");
+  const iniOv = src.indexOf("const REGIONAL_PROFILE_OVERRIDE");
+  const corpoOv = iniOv >= 0 ? src.slice(iniOv, src.indexOf("\n};", iniOv)) : "";
+  const overrides = new Set(
+    [...corpoOv.matchAll(/^ {2}([a-z_]+):/gm)].map((m) => m[1]),
+  );
+  // regiões que o motor trata como semiárido além das agua:"dry"
+  const iniSA = src.indexOf("const REGIOES_SEMIARIDAS");
+  const corpoSA = iniSA >= 0 ? src.slice(iniSA, src.indexOf("]);", iniSA)) : "";
+  const semiaridas = new Set([...corpoSA.matchAll(/"([a-z0-9-]+)"/g)].map((m) => m[1]));
+  return { perfis, overrides, semiaridas };
+}
+
+/** factPt de cada chave de vantagem (para H1 e H3). */
+async function lerFatos() {
+  const src = await readFile(ARQ_VANTAGENS, "utf8");
+  const ini = src.indexOf("export const stateAdvantages");
+  const corpo = src.slice(ini, src.indexOf("\n};", ini));
+  const fatos = {};
+  for (const m of corpo.matchAll(
+    /^ {2}([a-z_]+):\s*\{[\s\S]*?factPt:\s*\n?\s*"([\s\S]*?)",\n/gm,
+  )) {
+    fatos[m[1]] = m[2];
+  }
+  return fatos;
+}
+
+/** agua de cada região curada. */
+function lerAguaPorRegiao(srcRegioes) {
+  const ini = srcRegioes.indexOf("export const REGIOES");
+  const fim = srcRegioes.indexOf("export const BIOMA_FALLBACK");
+  const corpo = srcRegioes.slice(ini, fim);
+  const mapa = {};
+  for (const m of corpo.matchAll(/"([^"]+)":\s*\{[\s\S]*?agua:\s*"([a-z]+)"/g)) {
+    mapa[m[1]] = m[2];
+  }
+  return mapa;
+}
+
 async function main() {
   const strict = process.argv.includes("--strict");
   const vantagens = await lerVantagens();
   const { regioes, src } = await lerRegioes();
   const alcance = await lerAlcance(src);
+  const { perfis, overrides, semiaridas } = await lerPerfisHidricos();
+  const fatos = await lerFatos();
+  const aguaRegiao = lerAguaPorRegiao(src);
 
   // Finalidade de cada vantagem-cultura não é necessária aqui: o gate por UF
   // (`adv.ufs.includes(uf)`) é o mesmo para cultura e finalidade. O que o
@@ -152,11 +221,60 @@ async function main() {
     if (semChave.length) infoSemVantagem.push(`  ${regiao}: ${semChave.join(", ")}`);
   }
 
-  if (divergencias === 0) {
-    console.log("✓ Nenhuma divergência: toda vocação prometida por retrato tem vantagem que cobre as UFs alcançadas.\n");
-  } else {
-    console.log(`TOTAL: ${divergencias} divergência(s) região×vocação×UF.\n`);
+  // ── H1: blurb seco × fato irrigado ──
+  console.log("Guarda HÍDRICO H1 — perfil sequeiro × fato que fala em irrigação\n");
+  for (const [chave, perfil] of Object.entries(perfis)) {
+    if (perfil !== "sequeiro_semiarido_ok") continue;
+    const fato = fatos[chave];
+    if (!fato) continue; // sem vantagem, sem card, sem blurb
+    if (/irrigad/i.test(fato) && !/sequeiro/i.test(fato)) {
+      divergencias++;
+      console.log(
+        `  ✗ "${chave}" tem perfil sequeiro_semiarido_ok mas o fato fala em irrigação sem citar o sequeiro — os dois textos se contradizem na tela.`,
+      );
+    }
   }
+  console.log("  (ok quando nada listado acima)\n");
+
+  // ── H2: região seca × vocação-chave sem perfil hídrico explícito ──
+  console.log("Guarda HÍDRICO H2 — região seca com vocação-chave sem WATER_PROFILE\n");
+  for (const [regiao, vocacoes] of Object.entries(regioes).sort()) {
+    const seca = aguaRegiao[regiao] === "dry" || semiaridas.has(regiao);
+    if (!seca) continue;
+    for (const voc of vocacoes) {
+      if (!vantagens[voc]) continue; // não é chave: nunca vira card sozinha
+      if (!perfis[voc] && !overrides.has(voc)) {
+        divergencias++;
+        console.log(
+          `  ✗ ${regiao}: vocação "${voc}" é chave de vantagem em região seca mas não tem entrada em WATER_PROFILE — cairia no neutro implícito e apareceria não-rebaixada sem água.`,
+        );
+      }
+    }
+  }
+  console.log("  (ok quando nada listado acima)\n");
+
+  if (divergencias === 0) {
+    console.log("✓ Nenhuma divergência: retrato×ranking e checagens hídricas em zero.\n");
+  } else {
+    console.log(`TOTAL: ${divergencias} divergência(s).\n`);
+  }
+
+  // ── H3 (INFO): frescor dos fatos vs manifesto ──
+  console.log(
+    `INFO — frescor (fatos citando ano de edição anterior a ${ANO_MANIFESTO}; reescrever ou justificar):`,
+  );
+  let velhos = 0;
+  for (const [chave, fato] of Object.entries(fatos)) {
+    const anos = [...fato.matchAll(/\b(19\d{2}|20\d{2})\b/g)]
+      .map((m) => Number(m[1]))
+      .filter((a) => a < ANO_MANIFESTO);
+    if (anos.length) {
+      velhos++;
+      console.log(`  ${chave}: cita ${anos.join(", ")} — "${fato.slice(0, 80)}..."`);
+    }
+  }
+  if (!velhos) console.log("  ✓ nenhum fato com edição anterior ao manifesto.");
+  console.log("");
 
   console.log(
     "INFO (não é divergência) — vocações sem chave em stateAdvantages; sozinhas\n" +

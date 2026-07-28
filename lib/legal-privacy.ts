@@ -161,8 +161,13 @@ export const privacyPt: LegalDocument = {
             "Mensagens, propostas e contratos: enquanto a conta existir e, após o encerramento, pelo prazo necessário ao exercício regular de direitos, inclusive para apurar infrações às cláusulas 3.1 e 3.3 dos Termos.",
             "Documentos de verificação de identidade: pelo tempo necessário à finalidade da verificação e aos prazos legais aplicáveis.",
             "Aceites legais (documento, versão, data, IP e user agent): enquanto durar a relação e pelos prazos de prescrição aplicáveis, por serem a prova do consentimento contratual.",
-            "Registros de acesso: 6 (seis) meses, conforme o art. 15 do Marco Civil da Internet, prazo que pode ser estendido por determinação judicial.",
+            "Registros de acesso (data, hora, IP e user agent das requisições): hoje não mantemos base própria desses registros — eles existem nos logs da nossa infraestrutura de hospedagem e de banco de dados e ficam disponíveis pelo período técnico de retenção praticado por esses provedores. Quando a guarda for exigida, ela se dá com fundamento no art. 15 do Marco Civil da Internet e alcança os registros que estiverem sob nossa custódia, podendo ser estendida por determinação judicial.",
+            "Registros de eventos relevantes (cadastro, aceites legais, propostas e fechamentos): ficam na nossa base de dados enquanto a conta existir e pelo prazo necessário ao cumprimento de obrigações legais e ao exercício regular de direitos.",
           ],
+        },
+        {
+          kind: "note",
+          text: "Preferimos dizer o que de fato praticamos: não prometemos um prazo de guarda de registros de acesso maior do que a infraestrutura atual entrega. Se passarmos a manter uma base própria com prazo fixo, esta Política será atualizada antes.",
         },
         {
           kind: "p",
@@ -404,8 +409,13 @@ export const privacyEn: LegalDocument = {
             "Messages, offers and contracts: while the account exists and, after closure, for the period needed for the regular exercise of rights, including investigating breaches of clauses 3.1 and 3.3 of the Terms.",
             "Identity verification documents: for the time needed for the verification purpose and for the applicable legal periods.",
             "Legal acceptances (document, version, date, IP and user agent): for the duration of the relationship and the applicable limitation periods, as they are the evidence of contractual consent.",
-            "Access logs: 6 (six) months, under article 15 of the Brazilian Internet Act, a period that may be extended by court order.",
+            "Access logs (date, time, IP address and user agent of requests): today we keep no dedicated store for these records — they live in the logs of our hosting and database infrastructure and remain available for the technical retention period those providers offer. Where retention is required, it rests on article 15 of the Brazilian Internet Act and covers the records under our custody, and may be extended by court order.",
+            "Records of relevant events (sign-up, legal acceptances, offers and closings): kept in our database for as long as the account exists and for the period needed to comply with legal obligations and to exercise rights.",
           ],
+        },
+        {
+          kind: "note",
+          text: "We would rather state what we actually do: we do not promise an access-log retention period longer than what the current infrastructure delivers. If we start keeping a dedicated store with a fixed period, this Policy will be updated first.",
         },
         {
           kind: "p",

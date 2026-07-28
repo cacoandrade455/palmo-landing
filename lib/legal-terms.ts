@@ -174,7 +174,11 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "O atraso no pagamento sujeita o devedor a correção monetária e juros de mora de 1% (um por cento) ao mês, além de autorizar a suspensão da conta e a cobrança pelos meios legais cabíveis. Negócio não fechado não gera taxa.",
+          text: "O atraso no pagamento da taxa sujeita o devedor a atualização monetária pelo IPCA, juros de mora de 1% (um por cento) ao mês e multa moratória de 2% (dois por cento) sobre o valor em atraso, além de autorizar a suspensão da conta e a cobrança pelos meios legais cabíveis. Negócio não fechado não gera taxa.",
+        },
+        {
+          kind: "p",
+          text: "Os encargos de mora deste item NÃO se cumulam com a cláusula penal de 10% prevista na cláusula 3.4 pelo mesmo fato. São coisas distintas: a cláusula penal sanciona a circunvenção da plataforma (descumprimento das cláusulas 3.1 ou 3.3), enquanto os encargos de mora remuneram o atraso no pagamento de uma taxa efetivamente devida. Um mesmo inadimplemento não gera as duas cobranças.",
         },
       ],
     },
@@ -481,7 +485,11 @@ export const termsEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Late payment subjects the debtor to monetary restatement and default interest of 1% (one per cent) per month, and authorises suspension of the account and collection through the appropriate legal means. A deal that does not close generates no fee.",
+          text: "Late payment of the fee subjects the debtor to monetary restatement by the IPCA index, default interest of 1% (one per cent) per month and a late-payment penalty of 2% (two per cent) on the overdue amount, and authorises suspension of the account and collection through the appropriate legal means. A deal that does not close generates no fee.",
+        },
+        {
+          kind: "p",
+          text: "The default charges in this item do NOT cumulate with the 10% penalty clause set out in clause 3.4 for the same fact. They are different things: the penalty clause sanctions circumventing the platform (breach of clauses 3.1 or 3.3), while the default charges compensate for late payment of a fee that is actually owed. The same breach does not trigger both.",
         },
       ],
     },

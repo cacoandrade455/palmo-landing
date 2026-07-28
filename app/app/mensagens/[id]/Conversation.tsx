@@ -2,9 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Send, Lock, Phone, Mail, FileText } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, Send, Lock, Phone, Mail, FileText, ShieldAlert } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import type { ContractType } from "@/lib/contract-templates";
+import { FeeTerm } from "@/components/FeeTerm";
+import { acceptOfferTerms } from "@/app/app/legal-actions";
 import { createContract } from "@/app/app/contrato/[id]/actions";
 import {
   getConversation,
@@ -26,6 +29,8 @@ export function Conversation({ id }: { id: string }) {
   const [offerPrice, setOfferPrice] = useState("");
   const [offerTerm, setOfferTerm] = useState("");
   const [offerMsg, setOfferMsg] = useState("");
+  // C.3 — sem esta confirmação a proposta formal não é enviada.
+  const [offerConsent, setOfferConsent] = useState(false);
   const [contractType, setContractType] = useState<ContractType>("arrendamento");
   const [generating, setGenerating] = useState(false);
   const [contractError, setContractError] = useState<string | null>(null);
@@ -33,8 +38,8 @@ export function Conversation({ id }: { id: string }) {
 
   const label =
     lang === "en"
-      ? { back: "Back", placeholder: "Write a message…", send: "Send", makeOffer: "Make an offer", price: "Price (R$/ha/year)", term: "Term (years)", offerMsg: "Message (optional)", submitOffer: "Send offer", offer: "Offer", accept: "Accept", decline: "Decline", accepted: "Accepted", declined: "Declined", pending: "Pending", perYear: "/ha/yr", years: "years", closeDeal: "Close deal (reveal contacts)", closeHint: "Only close when you've agreed. Contacts are shared after closing.", locked: "Contacts unlock when the deal closes — that's how Palmo stays free until then.", contact: "Contact", dealClosed: "Deal closed", cancel: "Cancel deal", cancelled: "This deal was cancelled.", contractSection: "Contract", contractHint: "Offer accepted — generate the standard Palmo draft and negotiate it clause by clause.", typeArrendamento: "Lease (fixed price)", typeParceria: "Partnership (% split)", generate: "Generate contract draft", generating: "Generating…", openContract: "Open contract", minTerm: (min: number) => `The accepted offer's term is below the legal minimum for this land use: Decree 59.566/66 requires at least ${min} years. Adjust the offer before generating the draft.`, contractErrGeneric: "Couldn't generate the draft. Please try again." }
-      : { back: "Voltar", placeholder: "Escreva uma mensagem…", send: "Enviar", makeOffer: "Fazer proposta", price: "Preço (R$/ha/ano)", term: "Prazo (anos)", offerMsg: "Mensagem (opcional)", submitOffer: "Enviar proposta", offer: "Proposta", accept: "Aceitar", decline: "Recusar", accepted: "Aceita", declined: "Recusada", pending: "Pendente", perYear: "/ha/ano", years: "anos", closeDeal: "Fechar negócio (revelar contatos)", closeHint: "Só feche quando tiverem acordado. Os contatos são compartilhados após o fechamento.", locked: "Contatos são liberados quando o negócio é fechado — é assim que a Palmo se mantém gratuita até lá.", contact: "Contato", dealClosed: "Negócio fechado", cancel: "Cancelar negócio", cancelled: "Este negócio foi cancelado.", contractSection: "Contrato", contractHint: "Proposta aceita — gere a minuta padrão Palmo e negociem cláusula a cláusula.", typeArrendamento: "Arrendamento (preço fixo)", typeParceria: "Parceria (% da produção)", generate: "Gerar minuta do contrato", generating: "Gerando…", openContract: "Abrir contrato", minTerm: (min: number) => `O prazo da proposta aceita está abaixo do mínimo legal para esta finalidade: o Decreto 59.566/66 exige pelo menos ${min} anos. Ajustem a proposta antes de gerar a minuta.`, contractErrGeneric: "Não foi possível gerar a minuta. Tente novamente." };
+      ? { back: "Back", placeholder: "Write a message…", send: "Send", makeOffer: "Make an offer", price: "Price (R$/ha/year)", term: "Term (years)", offerMsg: "Message (optional)", submitOffer: "Send offer", offer: "Offer", accept: "Accept", decline: "Decline", accepted: "Accepted", declined: "Declined", pending: "Pending", perYear: "/ha/yr", years: "years", closeDeal: "Close deal (reveal contacts)", closeHint: "Only close when you've agreed. Contacts are shared after closing.", locked: "Contacts unlock when the deal closes — that's how Palmo stays free until then.", contact: "Contact", dealClosed: "Deal closed", cancel: "Cancel deal", cancelled: "This deal was cancelled.", contractSection: "Contract", contractHint: "Offer accepted — generate the standard Palmo draft and negotiate it clause by clause.", typeArrendamento: "Lease (fixed price)", typeParceria: "Partnership (% split)", generate: "Generate contract draft", generating: "Generating…", openContract: "Open contract", minTerm: (min: number) => `The accepted offer's term is below the legal minimum for this land use: Decree 59.566/66 requires at least ${min} years. Adjust the offer before generating the draft.`, contractErrGeneric: "Couldn't generate the draft. Please try again.", chatWarning: "For your safety, contact between the parties is released at closing. Sharing a phone number or e-mail here is forbidden by the Terms.", chatWarningLink: "Terms", offerConsent: "By sending this offer I confirm clause 3 of the Terms: no phone, e-mail or any contact details before closing, and closing a deal on this land outside the platform within 12 months triggers a penalty of 10% of the contract value, which binds both parties.", offerConsentLink: "Read clause 3" }
+      : { back: "Voltar", placeholder: "Escreva uma mensagem…", send: "Enviar", makeOffer: "Fazer proposta", price: "Preço (R$/ha/ano)", term: "Prazo (anos)", offerMsg: "Mensagem (opcional)", submitOffer: "Enviar proposta", offer: "Proposta", accept: "Aceitar", decline: "Recusar", accepted: "Aceita", declined: "Recusada", pending: "Pendente", perYear: "/ha/ano", years: "anos", closeDeal: "Fechar negócio (revelar contatos)", closeHint: "Só feche quando tiverem acordado. Os contatos são compartilhados após o fechamento.", locked: "Contatos são liberados quando o negócio é fechado — é assim que a Palmo se mantém gratuita até lá.", contact: "Contato", dealClosed: "Negócio fechado", cancel: "Cancelar negócio", cancelled: "Este negócio foi cancelado.", contractSection: "Contrato", contractHint: "Proposta aceita — gere a minuta padrão Palmo e negociem cláusula a cláusula.", typeArrendamento: "Arrendamento (preço fixo)", typeParceria: "Parceria (% da produção)", generate: "Gerar minuta do contrato", generating: "Gerando…", openContract: "Abrir contrato", minTerm: (min: number) => `O prazo da proposta aceita está abaixo do mínimo legal para esta finalidade: o Decreto 59.566/66 exige pelo menos ${min} anos. Ajustem a proposta antes de gerar a minuta.`, contractErrGeneric: "Não foi possível gerar a minuta. Tente novamente.", chatWarning: "Por segurança, o contato entre as partes é liberado no fechamento. Compartilhar telefone ou e-mail aqui é proibido pelos Termos.", chatWarningLink: "Termos", offerConsent: "Ao enviar esta proposta, confirmo a cláusula 3 dos Termos: nada de telefone, e-mail ou qualquer contato antes do fechamento, e fechar por fora um negócio sobre esta terra nos 12 meses seguintes sujeita à multa de 10% do valor do contrato, que vincula as duas partes.", offerConsentLink: "Ler a cláusula 3" };
 
   function reload() {
     getConversation(id).then((res) => {
@@ -70,9 +75,13 @@ export function Conversation({ id }: { id: string }) {
   async function submitOffer() {
     const price = Number(offerPrice);
     if (!price || price <= 0) return;
+    if (!offerConsent) return;
     await makeOffer(id, data!.listing_id, price, offerTerm ? Number(offerTerm) : null, offerMsg || null);
+    // C.3 — registra o aceite DEPOIS de enviar a proposta; falhar aqui não
+    // desfaz a proposta nem bloqueia a negociação.
+    void acceptOfferTerms(id);
     setShowOffer(false);
-    setOfferPrice(""); setOfferTerm(""); setOfferMsg("");
+    setOfferPrice(""); setOfferTerm(""); setOfferMsg(""); setOfferConsent(false);
     reload();
   }
 
@@ -106,6 +115,24 @@ export function Conversation({ id }: { id: string }) {
         <div className="border-b border-deep/10 p-4">
           <p className="font-extrabold text-deep">{data.listingTitle}</p>
           <p className="text-sm text-deep/60">{data.counterpartName ?? "—"}</p>
+        </div>
+
+        {/* aviso permanente da regra do chat (cláusula 3.1 dos Termos) */}
+        <div className="border-b border-deep/10 px-4 py-3">
+          <p className="flex gap-2 rounded-xl bg-neutral px-4 py-2.5 text-xs leading-relaxed text-deep/70">
+            <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+            <span>
+              {label.chatWarning}{" "}
+              <Link
+                href="/termos#conduta"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-primary underline transition-colors hover:text-primary-dark"
+              >
+                {label.chatWarningLink}
+              </Link>
+            </span>
+          </p>
         </div>
 
         {/* messages */}
@@ -210,19 +237,26 @@ export function Conversation({ id }: { id: string }) {
           </div>
         )}
 
-        {/* contact reveal / gate */}
+        {/* contact reveal / gate — lógica INTOCADA: o contato é liberado pelo
+            fechamento, independentemente do termo da taxa, que vem depois
+            apenas como registro. */}
         <div className="border-t border-deep/10 p-4">
           {dealClosed ? (
-            <div className="rounded-xl bg-primary/10 p-4">
-              <p className="text-sm font-bold text-primary">✓ {label.dealClosed} — {label.contact}</p>
-              {data.contact && (
-                <div className="mt-2 space-y-1 text-sm text-deep">
-                  {data.contact.full_name && <p className="font-semibold">{data.contact.full_name}</p>}
-                  {data.contact.phone && <p className="flex items-center gap-1.5"><Phone className="h-3.5 w-3.5" />{data.contact.phone}</p>}
-                  {data.contact.email && <p className="flex items-center gap-1.5"><Mail className="h-3.5 w-3.5" />{data.contact.email}</p>}
-                </div>
-              )}
-            </div>
+            <>
+              <div className="rounded-xl bg-primary/10 p-4">
+                <p className="text-sm font-bold text-primary">✓ {label.dealClosed} — {label.contact}</p>
+                {data.contact && (
+                  <div className="mt-2 space-y-1 text-sm text-deep">
+                    {data.contact.full_name && <p className="font-semibold">{data.contact.full_name}</p>}
+                    {data.contact.phone && <p className="flex items-center gap-1.5"><Phone className="h-3.5 w-3.5" />{data.contact.phone}</p>}
+                    {data.contact.email && <p className="flex items-center gap-1.5"><Mail className="h-3.5 w-3.5" />{data.contact.email}</p>}
+                  </div>
+                )}
+              </div>
+              {/* Só aparece para o proprietário (parte pagante); some sozinho
+                  para o produtor. */}
+              <FeeTerm conversationId={id} />
+            </>
           ) : dealCancelled ? (
             <p className="text-center text-sm font-semibold text-deep/50">{label.cancelled}</p>
           ) : (
@@ -243,8 +277,29 @@ export function Conversation({ id }: { id: string }) {
                   <input type="number" min="0" value={offerTerm} onChange={(e) => setOfferTerm(e.target.value)} placeholder={label.term} className="rounded-xl border border-deep/15 px-3 py-2 text-sm" />
                 </div>
                 <input value={offerMsg} onChange={(e) => setOfferMsg(e.target.value)} placeholder={label.offerMsg} className="w-full rounded-xl border border-deep/15 px-3 py-2 text-sm" />
+                {/* C.3 — a regra do contato e a não circunvenção confirmadas
+                    no momento da proposta formal. */}
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-neutral p-3">
+                  <input
+                    type="checkbox"
+                    checked={offerConsent}
+                    onChange={(e) => setOfferConsent(e.target.checked)}
+                    className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-primary)]"
+                  />
+                  <span className="text-xs leading-relaxed text-deep">
+                    {label.offerConsent}{" "}
+                    <Link
+                      href="/termos#conduta"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-primary underline transition-colors hover:text-primary-dark"
+                    >
+                      {label.offerConsentLink}
+                    </Link>
+                  </span>
+                </label>
                 <div className="flex gap-2">
-                  <button onClick={submitOffer} className="flex-1 rounded-full bg-accent px-4 py-2 text-sm font-bold text-deep">{label.submitOffer}</button>
+                  <button onClick={submitOffer} disabled={!offerConsent} className="flex-1 rounded-full bg-accent px-4 py-2 text-sm font-bold text-deep transition-colors hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-60">{label.submitOffer}</button>
                   <button onClick={() => setShowOffer(false)} className="rounded-full border border-deep/20 px-4 py-2 text-sm font-bold text-deep">✕</button>
                 </div>
               </div>

@@ -42,7 +42,8 @@ export const contentFr: typeof content.pt = {
       },
       {
         title: "Concluez en toute sécurité",
-        desc: "Contrat standardisé, signature électronique et rapports de suivi.",
+        // TODO(i18n): traduzir para fr — réplica temporária do EN (C1, jul/2026).
+        desc: "Standard contract anchored in Brazil's Land Statute, frozen text ready for e-signature.",
       },
     ],
   },
@@ -52,15 +53,19 @@ export const contentFr: typeof content.pt = {
     badges: [
       {
         title: "Annonces vérifiées",
-        desc: "Chaque terre publiée fait l'objet d'un contrôle des documents et du CAR (registre environnemental rural).",
+        // TODO(i18n): traduzir para fr — réplica temporária do EN (C3, jul/2026).
+        desc: "Every account is identity-verified with documents (CPF/CNPJ).",
       },
       {
         title: "Contrats standardisés",
-        desc: "Des modèles revus par des avocats spécialisés en droit rural, avec des clauses claires de fermage ou de partenariat.",
+        // TODO(i18n): traduzir para fr — réplica temporária do EN (C2, jul/2026).
+        desc: "Anchored in the Land Statute (Lei 4.504/64), with an improvements clause and entry/exit inspection report at the core.",
       },
       {
         title: "Suivi par satellite",
-        desc: "Le propriétaire reçoit des rapports périodiques montrant comment sa terre est utilisée.",
+        // TODO(i18n): traduzir para fr — réplica temporária do EN (C4, jul/2026).
+        desc: "Owners will receive periodic reports showing how their land is being used.",
+        soon: true,
       },
     ],
   },
@@ -379,17 +384,21 @@ export const contentFr: typeof content.pt = {
       {
         name: "Commission de succès",
         price: "5%",
-        priceNote: "de la 1re année de contrat",
-        desc: "Facturée uniquement à la signature et payée par celui qui exploitera la terre. Inclut le contrat standardisé, la vérification et la signature électronique.",
+        // TODO(i18n): traduzir para fr — réplicas temporárias do EN (A1, jul/2026).
+        priceNote: "of the total contract value",
+        desc: "5% of the total contract value, charged proportionally with each annual payment and paid by the landowner. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
         highlight: true,
       },
       {
         name: "Suivi par satellite",
-        price: "Abonnement mensuel",
-        desc: "Pour que le propriétaire suive l'utilisation de sa terre, grâce aux images satellite de Hexagon. Résiliable à tout moment.",
+        price: "",
+        // TODO(i18n): traduzir para fr — réplica temporária do EN (C5, jul/2026).
+        desc: "Owners will be able to track how their land is being used, with satellite imagery. Subscription cancellable anytime.",
+        soon: true,
       },
     ],
-    footnote: "Pas de frais cachés. Le propriétaire ne paie jamais pour annoncer.",
+    // TODO(i18n): traduzir para fr — réplica temporária do EN (A2, jul/2026).
+    footnote: "No hidden fees. Listing and negotiating are always free.",
   },
   waitlist: {
     eyebrow: "Soyez parmi les premiers",
@@ -434,7 +443,8 @@ export const contentFr: typeof content.pt = {
     error: "Une erreur est survenue. Réessayez dans quelques instants.",
   },
   footer: {
-    tagline: "De palmo em palmo, a terra volta a produzir.",
+    // TODO(i18n): traduzir para fr — réplica temporária do EN (C8, jul/2026).
+    tagline: "Every Palmo of land producing.",
     whatsapp: "Discuter sur WhatsApp",
     instagram: "Instagram",
     rights: "© 2026 Palmo. Fait au Brésil.",

@@ -53,6 +53,20 @@ export function fillBlocks(
   }));
 }
 
+/**
+ * Recital, não cláusula: declara um FATO (as partes se conheceram pela
+ * plataforma e aceitaram seus Termos) e não cria obrigação para ninguém. A
+ * taxa de sucesso é relação entre a Palmo e o proprietário e NÃO integra este
+ * instrumento. Posição clássica: depois da qualificação das partes, antes das
+ * cláusulas.
+ */
+const CONSIDERANDO: ContractBlock = {
+  key: "considerando",
+  title: "Considerando",
+  body:
+    "CONSIDERANDO que as partes se conheceram e negociaram por meio da plataforma Palmo, cujos Termos de Uso declaram ter lido e aceitado, e que a plataforma não é parte deste contrato;",
+};
+
 const BENFEITORIAS: ContractBlock = {
   key: "benfeitorias",
   title: "Benfeitorias e estado de devolução (núcleo)",
@@ -90,6 +104,7 @@ export const ARRENDAMENTO_BLOCKS: ContractBlock[] = [
     body:
       "ARRENDADOR(A): {{PROPRIETARIO_NOME}}, CPF/CNPJ {{PROPRIETARIO_DOC}}. ARRENDATÁRIO(A): {{PRODUTOR_NOME}}, CPF/CNPJ {{PRODUTOR_DOC}}. Regem-se as partes por este contrato e, no que couber, pelas normas cogentes do Estatuto da Terra (Lei 4.504/64) e do Decreto 59.566/66.",
   },
+  CONSIDERANDO,
   {
     key: "objeto",
     title: "Objeto",
@@ -139,6 +154,7 @@ export const PARCERIA_BLOCKS: ContractBlock[] = [
     body:
       "PARCEIRO(A)-OUTORGANTE: {{PROPRIETARIO_NOME}}, CPF/CNPJ {{PROPRIETARIO_DOC}}. PARCEIRO(A)-OUTORGADO(A): {{PRODUTOR_NOME}}, CPF/CNPJ {{PRODUTOR_DOC}}. Regência: Lei 4.504/64 (arts. 96 e ss.) e Decreto 59.566/66.",
   },
+  CONSIDERANDO,
   {
     key: "objeto",
     title: "Objeto e finalidade",

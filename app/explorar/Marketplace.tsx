@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { CheckCircle2, Droplet, Image as ImageIcon, MapPin, Search } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { UFS } from "@/lib/appraisal-data";
+import { listingPath } from "@/lib/listing-slug";
 import { sortOptionsByLabel } from "@/lib/sort-options";
 import { browseListings, type BrowseListing } from "./actions";
 
@@ -19,14 +20,11 @@ type FilterValues = {
   maxHa: string;
 };
 
-const EMPTY_FILTERS: FilterValues = { uf: "", muni: "", purpose: "", minHa: "", maxHa: "" };
-
-export function Marketplace() {
+export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
   const { t, lang } = useLanguage();
-  const router = useRouter();
   const [listings, setListings] = useState<BrowseListing[] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [uf, setUf] = useState("");
+  const [uf, setUf] = useState(initialUf);
   const [muni, setMuni] = useState("");
   const [purpose, setPurpose] = useState("");
   const [minHa, setMinHa] = useState("");
@@ -54,6 +52,7 @@ export function Marketplace() {
           resultOne: "1 plot",
           resultMany: "plots",
           photoSoon: "Photo coming soon",
+          photoAlt: (title: string) => `Photo of ${title}`,
           perYear: "/ha/yr",
           water: "Water",
           verified: "Verified",
@@ -78,6 +77,7 @@ export function Marketplace() {
           resultOne: "1 terra",
           resultMany: "terras",
           photoSoon: "Foto em breve",
+          photoAlt: (title: string) => `Foto de ${title}`,
           perYear: "/ha/ano",
           water: "Água",
           verified: "Verificado",
@@ -122,8 +122,13 @@ export function Marketplace() {
     });
   }
 
+  // Primeira carga já respeita o ?uf= vindo da calculadora ("Ver terras
+  // disponíveis na sua região").
   useEffect(() => {
-    queueMicrotask(() => load(EMPTY_FILTERS));
+    queueMicrotask(() =>
+      load({ uf: initialUf, muni: "", purpose: "", minHa: "", maxHa: "" }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- só na montagem
   }, []);
 
   function applyFilters() {
@@ -136,7 +141,7 @@ export function Marketplace() {
     setPurpose("");
     setMinHa("");
     setMaxHa("");
-    load(EMPTY_FILTERS);
+    load({ uf: "", muni: "", purpose: "", minHa: "", maxHa: "" });
   }
 
   const purposeLabel = (v: string) =>
@@ -302,16 +307,27 @@ export function Marketplace() {
             <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {listings.map((l) => (
                 <li key={l.id}>
-                  <button
-                    onClick={() => router.push(`/app/imovel/${l.id}`)}
-                    className="w-full overflow-hidden rounded-2xl border border-deep/10 bg-white text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                  <Link
+                    href={listingPath(l)}
+                    className="block w-full overflow-hidden rounded-2xl border border-deep/10 bg-white text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                   >
-                    <div className="flex h-40 items-center justify-center bg-neutral">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-bold text-deep/50 shadow-sm">
-                        <ImageIcon className="h-3.5 w-3.5" aria-hidden="true" />
-                        {label.photoSoon}
-                      </span>
-                    </div>
+                    {l.photos.length > 0 ? (
+                      <div className="relative h-40 bg-neutral">
+                        {/* eslint-disable-next-line @next/next/no-img-element -- fotos vêm do storage do Supabase (host externo) */}
+                        <img
+                          src={l.photos[0]}
+                          alt={label.photoAlt(l.title)}
+                          className="absolute inset-0 h-full w-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex h-40 items-center justify-center bg-neutral">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-bold text-deep/50 shadow-sm">
+                          <ImageIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                          {label.photoSoon}
+                        </span>
+                      </div>
+                    )}
                     <div className="space-y-2 p-5">
                       <div className="flex items-start justify-between gap-3">
                         <h3 className="font-extrabold text-deep">{l.title}</h3>
@@ -326,7 +342,7 @@ export function Marketplace() {
                       <p className="text-sm font-semibold text-deep/70">
                         {purposeLabel(l.purpose)}
                       </p>
-                      {l.car_number && (
+                      {l.verified && (
                         <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
                           <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
                           {label.verified}
@@ -349,7 +365,7 @@ export function Marketplace() {
                         </div>
                       )}
                     </div>
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -42,7 +42,8 @@ export const contentAr: typeof content.pt = {
       },
       {
         title: "أتمم الصفقة بأمان",
-        desc: "عقد موحَّد، وتوقيع رقمي، وتقارير متابعة دورية.",
+        // TODO(i18n): traduzir para ar — réplica temporária do EN (C1, jul/2026).
+        desc: "Standard contract anchored in Brazil's Land Statute, frozen text ready for e-signature.",
       },
     ],
   },
@@ -52,15 +53,19 @@ export const contentAr: typeof content.pt = {
     badges: [
       {
         title: "إعلانات موثَّقة",
-        desc: "كل أرض تُنشر تخضع لفحص المستندات وسجل CAR (السجل البيئي الريفي).",
+        // TODO(i18n): traduzir para ar — réplica temporária do EN (C3, jul/2026).
+        desc: "Every account is identity-verified with documents (CPF/CNPJ).",
       },
       {
         title: "عقود موحَّدة",
-        desc: "نماذج راجعها محامون متخصصون في القطاع الزراعي، ببنود واضحة للإيجار أو الشراكة.",
+        // TODO(i18n): traduzir para ar — réplica temporária do EN (C2, jul/2026).
+        desc: "Anchored in the Land Statute (Lei 4.504/64), with an improvements clause and entry/exit inspection report at the core.",
       },
       {
         title: "متابعة عبر الأقمار الاصطناعية",
-        desc: "يتلقى المالك تقارير دورية توضح كيفية استخدام أرضه.",
+        // TODO(i18n): traduzir para ar — réplica temporária do EN (C4, jul/2026).
+        desc: "Owners will receive periodic reports showing how their land is being used.",
+        soon: true,
       },
     ],
   },
@@ -377,17 +382,21 @@ export const contentAr: typeof content.pt = {
       {
         name: "عمولة النجاح",
         price: "5%",
-        priceNote: "من قيمة السنة الأولى للعقد",
-        desc: "تُحصَّل عند التوقيع فقط ويدفعها من سيُنتج في الأرض. تشمل العقد الموحَّد والتحقق والتوقيع الرقمي.",
+        // TODO(i18n): traduzir para ar — réplicas temporárias do EN (A1, jul/2026).
+        priceNote: "of the total contract value",
+        desc: "5% of the total contract value, charged proportionally with each annual payment and paid by the landowner. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
         highlight: true,
       },
       {
         name: "المراقبة عبر الأقمار الاصطناعية",
-        price: "اشتراك شهري",
-        desc: "ليتابع المالك كيفية استخدام أرضه عبر صور الأقمار الاصطناعية من Hexagon. يمكن الإلغاء في أي وقت.",
+        price: "",
+        // TODO(i18n): traduzir para ar — réplica temporária do EN (C5, jul/2026).
+        desc: "Owners will be able to track how their land is being used, with satellite imagery. Subscription cancellable anytime.",
+        soon: true,
       },
     ],
-    footnote: "لا رسوم خفية. المالك لا يدفع أبدًا مقابل الإعلان.",
+    // TODO(i18n): traduzir para ar — réplica temporária do EN (A2, jul/2026).
+    footnote: "No hidden fees. Listing and negotiating are always free.",
   },
   waitlist: {
     eyebrow: "كن من الأوائل",
@@ -431,7 +440,8 @@ export const contentAr: typeof content.pt = {
     error: "حدث خطأ ما. حاول مرة أخرى بعد قليل.",
   },
   footer: {
-    tagline: "De palmo em palmo, a terra volta a produzir.",
+    // TODO(i18n): traduzir para ar — réplica temporária do EN (C8, jul/2026).
+    tagline: "Every Palmo of land producing.",
     whatsapp: "تواصل عبر WhatsApp",
     instagram: "Instagram",
     rights: "© 2026 Palmo. صُنع في البرازيل.",

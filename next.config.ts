@@ -7,6 +7,22 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
+  // URLs limpas do marketplace público: as rotas antigas do app redirecionam
+  // permanentemente (308) — links já compartilhados continuam funcionando.
+  async redirects() {
+    return [
+      {
+        source: "/app/explorar",
+        destination: "/explorar",
+        permanent: true,
+      },
+      {
+        source: "/app/imovel/:id",
+        destination: "/terra/:id",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

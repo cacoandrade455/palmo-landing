@@ -11,15 +11,15 @@ export function ComingSoon() {
       ? {
           badge: "Coming soon",
           title: "The Palmo platform is almost here",
-          body: "Listings, verified profiles and secure deal-making — all in one place. Join the waitlist and we'll let you know the moment it opens.",
-          cta: "Join the waitlist",
+          body: "Listings, verified profiles and secure deal-making — all in one place. Meanwhile, find out what your land is worth.",
+          cta: "How much is my land worth?",
           back: "Back to home",
         }
       : {
           badge: "Em breve",
           title: "A plataforma Palmo está chegando",
-          body: "Anúncios, perfis verificados e negociação segura — tudo em um só lugar. Entre na lista de espera e avisamos assim que abrir.",
-          cta: "Entrar na lista de espera",
+          body: "Anúncios, perfis verificados e negociação segura — tudo em um só lugar. Enquanto isso, descubra quanto vale a sua terra.",
+          cta: "Quanto vale minha terra?",
           back: "Voltar ao início",
         };
 
@@ -44,7 +44,7 @@ export function ComingSoon() {
       </p>
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
         <Link
-          href="/#lista-de-espera"
+          href="/quanto-vale"
           className="rounded-full bg-primary px-6 py-3 text-base font-bold text-white transition-colors hover:bg-primary-dark"
         >
           {t.cta}

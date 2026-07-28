@@ -6,8 +6,12 @@ import type { User } from "@supabase/supabase-js";
 import { useLanguage } from "@/lib/language-context";
 import { getSupabase } from "@/lib/supabase";
 
-export function AuthButton() {
-  const { t } = useLanguage();
+/**
+ * Sessão Supabase no cliente, compartilhada entre o AuthButton e o Header
+ * (que precisa saber se mostra "Mensagens" na navegação). `user` é null
+ * enquanto deslogado; `ready` evita decidir layout antes da 1ª resposta.
+ */
+export function useSupabaseUser() {
   const supabase = getSupabase();
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
@@ -23,6 +27,13 @@ export function AuthButton() {
     });
     return () => sub.subscription.unsubscribe();
   }, [supabase]);
+
+  return { supabase, user, ready };
+}
+
+export function AuthButton() {
+  const { t } = useLanguage();
+  const { supabase, user, ready } = useSupabaseUser();
 
   // Supabase not configured yet — render nothing, site works as before.
   if (!supabase) return null;

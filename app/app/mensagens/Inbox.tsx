@@ -41,7 +41,7 @@ export function Inbox() {
         ) : !items || items.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-deep/20 bg-white p-10 text-center shadow-sm">
             <p className="text-deep/60">{label.empty}</p>
-            <button onClick={() => router.push("/app/explorar")} className="mt-5 rounded-full bg-primary px-6 py-3 text-base font-bold text-white hover:bg-primary-dark">
+            <button onClick={() => router.push("/explorar")} className="mt-5 rounded-full bg-primary px-6 py-3 text-base font-bold text-white hover:bg-primary-dark">
               {label.explore}
             </button>
           </div>

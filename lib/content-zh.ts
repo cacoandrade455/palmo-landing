@@ -42,7 +42,8 @@ export const contentZh: typeof content.pt = {
       },
       {
         title: "安全成交",
-        desc: "标准化合同、电子签名以及后续跟踪报告。",
+        // TODO(i18n): traduzir para zh — réplica temporária do EN (C1, jul/2026).
+        desc: "Standard contract anchored in Brazil's Land Statute, frozen text ready for e-signature.",
       },
     ],
   },
@@ -52,15 +53,19 @@ export const contentZh: typeof content.pt = {
     badges: [
       {
         title: "核验过的地块信息",
-        desc: "每一块发布的土地都经过文件与 CAR（农村环境登记）核查。",
+        // TODO(i18n): traduzir para zh — réplica temporária do EN (C3, jul/2026).
+        desc: "Every account is identity-verified with documents (CPF/CNPJ).",
       },
       {
         title: "标准化合同",
-        desc: "由农业领域律师审阅的合同范本，租赁或合作条款清晰明确。",
+        // TODO(i18n): traduzir para zh — réplica temporária do EN (C2, jul/2026).
+        desc: "Anchored in the Land Statute (Lei 4.504/64), with an improvements clause and entry/exit inspection report at the core.",
       },
       {
         title: "卫星跟踪",
-        desc: "土地所有者定期收到报告，了解土地的实际使用情况。",
+        // TODO(i18n): traduzir para zh — réplica temporária do EN (C4, jul/2026).
+        desc: "Owners will receive periodic reports showing how their land is being used.",
+        soon: true,
       },
     ],
   },
@@ -377,17 +382,21 @@ export const contentZh: typeof content.pt = {
       {
         name: "成交服务费",
         price: "5%",
-        priceNote: "按首年合同金额",
-        desc: "仅在签约时收取，由租用土地的一方支付。包含标准化合同、核验与电子签名。",
+        // TODO(i18n): traduzir para zh — réplicas temporárias do EN (A1, jul/2026).
+        priceNote: "of the total contract value",
+        desc: "5% of the total contract value, charged proportionally with each annual payment and paid by the landowner. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
         highlight: true,
       },
       {
         name: "卫星监测",
-        price: "按月订阅",
-        desc: "土地所有者可通过 Hexagon 卫星影像随时了解土地使用情况。可随时取消。",
+        price: "",
+        // TODO(i18n): traduzir para zh — réplica temporária do EN (C5, jul/2026).
+        desc: "Owners will be able to track how their land is being used, with satellite imagery. Subscription cancellable anytime.",
+        soon: true,
       },
     ],
-    footnote: "没有隐藏费用。土地所有者发布永远免费。",
+    // TODO(i18n): traduzir para zh — réplica temporária do EN (A2, jul/2026).
+    footnote: "No hidden fees. Listing and negotiating are always free.",
   },
   waitlist: {
     eyebrow: "抢先加入",
@@ -431,7 +440,8 @@ export const contentZh: typeof content.pt = {
     error: "出了点问题，请稍后再试。",
   },
   footer: {
-    tagline: "De palmo em palmo, a terra volta a produzir.",
+    // TODO(i18n): traduzir para zh — réplica temporária do EN (C8, jul/2026).
+    tagline: "Every Palmo of land producing.",
     whatsapp: "通过 WhatsApp 联系",
     instagram: "Instagram",
     rights: "© 2026 Palmo. 巴西出品。",

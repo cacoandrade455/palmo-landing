@@ -522,10 +522,9 @@ export const content: Record<Lang, Content> = {
           desc: "Cadastre sua terra, veja anúncios, converse e negocie. De graça para os dois lados.",
         },
         {
-          name: "Taxa de sucesso",
-          price: "5%",
-          priceNote: "do 1º ano de contrato",
-          desc: "Cobrada só na assinatura e paga por quem vai produzir na terra. Inclui contrato padronizado e verificação.",
+          name: "Taxa de sucesso de 5%",
+          price: "",
+          desc: "5% sobre o valor total do contrato, cobrados proporcionalmente a cada pagamento anual. Grátis até fechar negócio: você paga no ritmo em que o contrato paga você. Inclui o contrato padronizado e a verificação.",
           highlight: true,
         },
         {
@@ -960,10 +959,9 @@ export const content: Record<Lang, Content> = {
           desc: "List your land, browse offers, talk and negotiate. Free for both sides.",
         },
         {
-          name: "Success fee",
-          price: "5%",
-          priceNote: "of the first-year contract",
-          desc: "Charged only at signing, paid by the party leasing the land. Includes the standardized contract and verification.",
+          name: "5% success fee",
+          price: "",
+          desc: "5% of the total contract value, charged proportionally with each annual payment. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
           highlight: true,
         },
         {

@@ -382,11 +382,11 @@ export const contentFr: typeof content.pt = {
         desc: "Publiez votre terre, consultez les annonces, échangez et négociez. Gratuit pour les deux parties.",
       },
       {
-        name: "Commission de succès",
-        price: "5%",
-        priceNote: "de la 1re année de contrat",
-        // TODO(i18n): traduzir para fr — réplica temporária do EN (C6, jul/2026).
-        desc: "Charged only at signing, paid by the party leasing the land. Includes the standardized contract and verification.",
+        // TODO(i18n): traduzir para fr — réplica temporária do EN (C9, jul/2026).
+        // Ao traduzir, o "5%" precisa entrar no título (como em PT/EN).
+        name: "5% success fee",
+        price: "",
+        desc: "5% of the total contract value, charged proportionally with each annual payment. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
         highlight: true,
       },
       {

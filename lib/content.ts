@@ -29,7 +29,7 @@ export type Content = {
   trust: {
     eyebrow: string;
     title: string;
-    badges: { title: string; desc: string }[];
+    badges: { title: string; desc: string; soon?: boolean }[];
   };
   appraiser: {
     navLabel: string;
@@ -110,6 +110,7 @@ export type Content = {
       priceNote?: string;
       desc: string;
       highlight?: boolean;
+      soon?: boolean;
     }[];
     footnote: string;
   };
@@ -185,7 +186,7 @@ export const content: Record<Lang, Content> = {
         },
         {
           title: "Feche com segurança",
-          desc: "Contrato padronizado, assinatura digital e relatórios de acompanhamento.",
+          desc: "Contrato padrão ancorado no Estatuto da Terra, com texto congelado pronto para assinatura eletrônica.",
         },
       ],
     },
@@ -195,15 +196,16 @@ export const content: Record<Lang, Content> = {
       badges: [
         {
           title: "Anúncios verificados",
-          desc: "Toda terra publicada passa por checagem de documentos e do CAR.",
+          desc: "Toda conta passa por verificação de identidade com documentos.",
         },
         {
           title: "Contratos padronizados",
-          desc: "Modelos revisados por advogados do agro, com termos claros de arrendamento ou parceria.",
+          desc: "Ancorado no Estatuto da Terra (Lei 4.504/64), com cláusula de benfeitorias e laudo de entrada e saída no núcleo.",
         },
         {
           title: "Acompanhamento por satélite",
-          desc: "O dono recebe relatórios periódicos mostrando como a terra está sendo usada.",
+          desc: "O dono receberá relatórios periódicos mostrando como a terra estará sendo usada.",
+          soon: true,
         },
       ],
     },
@@ -523,13 +525,14 @@ export const content: Record<Lang, Content> = {
           name: "Taxa de sucesso",
           price: "5%",
           priceNote: "do 1º ano de contrato",
-          desc: "Cobrada só na assinatura e paga por quem vai produzir na terra. Inclui contrato padronizado, verificação e assinatura digital.",
+          desc: "Cobrada só na assinatura e paga por quem vai produzir na terra. Inclui contrato padronizado e verificação.",
           highlight: true,
         },
         {
           name: "Monitoramento por satélite",
-          price: "Assinatura mensal",
-          desc: "Para o dono acompanhar como a terra está sendo usada, por imagens de satélite da Hexagon. Cancele quando quiser.",
+          price: "",
+          desc: "O dono poderá acompanhar como a terra está sendo usada, por imagens de satélite. Assinatura cancelável a qualquer momento.",
+          soon: true,
         },
       ],
       footnote: "Sem taxas escondidas. O dono nunca paga para anunciar.",
@@ -577,7 +580,7 @@ export const content: Record<Lang, Content> = {
       error: "Algo deu errado. Tente novamente em instantes.",
     },
     footer: {
-      tagline: "De palmo em palmo, a terra volta a produzir.",
+      tagline: "Cada Palmo de terra produzindo.",
       whatsapp: "Falar no WhatsApp",
       instagram: "Instagram",
       rights: "© 2026 Palmo. Palmo no Brasil.",
@@ -621,7 +624,7 @@ export const content: Record<Lang, Content> = {
         },
         {
           title: "Close with confidence",
-          desc: "Standard contract, digital signature, and ongoing monitoring reports.",
+          desc: "Standard contract anchored in Brazil's Land Statute, frozen text ready for e-signature.",
         },
       ],
     },
@@ -631,15 +634,16 @@ export const content: Record<Lang, Content> = {
       badges: [
         {
           title: "Verified listings",
-          desc: "Every listed property is checked against documents and the CAR registry.",
+          desc: "Every account is identity-verified with documents (CPF/CNPJ).",
         },
         {
           title: "Standard contracts",
-          desc: "Templates reviewed by agricultural lawyers, with clear lease or partnership terms.",
+          desc: "Anchored in the Land Statute (Lei 4.504/64), with an improvements clause and entry/exit inspection report at the core.",
         },
         {
           title: "Satellite monitoring",
-          desc: "Owners receive periodic reports showing exactly how their land is being used.",
+          desc: "Owners will receive periodic reports showing how their land is being used.",
+          soon: true,
         },
       ],
     },
@@ -959,13 +963,14 @@ export const content: Record<Lang, Content> = {
           name: "Success fee",
           price: "5%",
           priceNote: "of the first-year contract",
-          desc: "Charged only at signing, paid by the party leasing the land. Includes the standardized contract, verification, and digital signature.",
+          desc: "Charged only at signing, paid by the party leasing the land. Includes the standardized contract and verification.",
           highlight: true,
         },
         {
           name: "Satellite monitoring",
-          price: "Monthly subscription",
-          desc: "For owners to track how their land is being used, with satellite imagery powered by Hexagon. Cancel anytime.",
+          price: "",
+          desc: "Owners will be able to track how their land is being used, with satellite imagery. Subscription cancellable anytime.",
+          soon: true,
         },
       ],
       footnote: "No hidden fees. Owners never pay to list.",
@@ -1012,7 +1017,7 @@ export const content: Record<Lang, Content> = {
       error: "Something went wrong. Please try again shortly.",
     },
     footer: {
-      tagline: "De palmo em palmo, a terra volta a produzir.",
+      tagline: "Every Palmo of land producing.",
       whatsapp: "Chat on WhatsApp",
       instagram: "Instagram",
       rights: "© 2026 Palmo. Made in Brazil.",

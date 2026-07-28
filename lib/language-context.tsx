@@ -9,7 +9,8 @@ import {
   type ReactNode,
 } from "react";
 import { content, type Content, type Lang } from "./content";
-import { contentExtra, type ExtraLang } from "./content-extra";
+import { contentExtra } from "./content-extra";
+import { LANG_COOKIE, isAppLang, type AppLang } from "./lang";
 
 const STORAGE_KEY = "palmo-lang";
 
@@ -17,9 +18,10 @@ const STORAGE_KEY = "palmo-lang";
  * Idiomas da superfície pública. `Lang` (pt/en) vive em `content.ts` e não
  * pode ser editado; os idiomas adicionais chegam por `content-extra.ts`, cujos
  * dicionários são tipados como `typeof content.pt` — o compilador prova a
- * completude de cada tradução.
+ * completude de cada tradução. O type `AppLang`, o nome do cookie e o type
+ * guard moram em `lib/lang.ts` (módulo neutro, usável pelo servidor).
  */
-export type AppLang = Lang | ExtraLang;
+export type { AppLang };
 
 export const APP_LANGS: { code: AppLang; label: string; name: string }[] = [
   { code: "pt", label: "PT", name: "Português" },
@@ -28,10 +30,6 @@ export const APP_LANGS: { code: AppLang; label: string; name: string }[] = [
   { code: "fr", label: "FR", name: "Français" },
   { code: "ar", label: "AR", name: "العربية" },
 ];
-
-function isAppLang(value: string | null): value is AppLang {
-  return APP_LANGS.some((l) => l.code === value);
-}
 
 function isBaseLang(lang: AppLang): lang is Lang {
   return lang === "pt" || lang === "en";
@@ -52,17 +50,31 @@ type LanguageContextValue = {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-function readStoredLang(): AppLang {
-  if (typeof window === "undefined") return "pt";
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  return isAppLang(stored) ? stored : "pt";
+function writeLangCookie(lang: AppLang) {
+  document.cookie = `${LANG_COOKIE}=${lang}; path=/; max-age=31536000; samesite=lax`;
 }
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  // Lazy initializer reads the persisted preference on first client render,
-  // avoiding a setState-in-effect (which would cause a visible flash + an
-  // extra render pass).
-  const [lang, setLangState] = useState<AppLang>(readStoredLang);
+function hasLangCookie(): boolean {
+  return document.cookie
+    .split("; ")
+    .some((c) => c.startsWith(`${LANG_COOKIE}=`));
+}
+
+/**
+ * O idioma agora chega do SERVIDOR (cookie `palmo-lang` lido em
+ * `app/layout.tsx`), então o HTML do SSR já vem no idioma certo e a hidratação
+ * não troca texto na tela — este era o "flash PT→EN" antigo, causado por um
+ * estado inicial lido do localStorage só no cliente.
+ */
+export function LanguageProvider({
+  children,
+  initialLang = "pt",
+}: {
+  children: ReactNode;
+  initialLang?: AppLang;
+}) {
+  // O estado inicial espelha exatamente o que o servidor renderizou.
+  const [lang, setLangState] = useState<AppLang>(initialLang);
 
   const dir: "ltr" | "rtl" = lang === "ar" ? "rtl" : "ltr";
 
@@ -75,7 +87,25 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const setLang = (next: AppLang) => {
     setLangState(next);
     window.localStorage.setItem(STORAGE_KEY, next);
+    writeLangCookie(next);
   };
+
+  // Migração one-time: visitantes antigos guardavam a preferência só no
+  // localStorage. Sem cookie, promovemos o valor guardado a cookie — a partir
+  // da PRÓXIMA navegação o servidor já renderiza no idioma certo. O setState
+  // síncrono fica em queueMicrotask (padrão do projeto para a regra
+  // react-hooks/set-state-in-effect).
+  useEffect(() => {
+    if (hasLangCookie()) return;
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (isAppLang(stored)) {
+      writeLangCookie(stored);
+      if (stored !== initialLang) {
+        queueMicrotask(() => setLangState(stored));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- roda uma vez
+  }, []);
 
   const value = useMemo<LanguageContextValue>(
     () => ({

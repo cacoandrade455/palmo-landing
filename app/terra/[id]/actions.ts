@@ -2,6 +2,11 @@
 
 import { getServerSupabase } from "@/lib/supabase-server";
 
+/**
+ * Dados PÚBLICOS de uma listagem — o que a view `public_listings` expõe.
+ * Nunca inclui contato do dono, CAR cru nem matrícula; o selo de verificado
+ * é um booleano derivado no banco.
+ */
 export type ListingDetailData = {
   id: string;
   owner_id: string;
@@ -14,9 +19,16 @@ export type ListingDetailData = {
   price_per_ha_year: number | null;
   description: string | null;
   has_water: boolean | null;
-  car_number: string | null;
+  verified: boolean;
+  photos: string[];
   created_at: string;
-  ownerName: string | null; // public display name only — never contact
+  ownerName: string | null; // display name público — nunca contato
+};
+
+type PublicRow = Omit<ListingDetailData, "verified" | "photos" | "ownerName"> & {
+  verified?: boolean | null;
+  car_number?: string | null;
+  photos: string[] | null;
 };
 
 export async function getListing(
@@ -25,27 +37,64 @@ export async function getListing(
   const supabase = await getServerSupabase();
   if (!supabase) return { ok: false, error: "unconfigured" };
 
-  const { data, error } = await supabase
-    .from("listings")
+  let row: PublicRow | null = null;
+
+  // Caminho principal: view pública (colunas seguras, legível por anon).
+  const viewRes = await supabase
+    .from("public_listings")
     .select(
-      "id, owner_id, title, state, municipality, hectares, purpose, crop, price_per_ha_year, description, has_water, car_number, created_at",
+      "id, owner_id, title, state, municipality, hectares, purpose, crop, price_per_ha_year, description, has_water, verified, photos, created_at",
     )
     .eq("id", id)
     .single();
 
-  if (error || !data) return { ok: false, error: error?.message ?? "not_found" };
+  if (!viewRes.error && viewRes.data) {
+    row = viewRes.data as unknown as PublicRow;
+  } else {
+    // Fallback pré-migration: tabela base (policy atual já limita a ativos +
+    // anúncios do próprio dono); `verified` derivado do CAR.
+    const tableRes = await supabase
+      .from("listings")
+      .select(
+        "id, owner_id, title, state, municipality, hectares, purpose, crop, price_per_ha_year, description, has_water, car_number, photos, created_at",
+      )
+      .eq("id", id)
+      .single();
+    if (tableRes.error || !tableRes.data)
+      return { ok: false, error: tableRes.error?.message ?? "not_found" };
+    row = tableRes.data as unknown as PublicRow;
+  }
 
-  // Public display name only (no phone/email — those come from the gate function
-  // after a deal closes). Read from the contact-free public_profiles view.
+  // Display name público do dono (view contact-free). Pode falhar para anon
+  // dependendo dos grants — aí simplesmente não mostramos o nome.
   let ownerName: string | null = null;
   const { data: prof } = await supabase
     .from("public_profiles")
     .select("display_name")
-    .eq("id", data.owner_id)
-    .single();
+    .eq("id", row.owner_id)
+    .maybeSingle();
   ownerName = prof?.display_name ?? null;
 
-  return { ok: true, listing: { ...data, ownerName } as ListingDetailData };
+  return {
+    ok: true,
+    listing: {
+      id: row.id,
+      owner_id: row.owner_id,
+      title: row.title,
+      state: row.state,
+      municipality: row.municipality,
+      hectares: row.hectares,
+      purpose: row.purpose,
+      crop: row.crop,
+      price_per_ha_year: row.price_per_ha_year,
+      description: row.description,
+      has_water: row.has_water,
+      verified: row.verified ?? !!row.car_number,
+      photos: row.photos ?? [],
+      created_at: row.created_at,
+      ownerName,
+    },
+  };
 }
 
 /**

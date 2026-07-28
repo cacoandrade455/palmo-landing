@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { cookies } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { LanguageProvider } from "@/lib/language-context";
+import { LANG_COOKIE, isAppLang, type AppLang } from "@/lib/lang";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
@@ -45,15 +47,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // O idioma vive num cookie e é resolvido AQUI, no servidor: o HTML já sai
+  // no idioma do visitante e a hidratação não troca texto (fim do flash
+  // PT→EN). Custo assumido: as páginas passam a ser renderizadas por request.
+  const cookieStore = await cookies();
+  const cookieLang = cookieStore.get(LANG_COOKIE)?.value;
+  const initialLang: AppLang = isAppLang(cookieLang) ? cookieLang : "pt";
+  const dir = initialLang === "ar" ? "rtl" : "ltr";
+
   return (
-    <html lang="pt" className={`${nunito.variable} h-full antialiased`}>
+    <html
+      lang={initialLang}
+      dir={dir}
+      className={`${nunito.variable} h-full antialiased`}
+    >
       <body className="min-h-full">
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider initialLang={initialLang}>{children}</LanguageProvider>
         {/* Vercel Web Analytics — only reports from the deployed site
             (localhost/npm run dev sends nothing, by design). */}
         <Analytics />

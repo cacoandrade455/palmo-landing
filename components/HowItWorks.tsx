@@ -6,7 +6,7 @@ export function HowItWorks() {
   const { t } = useLanguage();
 
   return (
-    <section id="como-funciona" className="bg-white py-20">
+    <section id="como-funciona" className="bg-neutral py-20">
       <div className="mx-auto max-w-6xl px-6">
         <p className="text-sm font-bold uppercase tracking-wide text-primary">
           {t.how.eyebrow}

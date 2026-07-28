@@ -203,7 +203,7 @@ export function HomeDashboard() {
           <p className="mt-1 text-sm text-white/80">{label.ctaListHint}</p>
         </Link>
         <Link
-          href="/app/explorar"
+          href="/explorar"
           className="rounded-2xl bg-accent p-6 text-deep shadow-sm transition-colors hover:bg-accent-dark"
         >
           <Search className="h-5 w-5" aria-hidden="true" />
@@ -293,7 +293,7 @@ export function HomeDashboard() {
             <p className="text-sm text-deep/60">{label.messagesEmpty}</p>
             <p className="mt-1 text-sm text-deep/50">{label.messagesEmptyHint}</p>
             <Link
-              href="/app/explorar"
+              href="/explorar"
               className="mt-4 inline-block rounded-full bg-accent px-4 py-2 text-sm font-bold text-deep shadow-sm transition-colors hover:bg-accent-dark"
             >
               {label.ctaExplore}

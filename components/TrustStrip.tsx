@@ -6,7 +6,9 @@ import { useLanguage } from "@/lib/language-context";
 const icons = [ShieldCheck, FileCheck2, Satellite];
 
 export function TrustStrip() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  // C4: o pilar de satélite ainda não opera — selo "Em breve" (inline, regra 5).
+  const soonLabel = lang === "pt" ? "Em breve" : "Coming soon";
 
   return (
     <section id="confianca" className="bg-neutral py-20">
@@ -26,8 +28,13 @@ export function TrustStrip() {
                 <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-primary shadow-sm">
                   <Icon className="h-6 w-6" aria-hidden="true" />
                 </span>
-                <h3 className="mt-4 text-lg font-extrabold text-deep">
+                <h3 className="mt-4 flex flex-wrap items-center gap-2 text-lg font-extrabold text-deep">
                   {badge.title}
+                  {badge.soon && (
+                    <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+                      {soonLabel}
+                    </span>
+                  )}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-deep/60">
                   {badge.desc}

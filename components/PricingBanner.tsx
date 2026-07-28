@@ -4,7 +4,9 @@ import { Check } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 
 export function PricingBanner() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  // C5: satélite ainda não opera — selo "Em breve", sem preço (inline, regra 5).
+  const soonLabel = lang === "pt" ? "Em breve" : "Coming soon";
 
   return (
     <section id="precos" className="bg-white py-20">
@@ -32,30 +34,37 @@ export function PricingBanner() {
               }`}
             >
               <h3
-                className={`text-sm font-bold uppercase tracking-wide ${
+                className={`flex flex-wrap items-center gap-2 text-sm font-bold uppercase tracking-wide ${
                   tier.highlight ? "text-white/80" : "text-deep/50"
                 }`}
               >
                 {tier.name}
-              </h3>
-              <div className="mt-3 flex items-baseline gap-2">
-                <span
-                  className={`font-extrabold ${
-                    tier.price.length > 8 ? "text-2xl" : "text-4xl"
-                  }`}
-                >
-                  {tier.price}
-                </span>
-                {tier.priceNote && (
-                  <span
-                    className={`text-sm font-semibold ${
-                      tier.highlight ? "text-white/70" : "text-deep/50"
-                    }`}
-                  >
-                    {tier.priceNote}
+                {tier.soon && (
+                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold normal-case tracking-normal text-primary">
+                    {soonLabel}
                   </span>
                 )}
-              </div>
+              </h3>
+              {tier.price && (
+                <div className="mt-3 flex items-baseline gap-2">
+                  <span
+                    className={`font-extrabold ${
+                      tier.price.length > 8 ? "text-2xl" : "text-4xl"
+                    }`}
+                  >
+                    {tier.price}
+                  </span>
+                  {tier.priceNote && (
+                    <span
+                      className={`text-sm font-semibold ${
+                        tier.highlight ? "text-white/70" : "text-deep/50"
+                      }`}
+                    >
+                      {tier.priceNote}
+                    </span>
+                  )}
+                </div>
+              )}
               <p
                 className={`mt-4 text-sm leading-relaxed ${
                   tier.highlight ? "text-white/85" : "text-deep/60"

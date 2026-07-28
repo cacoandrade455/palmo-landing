@@ -73,6 +73,8 @@ const XL: Record<
     listSub: string;
     country: string;
     bestUsesTitle: string;
+    seeLandTitle: string;
+    seeLandSub: string;
   }
 > = {
   pt: {
@@ -82,6 +84,8 @@ const XL: Record<
     listSub: "Anúncio pré-preenchido com os dados da calculadora",
     country: "Brasil",
     bestUsesTitle: "Melhores usos para sua terra",
+    seeLandTitle: "Ver terras disponíveis na sua região",
+    seeLandSub: "Anúncios ativos no seu estado — sem precisar de conta",
   },
   en: {
     year: "year",
@@ -90,6 +94,8 @@ const XL: Record<
     listSub: "Listing pre-filled with your calculator data",
     country: "Brazil",
     bestUsesTitle: "Best uses for your land",
+    seeLandTitle: "See land available in your region",
+    seeLandSub: "Active listings in your state — no account needed",
   },
   zh: {
     year: "年",
@@ -98,6 +104,8 @@ const XL: Record<
     listSub: "房源已用计算器的数据预先填写",
     country: "Brazil",
     bestUsesTitle: "Best uses for your land",
+    seeLandTitle: "See land available in your region",
+    seeLandSub: "Active listings in your state — no account needed",
   },
   fr: {
     year: "an",
@@ -106,6 +114,8 @@ const XL: Record<
     listSub: "Annonce pré-remplie avec les données du calculateur",
     country: "Brazil",
     bestUsesTitle: "Best uses for your land",
+    seeLandTitle: "See land available in your region",
+    seeLandSub: "Active listings in your state — no account needed",
   },
   ar: {
     year: "سنة",
@@ -114,6 +124,8 @@ const XL: Record<
     listSub: "إعلان معبّأ مسبقًا ببيانات الحاسبة",
     country: "Brazil",
     bestUsesTitle: "Best uses for your land",
+    seeLandTitle: "See land available in your region",
+    seeLandSub: "Active listings in your state — no account needed",
   },
 };
 
@@ -180,7 +192,18 @@ const UNI: Record<AppLang, UniCopy> = {
   ar: UNI_EN,
 };
 
-export function Appraiser() {
+/**
+ * A calculadora — o MESMO componente em /quanto-vale (standalone, com o
+ * próprio cabeçalho) e embutido no herói da home (`variant="hero"`, sem
+ * cabeçalho: o H1 vem do herói; o resultado rola suavemente para a vista).
+ * ZERO fork: nada do motor/dados muda entre as montagens.
+ */
+export function Appraiser({
+  variant = "standalone",
+}: {
+  variant?: "standalone" | "hero";
+} = {}) {
+  const isHero = variant === "hero";
   const { t, lang } = useLanguage();
   const xl = XL[lang];
   const uni = UNI[lang];
@@ -198,6 +221,10 @@ export function Appraiser() {
   const [retrato, setRetrato] = useState<RegiaoRetrato | null>(null);
   const retratoSeq = useRef(0);
   const [query, setQuery] = useState<Query | null>(null);
+  // No herói da home o resultado nasce abaixo da dobra: depois de cada
+  // cálculo rolamos suavemente até ele (uma vez por submit, via flag).
+  const resultRef = useRef<HTMLDivElement>(null);
+  const scrollPending = useRef(false);
   const [purposeSel, setPurposeSel] = useState("");
   const [cropSel, setCropSel] = useState("");
   const [ufSel, setUfSel] = useState("");
@@ -312,6 +339,7 @@ export function Appraiser() {
   // instead, showing only the ranking. Any real crop/use runs estimateLease.
   function handleCalculate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    scrollPending.current = true;
     const fd = new FormData(e.currentTarget);
     const uf = String(fd.get("uf") ?? "");
     const municipality = String(fd.get("municipality") ?? "").trim();
@@ -377,6 +405,15 @@ export function Appraiser() {
 
   const recommendMode = purposeSel === RECOMMEND;
 
+  // Scroll suave até o resultado — só no herói (o standalone fica intacto).
+  useEffect(() => {
+    if (!isHero || !scrollPending.current) return;
+    if (recResult || (query && estimate)) {
+      scrollPending.current = false;
+      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isHero, recResult, query, estimate]);
+
   const purposeLabel =
     query &&
     (t.waitlist.purposeOptions.find((o) => o.value === query.purpose)?.label ??
@@ -422,23 +459,28 @@ export function Appraiser() {
   })();
 
   return (
-    <section className="bg-white py-16">
+    <section className={isHero ? "bg-white pb-16" : "bg-white py-16"}>
       <div className="mx-auto max-w-2xl px-6">
-        <p className="text-center text-sm font-bold uppercase tracking-wide text-primary">
-          {a.eyebrow}
-        </p>
-        <h1 className="mt-2 text-center text-3xl font-extrabold tracking-tight text-deep sm:text-4xl">
-          {a.title}
-        </h1>
-        <p className="mx-auto mt-3 max-w-md text-center text-base text-deep/70">
-          {a.subtitle}
-        </p>
+        {/* No herói, o cabeçalho (H1 + apoio + slogan) vem do HomeHero. */}
+        {!isHero && (
+          <>
+            <p className="text-center text-sm font-bold uppercase tracking-wide text-primary">
+              {a.eyebrow}
+            </p>
+            <h1 className="mt-2 text-center text-3xl font-extrabold tracking-tight text-deep sm:text-4xl">
+              {a.title}
+            </h1>
+            <p className="mx-auto mt-3 max-w-md text-center text-base text-deep/70">
+              {a.subtitle}
+            </p>
+          </>
+        )}
 
         {/* One calculator, one form. The land use "Não sei / me recomende"
             turns the result into the region's ranked vocations. */}
         <form
           onSubmit={handleCalculate}
-          className="mt-8 space-y-4 rounded-2xl border border-deep/10 bg-white p-6 shadow-sm sm:p-8"
+          className={`${isHero ? "mt-6" : "mt-8"} space-y-4 rounded-2xl border border-deep/10 bg-white p-6 shadow-sm sm:p-8`}
         >
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -657,6 +699,7 @@ export function Appraiser() {
           </button>
         </form>
 
+        <div ref={resultRef} className="scroll-mt-24">
         {recResult && (
           <div className="mt-8">
             {/* Retrato da região primeiro (contexto), ranking depois. Sem
@@ -667,6 +710,24 @@ export function Appraiser() {
               </div>
             )}
             <RecommenderRanking result={recResult} onCalcSelect={goToCalc} />
+            {/* Ponte para o marketplace: o Explorar já filtrado pela UF. */}
+            <Link
+              href={`/explorar?uf=${recResult.uf ?? ufSel}`}
+              className="group mt-4 flex items-center gap-4 rounded-2xl border border-deep/10 bg-white px-5 py-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <span className="min-w-0 flex-1">
+                <span className="block text-base font-extrabold leading-snug text-deep">
+                  {xl.seeLandTitle}
+                </span>
+                <span className="mt-0.5 block text-sm leading-snug text-deep/60">
+                  {xl.seeLandSub}
+                </span>
+              </span>
+              <ArrowRight
+                className="h-5 w-5 shrink-0 text-deep transition-transform group-hover:translate-x-1"
+                aria-hidden="true"
+              />
+            </Link>
           </div>
         )}
 
@@ -976,6 +1037,27 @@ export function Appraiser() {
               </Link>
             )}
 
+            {/* Ponte para o marketplace: o Explorar já filtrado pela UF do
+                cálculo (vale na home E no /quanto-vale). Só um link — nenhuma
+                lógica ou dado do motor muda aqui. */}
+            <Link
+              href={`/explorar?uf=${query.uf}`}
+              className={`group flex items-center gap-4 rounded-2xl border border-deep/10 bg-white px-5 py-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${listUrl ? "mt-3" : "mt-6"}`}
+            >
+              <span className="min-w-0 flex-1">
+                <span className="block text-base font-extrabold leading-snug text-deep">
+                  {xl.seeLandTitle}
+                </span>
+                <span className="mt-0.5 block text-sm leading-snug text-deep/60">
+                  {xl.seeLandSub}
+                </span>
+              </span>
+              <ArrowRight
+                className="h-5 w-5 shrink-0 text-deep transition-transform group-hover:translate-x-1"
+                aria-hidden="true"
+              />
+            </Link>
+
             {/* Best uses for your land — ranked by return, each with the
                 sourced regional "why". The justification is NOT computed here:
                 we route the same land through the recommender engine and reuse,
@@ -1180,6 +1262,7 @@ export function Appraiser() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </section>
   );

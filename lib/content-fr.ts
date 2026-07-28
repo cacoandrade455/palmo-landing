@@ -382,11 +382,11 @@ export const contentFr: typeof content.pt = {
         desc: "Publiez votre terre, consultez les annonces, échangez et négociez. Gratuit pour les deux parties.",
       },
       {
-        // TODO(i18n): traduzir para fr — réplica temporária do EN (C9, jul/2026).
-        // Ao traduzir, o "5%" precisa entrar no título (como em PT/EN).
-        name: "5% success fee",
-        price: "",
-        desc: "5% of the total contract value, charged proportionally with each annual payment. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
+        name: "Commission de succès",
+        price: "5%",
+        // TODO(i18n): traduzir para fr — réplicas temporárias do EN (A1, jul/2026).
+        priceNote: "of the total contract value",
+        desc: "5% of the total contract value, charged proportionally with each annual payment and paid by the landowner. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
         highlight: true,
       },
       {
@@ -397,7 +397,8 @@ export const contentFr: typeof content.pt = {
         soon: true,
       },
     ],
-    footnote: "Pas de frais cachés. Le propriétaire ne paie jamais pour annoncer.",
+    // TODO(i18n): traduzir para fr — réplica temporária do EN (A2, jul/2026).
+    footnote: "No hidden fees. Listing and negotiating are always free.",
   },
   waitlist: {
     eyebrow: "Soyez parmi les premiers",

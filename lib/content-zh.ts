@@ -380,11 +380,11 @@ export const contentZh: typeof content.pt = {
         desc: "发布您的土地，浏览地块信息，沟通与谈判。双方均免费。",
       },
       {
-        // TODO(i18n): traduzir para zh — réplica temporária do EN (C9, jul/2026).
-        // Ao traduzir, o "5%" precisa entrar no título (como em PT/EN).
-        name: "5% success fee",
-        price: "",
-        desc: "5% of the total contract value, charged proportionally with each annual payment. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
+        name: "成交服务费",
+        price: "5%",
+        // TODO(i18n): traduzir para zh — réplicas temporárias do EN (A1, jul/2026).
+        priceNote: "of the total contract value",
+        desc: "5% of the total contract value, charged proportionally with each annual payment and paid by the landowner. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
         highlight: true,
       },
       {
@@ -395,7 +395,8 @@ export const contentZh: typeof content.pt = {
         soon: true,
       },
     ],
-    footnote: "没有隐藏费用。土地所有者发布永远免费。",
+    // TODO(i18n): traduzir para zh — réplica temporária do EN (A2, jul/2026).
+    footnote: "No hidden fees. Listing and negotiating are always free.",
   },
   waitlist: {
     eyebrow: "抢先加入",

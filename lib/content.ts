@@ -522,9 +522,10 @@ export const content: Record<Lang, Content> = {
           desc: "Cadastre sua terra, veja anúncios, converse e negocie. De graça para os dois lados.",
         },
         {
-          name: "Taxa de sucesso de 5%",
-          price: "",
-          desc: "5% sobre o valor total do contrato, cobrados proporcionalmente a cada pagamento anual. Grátis até fechar negócio: você paga no ritmo em que o contrato paga você. Inclui o contrato padronizado e a verificação.",
+          name: "Taxa de sucesso",
+          price: "5%",
+          priceNote: "do valor total do contrato",
+          desc: "5% sobre o valor total do contrato, cobrados proporcionalmente a cada pagamento anual e devidos pelo proprietário da terra. Grátis até fechar negócio: você paga no ritmo em que o contrato paga você. Inclui o contrato padronizado e a verificação.",
           highlight: true,
         },
         {
@@ -534,7 +535,7 @@ export const content: Record<Lang, Content> = {
           soon: true,
         },
       ],
-      footnote: "Sem taxas escondidas. O dono nunca paga para anunciar.",
+      footnote: "Sem taxas escondidas. Anunciar e negociar é sempre grátis.",
     },
     waitlist: {
       eyebrow: "Seja um dos primeiros",
@@ -959,9 +960,10 @@ export const content: Record<Lang, Content> = {
           desc: "List your land, browse offers, talk and negotiate. Free for both sides.",
         },
         {
-          name: "5% success fee",
-          price: "",
-          desc: "5% of the total contract value, charged proportionally with each annual payment. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
+          name: "Success fee",
+          price: "5%",
+          priceNote: "of the total contract value",
+          desc: "5% of the total contract value, charged proportionally with each annual payment and paid by the landowner. Free until your deal closes: you pay as the contract pays you. Includes the standardized contract and verification.",
           highlight: true,
         },
         {
@@ -971,7 +973,7 @@ export const content: Record<Lang, Content> = {
           soon: true,
         },
       ],
-      footnote: "No hidden fees. Owners never pay to list.",
+      footnote: "No hidden fees. Listing and negotiating are always free.",
     },
     waitlist: {
       eyebrow: "Be one of the first",

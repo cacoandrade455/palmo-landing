@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
@@ -9,6 +10,7 @@ import { getSupabase } from "@/lib/supabase";
 import { UFS } from "@/lib/appraisal-data";
 import { sortOptionsByLabel } from "@/lib/sort-options";
 import { createListing } from "./actions";
+import { acceptListingTerms } from "@/app/app/legal-actions";
 
 const inputCls =
   "mt-1.5 w-full rounded-xl border border-deep/15 bg-white px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none";
@@ -52,6 +54,8 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
   const pendingMuniRef = useRef(prefill?.municipality ?? "");
   const [muniByUf, setMuniByUf] = useState<Record<string, string[] | "error">>({});
   const [submitting, setSubmitting] = useState(false);
+  // C.2 — sem esta confirmação o anúncio não é publicado (rascunho pode).
+  const [acceptedFee, setAcceptedFee] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   // undefined = still checking; null = signed out; User = signed in
@@ -139,6 +143,9 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         selectMuniFirst: "Pick the state first",
         selectPurpose: "Select…",
         allCrops: "All / not sure",
+        feeConsent:
+          "By publishing, you agree to the Terms, including the 5% success fee on the total contract value, owed by the landowner, charged proportionally with each annual payment.",
+        feeConsentLink: "Read the fee clause",
       }
     : {
         title: "Anunciar minha terra",
@@ -175,6 +182,9 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         selectMuniFirst: "Escolha o estado primeiro",
         selectPurpose: "Selecione…",
         allCrops: "Todas / não sei",
+        feeConsent:
+          "Ao publicar, você concorda com os Termos, incluindo a taxa de sucesso de 5% sobre o valor total do contrato, devida pelo proprietário, cobrada proporcionalmente a cada pagamento anual.",
+        feeConsentLink: "Ler a cláusula da taxa",
       };
 
   async function submit(publish: boolean, form: HTMLFormElement) {
@@ -194,6 +204,9 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
     const res = await createListing(fd);
     setSubmitting(false);
     if (res.ok) {
+      // C.2 — registra o aceite DEPOIS de publicar, com o id do anúncio como
+      // contexto. Falhar aqui não desfaz nem bloqueia a publicação.
+      if (publish) void acceptListingTerms(res.id);
       setDone(true);
     } else {
       setError(res.error === "not_signed_in" ? label.errAuth : label.errGeneric);
@@ -374,6 +387,28 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
 
       {error && <p className="text-sm font-semibold text-red-600">{error}</p>}
 
+      {/* C.2 — aceite exibido no momento em que a taxa passa a valer: ao
+          PUBLICAR. Salvar rascunho não publica nada e segue livre. */}
+      <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-neutral p-4">
+        <input
+          type="checkbox"
+          checked={acceptedFee}
+          onChange={(e) => setAcceptedFee(e.target.checked)}
+          className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-primary)]"
+        />
+        <span className="text-sm leading-relaxed text-deep">
+          {label.feeConsent}{" "}
+          <Link
+            href="/termos#taxa"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-primary underline transition-colors hover:text-primary-dark"
+          >
+            {label.feeConsentLink}
+          </Link>
+        </span>
+      </label>
+
       <div className="flex flex-col gap-3 sm:flex-row">
         <button
           type="button"
@@ -385,9 +420,9 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         </button>
         <button
           type="button"
-          disabled={submitting}
+          disabled={submitting || !acceptedFee}
           onClick={(e) => submit(true, e.currentTarget.form!)}
-          className="flex-1 rounded-full bg-primary px-6 py-3 text-base font-bold text-white transition-colors hover:bg-primary-dark disabled:opacity-60"
+          className="flex-1 rounded-full bg-primary px-6 py-3 text-base font-bold text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting ? label.submitting : label.publish}
         </button>

@@ -51,12 +51,12 @@ export function Footer() {
       <div className="mx-auto mt-6 flex max-w-6xl flex-col gap-2 border-t border-white/10 px-6 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
         <p>{t.footer.rights}</p>
         <div className="flex gap-4">
-          <a href="#" className="hover:text-white/80">
+          <Link href="/termos" className="hover:text-white/80">
             {t.footer.terms}
-          </a>
-          <a href="#" className="hover:text-white/80">
+          </Link>
+          <Link href="/privacidade" className="hover:text-white/80">
             {t.footer.privacy}
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

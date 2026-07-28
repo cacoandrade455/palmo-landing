@@ -11,6 +11,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
+import { FeeTerm } from "@/components/FeeTerm";
+import { FeeDisclosure } from "@/components/FeeDisclosure";
 import {
   minYearsFor,
   PARCERIA_MAX_SHARE,
@@ -380,6 +382,16 @@ export function ContractRoom({ id }: { id: string }) {
         <Scale className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
         {label.legalBanner}
       </p>
+
+      {/* Transparência da taxa: os DOIS lados veem o valor do contrato e a
+          taxa antes de assinar. Só exibição. */}
+      <div className="mt-2">
+        <FeeDisclosure conversationId={data.conversation_id} />
+      </div>
+
+      {/* Termo da taxa — some sozinho para o produtor e enquanto o negócio
+          não estiver fechado; só o proprietário (pagante) precisa aceitar. */}
+      <FeeTerm conversationId={data.conversation_id} />
 
       {/* header: parties, property, status */}
       <div className="rounded-2xl border border-deep/10 bg-white p-6 shadow-sm">

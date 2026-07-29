@@ -4,9 +4,11 @@ import { useLanguage, type AppLang } from "@/lib/language-context";
 import { Appraiser } from "./Appraiser";
 
 /**
- * Herói da home: a calculadora É a porta de entrada. H1 + apoio + assinatura
- * do slogan, e o MESMO componente Appraiser de /quanto-vale embutido logo
- * abaixo (variant="hero" só esconde o cabeçalho duplicado — zero fork).
+ * Herói da home: a calculadora É a porta de entrada. Ordem: slogan (marca)
+ * acima, H1 (pergunta) e apoio abaixo, com o MESMO componente Appraiser de
+ * /quanto-vale embutido em seguida (variant="hero" só esconde o cabeçalho
+ * duplicado — zero fork). O slogan é kicker: continua sendo <p>, nunca um
+ * segundo título, para preservar a hierarquia semântica do H1.
  * Strings inline (regra 5); zh/fr/ar replicam EN — TODO(i18n) no PR.
  */
 type HeroCopy = {
@@ -42,14 +44,16 @@ export function HomeHero() {
   return (
     <section id="top" className="bg-white">
       <div className="mx-auto max-w-2xl px-6 pt-12 text-center sm:pt-16">
-        <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-deep sm:text-5xl">
+        {/* Slogan como kicker da marca: abre o herói, mas não é título. */}
+        <p className="text-sm font-bold uppercase tracking-wide text-primary">
+          {h.slogan}
+        </p>
+        <h1 className="mt-3 text-4xl font-extrabold leading-[1.1] tracking-tight text-deep sm:text-5xl">
           {h.title}
         </h1>
         <p className="mx-auto mt-4 max-w-md text-lg leading-relaxed text-deep/70">
           {h.support}
         </p>
-        {/* Assinatura discreta do slogan — não é um segundo título. */}
-        <p className="mt-3 text-sm font-bold text-primary">{h.slogan}</p>
       </div>
       <Appraiser variant="hero" />
     </section>

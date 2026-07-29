@@ -42,7 +42,9 @@ export function Verification() {
   const [docFile, setDocFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [justSubmitted, setJustSubmitted] = useState(false);
+  // Situação devolvida pela triagem no próprio POST: a PJ limpa já volta
+  // 'approved' e a tela mostra o selo sem precisar recarregar.
+  const [submittedStatus, setSubmittedStatus] = useState<string | null>(null);
 
   const label =
     lang === "en"
@@ -50,7 +52,7 @@ export function Verification() {
           kicker: "Trust layer",
           title: "Verify your identity",
           intro:
-            "One quick step: your details plus a photo of one document. Manual review, no external services.",
+            "One quick step: your details plus a photo of one document. Companies are checked against the Federal Revenue open data and may be approved right away.",
           typeQuestion: "Who is being verified?",
           pf: "Individual",
           pfDesc: "Verify with CPF and an ID document",
@@ -83,6 +85,7 @@ export function Verification() {
           rejectedTitle: "We couldn't verify your identity",
           rejectedBody:
             "Some information could not be confirmed. Review your details and try again.",
+          rejectedReason: "Reason:",
           redo: "Redo verification",
           backToAccount: "Back to my account",
           signInPrompt: "Sign in to verify your identity.",
@@ -92,7 +95,7 @@ export function Verification() {
           kicker: "Camada de confiança",
           title: "Verifique sua identidade",
           intro:
-            "Um passo rápido: seus dados e a foto de um documento. Revisão manual, sem serviços externos.",
+            "Um passo rápido: seus dados e a foto de um documento. Empresa é conferida nos dados abertos da Receita Federal e pode sair aprovada na hora.",
           typeQuestion: "Quem será verificado?",
           pf: "Pessoa física",
           pfDesc: "Verificação com CPF e documento com foto",
@@ -125,6 +128,7 @@ export function Verification() {
           rejectedTitle: "Não conseguimos verificar sua identidade",
           rejectedBody:
             "Alguma informação não pôde ser confirmada. Revise seus dados e tente de novo.",
+          rejectedReason: "Motivo:",
           redo: "Refazer verificação",
           backToAccount: "Voltar para minha conta",
           signInPrompt: "Entre para verificar sua identidade.",
@@ -207,8 +211,11 @@ export function Verification() {
     </div>
   );
 
-  const activeKyc = justSubmitted
-    ? ({ tier: type === "pj" ? "pj_br" : "pf_br", status: "pending" } as KycSummary)
+  const activeKyc = submittedStatus
+    ? ({
+        tier: type === "pj" ? "pj_br" : "pf_br",
+        status: submittedStatus,
+      } as KycSummary)
     : kyc;
 
   if (activeKyc && !redoing) {
@@ -228,13 +235,20 @@ export function Verification() {
         <XCircle className="h-10 w-10 text-deep/50" aria-hidden="true" />,
         label.rejectedTitle,
         label.rejectedBody,
-        <button
-          type="button"
-          onClick={() => setRedoing(true)}
-          className="mt-6 rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
-        >
-          {label.redo}
-        </button>,
+        <>
+          {activeKyc.decision_reason && (
+            <p className="mt-4 rounded-xl bg-accent/20 px-4 py-2.5 text-left text-sm font-semibold text-deep">
+              {label.rejectedReason} {activeKyc.decision_reason}
+            </p>
+          )}
+          <button
+            type="button"
+            onClick={() => setRedoing(true)}
+            className="mt-6 rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
+          >
+            {label.redo}
+          </button>
+        </>,
       );
     }
     // pending / in_review
@@ -319,7 +333,7 @@ export function Verification() {
       );
       return;
     }
-    setJustSubmitted(true);
+    setSubmittedStatus(res.status ?? "pending");
     setRedoing(false);
   }
 

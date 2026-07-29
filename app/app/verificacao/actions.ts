@@ -1,9 +1,16 @@
 "use server";
 
 import { getServerSupabase } from "@/lib/supabase-server";
+import { getAdminSupabase } from "@/lib/supabase-admin";
+import { gravarResultado, rodarChecagens } from "@/lib/kyc-triage";
 import { isValidCnpj, isValidCpf, onlyDigits } from "./br-docs";
 
-export type KycSummary = { tier: string; status: string };
+export type KycSummary = {
+  tier: string;
+  status: string;
+  /** Texto que o admin (ou a regra automática) deixou. Nulo antes da migration. */
+  decision_reason?: string | null;
+};
 
 export type KycStatusResult =
   | { ok: true; kyc: KycSummary | null }
@@ -12,6 +19,10 @@ export type KycStatusResult =
 /**
  * Situação de KYC do usuário logado (qualquer tier). RLS garante que cada
  * um só enxerga a própria linha. Usado aqui e no card da página de conta.
+ *
+ * `select("*")` de propósito: a linha é do próprio usuário (nada de terceiro
+ * passa por aqui) e assim a leitura não quebra nem antes nem depois da
+ * migration da triagem, que acrescenta colunas.
  */
 export async function getMyKyc(): Promise<KycStatusResult> {
   const supabase = await getServerSupabase();
@@ -23,12 +34,23 @@ export async function getMyKyc(): Promise<KycStatusResult> {
 
   const { data, error } = await supabase
     .from("kyc_profiles")
-    .select("tier, status")
+    .select("*")
     .eq("user_id", user.id)
     .maybeSingle();
 
   if (error) return { ok: false, error: error.message };
-  return { ok: true, kyc: (data as KycSummary | null) ?? null };
+  if (!data) return { ok: true, kyc: null };
+
+  const linha = data as Record<string, unknown>;
+  return {
+    ok: true,
+    kyc: {
+      tier: String(linha.tier ?? ""),
+      status: String(linha.status ?? "pending"),
+      decision_reason:
+        typeof linha.decision_reason === "string" ? linha.decision_reason : null,
+    },
+  };
 }
 
 export type BrKycInput =
@@ -48,17 +70,33 @@ export type BrKycInput =
       docPaths: string[];
     };
 
+export type BrKycResult = {
+  ok: boolean;
+  error?: string;
+  /** Situação final logo após a triagem — a tela mostra o cartão certo na hora. */
+  status?: "pending" | "in_review" | "approved";
+};
+
 const clean = (v: string) => v.trim().slice(0, 300);
 
 /**
- * Grava a verificação brasileira como 'pending'. O documento já foi enviado
- * pelo cliente para a pasta privada kyc-docs/{user.id}/ (RLS do storage
- * restringe cada usuário à própria pasta); aqui só persistimos os caminhos.
- * Revisão manual do fundador via Supabase (v1) — sem painel de aprovação.
+ * Recebe a verificação brasileira e roda a TRIAGEM.
+ *
+ * O documento já foi enviado pelo cliente para a pasta privada
+ * kyc-docs/{user.id}/ (a RLS do storage restringe cada usuário à própria
+ * pasta); aqui só persistimos os caminhos.
+ *
+ * Ordem, e o porquê dela:
+ *   1. grava a linha como 'pending' com o formato ANTIGO. É o único passo que
+ *      não pode falhar: funciona com ou sem a migration da triagem aplicada,
+ *      e garante que nenhuma submissão se perde se a etapa 2 explodir.
+ *   2. roda as checagens (dígito, Receita, duplicidade, arquivo) e grava o
+ *      resultado. Best-effort: qualquer erro aqui deixa o caso em 'pending',
+ *      que é a fila humana — o comportamento anterior a este lote.
+ *
+ * Só a PJ limpa sai daqui aprovada. Nada sai rejeitado: rejeitar é humano.
  */
-export async function submitBrKyc(
-  input: BrKycInput,
-): Promise<{ ok: boolean; error?: string }> {
+export async function submitBrKyc(input: BrKycInput): Promise<BrKycResult> {
   const supabase = await getServerSupabase();
   if (!supabase) return { ok: false, error: "unconfigured" };
   const {
@@ -96,6 +134,9 @@ export async function submitBrKyc(
     return { ok: false, error: "invalid_tier" };
   }
 
+  const docPaths = input.docPaths.slice(0, 5);
+
+  // ── 1) a submissão em si (formato compatível com o schema pré-triagem) ──
   const { error } = await supabase.from("kyc_profiles").upsert(
     {
       user_id: user.id,
@@ -103,11 +144,54 @@ export async function submitBrKyc(
       status: "pending",
       country: "BR",
       data,
-      doc_paths: input.docPaths.slice(0, 5),
+      doc_paths: docPaths,
       updated_at: new Date().toISOString(),
     },
     { onConflict: "user_id" },
   );
+  if (error) return { ok: false, error: error.message };
 
-  return error ? { ok: false, error: error.message } : { ok: true };
+  // ── 2) a triagem (best-effort; nunca derruba a submissão) ──
+  try {
+    const admin = getAdminSupabase();
+    const resultado = await rodarChecagens(
+      supabase,
+      admin,
+      input.tier === "pf_br"
+        ? {
+            tier: "pf_br",
+            userId: user.id,
+            email: user.email ?? null,
+            docPath: docPaths[0],
+            dados: {
+              full_name: String(data.full_name),
+              cpf: String(data.cpf),
+            },
+          }
+        : {
+            tier: "pj_br",
+            userId: user.id,
+            email: user.email ?? null,
+            docPath: docPaths[0],
+            dados: {
+              razao_social: String(data.razao_social),
+              cnpj: String(data.cnpj),
+              responsavel_cpf: String(data.responsavel_cpf),
+            },
+          },
+    );
+
+    const gravou = await gravarResultado(
+      supabase,
+      admin,
+      user.id,
+      user.email ?? null,
+      resultado,
+    );
+    if (!gravou) return { ok: true, status: "pending" };
+    return { ok: true, status: admin ? resultado.status : "in_review" };
+  } catch (e) {
+    console.error("[kyc] triagem falhou; caso segue na fila manual:", e);
+    return { ok: true, status: "pending" };
+  }
 }

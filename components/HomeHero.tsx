@@ -55,14 +55,14 @@ export function HomeHero() {
           aria-hidden="true"
           width={114}
           height={40}
-          className="mx-auto mb-5 h-9 w-auto sm:h-11"
+          className="mx-auto mb-6 h-12 w-auto sm:h-16"
           priority
         />
         {/* Slogan como kicker da marca: abre o herói, mas não é título. */}
         <p className="text-sm font-bold uppercase tracking-wide text-primary">
           {h.slogan}
         </p>
-        <h1 className="mt-3 text-4xl font-extrabold leading-[1.1] tracking-tight text-deep sm:text-5xl">
+        <h1 className="mt-3 text-[2rem] font-extrabold leading-[1.1] tracking-tight text-deep sm:text-[2.6rem]">
           {h.title}
         </h1>
         <p className="mx-auto mt-4 max-w-md text-lg leading-relaxed text-deep/70">

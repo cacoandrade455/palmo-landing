@@ -1,14 +1,18 @@
 "use client";
 
+import Image from "next/image";
+
 import { useLanguage, type AppLang } from "@/lib/language-context";
 import { Appraiser } from "./Appraiser";
 
 /**
- * Herói da home: a calculadora É a porta de entrada. Ordem: slogan (marca)
- * acima, H1 (pergunta) e apoio abaixo, com o MESMO componente Appraiser de
- * /quanto-vale embutido em seguida (variant="hero" só esconde o cabeçalho
- * duplicado — zero fork). O slogan é kicker: continua sendo <p>, nunca um
- * segundo título, para preservar a hierarquia semântica do H1.
+ * Herói da home: a calculadora É a porta de entrada. Ordem: logo, slogan,
+ * H1 (pergunta) e apoio, com o MESMO componente Appraiser de /quanto-vale
+ * embutido em seguida (variant="hero" só esconde o cabeçalho duplicado —
+ * zero fork). O slogan é kicker: continua sendo <p>, nunca um segundo
+ * título, para preservar a hierarquia semântica do H1. O logo aqui é
+ * decorativo (aria-hidden): o logo acessível da marca já está no Header,
+ * e repetir o alt faria o leitor de tela anunciar "Palmo" duas vezes.
  * Strings inline (regra 5); zh/fr/ar replicam EN — TODO(i18n) no PR.
  */
 type HeroCopy = {
@@ -43,7 +47,17 @@ export function HomeHero() {
 
   return (
     <section id="top" className="bg-white">
-      <div className="mx-auto max-w-2xl px-6 pt-12 text-center sm:pt-16">
+      <div className="mx-auto max-w-2xl px-6 pt-10 text-center sm:pt-12">
+        {/* Logo decorativo: o logo acessível já vive no Header. */}
+        <Image
+          src="/palmo-logo.svg"
+          alt=""
+          aria-hidden="true"
+          width={114}
+          height={40}
+          className="mx-auto mb-5 h-9 w-auto sm:h-11"
+          priority
+        />
         {/* Slogan como kicker da marca: abre o herói, mas não é título. */}
         <p className="text-sm font-bold uppercase tracking-wide text-primary">
           {h.slogan}

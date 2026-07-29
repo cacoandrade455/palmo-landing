@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MapPin, Droplet, MessageCircle, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
-import { getSupabase } from "@/lib/supabase";
 import { startConversation, type ListingDetailData } from "./actions";
 
 export function ListingDetail({
@@ -37,16 +36,10 @@ export function ListingDetail({
     if (res.ok) {
       router.push(`/app/mensagens/${res.conversationId}`);
     } else if (res.error === "not_signed_in") {
-      // Deslogado: entra com Google e VOLTA para esta mesma listagem.
-      const supabase = getSupabase();
-      if (supabase) {
-        supabase.auth.signInWithOAuth({
-          provider: "google",
-          options: { redirectTo: window.location.href },
-        });
-      } else {
-        router.push("/conta");
-      }
+      // Deslogado: vai para a tela de entrada (Google ou e-mail/senha) e
+      // VOLTA para esta mesma listagem depois do login.
+      const back = window.location.pathname + window.location.search;
+      router.push(`/entrar?next=${encodeURIComponent(back)}`);
     } else {
       setError(label.err);
     }

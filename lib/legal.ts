@@ -25,7 +25,7 @@ export const LEGAL_EFFECTIVE = {
 };
 
 /**
- * Taxa de sucesso: 5% sobre o valor total do contrato, cobrados
+ * A Taxa: 5% sobre o valor total do contrato, cobrados
  * proporcionalmente a cada pagamento anual. O número vive aqui e no texto dos
  * Termos (seção 5) — o card de preços tem o seu próprio texto em content.ts.
  */

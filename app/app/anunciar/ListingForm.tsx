@@ -183,7 +183,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         selectPurpose: "Selecione…",
         allCrops: "Todas / não sei",
         feeConsent:
-          "Ao publicar, você concorda com os Termos, incluindo a taxa de sucesso de 5% sobre o valor total do contrato, devida pelo proprietário, cobrada proporcionalmente a cada pagamento anual.",
+          "Ao publicar, você concorda com os Termos, incluindo a Taxa de 5% sobre o valor total do contrato, devida pelo proprietário, cobrada proporcionalmente a cada pagamento anual.",
         feeConsentLink: "Ler a cláusula da taxa",
       };
 
@@ -240,18 +240,12 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
             ? "You need an account to create a listing."
             : "Você precisa de uma conta para criar um anúncio."}
         </p>
-        <button
-          onClick={() => {
-            const supabase = getSupabase();
-            supabase?.auth.signInWithOAuth({
-              provider: "google",
-              options: { redirectTo: `${window.location.origin}/app/anunciar` },
-            });
-          }}
-          className="mt-6 rounded-full bg-primary px-6 py-3 text-base font-bold text-white hover:bg-primary-dark"
+        <Link
+          href="/entrar?next=%2Fapp%2Fanunciar"
+          className="mt-6 inline-block rounded-full bg-primary px-6 py-3 text-base font-bold text-white hover:bg-primary-dark"
         >
-          {lang === "en" ? "Sign in with Google" : "Entrar com Google"}
-        </button>
+          {lang === "en" ? "Sign in or create an account" : "Entrar ou criar conta"}
+        </Link>
       </div>
     );
   }

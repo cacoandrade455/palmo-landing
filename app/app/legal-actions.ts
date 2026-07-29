@@ -152,7 +152,7 @@ export async function acceptOfferTerms(conversationId: string) {
   return recordContextual(LEGAL_DOCS.offer, { conversation_id: conversationId });
 }
 
-/* ────────────────────── termo da taxa de sucesso ────────────────────── */
+/* ────────────────────── termo da Taxa ────────────────────── */
 
 export type FeeTerm = {
   /** false quando não se aplica (não sou o proprietário, negócio aberto…). */

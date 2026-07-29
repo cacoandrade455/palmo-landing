@@ -522,7 +522,9 @@ export const content: Record<Lang, Content> = {
           desc: "Cadastre sua terra, veja anúncios, converse e negocie. De graça para os dois lados.",
         },
         {
-          name: "Taxa de sucesso",
+          // "taxa de sucesso" é ambíguo em PT (lê-se como índice de acerto);
+          // o rótulo agora diz QUANDO ela incide. EN mantém "Success fee".
+          name: "Quando o negócio fecha",
           price: "5%",
           priceNote: "do valor total do contrato",
           desc: "5% sobre o valor total do contrato, cobrados proporcionalmente a cada pagamento anual e devidos pelo proprietário da terra. Grátis até fechar negócio: você paga no ritmo em que o contrato paga você. Inclui o contrato padronizado e a verificação.",

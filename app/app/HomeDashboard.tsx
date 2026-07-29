@@ -163,18 +163,12 @@ export function HomeDashboard() {
           {label.welcomeTitle}
         </h1>
         <p className="mx-auto mt-3 max-w-md text-deep/70">{label.welcomeText}</p>
-        <button
-          onClick={() => {
-            const supabase = getSupabase();
-            supabase?.auth.signInWithOAuth({
-              provider: "google",
-              options: { redirectTo: `${window.location.origin}/app` },
-            });
-          }}
-          className="mt-6 rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
+        <Link
+          href="/entrar?next=%2Fapp"
+          className="mt-6 inline-block rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
         >
           {label.signIn}
-        </button>
+        </Link>
       </div>
     );
   }

@@ -173,19 +173,12 @@ export function Verification() {
     return (
       <div className="rounded-2xl border border-deep/10 bg-white p-8 text-center shadow-sm">
         <p className="text-deep/70">{label.signInPrompt}</p>
-        <button
-          onClick={() => {
-            getSupabase()?.auth.signInWithOAuth({
-              provider: "google",
-              options: {
-                redirectTo: `${window.location.origin}/app/verificacao`,
-              },
-            });
-          }}
-          className="mt-6 rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
+        <Link
+          href="/entrar?next=%2Fapp%2Fverificacao"
+          className="mt-6 inline-block rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
         >
           {label.signIn}
-        </button>
+        </Link>
       </div>
     );
   }

@@ -7,7 +7,7 @@ import { useLanguage, type AppLang } from "@/lib/language-context";
 import { getFeeTerm, acceptFeeTerm, type FeeTerm as FeeTermData } from "@/app/app/legal-actions";
 
 /**
- * Termo da taxa de sucesso, exibido ao PROPRIETÁRIO — a parte pagante —
+ * Termo da Taxa, exibido ao PROPRIETÁRIO — a parte pagante —
  * quando o negócio é fechado (a mesma hora em que a Sala do Contrato é
  * liberada). Para o produtor e para negócios não fechados, `applies: false`
  * e o componente não renderiza nada.
@@ -40,10 +40,10 @@ type Copy = {
 };
 
 const PT: Copy = {
-  eyebrow: "Termo da taxa de sucesso",
+  eyebrow: "Termo da Taxa",
   title: "Negócio fechado: a taxa da Palmo",
   intro:
-    "A Palmo foi gratuita até aqui. Com o negócio fechado, é devida a taxa de sucesso, paga por você, proprietário da terra. Ela é um percentual do valor do contrato — não um acréscimo ao que foi combinado com o produtor.",
+    "A Palmo foi gratuita até aqui. Com o negócio fechado, é devida a Taxa, paga por você, proprietário da terra. Ela é um percentual do valor do contrato — não um acréscimo ao que foi combinado com o produtor.",
   totalLabel: "Valor total estimado do contrato",
   totalUnknown: "Depende do prazo que vocês acordarem",
   annualLabel: "Valor anual do contrato",
@@ -56,7 +56,7 @@ const PT: Copy = {
   nonCircumvention:
     "Lembrete da cláusula 3.3 dos Termos: fechar por fora da plataforma um negócio sobre esta mesma terra, nos 12 meses seguintes à última interação, sujeita à multa da cláusula 3.4.",
   termsLink: "Ler a cláusula nos Termos",
-  checkbox: "Li e aceito a cobrança da taxa de sucesso nas condições acima.",
+  checkbox: "Li e aceito a cobrança da Taxa nas condições acima.",
   submit: "Aceitar o termo",
   sending: "Registrando…",
   accepted: "Termo aceito e registrado.",

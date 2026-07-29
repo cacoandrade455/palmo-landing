@@ -100,7 +100,7 @@ export const privacyPt: LegalDocument = {
             "Publicar anúncios, viabilizar mensagens, propostas e a Sala do Contrato — execução de contrato (art. 7º, V).",
             "Verificar identidade com documentos (KYC) — execução de contrato (art. 7º, V) e legítimo interesse na prevenção a fraudes (art. 7º, IX); quando exigido por lei, cumprimento de obrigação legal (art. 7º, II).",
             "Liberar os dados de contato à contraparte no fechamento do negócio — execução de contrato (art. 7º, V).",
-            "Calcular e cobrar a taxa de sucesso — execução de contrato (art. 7º, V) e exercício regular de direitos (art. 7º, VI).",
+            "Calcular e cobrar a Taxa devida à Palmo no fechamento — execução de contrato (art. 7º, V) e exercício regular de direitos (art. 7º, VI).",
             "Registrar o aceite dos documentos legais, com IP e user agent — cumprimento de obrigação legal e exercício regular de direitos (art. 7º, II e VI).",
             "Segurança, prevenção a fraude e apuração de infrações às regras de conduta, inclusive as cláusulas 3.1 e 3.3 dos Termos — legítimo interesse (art. 7º, IX) e exercício regular de direitos (art. 7º, VI).",
             "Guardar registros de acesso — cumprimento de obrigação legal (art. 7º, II, c/c Marco Civil, art. 15).",

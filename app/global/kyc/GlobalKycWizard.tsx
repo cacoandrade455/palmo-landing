@@ -297,18 +297,12 @@ export function GlobalKycWizard() {
         <div className="rounded-2xl border border-deep/10 bg-white p-8 text-center shadow-sm">
           <h2 className="text-xl font-extrabold text-deep">{g.signInTitle}</h2>
           <p className="mt-2 text-deep/70">{g.signInBody}</p>
-          <button
-            type="button"
-            onClick={() => {
-              getSupabase()?.auth.signInWithOAuth({
-                provider: "google",
-                options: { redirectTo: `${window.location.origin}/global/kyc` },
-              });
-            }}
-            className="mt-6 rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
+          <Link
+            href="/entrar?next=%2Fglobal%2Fkyc"
+            className="mt-6 inline-block rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
           >
             {g.signInGoogle}
-          </button>
+          </Link>
         </div>
       </>,
     );

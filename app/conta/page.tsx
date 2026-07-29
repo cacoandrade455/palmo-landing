@@ -5,6 +5,7 @@ import type { User } from "@supabase/supabase-js";
 import { LogOut } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { SignIn } from "@/components/SignIn";
 import { useLanguage } from "@/lib/language-context";
 import { getSupabase } from "@/lib/supabase";
 
@@ -41,28 +42,14 @@ export default function ContaPage() {
           </h1>
           <p className="mt-2 text-deep/60">{t.auth.accountSubtitle}</p>
 
-          <div className="mt-8 rounded-2xl border border-deep/10 bg-white p-6 shadow-sm sm:p-8">
-            {!ready ? null : !supabase || !user ? (
-              <>
-                <p className="text-deep/70">{t.auth.notSignedIn}</p>
-                {supabase && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      supabase.auth.signInWithOAuth({
-                        provider: "google",
-                        options: {
-                          redirectTo: `${window.location.origin}/conta`,
-                        },
-                      })
-                    }
-                    className="mt-5 w-full rounded-full bg-primary px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
-                  >
-                    {t.auth.signInGoogle}
-                  </button>
-                )}
-              </>
-            ) : (
+          {/* Deslogado: o painel de entrada completo (Google + e-mail/senha)
+              vem embutido aqui, sem pulo extra de navegação. */}
+          {ready && (!supabase || !user) ? (
+            <div className="mt-8">
+              <SignIn next="/conta" />
+            </div>
+          ) : ready && supabase && user ? (
+            <div className="mt-8 rounded-2xl border border-deep/10 bg-white p-6 shadow-sm sm:p-8">
               <>
                 <div className="flex items-center gap-4">
                   {avatar ? (
@@ -94,8 +81,8 @@ export default function ContaPage() {
                   {t.auth.signOut}
                 </button>
               </>
-            )}
-          </div>
+            </div>
+          ) : null}
         </section>
       </main>
       <Footer />

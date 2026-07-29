@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { useLanguage } from "@/lib/language-context";
 import { getSupabase } from "@/lib/supabase";
@@ -33,6 +34,7 @@ export function useSupabaseUser() {
 
 export function AuthButton() {
   const { t } = useLanguage();
+  const pathname = usePathname();
   const { supabase, user, ready } = useSupabaseUser();
 
   // Supabase not configured yet — render nothing, site works as before.
@@ -41,19 +43,15 @@ export function AuthButton() {
   if (!ready) return <div className="h-9 w-9" aria-hidden="true" />;
 
   if (!user) {
+    // Leva à tela de entrada (Google + e-mail/senha), preservando de onde
+    // a pessoa veio para devolvê-la ao mesmo lugar depois do login.
     return (
-      <button
-        type="button"
-        onClick={() =>
-          supabase.auth.signInWithOAuth({
-            provider: "google",
-            options: { redirectTo: `${window.location.origin}/app/conta` },
-          })
-        }
+      <Link
+        href={`/entrar?next=${encodeURIComponent(pathname || "/app/conta")}`}
         className="rounded-full border border-deep/15 bg-white px-4 py-2 text-sm font-bold text-deep transition-colors hover:border-primary hover:text-primary"
       >
         {t.auth.signIn}
-      </button>
+      </Link>
     );
   }
 

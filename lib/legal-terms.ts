@@ -78,7 +78,7 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "O aceite destes Termos é registrado em camadas, no momento em que cada regra passa a valer para você: no cadastro (Termos e Política de Privacidade), ao publicar um anúncio (taxa de sucesso), ao enviar uma proposta formal (regras de conduta da seção 3) e no fechamento do negócio (termo específico da taxa). De cada aceite guardamos o documento, a versão, a data e hora, o endereço IP, o user agent e o anúncio ou negócio a que ele se refere — ver a seção 2 da Política de Privacidade.",
+          text: "O aceite destes Termos é registrado em camadas, no momento em que cada regra passa a valer para você: no cadastro (Termos e Política de Privacidade), ao publicar um anúncio (a Taxa), ao enviar uma proposta formal (regras de conduta da seção 3) e no fechamento do negócio (termo específico da taxa). De cada aceite guardamos o documento, a versão, a data e hora, o endereço IP, o user agent e o anúncio ou negócio a que ele se refere — ver a seção 2 da Política de Privacidade.",
         },
       ],
     },
@@ -88,7 +88,7 @@ export const termsPt: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "A Palmo é gratuita até o fechamento do negócio. Isso só é possível porque a plataforma remunera-se de uma taxa de sucesso cobrada quando o negócio acontece — e porque o contato direto entre as partes é liberado no fechamento. As regras desta seção são condição essencial do uso da plataforma e cada usuário as aceita expressamente.",
+          text: "A Palmo é gratuita até o fechamento do negócio. Isso só é possível porque a plataforma remunera-se da Taxa devida quando o negócio fecha (definida na seção 5) — e porque o contato direto entre as partes é liberado no fechamento. As regras desta seção são condição essencial do uso da plataforma e cada usuário as aceita expressamente.",
         },
         {
           kind: "clause",
@@ -112,7 +112,7 @@ export const termsPt: LegalDocument = {
           kind: "clause",
           ref: "3.4",
           title: "Cláusula penal",
-          text: "O descumprimento das cláusulas 3.1 ou 3.3 sujeita a parte infratora ao pagamento de multa equivalente ao DOBRO da taxa de sucesso que seria devida sobre o negócio, correspondente a 10% (dez por cento) do valor total do contrato firmado ou pretendido, sem prejuízo da suspensão ou do encerramento da conta. Esta multa vincula AMBAS as partes — proprietário e produtor —, ainda que a taxa de sucesso seja devida apenas pelo proprietário: quem burla a regra responde por ela. A multa é convencionada como cláusula penal, nos termos dos arts. 408 e seguintes do Código Civil, tem natureza compensatória e é proporcional ao proveito econômico do negócio que se pretendeu subtrair à plataforma. Observado o art. 412 do Código Civil, seu valor não excede o da obrigação principal; e, nos termos do art. 413, poderá ser reduzida equitativamente se a obrigação tiver sido cumprida em parte ou se o montante se mostrar manifestamente excessivo diante da natureza e da finalidade do negócio.",
+          text: "O descumprimento das cláusulas 3.1 ou 3.3 sujeita a parte infratora ao pagamento de multa equivalente ao DOBRO da Taxa que seria devida sobre o negócio, correspondente a 10% (dez por cento) do valor total do contrato firmado ou pretendido, sem prejuízo da suspensão ou do encerramento da conta. Esta multa vincula AMBAS as partes — proprietário e produtor —, ainda que a Taxa seja devida apenas pelo proprietário: quem burla a regra responde por ela. A multa é convencionada como cláusula penal, nos termos dos arts. 408 e seguintes do Código Civil, tem natureza compensatória e é proporcional ao proveito econômico do negócio que se pretendeu subtrair à plataforma. Observado o art. 412 do Código Civil, seu valor não excede o da obrigação principal; e, nos termos do art. 413, poderá ser reduzida equitativamente se a obrigação tiver sido cumprida em parte ou se o montante se mostrar manifestamente excessivo diante da natureza e da finalidade do negócio.",
         },
         {
           kind: "clause",
@@ -146,7 +146,7 @@ export const termsPt: LegalDocument = {
     },
     {
       id: "taxa",
-      title: "Taxa de sucesso",
+      title: "A Taxa devida à Palmo",
       blocks: [
         {
           kind: "p",
@@ -154,11 +154,11 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Fechado o negócio, é devida à Palmo uma taxa de sucesso de 5% (cinco por cento) sobre o valor total do contrato celebrado entre as partes, cobrada proporcionalmente a cada pagamento anual — ou seja, 5% de cada parcela anual, à medida que o contrato for sendo pago. A taxa é devida pelo PROPRIETÁRIO, a parte que oferece a terra.",
+          text: "Chama-se TAXA (a “Taxa”) a quantia devida à Palmo pelo PROPRIETÁRIO quando um negócio é fechado por meio da plataforma. A Taxa corresponde a 5% (cinco por cento) sobre o valor total do contrato celebrado entre as partes e é cobrada proporcionalmente a cada pagamento anual — ou seja, 5% de cada parcela anual, à medida que o contrato for sendo pago.",
         },
         {
           kind: "p",
-          text: "A taxa NÃO é um acréscimo ao valor do arrendamento nem é cobrada do produtor: ela é um percentual do valor do próprio contrato, conhecido por ambas as partes antes da negociação e exibido na plataforma durante a discussão da minuta. O preço combinado entre proprietário e produtor não muda por causa dela.",
+          text: "A Taxa NÃO é um acréscimo ao valor do arrendamento nem é cobrada do produtor: ela é um percentual do valor do próprio contrato, conhecido por ambas as partes antes da negociação e exibido na plataforma durante a discussão da minuta. O preço combinado entre proprietário e produtor não muda por causa dela.",
         },
         {
           kind: "p",
@@ -166,15 +166,15 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "A cobrança é feita por meio do documento de cobrança informado pela plataforma, com vencimento vinculado a cada pagamento anual do contrato. O proprietário declara conhecer e aceitar essa estrutura no momento do fechamento, por meio de termo específico registrado na plataforma.",
+          text: "A cobrança da Taxa é feita por meio do documento de cobrança informado pela plataforma, com vencimento vinculado a cada pagamento anual do contrato. O proprietário declara conhecer e aceitar essa estrutura no momento do fechamento, por meio de termo específico registrado na plataforma.",
         },
         {
           kind: "p",
-          text: "A Palmo poderá, no futuro, processar o pagamento do contrato dentro da plataforma e reter a taxa na fonte, repassando ao proprietário o valor líquido. Essa mudança só valerá mediante aviso prévio e nova aceitação, na forma da seção 11.",
+          text: "A Palmo poderá, no futuro, processar o pagamento do contrato dentro da plataforma e reter a Taxa na fonte, repassando ao proprietário o valor líquido. Essa mudança só valerá mediante aviso prévio e nova aceitação, na forma da seção 11.",
         },
         {
           kind: "p",
-          text: "O atraso no pagamento da taxa sujeita o devedor a atualização monetária pelo IPCA, juros de mora de 1% (um por cento) ao mês e multa moratória de 2% (dois por cento) sobre o valor em atraso, além de autorizar a suspensão da conta e a cobrança pelos meios legais cabíveis. Negócio não fechado não gera taxa.",
+          text: "O atraso no pagamento da Taxa sujeita o devedor a atualização monetária pelo IPCA, juros de mora de 1% (um por cento) ao mês e multa moratória de 2% (dois por cento) sobre o valor em atraso, além de autorizar a suspensão da conta e a cobrança pelos meios legais cabíveis. Negócio não fechado não gera Taxa.",
         },
         {
           kind: "p",
@@ -268,7 +268,7 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Você pode encerrar sua conta a qualquer momento, pelo canal de contato da seção 13. O encerramento não extingue obrigações já constituídas, especialmente a taxa de sucesso devida sobre negócio já fechado e as consequências da cláusula penal.",
+          text: "Você pode encerrar sua conta a qualquer momento, pelo canal de contato da seção 13. O encerramento não extingue obrigações já constituídas, especialmente a Taxa devida sobre negócio já fechado e as consequências da cláusula penal.",
         },
         {
           kind: "p",

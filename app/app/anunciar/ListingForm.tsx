@@ -9,8 +9,12 @@ import { useLanguage } from "@/lib/language-context";
 import { getSupabase } from "@/lib/supabase";
 import { UFS } from "@/lib/appraisal-data";
 import { sortOptionsByLabel } from "@/lib/sort-options";
-import { createListing } from "./actions";
+import { createListing, verificarCarDoAnuncio } from "./actions";
 import { acceptListingTerms } from "@/app/app/legal-actions";
+import { CAR_FORMATO_EXEMPLO, parseCar } from "@/lib/car-checks";
+import { PhotoPicker } from "./PhotoPicker";
+import { enviarFotos, novoEstado, type EstadoUpload } from "./upload-client";
+import { useMunicipios } from "./use-municipios";
 
 const inputCls =
   "mt-1.5 w-full rounded-xl border border-deep/15 bg-white px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none";
@@ -52,12 +56,25 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
   // Municipality can only be selected once the IBGE list for the UF arrives,
   // so the prefill waits for the fetch and is applied exactly once.
   const pendingMuniRef = useRef(prefill?.municipality ?? "");
-  const [muniByUf, setMuniByUf] = useState<Record<string, string[] | "error">>({});
+  // O hook guarda o CÓDIGO IBGE junto com o nome. O `<select>` continua
+  // exibindo e casando por NOME (é o que o prefill da calculadora conhece), mas
+  // o código vai no FormData para a checagem do CAR poder existir.
+  const { municipios: municipalities, falhou: muniFailed, entry: muniEntry, codigoDe } =
+    useMunicipios(ufSel);
   const [submitting, setSubmitting] = useState(false);
   // C.2 — sem esta confirmação o anúncio não é publicado (rascunho pode).
   const [acceptedFee, setAcceptedFee] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  // CAR controlado, para dar retorno de formato enquanto a pessoa digita.
+  const [carRaw, setCarRaw] = useState("");
+  const [fotos, setFotos] = useState<File[]>([]);
+  const [estadosFoto, setEstadosFoto] = useState<EstadoUpload[]>([]);
+
+  // Só avisa quando já dá para julgar: 43 é o comprimento do CAR canônico, e
+  // reclamar de formato no terceiro caractere digitado seria hostilidade.
+  const carLimpo = carRaw.trim();
+  const carNaoReconhecido = carLimpo.length >= 40 && parseCar(carLimpo) === null;
   // undefined = still checking; null = signed out; User = signed in
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const supabaseReady = !!getSupabase();
@@ -76,36 +93,20 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
   }, []);
 
   useEffect(() => {
-    if (!ufSel || muniByUf[ufSel]) return;
-    let cancelled = false;
-    fetch(
-      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufSel}/municipios?orderBy=nome`,
-    )
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((list: { nome: string }[]) => {
-        if (!cancelled) setMuniByUf((p) => ({ ...p, [ufSel]: list.map((m) => m.nome) }));
-      })
-      .catch(() => {
-        if (!cancelled) setMuniByUf((p) => ({ ...p, [ufSel]: "error" }));
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [ufSel, muniByUf]);
-
-  const muniEntry = ufSel ? muniByUf[ufSel] : undefined;
-  const municipalities = Array.isArray(muniEntry) ? muniEntry : [];
-  const muniFailed = muniEntry === "error";
-
-  useEffect(() => {
     const target = pendingMuniRef.current;
     const loaded = Array.isArray(muniEntry) ? muniEntry : [];
     if (!target || loaded.length === 0) return;
     pendingMuniRef.current = "";
-    if (loaded.includes(target)) {
+    // Casa por NOME de propósito: é o único dado que a ponte da calculadora
+    // carrega. Trocar isto por comparação de id quebraria o prefill em silêncio.
+    if (loaded.some((m) => m.nome === target)) {
       queueMicrotask(() => setMuniSel(target));
     }
   }, [muniEntry]);
+
+  // Código IBGE do município escolhido, derivado — não é estado novo, então não
+  // há setState em efeito para a regra do ESLint reclamar.
+  const muniIbge = codigoDe(muniSel);
 
   const label = lang === "en"
     ? {
@@ -127,7 +128,13 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         descriptionPh: "Access, soil, infrastructure, distance to town…",
         water: "Has water source",
         car: "CAR number (optional)",
-        carHint: "Listings with a CAR earn the Verified badge and more trust from producers.",
+        // Antes: "Listings with a CAR earn the Verified badge". Era falso — o
+        // selo vinha de o campo não estar vazio, então "123" bastava. Agora o
+        // selo só nasce de confirmação na base do SICAR, e a copy diz isso.
+        carHint:
+          "We check it against the official SICAR database. If the property comes back active, your listing gets the “CAR active on SICAR” badge.",
+        carUnknown: "We don't recognise this format.",
+        carExpected: "Have another look — it should look like",
         matricula: "Property record at the CRI (optional)",
         matriculaHint:
           "The Palmo standard contract requires the land registry (CRI) record number — you can also fill it in later, in the draft.",
@@ -166,7 +173,13 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         descriptionPh: "Acesso, solo, infraestrutura, distância da cidade…",
         water: "Tem água",
         car: "Número do CAR (opcional)",
-        carHint: "Anúncios com CAR ganham o selo Verificado e mais confiança dos produtores.",
+        // Antes: "Anúncios com CAR ganham o selo Verificado". Era falso — o selo
+        // vinha de o campo não estar vazio, então "123" bastava. Agora o selo só
+        // nasce de confirmação na base do SICAR, e a copy diz isso.
+        carHint:
+          "A gente confere na base oficial do SICAR. Se o imóvel voltar como ativo, seu anúncio recebe o selo “CAR ativo no SICAR”.",
+        carUnknown: "Não reconhecemos esse formato.",
+        carExpected: "Dá uma conferida — ele costuma ser assim:",
         matricula: "Matrícula do imóvel no CRI (opcional)",
         matriculaHint:
           "O contrato padrão Palmo exige a matrícula do Cartório de Registro de Imóveis — dá para preencher depois, na minuta.",
@@ -202,15 +215,33 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
       fd.set("variant", vLabel ?? variantVal);
     }
     const res = await createListing(fd);
-    setSubmitting(false);
-    if (res.ok) {
-      // C.2 — registra o aceite DEPOIS de publicar, com o id do anúncio como
-      // contexto. Falhar aqui não desfaz nem bloqueia a publicação.
-      if (publish) void acceptListingTerms(res.id);
-      setDone(true);
-    } else {
+    if (!res.ok) {
+      setSubmitting(false);
       setError(res.error === "not_signed_in" ? label.errAuth : label.errGeneric);
+      return;
     }
+
+    // C.2 — registra o aceite DEPOIS de publicar, com o id do anúncio como
+    // contexto. Falhar aqui não desfaz nem bloqueia a publicação.
+    if (publish) void acceptListingTerms(res.id);
+
+    // A checagem do CAR fala com o SICAR, então NÃO seguramos a submissão nela:
+    // mesmo padrão `void` do aceite acima. O anúncio já está salvo; se o SICAR
+    // estiver fora do ar, o resultado fica em `formato_ok` e a próxima edição
+    // tenta de novo. Selo nenhum depende de sorte de rede.
+    void verificarCarDoAnuncio(res.id);
+
+    // Fotos só agora, porque o caminho no bucket precisa do id do anúncio.
+    // Falha de uma foto não desfaz o anúncio nem impede as outras — o dono
+    // completa na tela de edição.
+    if (fotos.length > 0) {
+      await enviarFotos(res.id, fotos, estadosFoto, (key, patch) => {
+        setEstadosFoto((p) => p.map((e) => (e.key === key ? { ...e, ...patch } : e)));
+      });
+    }
+
+    setSubmitting(false);
+    setDone(true);
   }
 
   if (done) {
@@ -289,7 +320,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
           ) : (
             <select id="municipality" name="municipality" required value={muniSel} onChange={(e) => setMuniSel(e.target.value)} disabled={!ufSel} className={inputCls}>
               <option value="" disabled>{!ufSel ? label.selectMuniFirst : label.selectMuni}</option>
-              {municipalities.map((m) => <option key={m} value={m}>{m}</option>)}
+              {municipalities.map((m) => <option key={m.id} value={m.nome}>{m.nome}</option>)}
             </select>
           )}
         </div>
@@ -369,8 +400,28 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
           {label.water}
         </label>
         <div>
-          <input name="car_number" aria-label={label.car} placeholder={label.car} className={`${inputCls} mt-0`} />
+          <input
+            name="car_number"
+            aria-label={label.car}
+            placeholder={label.car}
+            value={carRaw}
+            onChange={(e) => setCarRaw(e.target.value)}
+            className={`${inputCls} mt-0`}
+          />
           <p className="mt-1.5 text-xs leading-relaxed text-deep/50">{label.carHint}</p>
+          {/* Formato não reconhecido NÃO bloqueia o rascunho nem a publicação.
+              E a copy nunca diz "inválido": a nossa regex pode estar incompleta
+              e o CAR do dono pode ser legítimo e atípico. A plataforma admite
+              que pode ser ela que não sabe. */}
+          {carNaoReconhecido && (
+            <p className="mt-1.5 rounded-xl bg-accent/20 px-4 py-2.5 text-sm text-deep">
+              <span className="font-semibold">{label.carUnknown}</span>{" "}
+              <span className="leading-relaxed text-deep/70">
+                {label.carExpected}{" "}
+                <span className="font-mono text-xs">{CAR_FORMATO_EXEMPLO}</span>
+              </span>
+            </p>
+          )}
         </div>
       </div>
 
@@ -378,6 +429,27 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         <input name="matricula" aria-label={label.matricula} placeholder={label.matricula} className={`${inputCls} mt-0`} />
         <p className="mt-1.5 text-xs leading-relaxed text-deep/50">{label.matriculaHint}</p>
       </div>
+
+      {/* Código IBGE do município, para a checagem do CAR poder acontecer. Fica
+          vazio quando a API do IBGE falhou e o campo virou texto livre — nesse
+          caminho não existe código, e isso é tratado como indeterminado, nunca
+          como divergência. */}
+      <input type="hidden" name="municipality_ibge" value={muniIbge ?? ""} />
+
+      <PhotoPicker
+        arquivos={fotos}
+        estados={estadosFoto}
+        onEscolher={(novos) => {
+          setFotos((p) => [...p, ...novos]);
+          setEstadosFoto((p) => [...p, ...novos.map((f, i) => novoEstado(f, p.length + i))]);
+        }}
+        onRemover={(i) => {
+          URL.revokeObjectURL(estadosFoto[i]?.previa ?? "");
+          setFotos((p) => p.filter((_, k) => k !== i));
+          setEstadosFoto((p) => p.filter((_, k) => k !== i));
+        }}
+        desabilitado={submitting}
+      />
 
       {error && <p className="text-sm font-semibold text-red-600">{error}</p>}
 

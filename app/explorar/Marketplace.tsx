@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, Droplet, Image as ImageIcon, MapPin, Search } from "lucide-react";
-import { useLanguage } from "@/lib/language-context";
+import { useLanguage, type AppLang } from "@/lib/language-context";
 import { UFS } from "@/lib/appraisal-data";
 import { listingPath } from "@/lib/listing-slug";
 import { sortOptionsByLabel } from "@/lib/sort-options";
@@ -11,6 +11,70 @@ import { browseListings, type BrowseListing } from "./actions";
 
 const inputCls =
   "w-full rounded-xl border border-deep/15 bg-white px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none disabled:cursor-not-allowed disabled:bg-neutral/60 disabled:text-deep/40";
+
+/** Data curta na convenção do idioma (29/07/2026 em pt-BR, 07/29/2026 em en-US). */
+function shortDate(iso: string | null, lang: AppLang): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString(lang === "en" ? "en-US" : "pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}
+
+/**
+ * Confiança do CAR no card público. Três estados, e só UM deles é selo:
+ *   • verified → selo forte ("CAR ativo no SICAR"), com a data da conferência
+ *     logo abaixo quando ela existe. Selo sem lastro é afirmação vazia; se
+ *     `car_checked_at` vier nulo, mostramos o selo e nenhuma data inventada.
+ *   • car_declarado → NINGUÉM conferiu. Texto apagado, sem fundo, sem borda,
+ *     sem ícone e sem negrito: de relance não pode ser lido como selo.
+ *   • nenhum dos dois → não renderiza nada. Página pública NUNCA tem selo
+ *     negativo: a plataforma não acusa ninguém.
+ */
+function CarTrust({
+  verified,
+  declared,
+  checkedAt,
+  lang,
+}: {
+  verified: boolean;
+  declared: boolean;
+  checkedAt: string | null;
+  lang: AppLang;
+}) {
+  const date = shortDate(checkedAt, lang);
+  const copy =
+    lang === "en"
+      ? {
+          active: "CAR active in SICAR",
+          checkedOn: (d: string) => `Checked on ${d}`,
+          declared: "CAR declared by the owner",
+        }
+      : {
+          active: "CAR ativo no SICAR",
+          checkedOn: (d: string) => `Conferido em ${d}`,
+          declared: "CAR declarado pelo proprietário",
+        };
+
+  if (verified) {
+    return (
+      <div>
+        <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+          <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+          {copy.active}
+        </span>
+        {date && <p className="mt-1 text-xs text-deep/50">{copy.checkedOn(date)}</p>}
+      </div>
+    );
+  }
+
+  if (declared) return <p className="text-xs text-deep/60">{copy.declared}</p>;
+
+  return null;
+}
 
 type FilterValues = {
   uf: string;
@@ -55,7 +119,6 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
           photoAlt: (title: string) => `Photo of ${title}`,
           perYear: "/ha/yr",
           water: "Water",
-          verified: "Verified",
           loading: "Loading listings…",
         }
       : {
@@ -80,7 +143,6 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
           photoAlt: (title: string) => `Foto de ${title}`,
           perYear: "/ha/ano",
           water: "Água",
-          verified: "Verificado",
           loading: "Carregando anúncios…",
         };
 
@@ -342,12 +404,12 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
                       <p className="text-sm font-semibold text-deep/70">
                         {purposeLabel(l.purpose)}
                       </p>
-                      {l.verified && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
-                          <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
-                          {label.verified}
-                        </span>
-                      )}
+                      <CarTrust
+                        verified={l.verified}
+                        declared={l.car_declarado}
+                        checkedAt={l.car_checked_at}
+                        lang={lang}
+                      />
                       {(l.price_per_ha_year || l.has_water) && (
                         <div className="flex items-center gap-3 pt-1 text-sm">
                           {l.price_per_ha_year && (

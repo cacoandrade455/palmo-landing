@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
-import { CheckCircle2, MapPin, Plus, LogOut, ShieldCheck } from "lucide-react";
+import { CheckCircle2, MapPin, Pencil, Plus, LogOut, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { getSupabase } from "@/lib/supabase";
 import { getMyListings, updateListingStatus, type MyListing } from "./actions";
@@ -38,6 +38,17 @@ export function AccountDashboard() {
           perYear: "/ha/yr",
           pause: "Pause",
           activate: "Activate",
+          edit: "Edit",
+          carConfirmed: "CAR active in SICAR",
+          carCheckedOn: "checked on",
+          carDeclared: "CAR declared, not checked yet",
+          carUnknownFormat:
+            "We don't recognise this CAR format. It may well be our pattern that is incomplete — worth a second look at the number.",
+          carReview:
+            "Our SICAR check didn't line up with what is on this listing. Worth reviewing the CAR number.",
+          carMissing:
+            "Add the CAR of the property and this listing can earn the verified badge.",
+          editedOn: "Listing edited on",
           statusLabels: {
             active: "Active",
             draft: "Draft",
@@ -68,6 +79,17 @@ export function AccountDashboard() {
           perYear: "/ha/ano",
           pause: "Pausar",
           activate: "Ativar",
+          edit: "Editar",
+          carConfirmed: "CAR ativo no SICAR",
+          carCheckedOn: "conferido em",
+          carDeclared: "CAR declarado, ainda não conferido",
+          carUnknownFormat:
+            "Não reconhecemos esse formato de CAR. Pode muito bem ser o nosso padrão que está incompleto — vale dar uma olhada no número.",
+          carReview:
+            "Nossa conferência no SICAR não fechou com o que está neste anúncio. Vale revisar o número do CAR.",
+          carMissing:
+            "Informe o CAR do imóvel e este anúncio pode receber o selo de verificado.",
+          editedOn: "Anúncio editado em",
           statusLabels: {
             active: "Ativo",
             draft: "Rascunho",
@@ -131,6 +153,42 @@ export function AccountDashboard() {
     crop
       ? t.appraiser.crops[purpose]?.find((c) => c.value === crop)?.label ?? crop
       : null;
+
+  const fmtDate = (iso: string) =>
+    new Date(iso).toLocaleDateString(lang === "en" ? "en-US" : "pt-BR");
+
+  /**
+   * Situação do CAR do anúncio, em tom de consultor. Só `confirmado_sicar`
+   * ganha selo (chip + data da conferência) — os outros estados são nota
+   * discreta e convite, nunca selo negativo. `car_status` nulo significa que
+   * ninguém conferiu nada ainda (ou que a migration do CAR não foi aplicada):
+   * nesse caso não afirmamos nada.
+   */
+  const carNote = (l: MyListing) => {
+    if (l.car_status === "confirmado_sicar") {
+      return (
+        <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+          <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+          {label.carConfirmed}
+          {l.car_checked_at
+            ? ` · ${label.carCheckedOn} ${fmtDate(l.car_checked_at)}`
+            : ""}
+        </span>
+      );
+    }
+    const text =
+      l.car_status === "formato_ok"
+        ? label.carDeclared
+        : l.car_status === "formato_invalido"
+          ? label.carUnknownFormat
+          : l.car_status === "divergente_sicar"
+            ? label.carReview
+            : l.car_status === "nao_informado"
+              ? label.carMissing
+              : null;
+    if (!text) return null;
+    return <p className="mt-1.5 text-xs text-deep/60">{text}</p>;
+  };
 
   if (user === null) {
     return (
@@ -274,15 +332,31 @@ export function AccountDashboard() {
                       ? ` · R$ ${l.price_per_ha_year.toLocaleString("pt-BR")}${label.perYear}`
                       : ""}
                   </p>
+                  {carNote(l)}
+                  {l.edited_at && (
+                    <p className="mt-1.5 text-xs text-deep/50">
+                      {label.editedOn} {fmtDate(l.edited_at)}
+                    </p>
+                  )}
                 </div>
-                {(l.status === "active" || l.status === "paused") && (
-                  <button
-                    onClick={() => toggle(l)}
-                    className="shrink-0 rounded-full border border-deep/15 px-4 py-2 text-sm font-bold text-deep transition-colors hover:border-primary"
+                {/* Par de ações: envolve em 390px, lado a lado a partir daí. */}
+                <div className="flex shrink-0 flex-wrap items-center gap-2">
+                  <Link
+                    href={`/app/anuncio/${l.id}/editar`}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-deep/15 px-4 py-2 text-sm font-bold text-deep transition-colors hover:border-primary"
                   >
-                    {l.status === "active" ? label.pause : label.activate}
-                  </button>
-                )}
+                    <Pencil className="h-4 w-4" aria-hidden="true" />
+                    {label.edit}
+                  </Link>
+                  {(l.status === "active" || l.status === "paused") && (
+                    <button
+                      onClick={() => toggle(l)}
+                      className="rounded-full border border-deep/15 px-4 py-2 text-sm font-bold text-deep transition-colors hover:border-primary"
+                    >
+                      {l.status === "active" ? label.pause : label.activate}
+                    </button>
+                  )}
+                </div>
               </li>
             ))}
           </ul>

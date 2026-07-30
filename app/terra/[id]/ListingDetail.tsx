@@ -3,8 +3,20 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MapPin, Droplet, MessageCircle, ArrowLeft, CheckCircle2 } from "lucide-react";
-import { useLanguage } from "@/lib/language-context";
+import { useLanguage, type AppLang } from "@/lib/language-context";
 import { startConversation, type ListingDetailData } from "./actions";
+
+/** Data curta na convenção do idioma (29/07/2026 em pt-BR, 07/29/2026 em en-US). */
+function shortDate(iso: string | null, lang: AppLang): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString(lang === "en" ? "en-US" : "pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}
 
 export function ListingDetail({
   listing,
@@ -17,11 +29,18 @@ export function ListingDetail({
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [activePhoto, setActivePhoto] = useState(0);
 
   const label =
     lang === "en"
-      ? { back: "Back to listings", owner: "Owner", contact: "Contact owner", yours: "This is your listing", water: "Water source", perYear: "/ha/year", area: "Area", use: "Use", desc: "Description", err: "Couldn't start the conversation.", verified: "Verified", verifiedHint: "Rural registry (CAR) provided by the owner", photoAlt: (title: string) => `Photo of ${title}` }
-      : { back: "Voltar aos anúncios", owner: "Proprietário", contact: "Falar com o dono", yours: "Este é o seu anúncio", water: "Fonte de água", perYear: "/ha/ano", area: "Área", use: "Uso", desc: "Descrição", err: "Não foi possível iniciar a conversa.", verified: "Verificado", verifiedHint: "CAR informado pelo proprietário", photoAlt: (title: string) => `Foto de ${title}` };
+      ? { back: "Back to listings", owner: "Owner", contact: "Contact owner", yours: "This is your listing", water: "Water source", perYear: "/ha/year", area: "Area", use: "Use", desc: "Description", err: "Couldn't start the conversation.", carActive: "CAR active in SICAR", carCheckedOn: (d: string) => `Checked on ${d}`, carDeclared: "CAR declared by the owner.", carDeclaredHint: "Nobody has checked this number against the SICAR registry yet.", editedOn: (d: string) => `Listing edited on ${d}`, photoAlt: (title: string) => `Photo of ${title}`, photoNumber: (n: number) => `Photo ${n}` }
+      : { back: "Voltar aos anúncios", owner: "Proprietário", contact: "Falar com o dono", yours: "Este é o seu anúncio", water: "Fonte de água", perYear: "/ha/ano", area: "Área", use: "Uso", desc: "Descrição", err: "Não foi possível iniciar a conversa.", carActive: "CAR ativo no SICAR", carCheckedOn: (d: string) => `Conferido em ${d}`, carDeclared: "CAR declarado pelo proprietário.", carDeclaredHint: "Ninguém conferiu esse número na base do SICAR ainda.", editedOn: (d: string) => `Anúncio editado em ${d}`, photoAlt: (title: string) => `Foto de ${title}`, photoNumber: (n: number) => `Foto ${n}` };
+
+  const carCheckedDate = shortDate(listing.car_checked_at, lang);
+  const editedDate = shortDate(listing.edited_at, lang);
+  // Galeria: photos[0] é a capa; clicar numa miniatura troca a foto grande.
+  const photos = listing.photos;
+  const cover = photos[activePhoto] ?? photos[0] ?? null;
 
   const purposeLabel = t.waitlist.purposeOptions.find((o) => o.value === listing.purpose)?.label ?? listing.purpose;
   const cropLabel = listing.crop
@@ -53,14 +72,45 @@ export function ListingDetail({
       </button>
 
       <div className="overflow-hidden rounded-2xl border border-deep/10 bg-white shadow-sm">
-        {listing.photos.length > 0 && (
-          <div className="relative h-56 bg-neutral sm:h-72">
-            {/* eslint-disable-next-line @next/next/no-img-element -- fotos vêm do storage do Supabase (host externo) */}
-            <img
-              src={listing.photos[0]}
-              alt={label.photoAlt(listing.title)}
-              className="absolute inset-0 h-full w-full object-cover"
-            />
+        {cover && (
+          <div>
+            <div className="relative h-56 bg-neutral sm:h-72">
+              {/* eslint-disable-next-line @next/next/no-img-element -- fotos vêm do storage do Supabase (host externo) */}
+              <img
+                src={cover}
+                alt={label.photoAlt(listing.title)}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+            {photos.length > 1 && (
+              // Rola dentro da faixa em 390px, então a página nunca ganha
+              // scroll horizontal por causa das miniaturas.
+              <div className="flex gap-2 overflow-x-auto border-b border-deep/10 bg-neutral/40 p-3">
+                {photos.map((p, i) => (
+                  <button
+                    key={`${i}-${p}`}
+                    type="button"
+                    onClick={() => setActivePhoto(i)}
+                    aria-label={label.photoNumber(i + 1)}
+                    aria-current={i === activePhoto}
+                    className={`relative h-16 w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-colors ${
+                      i === activePhoto
+                        ? "border-primary"
+                        : "border-deep/10 hover:border-deep/20"
+                    }`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element -- fotos vêm do storage do Supabase (host externo) */}
+                    <img
+                      src={p}
+                      alt=""
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -72,18 +122,35 @@ export function ListingDetail({
             </span>
           </div>
 
-          {listing.verified && (
+          {/*
+            Três estados, e só UM é selo:
+              • verified → CAR confirmado ATIVO na base do SICAR. Chip canônico
+                + a data da conferência (selo sem lastro é afirmação vazia).
+                Se `car_checked_at` vier nulo, o selo aparece sem data — nunca
+                inventamos uma.
+              • car_declarado → ninguém conferiu. Nota apagada de largura
+                inteira: sem chip, sem bg-primary/10, sem CheckCircle2, sem
+                negrito. De relance não pode ser confundida com verificado.
+              • nenhum dos dois → nada é renderizado. Página pública NUNCA tem
+                selo negativo: a plataforma não acusa ninguém.
+          */}
+          {listing.verified ? (
             <div className="mt-2 flex flex-wrap items-center gap-2">
-              <span
-                title={label.verifiedHint}
-                className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary"
-              >
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
                 <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
-                {label.verified}
+                {label.carActive}
               </span>
-              <span className="text-xs text-deep/50">{label.verifiedHint}</span>
+              {carCheckedDate && (
+                <span className="text-xs text-deep/50">
+                  {label.carCheckedOn(carCheckedDate)}
+                </span>
+              )}
             </div>
-          )}
+          ) : listing.car_declarado ? (
+            <p className="mt-3 rounded-xl bg-neutral px-4 py-2.5 text-sm text-deep/60">
+              {label.carDeclared} {label.carDeclaredHint}
+            </p>
+          ) : null}
 
           <p className="mt-2 flex items-center gap-1.5 text-deep/60">
             <MapPin className="h-4 w-4" aria-hidden="true" />
@@ -121,6 +188,11 @@ export function ListingDetail({
               <p className="text-sm text-deep/50">{label.owner}</p>
               <p className="font-semibold text-deep">{listing.ownerName}</p>
             </div>
+          )}
+
+          {/* Discreto de propósito: informa a outra parte sem virar alarme. */}
+          {editedDate && (
+            <p className="mt-6 text-xs text-deep/50">{label.editedOn(editedDate)}</p>
           )}
 
           {error && <p className="mt-4 text-sm font-semibold text-red-600">{error}</p>}

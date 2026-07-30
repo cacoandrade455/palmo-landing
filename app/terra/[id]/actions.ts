@@ -19,17 +19,36 @@ export type ListingDetailData = {
   price_per_ha_year: number | null;
   description: string | null;
   has_water: boolean | null;
+  /** CAR confirmado ATIVO na base do SICAR. Só isso vira selo. */
   verified: boolean;
+  /** Formato do CAR válido, mas NINGUÉM conferiu na fonte. Não é selo. */
+  car_declarado: boolean;
+  /** Data da conferência no SICAR — o lastro do selo. */
+  car_checked_at: string | null;
+  /** Última edição de campo sensível ao contrato. */
+  edited_at: string | null;
   photos: string[];
   created_at: string;
   ownerName: string | null; // display name público — nunca contato
 };
 
-type PublicRow = Omit<ListingDetailData, "verified" | "photos" | "ownerName"> & {
-  verified?: boolean | null;
-  car_number?: string | null;
+type PublicRow = Omit<
+  ListingDetailData,
+  "verified" | "car_declarado" | "car_checked_at" | "edited_at" | "photos" | "ownerName"
+> & {
   photos: string[] | null;
+  // Só existem na view depois de 20260729-car-sicar-e-fotos.sql.
+  verified?: boolean | null;
+  car_declarado?: boolean | null;
+  car_checked_at?: string | null;
+  edited_at?: string | null;
 };
+
+const BASE_COLS =
+  "id, owner_id, title, state, municipality, hectares, purpose, crop, price_per_ha_year, description, has_water, photos, created_at";
+
+/** Contrato novo: selo honesto + estado declarado + datas. */
+const TRUSTED_COLS = `${BASE_COLS}, verified, car_declarado, car_checked_at, edited_at`;
 
 export async function getListing(
   id: string,
@@ -38,31 +57,45 @@ export async function getListing(
   if (!supabase) return { ok: false, error: "unconfigured" };
 
   let row: PublicRow | null = null;
+  // "A fonte sabe dizer quem foi conferido no SICAR?" Se não, ninguém recebe
+  // selo — o selo antigo era só "car_number não vazio", e não reproduzimos
+  // essa mentira em código, muito menos com a copy "CAR ativo no SICAR".
+  let trusted = false;
 
-  // Caminho principal: view pública (colunas seguras, legível por anon).
+  // Caminho principal: view pública com o contrato novo.
   const viewRes = await supabase
     .from("public_listings")
-    .select(
-      "id, owner_id, title, state, municipality, hectares, purpose, crop, price_per_ha_year, description, has_water, verified, photos, created_at",
-    )
+    .select(TRUSTED_COLS)
     .eq("id", id)
     .single();
 
   if (!viewRes.error && viewRes.data) {
     row = viewRes.data as unknown as PublicRow;
+    trusted = true;
   } else {
-    // Fallback pré-migration: tabela base (policy atual já limita a ativos +
-    // anúncios do próprio dono); `verified` derivado do CAR.
-    const tableRes = await supabase
-      .from("listings")
-      .select(
-        "id, owner_id, title, state, municipality, hectares, purpose, crop, price_per_ha_year, description, has_water, car_number, photos, created_at",
-      )
+    // A migration do SICAR ainda não foi aplicada: a view antiga não tem as
+    // colunas novas. Lemos o conjunto mínimo (que existe na view antiga e na
+    // tabela base) e não exibimos selo nenhum.
+    const legacyView = await supabase
+      .from("public_listings")
+      .select(BASE_COLS)
       .eq("id", id)
       .single();
-    if (tableRes.error || !tableRes.data)
-      return { ok: false, error: tableRes.error?.message ?? "not_found" };
-    row = tableRes.data as unknown as PublicRow;
+
+    if (!legacyView.error && legacyView.data) {
+      row = legacyView.data as unknown as PublicRow;
+    } else {
+      // Último recurso: tabela base (a policy atual já limita a ativos +
+      // anúncios do próprio dono).
+      const tableRes = await supabase
+        .from("listings")
+        .select(BASE_COLS)
+        .eq("id", id)
+        .single();
+      if (tableRes.error || !tableRes.data)
+        return { ok: false, error: tableRes.error?.message ?? "not_found" };
+      row = tableRes.data as unknown as PublicRow;
+    }
   }
 
   // Display name público do dono (view contact-free). Pode falhar para anon
@@ -89,7 +122,10 @@ export async function getListing(
       price_per_ha_year: row.price_per_ha_year,
       description: row.description,
       has_water: row.has_water,
-      verified: row.verified ?? !!row.car_number,
+      verified: trusted && row.verified === true,
+      car_declarado: trusted && row.car_declarado === true,
+      car_checked_at: trusted ? row.car_checked_at ?? null : null,
+      edited_at: trusted ? row.edited_at ?? null : null,
       photos: row.photos ?? [],
       created_at: row.created_at,
       ownerName,

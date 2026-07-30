@@ -4,7 +4,11 @@ import path from "node:path";
 const nextConfig: NextConfig = {
   // nodemailer abre socket TCP e carrega módulos nativos do Node: precisa ser
   // exigido em tempo de execução, não empacotado pelo bundler do servidor.
-  serverExternalPackages: ["nodemailer"],
+  // `sharp` entra pelo MESMO motivo: é binário nativo (libvips), e a própria
+  // documentação dele manda excluir do bundling. Ele processa as fotos do
+  // anúncio no servidor — redimensiona, converte para WebP e, principalmente,
+  // remove o EXIF com a coordenada GPS que o celular grava dentro da foto.
+  serverExternalPackages: ["nodemailer", "sharp"],
   // Pin the workspace root to this project so Next.js ignores the stray
   // package-lock.json in C:\Users\User and stops warning about it.
   turbopack: {

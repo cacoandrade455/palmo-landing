@@ -30,7 +30,8 @@ type Copy = {
   photoAlt: (title: string) => string;
   perYear: string;
   water: string;
-  verified: string;
+  carAtivo: string;
+  conferidoEm: (data: string) => string;
 };
 
 const COPY_PT: Copy = {
@@ -49,8 +50,9 @@ const COPY_PT: Copy = {
   photoSoon: "Foto em breve",
   photoAlt: (title: string) => `Foto de ${title}`,
   perYear: "/ha/ano",
+  carAtivo: "CAR ativo no SICAR",
+  conferidoEm: (data: string) => `Conferido em ${data}`,
   water: "Água",
-  verified: "Verificado",
 };
 
 const COPY_EN: Copy = {
@@ -70,7 +72,8 @@ const COPY_EN: Copy = {
   photoAlt: (title: string) => `Photo of ${title}`,
   perYear: "/ha/yr",
   water: "Water",
-  verified: "Verified",
+  carAtivo: "CAR active on SICAR",
+  conferidoEm: (data: string) => `Checked on ${data}`,
 };
 
 const COPY: Record<AppLang, Copy> = {
@@ -115,11 +118,27 @@ function ListingCard({ l, c, lang }: { l: BrowseListing; c: Copy; lang: AppLang 
           <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
           {l.municipality}, {l.state}
         </p>
+        {/* Selo forte SÓ com confirmação na base do SICAR, e sempre com a data:
+            selo sem data é afirmação sem lastro. O estado intermediário
+            (car_declarado) NÃO aparece aqui — a home é vitrine de varredura, e
+            um segundo aviso cinza em cada card viraria ruído. Ele aparece no
+            /explorar e no detalhe do imóvel, que é onde a pessoa decide. */}
         {l.verified && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
-            <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
-            {c.verified}
-          </span>
+          <div>
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+              <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+              {c.carAtivo}
+            </span>
+            {l.car_checked_at && (
+              <p className="mt-1 text-xs text-deep/50">
+                {c.conferidoEm(
+                  new Date(l.car_checked_at).toLocaleDateString(
+                    lang === "en" ? "en-US" : "pt-BR",
+                  ),
+                )}
+              </p>
+            )}
+          </div>
         )}
         {(l.price_per_ha_year || l.has_water) && (
           <div className="flex items-center gap-3 pt-1 text-sm">

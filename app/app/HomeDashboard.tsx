@@ -29,7 +29,10 @@ export function HomeDashboard() {
           greetingFallback: "Hello!",
           subtitle: "Here's what's happening with your land and conversations.",
           ctaList: "List my land",
-          ctaListHint: "Free listing, verified before going live.",
+          // Antes: "verified before going live" — nunca foi verdade. Nenhum
+          // anúncio é conferido antes de publicar, e o selo depende do CAR
+          // voltar ativo na base do SICAR. Não prometemos o que não entregamos.
+          ctaListHint: "Free listing. Add your CAR and we check it on SICAR.",
           ctaExplore: "Explore land",
           ctaExploreHint: "Find land ready for your next crop.",
           myListings: "My listings",
@@ -76,7 +79,10 @@ export function HomeDashboard() {
           greetingFallback: "Olá!",
           subtitle: "Veja como estão suas terras e suas conversas.",
           ctaList: "Anunciar minha terra",
-          ctaListHint: "Anúncio gratuito, verificado antes de ir ao ar.",
+          // Antes: "verificado antes de ir ao ar" — nunca foi verdade. Nenhum
+          // anúncio é conferido antes de publicar, e o selo depende do CAR
+          // voltar ativo na base do SICAR. Não prometemos o que não entregamos.
+          ctaListHint: "Anúncio gratuito. Informe o CAR e a gente confere no SICAR.",
           ctaExplore: "Explorar terras",
           ctaExploreHint: "Encontre terra pronta para a sua próxima lavoura.",
           myListings: "Meus anúncios",

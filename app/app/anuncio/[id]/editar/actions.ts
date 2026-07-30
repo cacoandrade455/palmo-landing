@@ -3,6 +3,7 @@
 import { getServerSupabase } from "@/lib/supabase-server";
 import { getAdminSupabase } from "@/lib/supabase-admin";
 import { verificarEGravarCar } from "@/lib/listing-car";
+import { mudarStatus } from "@/lib/listing-status";
 import type { CarStatus } from "@/lib/car-checks";
 
 /**
@@ -301,33 +302,8 @@ export async function mudarStatusDoAnuncio(
   } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "not_signed_in" };
 
-  const { data: atual } = await supabase
-    .from("listings")
-    .select("owner_id, status")
-    .eq("id", id)
-    .maybeSingle();
-  if (!atual || atual.owner_id !== user.id) return { ok: false, error: "not_found" };
-
-  // De `closed` o proprietário não sai: aquele estado é do fluxo do contrato.
-  if (atual.status === "closed") return { ok: false, error: "estado_do_contrato" };
-
-  const { error } = await supabase
-    .from("listings")
-    .update({ status })
-    .eq("id", id)
-    .eq("owner_id", user.id); // RLS também garante
-  if (error) return { ok: false, error: error.message };
-
-  const db = getAdminSupabase();
-  if (db) {
-    await db.from("listing_changes").insert({
-      listing_id: id,
-      actor_id: user.id,
-      field: "status",
-      old_value: atual.status,
-      new_value: status,
-      categoria: "livre",
-    });
-  }
-  return { ok: true };
+  // Mesma implementação usada pelo painel da conta: confere o dono no servidor,
+  // recusa sair de `closed`, e registra a mudança — marcando com campo próprio
+  // quando o anúncio sai do ar EXISTINDO proposta aceita.
+  return mudarStatus(id, user.id, status);
 }

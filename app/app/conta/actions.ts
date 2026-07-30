@@ -1,6 +1,7 @@
 "use server";
 
 import { getServerSupabase } from "@/lib/supabase-server";
+import { mudarStatus } from "@/lib/listing-status";
 
 /**
  * Estado corrente do CAR de um anúncio — a linha mais recente de
@@ -127,10 +128,9 @@ export async function updateListingStatus(
   } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "not_signed_in" };
 
-  const { error } = await supabase
-    .from("listings")
-    .update({ status })
-    .eq("id", id)
-    .eq("owner_id", user.id); // RLS also enforces this
-  return error ? { ok: false, error: error.message } : { ok: true };
+  // Delegado ao módulo compartilhado com a tela de edição: além de trocar o
+  // status, ele registra a mudança em `listing_changes` e marca com campo
+  // próprio quando o anúncio sai do ar EXISTINDO proposta aceita — a assinatura
+  // de negócio fechado por fora. Não bloqueia nada e não acusa ninguém.
+  return mudarStatus(id, user.id, status);
 }

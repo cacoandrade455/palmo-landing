@@ -41,7 +41,35 @@ import type { CarSicarLookup } from "./car-checks";
 const USER_AGENT =
   "Palmo/1.0 (marketplace de terras; validacao de CAR; contato: cacoandrade45@gmail.com)";
 
-/** Curto e explícito: a submissão do anúncio não espera I/O externo além disto. */
+/**
+ * Timeout curto e EXPLÍCITO. Nada de default de runtime.
+ *
+ * ── DE ONDE VEM O NÚMERO ─────────────────────────────────────────────────────
+ * A consulta filtrada por `cod_imovel` foi medida em 29/07/2026: 0,330 s /
+ * 0,329 s / 0,330 s em três chamadas consecutivas, e 0,324 s no caso de imóvel
+ * não encontrado. 8 s é ~24× a mediana observada: folga suficiente para um dia
+ * ruim do geoserver sem nunca virar espera de verdade.
+ *
+ * ── E O QUE ACONTECE QUANDO ESTOURA ──────────────────────────────────────────
+ * O `AbortError` cai no `catch` e devolve `consulted: false`, o que faz
+ * `decideCar` parar em `formato_ok` — NUNCA em `divergente_sicar`. É a mesma
+ * regra de três saídas do resto do lote: "não deu para conferir" não é "não
+ * confere", e um geoserver lento não pode marcar um proprietário como suspeito.
+ *
+ * ── E POR QUE 8 s NÃO PENDURA NINGUÉM ────────────────────────────────────────
+ * Na CRIAÇÃO do anúncio nada disto está no caminho crítico: `ListingForm` chama
+ * `verificarCarDoAnuncio` com `void`, depois de o anúncio já estar salvo — o
+ * mesmo idioma que o arquivo já usa para `acceptListingTerms`. O usuário nunca
+ * espera.
+ *
+ * Na EDIÇÃO a chamada é aguardada, de propósito: o anúncio já foi gravado antes,
+ * então o dado do usuário está seguro, e ele precisa ver o selo NOVO na resposta
+ * (o antigo acabou de deixar de valer). A alternativa — disparar sem aguardar —
+ * corre o risco de a function ser congelada pelo runtime serverless antes de a
+ * verificação terminar, e aí o selo simplesmente nunca seria recalculado. Entre
+ * esperar 0,33 s no caso normal e perder a verificação em silêncio, esperar é o
+ * certo.
+ */
 const TIMEOUT_MS = 8000;
 
 /**

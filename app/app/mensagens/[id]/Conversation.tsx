@@ -17,6 +17,7 @@ import {
   setDealStatus,
   markConversationRead,
   type ConvData,
+  type DealStatusErro,
 } from "./actions";
 
 export function Conversation({ id }: { id: string }) {
@@ -34,12 +35,13 @@ export function Conversation({ id }: { id: string }) {
   const [contractType, setContractType] = useState<ContractType>("arrendamento");
   const [generating, setGenerating] = useState(false);
   const [contractError, setContractError] = useState<string | null>(null);
+  const [erroFechar, setErroFechar] = useState<DealStatusErro | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const label =
     lang === "en"
-      ? { back: "Back", placeholder: "Write a message…", send: "Send", makeOffer: "Make an offer", price: "Price (R$/ha/year)", term: "Term (years)", offerMsg: "Message (optional)", submitOffer: "Send offer", offer: "Offer", accept: "Accept", decline: "Decline", accepted: "Accepted", declined: "Declined", pending: "Pending", perYear: "/ha/yr", years: "years", closeDeal: "Close deal (reveal contacts)", closeHint: "Only close when you've agreed. Contacts are shared after closing.", locked: "Contacts unlock when the deal closes — that's how Palmo stays free until then.", contact: "Contact", dealClosed: "Deal closed", cancel: "Cancel deal", cancelled: "This deal was cancelled.", contractSection: "Contract", contractHint: "Offer accepted — generate the standard Palmo draft and negotiate it clause by clause.", typeArrendamento: "Lease (fixed price)", typeParceria: "Partnership (% split)", generate: "Generate contract draft", generating: "Generating…", openContract: "Open contract", minTerm: (min: number) => `The accepted offer's term is below the legal minimum for this land use: Decree 59.566/66 requires at least ${min} years. Adjust the offer before generating the draft.`, contractErrGeneric: "Couldn't generate the draft. Please try again.", chatWarning: "For your safety, contact between the parties is released at closing. Sharing a phone number or e-mail here is forbidden by the Terms.", chatWarningLink: "Terms", offerConsent: "By sending this offer I confirm clause 3 of the Terms: no phone, e-mail or any contact details before closing, and closing a deal on this land outside the platform within 12 months triggers a penalty of 10% of the contract value, which binds both parties.", offerConsentLink: "Read clause 3" }
-      : { back: "Voltar", placeholder: "Escreva uma mensagem…", send: "Enviar", makeOffer: "Fazer proposta", price: "Preço (R$/ha/ano)", term: "Prazo (anos)", offerMsg: "Mensagem (opcional)", submitOffer: "Enviar proposta", offer: "Proposta", accept: "Aceitar", decline: "Recusar", accepted: "Aceita", declined: "Recusada", pending: "Pendente", perYear: "/ha/ano", years: "anos", closeDeal: "Fechar negócio (revelar contatos)", closeHint: "Só feche quando tiverem acordado. Os contatos são compartilhados após o fechamento.", locked: "Contatos são liberados quando o negócio é fechado — é assim que a Palmo se mantém gratuita até lá.", contact: "Contato", dealClosed: "Negócio fechado", cancel: "Cancelar negócio", cancelled: "Este negócio foi cancelado.", contractSection: "Contrato", contractHint: "Proposta aceita — gere a minuta padrão Palmo e negociem cláusula a cláusula.", typeArrendamento: "Arrendamento (preço fixo)", typeParceria: "Parceria (% da produção)", generate: "Gerar minuta do contrato", generating: "Gerando…", openContract: "Abrir contrato", minTerm: (min: number) => `O prazo da proposta aceita está abaixo do mínimo legal para esta finalidade: o Decreto 59.566/66 exige pelo menos ${min} anos. Ajustem a proposta antes de gerar a minuta.`, contractErrGeneric: "Não foi possível gerar a minuta. Tente novamente.", chatWarning: "Por segurança, o contato entre as partes é liberado no fechamento. Compartilhar telefone ou e-mail aqui é proibido pelos Termos.", chatWarningLink: "Termos", offerConsent: "Ao enviar esta proposta, confirmo a cláusula 3 dos Termos: nada de telefone, e-mail ou qualquer contato antes do fechamento, e fechar por fora um negócio sobre esta terra nos 12 meses seguintes sujeita à multa de 10% do valor do contrato, que vincula as duas partes.", offerConsentLink: "Ler a cláusula 3" };
+      ? { back: "Back", placeholder: "Write a message…", send: "Send", makeOffer: "Make an offer", price: "Price (R$/ha/year)", term: "Term (years)", offerMsg: "Message (optional)", submitOffer: "Send offer", offer: "Offer", accept: "Accept", decline: "Decline", accepted: "Accepted", declined: "Declined", pending: "Pending", perYear: "/ha/yr", years: "years", closeDeal: "Close deal (reveal contacts)", closeHint: "Only close when you've agreed. Contacts are shared after closing.", locked: "Contacts unlock when the deal closes — that's how Palmo stays free until then.", contact: "Contact", dealClosed: "Deal closed", cancel: "Cancel deal", cancelled: "This deal was cancelled.", contractSection: "Contract", contractHint: "Offer accepted — generate the standard Palmo draft and negotiate it clause by clause.", typeArrendamento: "Lease (fixed price)", typeParceria: "Partnership (% split)", generate: "Generate contract draft", generating: "Generating…", openContract: "Open contract", minTerm: (min: number) => `The accepted offer's term is below the legal minimum for this land use: Decree 59.566/66 requires at least ${min} years. Adjust the offer before generating the draft.`, contractErrGeneric: "Couldn't generate the draft. Please try again.", chatWarning: "For your safety, contact between the parties is released at closing. Sharing a phone number or e-mail here is forbidden by the Terms.", chatWarningLink: "Terms", offerConsent: "By sending this offer I confirm clause 3 of the Terms: no phone, e-mail or any contact details before closing, and closing a deal on this land outside the platform within 12 months triggers a penalty of 10% of the contract value, which binds both parties.", offerConsentLink: "Read clause 3", closeNeedsOffer: "To close the deal, an offer must be accepted first — that's what sets the agreed price and term on record.", closeUnavailable: "Closing is temporarily unavailable. Nothing was changed; please try again shortly.", closeFailed: "We couldn't close the deal. Nothing was changed." }
+      : { back: "Voltar", placeholder: "Escreva uma mensagem…", send: "Enviar", makeOffer: "Fazer proposta", price: "Preço (R$/ha/ano)", term: "Prazo (anos)", offerMsg: "Mensagem (opcional)", submitOffer: "Enviar proposta", offer: "Proposta", accept: "Aceitar", decline: "Recusar", accepted: "Aceita", declined: "Recusada", pending: "Pendente", perYear: "/ha/ano", years: "anos", closeDeal: "Fechar negócio (revelar contatos)", closeHint: "Só feche quando tiverem acordado. Os contatos são compartilhados após o fechamento.", locked: "Contatos são liberados quando o negócio é fechado — é assim que a Palmo se mantém gratuita até lá.", contact: "Contato", dealClosed: "Negócio fechado", cancel: "Cancelar negócio", cancelled: "Este negócio foi cancelado.", contractSection: "Contrato", contractHint: "Proposta aceita — gere a minuta padrão Palmo e negociem cláusula a cláusula.", typeArrendamento: "Arrendamento (preço fixo)", typeParceria: "Parceria (% da produção)", generate: "Gerar minuta do contrato", generating: "Gerando…", openContract: "Abrir contrato", minTerm: (min: number) => `O prazo da proposta aceita está abaixo do mínimo legal para esta finalidade: o Decreto 59.566/66 exige pelo menos ${min} anos. Ajustem a proposta antes de gerar a minuta.`, contractErrGeneric: "Não foi possível gerar a minuta. Tente novamente.", chatWarning: "Por segurança, o contato entre as partes é liberado no fechamento. Compartilhar telefone ou e-mail aqui é proibido pelos Termos.", chatWarningLink: "Termos", offerConsent: "Ao enviar esta proposta, confirmo a cláusula 3 dos Termos: nada de telefone, e-mail ou qualquer contato antes do fechamento, e fechar por fora um negócio sobre esta terra nos 12 meses seguintes sujeita à multa de 10% do valor do contrato, que vincula as duas partes.", offerConsentLink: "Ler a cláusula 3", closeNeedsOffer: "Para fechar o negócio, é preciso que uma proposta tenha sido aceita antes — é ela que registra o preço e o prazo acordados.", closeUnavailable: "O fechamento está momentaneamente indisponível. Nada foi alterado; tente de novo em instantes.", closeFailed: "Não foi possível fechar o negócio. Nada foi alterado." };
 
   function reload() {
     getConversation(id).then((res) => {
@@ -82,6 +84,21 @@ export function Conversation({ id }: { id: string }) {
     void acceptOfferTerms(id);
     setShowOffer(false);
     setOfferPrice(""); setOfferTerm(""); setOfferMsg(""); setOfferConsent(false);
+    reload();
+  }
+
+  /**
+   * O fechamento é decidido no servidor e pode ser RECUSADO (sem proposta
+   * aceita, por exemplo). Antes o retorno era descartado e a recusa ficava
+   * invisível — o botão parecia simplesmente não funcionar.
+   */
+  async function fecharNegocio() {
+    setErroFechar(null);
+    const res = await setDealStatus(id, "closed");
+    if (!res.ok) {
+      setErroFechar(res.error);
+      return;
+    }
     reload();
   }
 
@@ -321,7 +338,7 @@ export function Conversation({ id }: { id: string }) {
                   <button onClick={() => setShowOffer(true)} className="rounded-full border border-accent bg-accent/10 px-4 py-1.5 text-sm font-bold text-deep">{label.makeOffer}</button>
                   {!dealClosed && (
                     <button
-                      onClick={async () => { await setDealStatus(id, "closed"); reload(); }}
+                      onClick={fecharNegocio}
                       title={label.closeHint}
                       className="rounded-full bg-primary px-4 py-1.5 text-sm font-bold text-white"
                     >
@@ -329,6 +346,18 @@ export function Conversation({ id }: { id: string }) {
                     </button>
                   )}
                 </div>
+                {/* O fechamento agora tem pré-condição de negócio no servidor
+                    (proposta aceita). Antes o resultado era descartado, então
+                    uma recusa era invisível: o botão parecia não fazer nada. */}
+                {erroFechar && (
+                  <p className="mt-2 rounded-xl bg-accent/20 px-4 py-2.5 text-sm font-semibold text-deep">
+                    {erroFechar === "sem_proposta_aceita"
+                      ? label.closeNeedsOffer
+                      : erroFechar === "service_role_missing"
+                        ? label.closeUnavailable
+                        : label.closeFailed}
+                  </p>
+                )}
               </>
             )}
           </div>

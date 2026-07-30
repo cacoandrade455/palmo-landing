@@ -95,3 +95,72 @@ export function caminhoFoto(ownerId: string, listingId: string, uuid: string): s
 export function caminhoStaging(ownerId: string, listingId: string, uuid: string): string {
   return `${ownerId}/${listingId}/${uuid}`;
 }
+
+/**
+ * Converte a URL pública de uma foto no CAMINHO do objeto dentro do bucket, e
+ * só devolve caminho que comprovadamente pertence a este dono e a este anúncio.
+ *
+ * ── POR QUE ISTO NÃO É UM `split` ─────────────────────────────────────────────
+ * A versão anterior fazia `url.split('/listing-photos/')[1]`, e isso era um
+ * buraco de segurança, não um detalhe de estilo. O dono TEM UPDATE em
+ * `listings.photos` (é coluna de conteúdo dele), então ele pode escrever
+ * qualquer string ali pela API REST — inclusive a URL da foto de OUTRO dono.
+ * Na sequência, pedir a remoção dessa URL fazia a SERVICE ROLE apagar o objeto
+ * do vizinho, porque:
+ *   • o host da URL era ignorado (URL de outro projeto Supabase passava);
+ *   • `split` quebra em TODAS as ocorrências, então bucket repetido no caminho
+ *     truncava o path e podia acertar outro objeto;
+ *   • query string (`?t=...`) entrava no path e o `remove` virava no-op silencioso;
+ *   • e nada conferia que o caminho começava com a pasta do próprio dono.
+ *
+ * Agora: host precisa ser o nosso, o caminho precisa estar sob
+ * `/object/public/<bucket>/`, e o resto precisa começar exatamente com
+ * `{ownerId}/{listingId}/`. Qualquer coisa fora disso devolve `null` e NÃO é
+ * apagada — preferimos deixar órfão a apagar arquivo alheio.
+ */
+export function caminhoDoObjeto(
+  url: string,
+  bucket: string,
+  ownerId: string,
+  listingId: string,
+): string | null {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!url || !base) return null;
+
+  let u: URL;
+  let raiz: URL;
+  try {
+    u = new URL(url);
+    raiz = new URL(base);
+  } catch {
+    return null; // não é URL: nunca tratamos como caminho
+  }
+
+  // 1) Tem que ser o NOSSO storage. Sem isto, URL de outro projeto viraria
+  //    caminho e a service role apagaria no nosso bucket.
+  if (u.host !== raiz.host) return null;
+
+  // 2) Tem que estar sob o prefixo público do bucket certo. `indexOf` + `slice`
+  //    em vez de `split`, para bucket repetido no caminho não truncar nada.
+  const prefixo = `/storage/v1/object/public/${bucket}/`;
+  const i = u.pathname.indexOf(prefixo);
+  if (i !== 0) return null; // exigimos no COMEÇO do pathname, não em qualquer lugar
+
+  // 3) `pathname` já vem sem query e sem hash — a query nunca entra no caminho.
+  let caminho: string;
+  try {
+    caminho = decodeURIComponent(u.pathname.slice(prefixo.length));
+  } catch {
+    return null;
+  }
+  if (!caminho) return null;
+
+  // 4) Tem que ser a pasta deste dono e deste anúncio. É esta linha que impede
+  //    apagar a foto de terceiro.
+  if (!caminho.startsWith(`${ownerId}/${listingId}/`)) return null;
+
+  // 5) Nada de subir de diretório.
+  if (caminho.includes("..")) return null;
+
+  return caminho;
+}

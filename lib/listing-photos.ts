@@ -27,6 +27,7 @@ import { randomUUID } from "node:crypto";
 import { getAdminSupabase } from "./supabase-admin";
 import {
   MAX_FOTOS_POR_ANUNCIO,
+  caminhoDoObjeto,
   caminhoFoto,
   caminhoStaging,
   processarFoto,
@@ -195,14 +196,47 @@ export async function definirOrdemDeFotos(
   const { error } = await db.from("listings").update({ photos: limpa }).eq("id", listingId);
   if (error) return { ok: false, error: error.message };
 
-  // Apaga do bucket o que saiu da lista. Ordem deliberada: a linha do banco
-  // primeiro. Se o storage falhar, sobra arquivo órfão (invisível, barato); se
-  // fosse ao contrário, sobraria URL apontando para arquivo que não existe.
+  // Apaga do bucket o que saiu da lista.
+  //
+  // ORDEM DELIBERADA: a linha do banco primeiro, o storage depois. Se o storage
+  // falhar, sobra arquivo órfão — invisível e barato. Se fosse ao contrário,
+  // sobraria URL no array apontando para arquivo que não existe, ou seja foto
+  // quebrada na vitrine. Órfão é problema de custo; foto que reaparece (ou
+  // some) na tela é problema de confiança.
+  //
+  // E a falha NUNCA derruba a operação do usuário: ele pediu para excluir a
+  // foto, a foto saiu do anúncio, e é isso que ele precisa ver acontecer.
   if (removidas.length > 0) {
     const paths = removidas
-      .map((u) => u.split(`/${BUCKET_PUBLICO}/`)[1])
+      .map((u) => caminhoDoObjeto(u, BUCKET_PUBLICO, ownerId, listingId))
       .filter((p): p is string => !!p);
-    if (paths.length > 0) await db.storage.from(BUCKET_PUBLICO).remove(paths);
+
+    // O que NÃO virou caminho válido fica registrado: ou é URL de fora (que a
+    // gente se recusa a apagar, de propósito), ou é sinal de que o formato da
+    // URL pública mudou e o descarte parou de funcionar em silêncio.
+    const naoResolvidas = removidas.length - paths.length;
+    if (naoResolvidas > 0) {
+      console.warn(
+        `[listing-photos] ${naoResolvidas} de ${removidas.length} URL(s) removidas do anuncio ${listingId} nao resolveram para objeto deste dono; objeto NAO apagado.`,
+      );
+    }
+
+    if (paths.length > 0) {
+      const { error: errStorage } = await db.storage.from(BUCKET_PUBLICO).remove(paths);
+      if (errStorage) {
+        // Órfão consciente, não silencioso.
+        console.error(
+          `[listing-photos] falha ao apagar ${paths.length} objeto(s) do bucket ${BUCKET_PUBLICO} (anuncio ${listingId}): ${errStorage.message}`,
+        );
+      }
+
+      // Cinto e suspensório: se por algum motivo o original cru ainda estiver no
+      // staging (upload abandonado com o mesmo uuid), ele morre junto. O arquivo
+      // ali carrega EXIF com GPS, então não deixamos acumular nem em bucket
+      // privado. Falhar aqui é irrelevante e não é reportado.
+      const staging = paths.map((p) => p.replace(/\.webp$/, ""));
+      await db.storage.from(BUCKET_STAGING).remove(staging).catch(() => {});
+    }
   }
 
   return { ok: true, photos: limpa };

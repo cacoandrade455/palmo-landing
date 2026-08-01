@@ -12,6 +12,7 @@ import { sortOptionsByLabel } from "@/lib/sort-options";
 import { createListing, verificarCarDoAnuncio } from "./actions";
 import { acceptListingTerms } from "@/app/app/legal-actions";
 import { CAR_FORMATO_EXEMPLO, parseCar } from "@/lib/car-checks";
+import { CampoDeArea } from "@/components/CampoDeArea";
 import { PhotoPicker } from "./PhotoPicker";
 import { enviarFotos, novoEstado, type EstadoUpload } from "./upload-client";
 import { useMunicipios } from "./use-municipios";
@@ -329,7 +330,10 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor="hectares" className="text-sm font-semibold text-deep">{label.hectares}</label>
-          <input id="hectares" name="hectares" type="number" min="1" step="any" required defaultValue={prefill?.hectares ?? ""} className={inputCls} />
+          {/* Conversor de medidas agrárias: quem pensa em tarefas/alqueires
+              digita na unidade da sua região; o FormData continua recebendo
+              `hectares` (input hidden do componente), sempre em hectares. */}
+          <CampoDeArea uf={ufSel} inputCls={inputCls} required defaultHectares={prefill?.hectares ?? ""} />
         </div>
         <div>
           <label htmlFor="purpose" className="text-sm font-semibold text-deep">{label.purpose}</label>

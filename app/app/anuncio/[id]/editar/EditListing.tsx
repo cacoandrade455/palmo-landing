@@ -10,6 +10,7 @@ import { UFS } from "@/lib/appraisal-data";
 import { sortOptionsByLabel } from "@/lib/sort-options";
 import { CAR_FORMATO_EXEMPLO, parseCar } from "@/lib/car-checks";
 import { useMunicipios } from "@/app/app/anunciar/use-municipios";
+import { CampoDeArea } from "@/components/CampoDeArea";
 import { acceptListingTerms } from "@/app/app/legal-actions";
 import { PhotoManager } from "./PhotoManager";
 import { mudarStatusDoAnuncio, updateListing, type ListingParaEditar } from "./actions";
@@ -425,7 +426,11 @@ export function EditListing({ listing }: { listing: ListingParaEditar }) {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label htmlFor="hectares" className="text-sm font-semibold text-deep">{label.hectares}</label>
-            <input id="hectares" name="hectares" type="number" min="1" step="any" required value={hectares} onChange={(e) => setHectares(e.target.value)} className={inputCls} />
+            {/* Conversor de medidas agrárias. O estado `hectares` continua
+                carregando o valor EM HECTARES (via onHectaresChange), então o
+                dirty-check acima e o updateListing não mudam; o FormData segue
+                recebendo `hectares` pelo input hidden do componente. */}
+            <CampoDeArea uf={ufSel} inputCls={inputCls} required hectares={hectares} onHectaresChange={setHectares} />
           </div>
           <div>
             <label htmlFor="purpose" className="text-sm font-semibold text-deep">{label.purpose}</label>

@@ -286,7 +286,10 @@ export function EditListing({ listing }: { listing: ListingParaEditar }) {
                 {label.pausar}
               </button>
             )}
-            {status === "paused" && (
+            {/* Arquivado também reativa: sem este botão, `archived` seria
+                beco sem saída na interface — e reativar é o que traz as
+                fotos de volta do staging para a vitrine. */}
+            {(status === "paused" || status === "archived") && (
               <button
                 type="button"
                 onClick={() => trocarStatus("active")}

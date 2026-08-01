@@ -20,6 +20,7 @@
 import "server-only";
 
 import { getAdminSupabase } from "./supabase-admin";
+import { despublicarFotos, republicarFotos } from "./listing-photos";
 
 /** Transições permitidas ao proprietário. `closed` pertence ao contrato. */
 export type StatusDoDono = "draft" | "active" | "paused" | "archived";
@@ -55,7 +56,7 @@ export async function mudarStatus(
 
   const { data: atual } = await db
     .from("listings")
-    .select("owner_id, status")
+    .select("owner_id, status, photos")
     .eq("id", listingId)
     .maybeSingle();
   // Anúncio de outro dono responde igual a anúncio inexistente.
@@ -99,6 +100,25 @@ export async function mudarStatus(
     // contratual. Nos outros casos é mudança livre de vitrine.
     categoria: temPropostaAceita ? "contrato" : "livre",
   });
+
+  // ── FOTOS: arquivar despublica, reativar republica ─────────────────────────
+  // ARQUIVAR é o "sumir com o anúncio": as fotos saem do bucket público (movem
+  // para o staging privado; `photos[]` fica intacto e as URLs param de
+  // resolver). PAUSAR não mexe em foto — é estado leve e frequente.
+  //
+  // Vem DEPOIS do update de status e do registro, e as duas funções nunca
+  // lançam: falha de storage vira log, nunca derruba o `{ ok: true }` de quem
+  // só pediu para arquivar ou reativar o anúncio.
+  const fotos = (atual.photos as string[] | null) ?? [];
+  if (novo === "archived") {
+    await despublicarFotos(listingId, userId, fotos);
+  } else if (novo === "active") {
+    // Toda reativação tenta a volta (inclusive archived -> paused -> active):
+    // a função lista o staging e só move o que existe, então anúncio que nunca
+    // foi arquivado é no-op silencioso. Se algum objeto não voltar, o anúncio
+    // reativa MESMO ASSIM — vitrine sem foto se conserta na edição.
+    await republicarFotos(listingId, userId);
+  }
 
   return { ok: true };
 }

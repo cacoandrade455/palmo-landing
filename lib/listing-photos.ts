@@ -166,6 +166,134 @@ export async function publicarFotoDoStaging(
 }
 
 /**
+ * ARQUIVAR DESPUBLICA AS FOTOS: move os objetos do bucket público para o
+ * staging privado, preservando o caminho `{ownerId}/{listingId}/{uuid}.webp`.
+ *
+ * MOVER, não apagar: o array `photos[]` do anúncio NÃO muda. As URLs ficam
+ * gravadas e simplesmente param de resolver (bucket privado responde 400 para
+ * leitura anônima). Reativar move de volta e as mesmas URLs voltam a funcionar
+ * — nenhum byte é perdido, nenhuma linha do banco é reescrita.
+ *
+ * As mesmas garantias do caminho de exclusão valem aqui:
+ *   • cada caminho passa por `caminhoDoObjeto` — nunca movemos objeto de
+ *     terceiro, mesmo que o dono tenha injetado URL alheia em `photos[]`;
+ *   • falha de storage NUNCA derruba a operação do usuário — quem chama já
+ *     mudou o status, e aqui só se loga (foto que ficou pública a mais é
+ *     problema de faxina, anúncio preso é problema de confiança).
+ *
+ * Nunca lança.
+ */
+export async function despublicarFotos(
+  listingId: string,
+  ownerId: string,
+  photos: string[],
+): Promise<void> {
+  try {
+    if (photos.length === 0) return;
+
+    const db = getAdminSupabase();
+    if (!db) {
+      console.error(
+        `[listing-photos] service role ausente ao despublicar fotos do anuncio ${listingId}; objetos seguem publicos.`,
+      );
+      return;
+    }
+
+    const paths = photos
+      .map((u) => caminhoDoObjeto(u, BUCKET_PUBLICO, ownerId, listingId))
+      .filter((p): p is string => !!p);
+
+    // Mesmo aviso do descarte: URL que não resolve para objeto DESTE dono e
+    // DESTE anúncio não é tocada — ou é URL de fora, ou o formato mudou e o
+    // despublicar parou de funcionar; nos dois casos queremos saber.
+    const naoResolvidas = photos.length - paths.length;
+    if (naoResolvidas > 0) {
+      console.warn(
+        `[listing-photos] ${naoResolvidas} de ${photos.length} URL(s) do anuncio ${listingId} nao resolveram para objeto deste dono; objeto NAO movido.`,
+      );
+    }
+
+    for (const path of paths) {
+      // Mesmo caminho nos dois buckets: o objeto só troca de "lado da cerca".
+      const { error } = await db.storage
+        .from(BUCKET_PUBLICO)
+        .move(path, path, { destinationBucket: BUCKET_STAGING });
+      if (error) {
+        // Objeto que ficou para trás segue público até a próxima tentativa
+        // (novo arquivamento ou exclusão na edição). Consciente, não silencioso.
+        console.error(
+          `[listing-photos] falha ao despublicar ${path} do anuncio ${listingId} (${BUCKET_PUBLICO} -> ${BUCKET_STAGING}): ${error.message}`,
+        );
+      }
+    }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "falha desconhecida";
+    console.error(
+      `[listing-photos] erro inesperado ao despublicar fotos do anuncio ${listingId}: ${msg}`,
+    );
+  }
+}
+
+/**
+ * REATIVAR REPUBLICA AS FOTOS: move de volta staging → público o que o
+ * arquivamento levou.
+ *
+ * Em vez de derivar de `photos[]`, LISTA o staging sob `{ownerId}/{listingId}/`
+ * e move só o que existe. Dois motivos:
+ *   • anúncio que nunca foi arquivado vira no-op silencioso — sem ruído de log
+ *     em toda ativação de rascunho ou despausa;
+ *   • objeto que já voltou (ou nunca foi) não gera erro falso.
+ *
+ * SÓ move `.webp`: no staging também vivem, por segundos, os originais crus de
+ * upload (`{uuid}` sem extensão) com EXIF/GPS intactos. Esses NUNCA podem ir
+ * para o bucket público — o filtro por extensão é a garantia de que a
+ * republicação não vaza coordenada.
+ *
+ * Falha aqui NUNCA prende o anúncio: quem chama já reativou o status; vitrine
+ * sem foto se conserta na edição, anúncio preso em archived por storage não.
+ *
+ * Nunca lança.
+ */
+export async function republicarFotos(listingId: string, ownerId: string): Promise<void> {
+  try {
+    const db = getAdminSupabase();
+    if (!db) {
+      console.error(
+        `[listing-photos] service role ausente ao republicar fotos do anuncio ${listingId}; fotos seguem no staging.`,
+      );
+      return;
+    }
+
+    const prefixo = `${ownerId}/${listingId}`;
+    const { data: objetos, error } = await db.storage.from(BUCKET_STAGING).list(prefixo);
+    if (error) {
+      console.error(
+        `[listing-photos] falha ao listar staging de ${prefixo} para republicar (anuncio ${listingId}): ${error.message}`,
+      );
+      return;
+    }
+
+    const arquivadas = (objetos ?? []).filter((o) => o.name.endsWith(".webp"));
+    for (const objeto of arquivadas) {
+      const path = `${prefixo}/${objeto.name}`;
+      const { error: errMove } = await db.storage
+        .from(BUCKET_STAGING)
+        .move(path, path, { destinationBucket: BUCKET_PUBLICO });
+      if (errMove) {
+        console.error(
+          `[listing-photos] falha ao republicar ${path} do anuncio ${listingId} (${BUCKET_STAGING} -> ${BUCKET_PUBLICO}): ${errMove.message}`,
+        );
+      }
+    }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "falha desconhecida";
+    console.error(
+      `[listing-photos] erro inesperado ao republicar fotos do anuncio ${listingId}: ${msg}`,
+    );
+  }
+}
+
+/**
  * Reordena / define capa / remove. Uma função só, porque as três operações são
  * a mesma coisa: o dono manda a lista nova e nós validamos que ela é um
  * subconjunto da atual.
@@ -230,11 +358,15 @@ export async function definirOrdemDeFotos(
         );
       }
 
-      // Cinto e suspensório: se por algum motivo o original cru ainda estiver no
-      // staging (upload abandonado com o mesmo uuid), ele morre junto. O arquivo
-      // ali carrega EXIF com GPS, então não deixamos acumular nem em bucket
-      // privado. Falhar aqui é irrelevante e não é reportado.
-      const staging = paths.map((p) => p.replace(/\.webp$/, ""));
+      // Cinto e suspensório: o mesmo uuid pode ter DOIS restos no staging.
+      //   • o original cru `{uuid}` (upload abandonado) — carrega EXIF com GPS,
+      //     não deixamos acumular nem em bucket privado;
+      //   • o `{uuid}.webp` ARQUIVADO — se o anúncio está archived, a foto vive
+      //     no staging, não no público. Sem apagá-lo aqui, `republicarFotos`
+      //     ressuscitaria no bucket público uma foto que o dono EXCLUIU (órfã
+      //     fora de `photos[]`, e portanto nunca mais despublicada).
+      // Falhar aqui é irrelevante e não é reportado.
+      const staging = paths.flatMap((p) => [p, p.replace(/\.webp$/, "")]);
       await db.storage.from(BUCKET_STAGING).remove(staging).catch(() => {});
     }
   }

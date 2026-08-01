@@ -19,6 +19,7 @@ import {
   type RecommendResult,
   type Recommendation,
 } from "@/lib/land-recommender";
+import { CampoDeArea } from "@/components/CampoDeArea";
 import { RecommenderRanking } from "@/components/RecommenderRanking";
 import { RegionalPortrait } from "@/components/RegionalPortrait";
 import type { RegiaoRetrato } from "@/lib/regioes-agricolas";
@@ -564,17 +565,22 @@ export function Appraiser({
                   </span>
                 )}
               </label>
-              <input
-                id="hectares"
-                name="hectares"
-                type="number"
-                min="1"
-                step="any"
+              {/* Conversor de medidas agrárias em modo discreto: o herói fica
+                  limpo (só um texto-link expande tarefas/alqueires), e o
+                  `fd.get("hectares")` do submit continua recebendo HECTARES
+                  pelo input hidden do componente. Os prefills (query string,
+                  goToCalc) seguem chamando setHaInput em hectares; quando um
+                  deles chega com unidade não-hectare ativa, o componente volta
+                  a exibição para hectare para o valor mostrado bater com o
+                  repassado. */}
+              <CampoDeArea
+                uf={ufSel}
+                inputCls={inputCls}
                 required={!recommendMode}
-                value={haInput}
-                onChange={(e) => setHaInput(e.target.value)}
+                hectares={haInput}
+                onHectaresChange={setHaInput}
                 placeholder={a.hectaresPlaceholder}
-                className={inputCls}
+                discreto
               />
             </div>
             <div>

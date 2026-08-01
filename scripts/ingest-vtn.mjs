@@ -109,12 +109,70 @@ async function fetchIbgeMap() {
 
 const NUM = String.raw`(?:\d{1,3}(?:\.\d{3})*,\d{2}|-|NI)`;
 
+// --- Sanity helpers against page-legend contamination -----------------------
+// The extracted PDF text interleaves page legends like
+// "ALAGOAS - AL BAHIA - BA CEARÁ - CE ... GOIÂNIA - GO" right before a real
+// row ("GO ANICUNS R$ ..."), so the row regexes can anchor on a legend sigla
+// and swallow the legend + the real row's UF into the captured name
+// (e.g. "BA|CEARA CE ESPIRITO SANTO ES GOIANIA GO GO ANICUNS").
+const MAX_NAME_WORDS = 8; // longest real municipality name (IBGE) has 7 words
+
+const isUfToken = (w) => w.length === 2 && UFS.has(w);
+
+function nameInIbge(ibgeMap, uf, name) {
+  return ibgeMap ? ibgeMap.get(name)?.has(uf) === true : false;
+}
+
+// A plain municipality name: bounded word count and no isolated UF sigla.
+// Real names containing a sigla token (PE DE SERRA/BA, SENTO SE/BA) are
+// accepted upstream via the IBGE-map check, never via this heuristic.
+function nameLooksSane(name) {
+  const words = name.split(" ");
+  return words.length <= MAX_NAME_WORDS && !words.some(isUfToken);
+}
+// ----------------------------------------------------------------------------
+
 function collectRows(text, ibgeMap) {
   const data = {};
   const add = (uf, rawName, numTokens) => {
     if (!UFS.has(uf)) return false;
-    const name = normalizeName(rawName);
+    let name = normalizeName(rawName);
     if (!name || name.length < 2) return false;
+    // Accept directly when IBGE confirms the pair, or when the name at least
+    // looks like a plain municipality name (the IBGE fetch can fail, and RFB
+    // spellings sometimes diverge from IBGE — e.g. AMPARO DA SERRA vs
+    // AMPARO DO SERRA — so map absence alone never discards a row).
+    if (!nameInIbge(ibgeMap, uf, name) && !nameLooksSane(name)) {
+      // Legend contamination: re-anchor on the LAST UF sigla inside the
+      // captured name; what follows it is the real row that was swallowed
+      // ("BA|CEARA CE ... GOIANIA GO GO ANICUNS" -> GO|ANICUNS).
+      let recovered = null;
+      if (ibgeMap) {
+        const words = name.split(" ");
+        for (let i = words.length - 2; i >= 0; i--) {
+          if (!isUfToken(words[i])) continue;
+          const candUf = words[i];
+          const candName = words.slice(i + 1).join(" ");
+          if (
+            UFS.has(candUf) &&
+            (nameInIbge(ibgeMap, candUf, candName) ||
+              (candName.length >= 3 && nameLooksSane(candName)))
+          ) {
+            recovered = { uf: candUf, name: candName };
+          }
+          break; // only the last sigla can anchor the real row
+        }
+      }
+      if (!recovered) {
+        console.log(`  (discarded legend-contaminated row: ${uf}|${name})`);
+        return false;
+      }
+      console.log(
+        `  (re-anchored legend-contaminated row: ${uf}|${name} -> ${recovered.uf}|${recovered.name})`,
+      );
+      uf = recovered.uf;
+      name = recovered.name;
+    }
     const nums = numTokens.map(parseBRNumber);
     while (nums.length < 6) nums.push(null);
     const [boa, regular, restrita, pastagem, silvicultura] = nums;
@@ -232,6 +290,21 @@ async function main() {
     } catch (e) {
       console.warn(`  Skipped ${year}: ${e.message}`);
     }
+  }
+
+  // Output sanity pass: nothing that still looks like legend/header junk may
+  // reach the dataset (works even when the IBGE map failed to load).
+  let droppedByOutputCheck = 0;
+  for (const [key, row] of Object.entries(data)) {
+    const uf = key.slice(0, 2);
+    const name = key.slice(3);
+    if (nameInIbge(ibgeMap, uf, name) || nameLooksSane(name)) continue;
+    console.log(`  (output sanity check dropped ${key} [y${row.y}])`);
+    delete data[key];
+    droppedByOutputCheck++;
+  }
+  if (droppedByOutputCheck) {
+    console.log(`Output sanity check dropped ${droppedByOutputCheck} row(s).`);
   }
 
   const count = Object.keys(data).length;

@@ -1,5 +1,6 @@
 "use server";
 
+import { PURPOSE_OPEN } from "@/lib/purpose-open";
 import { getServerSupabase } from "@/lib/supabase-server";
 
 export type BrowseListing = {
@@ -121,7 +122,8 @@ async function selectListings(
     if (source === "listings") q = q.eq("status", "active");
     if (filters.state) q = q.eq("state", filters.state);
     if (filters.municipality) q = q.eq("municipality", filters.municipality);
-    if (filters.purpose) q = q.eq("purpose", filters.purpose);
+    // Finalidade aberta casa com qualquer busca de finalidade.
+    if (filters.purpose) q = q.in("purpose", [filters.purpose, PURPOSE_OPEN]);
     if (filters.minHectares && filters.minHectares > 0)
       q = q.gte("hectares", filters.minHectares);
     if (filters.maxHectares && filters.maxHectares > 0)

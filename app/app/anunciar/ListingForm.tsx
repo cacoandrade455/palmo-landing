@@ -7,7 +7,9 @@ import { CheckCircle2 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { useLanguage } from "@/lib/language-context";
 import { getSupabase } from "@/lib/supabase";
-import { UFS } from "@/lib/appraisal-data";
+import { UFS, estimateLease, formatBRL } from "@/lib/appraisal-data";
+import { pricesUpdatedLabel } from "@/lib/prices";
+import { PURPOSE_OPEN } from "@/lib/purpose-open";
 import { sortOptionsByLabel } from "@/lib/sort-options";
 import { createListing, verificarCarDoAnuncio } from "./actions";
 import { acceptListingTerms } from "@/app/app/legal-actions";
@@ -54,6 +56,13 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
       : "",
   );
   const [muniSel, setMuniSel] = useState("");
+  // A.1 — preço "Aberto a propostas". Nasce desmarcado sempre (inclusive quando
+  // a ponte da calculadora traz um sugerido: nesse caso o campo já vem cheio).
+  const [openPrice, setOpenPrice] = useState(false);
+  // Preço controlado para o toggle poder esvaziar/restaurar o campo. O name
+  // continua `price_per_ha_year`; desabilitado, ele fica fora do FormData e a
+  // action grava null (comportamento já existente da action).
+  const [priceVal, setPriceVal] = useState(prefill?.suggested ?? "");
   // Municipality can only be selected once the IBGE list for the UF arrives,
   // so the prefill waits for the fetch and is applied exactly once.
   const pendingMuniRef = useRef(prefill?.municipality ?? "");
@@ -125,6 +134,12 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         price: "Expected price (R$/ha/year, optional)",
         priceSuggested:
           "Suggested by the Palmo calculator (official sources) — adjust as you like.",
+        priceOpen: "Open to proposals",
+        priceOpenHint:
+          "Let producers propose the value. The real price is set by the proposal.",
+        purposeOpen: "Open to proposals (producers propose the use)",
+        rangeInfo: (use: string, min: string, max: string) =>
+          `In your region, land for ${use} usually earns between ${min} and ${max} per hectare per year (public market sources, updated ${pricesUpdatedLabel("en")}).`,
         description: "Description (optional)",
         descriptionPh: "Access, soil, infrastructure, distance to town…",
         water: "Has water source",
@@ -170,6 +185,12 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         price: "Preço esperado (R$/ha/ano, opcional)",
         priceSuggested:
           "Sugerido pela calculadora Palmo (fontes oficiais) — ajuste como quiser.",
+        priceOpen: "Aberto a propostas",
+        priceOpenHint:
+          "Deixe que os produtores proponham o valor. Quem define o preço de verdade é a proposta.",
+        purposeOpen: "Aberta a propostas (produtores propõem o uso)",
+        rangeInfo: (use: string, min: string, max: string) =>
+          `Na sua região, terras para ${use} costumam render entre ${min} e ${max} por hectare por ano (fontes públicas de mercado, atualizadas em ${pricesUpdatedLabel("pt")}).`,
         description: "Descrição (opcional)",
         descriptionPh: "Acesso, solo, infraestrutura, distância da cidade…",
         water: "Tem água",
@@ -200,6 +221,22 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
           "Ao publicar, você concorda com os Termos, incluindo a Taxa de 5% sobre o valor total do contrato, devida pelo proprietário, cobrada proporcionalmente a cada pagamento anual.",
         feeConsentLink: "Ler a cláusula da taxa",
       };
+
+  // A.3 — faixa informativa, derivada em render (estimateLease é síncrono e
+  // barato, então nada de setState em effect). Só existe com o toggle de preço
+  // marcado, UF escolhida, finalidade real e faixa REGIONAL: o fallback
+  // nacional não é "sua região", e faixa sem fonte regional não aparece.
+  const faixa = (() => {
+    if (!openPrice || !ufSel || !purposeSel || purposeSel === PURPOSE_OPEN) return null;
+    const est = estimateLease(purposeSel, ufSel, cropSel || undefined);
+    if (est.kind !== "range" || est.fallback) return null;
+    const uso = w.purposeOptions.find((o) => o.value === purposeSel)?.label ?? purposeSel;
+    return label.rangeInfo(
+      uso.toLocaleLowerCase(lang === "en" ? "en" : "pt-BR"),
+      formatBRL(est.minPerHa),
+      formatBRL(est.maxPerHa),
+    );
+  })();
 
   async function submit(publish: boolean, form: HTMLFormElement) {
     setError(null);
@@ -339,6 +376,9 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
           <label htmlFor="purpose" className="text-sm font-semibold text-deep">{label.purpose}</label>
           <select id="purpose" name="purpose" required value={purposeSel} onChange={(e) => { setPurposeSel(e.target.value); setCropSel(""); }} className={inputCls}>
             <option value="" disabled>{label.selectPurpose}</option>
+            {/* A.2 — finalidade aberta vem PRIMEIRO, antes das ordenadas.
+                Valor de aplicação (lib/purpose-open.ts), não de content.ts. */}
+            <option value={PURPOSE_OPEN}>{label.purposeOpen}</option>
             {sortOptionsByLabel(w.purposeOptions).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
@@ -385,11 +425,49 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
 
       <div>
         <label htmlFor="price_per_ha_year" className="text-sm font-semibold text-deep">{label.price}</label>
-        <input id="price_per_ha_year" name="price_per_ha_year" type="number" min="0" step="any" defaultValue={prefill?.suggested ?? ""} className={inputCls} />
-        {prefill?.suggested && (
+        {/* A.1 — com o toggle marcado, o input fica desabilitado e vazio: fora
+            do FormData, a action grava null (comportamento já existente). O
+            estado `priceVal` sobrevive ao toggle, então desmarcar devolve o
+            valor digitado (ou o sugerido da calculadora). */}
+        <input
+          id="price_per_ha_year"
+          name="price_per_ha_year"
+          type="number"
+          min="0"
+          step="any"
+          value={openPrice ? "" : priceVal}
+          onChange={(e) => setPriceVal(e.target.value)}
+          disabled={openPrice}
+          className={`${inputCls} disabled:opacity-60`}
+        />
+        {prefill?.suggested && !openPrice && (
           <p className="mt-1.5 text-xs leading-relaxed text-deep/50">
             {label.priceSuggested}
           </p>
+        )}
+        <label className="mt-2 flex cursor-pointer items-start gap-2 rounded-xl border border-deep/15 px-4 py-3">
+          <input
+            type="checkbox"
+            checked={openPrice}
+            onChange={(e) => setOpenPrice(e.target.checked)}
+            className="mt-0.5 accent-primary"
+          />
+          <span className="text-sm font-semibold text-deep">
+            {label.priceOpen}
+            <span className="mt-0.5 block text-xs font-normal leading-relaxed text-deep/60">
+              {label.priceOpenHint}
+            </span>
+          </span>
+        </label>
+        {faixa && (
+          <div className="mt-2">
+            <p className="rounded-xl bg-accent/20 px-4 py-2.5 text-sm font-semibold text-deep">
+              {faixa}
+            </p>
+            <p className="mt-1.5 text-xs leading-relaxed text-deep/60">
+              {t.appraiser.disclaimer}
+            </p>
+          </div>
         )}
       </div>
 

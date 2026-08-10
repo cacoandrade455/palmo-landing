@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MapPin, Droplet, MessageCircle, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { useLanguage, type AppLang } from "@/lib/language-context";
+import { PURPOSE_OPEN } from "@/lib/purpose-open";
 import { startConversation, type ListingDetailData } from "./actions";
 
 /** Data curta na convenção do idioma (29/07/2026 em pt-BR, 07/29/2026 em en-US). */
@@ -33,8 +34,8 @@ export function ListingDetail({
 
   const label =
     lang === "en"
-      ? { back: "Back to listings", owner: "Owner", contact: "Contact owner", yours: "This is your listing", water: "Water source", perYear: "/ha/year", area: "Area", use: "Use", desc: "Description", err: "Couldn't start the conversation.", carActive: "CAR active in SICAR", carCheckedOn: (d: string) => `Checked on ${d}`, carDeclared: "CAR declared by the owner.", carDeclaredHint: "Nobody has checked this number against the SICAR registry yet.", editedOn: (d: string) => `Listing edited on ${d}`, photoAlt: (title: string) => `Photo of ${title}`, photoNumber: (n: number) => `Photo ${n}` }
-      : { back: "Voltar aos anúncios", owner: "Proprietário", contact: "Falar com o dono", yours: "Este é o seu anúncio", water: "Fonte de água", perYear: "/ha/ano", area: "Área", use: "Uso", desc: "Descrição", err: "Não foi possível iniciar a conversa.", carActive: "CAR ativo no SICAR", carCheckedOn: (d: string) => `Conferido em ${d}`, carDeclared: "CAR declarado pelo proprietário.", carDeclaredHint: "Ninguém conferiu esse número na base do SICAR ainda.", editedOn: (d: string) => `Anúncio editado em ${d}`, photoAlt: (title: string) => `Foto de ${title}`, photoNumber: (n: number) => `Foto ${n}` };
+      ? { back: "Back to listings", owner: "Owner", contact: "Contact owner", yours: "This is your listing", water: "Water source", perYear: "/ha/year", area: "Area", use: "Use", price: "Price", openPrice: "Open to proposals", openPurpose: "Open purpose", desc: "Description", err: "Couldn't start the conversation.", carActive: "CAR active in SICAR", carCheckedOn: (d: string) => `Checked on ${d}`, carDeclared: "CAR declared by the owner.", carDeclaredHint: "Nobody has checked this number against the SICAR registry yet.", editedOn: (d: string) => `Listing edited on ${d}`, photoAlt: (title: string) => `Photo of ${title}`, photoNumber: (n: number) => `Photo ${n}` }
+      : { back: "Voltar aos anúncios", owner: "Proprietário", contact: "Falar com o dono", yours: "Este é o seu anúncio", water: "Fonte de água", perYear: "/ha/ano", area: "Área", use: "Uso", price: "Preço", openPrice: "Aberto a propostas", openPurpose: "Finalidade aberta", desc: "Descrição", err: "Não foi possível iniciar a conversa.", carActive: "CAR ativo no SICAR", carCheckedOn: (d: string) => `Conferido em ${d}`, carDeclared: "CAR declarado pelo proprietário.", carDeclaredHint: "Ninguém conferiu esse número na base do SICAR ainda.", editedOn: (d: string) => `Anúncio editado em ${d}`, photoAlt: (title: string) => `Foto de ${title}`, photoNumber: (n: number) => `Foto ${n}` };
 
   const carCheckedDate = shortDate(listing.car_checked_at, lang);
   const editedDate = shortDate(listing.edited_at, lang);
@@ -42,7 +43,12 @@ export function ListingDetail({
   const photos = listing.photos;
   const cover = photos[activePhoto] ?? photos[0] ?? null;
 
-  const purposeLabel = t.waitlist.purposeOptions.find((o) => o.value === listing.purpose)?.label ?? listing.purpose;
+  // PURPOSE_OPEN não está em purposeOptions (regra 5): traduzido aqui mesmo,
+  // para nunca vazar o value cru "aberta_a_propostas" na tela.
+  const purposeLabel =
+    listing.purpose === PURPOSE_OPEN
+      ? label.openPurpose
+      : t.waitlist.purposeOptions.find((o) => o.value === listing.purpose)?.label ?? listing.purpose;
   const cropLabel = listing.crop
     ? t.appraiser.crops[listing.purpose]?.find((c) => c.value === listing.crop)?.label ?? listing.crop
     : null;
@@ -162,7 +168,15 @@ export function ListingDetail({
               <p className="text-deep/50">{label.use}</p>
               <p className="font-semibold text-deep">{cropLabel ?? purposeLabel}</p>
             </div>
-            {listing.price_per_ha_year && (
+            {/* Preço null é escolha do dono ("aberto a propostas"), não campo
+                faltando: a célula aparece sempre. Rótulo "R$/ha/ano" só sobre
+                número; == null explícito para não engolir um preço 0. */}
+            {listing.price_per_ha_year == null ? (
+              <div>
+                <p className="text-deep/50">{label.price}</p>
+                <p className="font-semibold text-deep">{label.openPrice}</p>
+              </div>
+            ) : (
               <div>
                 <p className="text-deep/50">R$/ha/ano</p>
                 <p className="font-semibold text-deep">R$ {listing.price_per_ha_year.toLocaleString("pt-BR")}</p>

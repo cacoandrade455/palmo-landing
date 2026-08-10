@@ -29,6 +29,7 @@ type Copy = {
   photoSoon: string;
   photoAlt: (title: string) => string;
   perYear: string;
+  openPrice: string;
   water: string;
   carAtivo: string;
   conferidoEm: (data: string) => string;
@@ -50,6 +51,7 @@ const COPY_PT: Copy = {
   photoSoon: "Foto em breve",
   photoAlt: (title: string) => `Foto de ${title}`,
   perYear: "/ha/ano",
+  openPrice: "Aberto a propostas",
   carAtivo: "CAR ativo no SICAR",
   conferidoEm: (data: string) => `Conferido em ${data}`,
   water: "Água",
@@ -71,6 +73,7 @@ const COPY_EN: Copy = {
   photoSoon: "Photo coming soon",
   photoAlt: (title: string) => `Photo of ${title}`,
   perYear: "/ha/yr",
+  openPrice: "Open to proposals",
   water: "Water",
   carAtivo: "CAR active on SICAR",
   conferidoEm: (data: string) => `Checked on ${data}`,
@@ -140,22 +143,25 @@ function ListingCard({ l, c, lang }: { l: BrowseListing; c: Copy; lang: AppLang 
             )}
           </div>
         )}
-        {(l.price_per_ha_year || l.has_water) && (
-          <div className="flex items-center gap-3 pt-1 text-sm">
-            {l.price_per_ha_year && (
-              <span className="font-bold text-deep">
-                R$ {l.price_per_ha_year.toLocaleString("pt-BR")}
-                <span className="font-normal text-deep/50">{c.perYear}</span>
-              </span>
-            )}
-            {l.has_water && (
-              <span className="inline-flex items-center gap-1 text-primary">
-                <Droplet className="h-3.5 w-3.5" aria-hidden="true" />
-                {c.water}
-              </span>
-            )}
-          </div>
-        )}
+        {/* Preço null é escolha do dono ("aberto a propostas"), não campo
+            faltando: a faixa aparece sempre. Checagem explícita com == null
+            para não engolir um preço 0. */}
+        <div className="flex items-center gap-3 pt-1 text-sm">
+          {l.price_per_ha_year == null ? (
+            <span className="font-bold text-deep">{c.openPrice}</span>
+          ) : (
+            <span className="font-bold text-deep">
+              R$ {l.price_per_ha_year.toLocaleString("pt-BR")}
+              <span className="font-normal text-deep/50">{c.perYear}</span>
+            </span>
+          )}
+          {l.has_water && (
+            <span className="inline-flex items-center gap-1 text-primary">
+              <Droplet className="h-3.5 w-3.5" aria-hidden="true" />
+              {c.water}
+            </span>
+          )}
+        </div>
       </div>
     </Link>
   );

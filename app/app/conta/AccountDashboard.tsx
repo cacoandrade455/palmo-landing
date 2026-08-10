@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 import { CheckCircle2, MapPin, Pencil, Plus, LogOut, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
+import { PURPOSE_OPEN } from "@/lib/purpose-open";
 import { getSupabase } from "@/lib/supabase";
 import { getMyListings, updateListingStatus, type MyListing } from "./actions";
 import { getMyKyc, type KycSummary } from "../verificacao/actions";
@@ -36,6 +37,8 @@ export function AccountDashboard() {
           emptyCta: "List my land",
           hectares: "ha",
           perYear: "/ha/yr",
+          openPrice: "Open to proposals",
+          openPurpose: "Open purpose",
           pause: "Pause",
           activate: "Activate",
           edit: "Edit",
@@ -77,6 +80,8 @@ export function AccountDashboard() {
           emptyCta: "Anunciar minha terra",
           hectares: "ha",
           perYear: "/ha/ano",
+          openPrice: "Aberto a propostas",
+          openPurpose: "Finalidade aberta",
           pause: "Pausar",
           activate: "Ativar",
           edit: "Editar",
@@ -147,8 +152,12 @@ export function AccountDashboard() {
     await updateListingStatus(l.id, next);
   }
 
+  // PURPOSE_OPEN não está em purposeOptions (regra 5): traduzido aqui mesmo,
+  // para nunca vazar o value cru "aberta_a_propostas" na tela.
   const purposeLabel = (val: string) =>
-    t.waitlist.purposeOptions.find((o) => o.value === val)?.label ?? val;
+    val === PURPOSE_OPEN
+      ? label.openPurpose
+      : t.waitlist.purposeOptions.find((o) => o.value === val)?.label ?? val;
   const cropLabel = (purpose: string, crop: string | null) =>
     crop
       ? t.appraiser.crops[purpose]?.find((c) => c.value === crop)?.label ?? crop
@@ -328,9 +337,11 @@ export function AccountDashboard() {
                     <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
                     {l.municipality}, {l.state} · {l.hectares} {label.hectares} ·{" "}
                     {cropLabel(l.purpose, l.crop) ?? purposeLabel(l.purpose)}
-                    {l.price_per_ha_year
-                      ? ` · R$ ${l.price_per_ha_year.toLocaleString("pt-BR")}${label.perYear}`
-                      : ""}
+                    {/* Preço null é escolha do dono, não campo faltando: o
+                        segmento aparece sempre (== null para não engolir 0). */}
+                    {l.price_per_ha_year == null
+                      ? ` · ${label.openPrice}`
+                      : ` · R$ ${l.price_per_ha_year.toLocaleString("pt-BR")}${label.perYear}`}
                   </p>
                   {carNote(l)}
                   {l.edited_at && (

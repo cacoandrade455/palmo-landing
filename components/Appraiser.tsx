@@ -11,6 +11,7 @@ import {
   Droplets,
   DropletOff,
 } from "lucide-react";
+import { track } from "@vercel/analytics";
 import { APP_ENABLED } from "@/lib/feature-flags";
 import { submitWaitlist, type WaitlistResult } from "@/app/actions";
 import { useLanguage, type AppLang } from "@/lib/language-context";
@@ -349,6 +350,11 @@ export function Appraiser({
 
     if (purpose === RECOMMEND) {
       if (!uf || water === "") return;
+      // Medicao anonima: so UF e agua — nunca municipio, hectares ou dado pessoal.
+      track("calculadora_calculo", {
+        uf,
+        tem_agua: water === "yes" ? "sim" : water === "no" ? "nao" : "nao_informado",
+      });
       const hectares =
         Number.isFinite(haRaw) && haRaw > 0 ? haRaw : undefined;
       const hasWater = water === "yes";
@@ -397,6 +403,8 @@ export function Appraiser({
       variant: String(fd.get("variant") ?? ""),
     };
     if (!q.uf || !q.purpose || !q.hectares || q.hectares <= 0) return;
+    // Medicao anonima: no ramo de preco a pergunta de agua nao existe.
+    track("calculadora_calculo", { uf: q.uf, tem_agua: "nao_informado" });
     setRecResult(null);
     retratoSeq.current++;
     setRetrato(null);
@@ -1026,6 +1034,7 @@ export function Appraiser({
             {listUrl && (
               <Link
                 href={listUrl}
+                onClick={() => track("calculadora_cta_anunciar", { uf: query.uf })}
                 className="group mt-6 flex items-center gap-4 rounded-2xl border-2 border-accent bg-accent/10 px-5 py-4 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-accent/20 hover:shadow-md"
               >
                 <span className="min-w-0 flex-1">

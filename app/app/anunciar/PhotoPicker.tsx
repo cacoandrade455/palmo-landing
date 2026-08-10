@@ -128,7 +128,7 @@ export function PhotoPicker({
                   className="aspect-[4/3] w-full object-cover"
                 />
                 {i === 0 && (
-                  <span className="absolute left-2 top-2 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+                  <span className="absolute left-2 top-2 rounded-full bg-deep px-2.5 py-1 text-xs font-bold text-white">
                     {label.capa}
                   </span>
                 )}

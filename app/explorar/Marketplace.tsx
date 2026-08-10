@@ -2,13 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import type { User } from "@supabase/supabase-js";
 import { CheckCircle2, Droplet, Image as ImageIcon, MapPin, Search } from "lucide-react";
 import { useLanguage, type AppLang } from "@/lib/language-context";
 import { UFS } from "@/lib/appraisal-data";
+import { getSupabase } from "@/lib/supabase";
 import { listingPath } from "@/lib/listing-slug";
 import { PURPOSE_OPEN } from "@/lib/purpose-open";
 import { sortOptionsByLabel } from "@/lib/sort-options";
 import { browseListings, type BrowseListing } from "./actions";
+import { registerRegionInterest } from "./interest-actions";
 
 const inputCls =
   "w-full rounded-xl border border-deep/15 bg-white px-4 py-3 text-deep placeholder:text-deep/35 focus:border-primary focus:outline-none disabled:cursor-not-allowed disabled:bg-neutral/60 disabled:text-deep/40";
@@ -95,6 +98,15 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
   const [minHa, setMinHa] = useState("");
   const [maxHa, setMaxHa] = useState("");
   const [muniByUf, setMuniByUf] = useState<Record<string, string[] | "error">>({});
+  // Filtros da ÚLTIMA busca efetivamente aplicada. Os states do formulário
+  // acima podem divergir (o usuário mexe nos selects sem clicar em Filtrar);
+  // o registro de interesse usa SEMPRE o que foi buscado de fato.
+  const [lastApplied, setLastApplied] = useState<FilterValues | null>(null);
+  const [interest, setInterest] = useState<"idle" | "sending" | "done" | "error">(
+    "idle",
+  );
+  // undefined = ainda carregando a sessão; null = deslogado.
+  const [sessionUser, setSessionUser] = useState<User | null | undefined>(undefined);
 
   const label =
     lang === "en"
@@ -123,6 +135,13 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
           openPurpose: "Open purpose",
           water: "Water",
           loading: "Loading listings…",
+          interestTitle: "Want a heads-up when land like this arrives?",
+          interestCta: "Notify me when it appears",
+          interestDone:
+            "Noted. We will let you know when land like this shows up in your region.",
+          interestError:
+            "We could not register your interest right now. Please try again later.",
+          interestSignIn: "Sign in to get notified",
         }
       : {
           title: "Explorar terras",
@@ -149,6 +168,13 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
           openPurpose: "Finalidade aberta",
           water: "Água",
           loading: "Carregando anúncios…",
+          interestTitle: "Quer ser avisado quando entrar terra assim?",
+          interestCta: "Avisar quando aparecer",
+          interestDone:
+            "Anotado. Avisamos quando aparecer terra assim na sua região.",
+          interestError:
+            "Não foi possível registrar agora. Tente de novo mais tarde.",
+          interestSignIn: "Entrar para ser avisado",
         };
 
   // Same IBGE municipality pattern used by ListingForm: fetch once per UF,
@@ -175,8 +201,29 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
   const municipalities = Array.isArray(muniEntry) ? muniEntry : [];
   const muniFailed = muniEntry === "error";
 
+  // Sessão do navegador, no mesmo padrão do AccountDashboard: lazy, com
+  // queueMicrotask no caminho síncrono (regra react-hooks/set-state-in-effect).
+  useEffect(() => {
+    const supabase = getSupabase();
+    if (!supabase) {
+      queueMicrotask(() => setSessionUser(null));
+      return;
+    }
+    supabase.auth.getSession().then(({ data }) => {
+      setSessionUser(data.session?.user ?? null);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setSessionUser(session?.user ?? null);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
   function load(f: FilterValues) {
     setLoading(true);
+    // Cada busca nova zera o sub-bloco de interesse e grava os filtros que
+    // REALMENTE foram aplicados (o formulário pode divergir depois).
+    setLastApplied(f);
+    setInterest("idle");
     browseListings({
       state: f.uf || undefined,
       municipality: f.muni || undefined,
@@ -209,6 +256,27 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
     setMinHa("");
     setMaxHa("");
     load({ uf: "", muni: "", purpose: "", minHa: "", maxHa: "" });
+  }
+
+  function submitInterest() {
+    if (!lastApplied?.uf || interest === "sending") return;
+    setInterest("sending");
+    registerRegionInterest({
+      state: lastApplied.uf,
+      municipality: lastApplied.muni || null,
+      purpose: lastApplied.purpose || null,
+    }).then((res) => {
+      if (res.ok) {
+        setInterest("done");
+      } else if (res.error === "not_signed_in") {
+        // Sessão expirou entre o carregamento e o clique: troca para o CTA
+        // de entrar em vez de mostrar um erro genérico.
+        setSessionUser(null);
+        setInterest("idle");
+      } else {
+        setInterest("error");
+      }
+    });
   }
 
   // PURPOSE_OPEN não está em purposeOptions (regra 5): o rótulo é traduzido
@@ -367,6 +435,39 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
             >
               {label.clearFilters}
             </button>
+            {/* Interesse por região: só quando a ÚLTIMA busca aplicada tinha
+                UF (interesse por região exige região). */}
+            {lastApplied?.uf && (
+              <div className="mx-auto mt-8 max-w-md border-t border-deep/10 pt-6">
+                <p className="text-sm font-semibold text-deep">{label.interestTitle}</p>
+                {interest === "done" ? (
+                  <p className="mt-3 rounded-xl bg-accent/20 px-4 py-2.5 text-sm font-semibold text-deep">
+                    {label.interestDone}
+                  </p>
+                ) : sessionUser === null ? (
+                  <Link
+                    href="/entrar"
+                    className="mt-3 inline-block rounded-full bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-primary-dark"
+                  >
+                    {label.interestSignIn}
+                  </Link>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={submitInterest}
+                      disabled={interest === "sending"}
+                      className="mt-3 rounded-full bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-primary-dark disabled:cursor-not-allowed"
+                    >
+                      {label.interestCta}
+                    </button>
+                    {interest === "error" && (
+                      <p className="mt-2 text-sm text-deep/60">{label.interestError}</p>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
           </div>
         ) : (
           <>

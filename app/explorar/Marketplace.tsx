@@ -6,6 +6,7 @@ import { CheckCircle2, Droplet, Image as ImageIcon, MapPin, Search } from "lucid
 import { useLanguage, type AppLang } from "@/lib/language-context";
 import { UFS } from "@/lib/appraisal-data";
 import { listingPath } from "@/lib/listing-slug";
+import { PURPOSE_OPEN } from "@/lib/purpose-open";
 import { sortOptionsByLabel } from "@/lib/sort-options";
 import { browseListings, type BrowseListing } from "./actions";
 
@@ -118,6 +119,8 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
           photoSoon: "Photo coming soon",
           photoAlt: (title: string) => `Photo of ${title}`,
           perYear: "/ha/yr",
+          openPrice: "Open to proposals",
+          openPurpose: "Open purpose",
           water: "Water",
           loading: "Loading listings…",
         }
@@ -142,6 +145,8 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
           photoSoon: "Foto em breve",
           photoAlt: (title: string) => `Foto de ${title}`,
           perYear: "/ha/ano",
+          openPrice: "Aberto a propostas",
+          openPurpose: "Finalidade aberta",
           water: "Água",
           loading: "Carregando anúncios…",
         };
@@ -206,8 +211,12 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
     load({ uf: "", muni: "", purpose: "", minHa: "", maxHa: "" });
   }
 
+  // PURPOSE_OPEN não está em purposeOptions (regra 5): o rótulo é traduzido
+  // aqui mesmo, para nunca vazar o value cru "aberta_a_propostas" na tela.
   const purposeLabel = (v: string) =>
-    t.waitlist.purposeOptions.find((o) => o.value === v)?.label ?? v;
+    v === PURPOSE_OPEN
+      ? label.openPurpose
+      : t.waitlist.purposeOptions.find((o) => o.value === v)?.label ?? v;
 
   return (
     <div>
@@ -410,22 +419,25 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
                         checkedAt={l.car_checked_at}
                         lang={lang}
                       />
-                      {(l.price_per_ha_year || l.has_water) && (
-                        <div className="flex items-center gap-3 pt-1 text-sm">
-                          {l.price_per_ha_year && (
-                            <span className="font-bold text-deep">
-                              R$ {l.price_per_ha_year.toLocaleString("pt-BR")}
-                              <span className="font-normal text-deep/50">{label.perYear}</span>
-                            </span>
-                          )}
-                          {l.has_water && (
-                            <span className="inline-flex items-center gap-1 text-primary">
-                              <Droplet className="h-3.5 w-3.5" aria-hidden="true" />
-                              {label.water}
-                            </span>
-                          )}
-                        </div>
-                      )}
+                      {/* Preço null é escolha do dono ("aberto a propostas"),
+                          não campo faltando: a faixa aparece sempre. Checagem
+                          explícita com == null para não engolir um preço 0. */}
+                      <div className="flex items-center gap-3 pt-1 text-sm">
+                        {l.price_per_ha_year == null ? (
+                          <span className="font-bold text-deep">{label.openPrice}</span>
+                        ) : (
+                          <span className="font-bold text-deep">
+                            R$ {l.price_per_ha_year.toLocaleString("pt-BR")}
+                            <span className="font-normal text-deep/50">{label.perYear}</span>
+                          </span>
+                        )}
+                        {l.has_water && (
+                          <span className="inline-flex items-center gap-1 text-primary">
+                            <Droplet className="h-3.5 w-3.5" aria-hidden="true" />
+                            {label.water}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </Link>
                 </li>

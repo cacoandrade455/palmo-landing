@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { content } from "@/lib/content";
 import { listingIdFromParam, listingPath } from "@/lib/listing-slug";
+import { PURPOSE_OPEN } from "@/lib/purpose-open";
 import { siteConfig } from "@/lib/site-config";
 import { getServerSupabase } from "@/lib/supabase-server";
 import { getListing, type ListingDetailData } from "./actions";
@@ -14,6 +15,11 @@ type Params = Promise<{ id: string }>;
 /** "45 ha de cacau em Mutuípe, BA" — rótulos PT (idioma principal do SEO). */
 function seoHeadline(l: ListingDetailData): string {
   const pt = content.pt;
+  const ha = l.hectares.toLocaleString("pt-BR");
+  // Finalidade aberta não tem "uso" a cravar: a frase muda de preposição
+  // ("com finalidade aberta") para continuar natural, sem vazar o value cru.
+  if (l.purpose === PURPOSE_OPEN)
+    return `${ha} ha com finalidade aberta em ${l.municipality}, ${l.state}`;
   const cropLabel = l.crop
     ? pt.appraiser.crops[l.purpose]?.find((c) => c.value === l.crop)?.label
     : undefined;
@@ -21,7 +27,6 @@ function seoHeadline(l: ListingDetailData): string {
     pt.waitlist.purposeOptions.find((o) => o.value === l.purpose)?.label ??
     l.purpose;
   const uso = (cropLabel ?? purposeLabel).toLowerCase();
-  const ha = l.hectares.toLocaleString("pt-BR");
   return `${ha} ha de ${uso} em ${l.municipality}, ${l.state}`;
 }
 

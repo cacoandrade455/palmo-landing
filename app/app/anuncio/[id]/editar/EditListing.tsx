@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Archive, CheckCircle2, Eye, Pause, Play } from "lucide-react";
 
 import { useLanguage } from "@/lib/language-context";
-import { UFS } from "@/lib/appraisal-data";
+import { UFS, estimateLease, formatBRL } from "@/lib/appraisal-data";
+import { pricesUpdatedLabel } from "@/lib/prices";
+import { PURPOSE_OPEN } from "@/lib/purpose-open";
 import { sortOptionsByLabel } from "@/lib/sort-options";
 import { CAR_FORMATO_EXEMPLO, parseCar } from "@/lib/car-checks";
 import { useMunicipios } from "@/app/app/anunciar/use-municipios";
@@ -42,6 +44,9 @@ export function EditListing({ listing }: { listing: ListingParaEditar }) {
   const [preco, setPreco] = useState(
     listing.price_per_ha_year == null ? "" : String(listing.price_per_ha_year),
   );
+  // A.1 — preço "Aberto a propostas". Anúncio sem preço gravado nasce com o
+  // toggle marcado; desmarcar devolve o campo para digitação.
+  const [precoAberto, setPrecoAberto] = useState(listing.price_per_ha_year == null);
   const [status, setStatus] = useState(listing.status);
   const [salvando, setSalvando] = useState(false);
   const [salvo, setSalvo] = useState(false);
@@ -77,8 +82,14 @@ export function EditListing({ listing }: { listing: ListingParaEditar }) {
     listing.municipality !== muniSel ||
     Number(listing.hectares) !== Number(hectares);
 
+  // Preço compara null-vs-valor de forma explícita: "aberto a propostas" (null)
+  // e "R$ 0" são coisas diferentes, e o toggle marcado significa que o submit
+  // vai gravar null (input desabilitado fica fora do FormData).
+  const precoOriginal =
+    listing.price_per_ha_year == null ? null : Number(listing.price_per_ha_year);
+  const precoNovo = precoAberto || preco.trim() === "" ? null : Number(preco);
   const mexeuNoContrato =
-    Number(listing.price_per_ha_year ?? 0) !== Number(preco || 0) ||
+    precoOriginal !== precoNovo ||
     Number(listing.hectares) !== Number(hectares) ||
     listing.purpose !== purposeSel;
 
@@ -99,6 +110,12 @@ export function EditListing({ listing }: { listing: ListingParaEditar }) {
           crop: "Specific crop (optional)",
           allCrops: "All / not sure",
           price: "Expected price (R$/ha/year, optional)",
+          priceOpen: "Open to proposals",
+          priceOpenHint:
+            "Let producers propose the value. The real price is set by the proposal.",
+          purposeOpen: "Open to proposals (producers propose the use)",
+          rangeInfo: (use: string, min: string, max: string) =>
+            `In your region, land for ${use} usually earns between ${min} and ${max} per hectare per year (public market sources, updated ${pricesUpdatedLabel("en")}).`,
           description: "Description (optional)",
           water: "Has water source",
           car: "CAR number (optional)",
@@ -159,6 +176,12 @@ export function EditListing({ listing }: { listing: ListingParaEditar }) {
           crop: "Cultura específica (opcional)",
           allCrops: "Todas / não sei",
           price: "Preço esperado (R$/ha/ano, opcional)",
+          priceOpen: "Aberto a propostas",
+          priceOpenHint:
+            "Deixe que os produtores proponham o valor. Quem define o preço de verdade é a proposta.",
+          purposeOpen: "Aberta a propostas (produtores propõem o uso)",
+          rangeInfo: (use: string, min: string, max: string) =>
+            `Na sua região, terras para ${use} costumam render entre ${min} e ${max} por hectare por ano (fontes públicas de mercado, atualizadas em ${pricesUpdatedLabel("pt")}).`,
           description: "Descrição (opcional)",
           water: "Tem água",
           car: "Número do CAR (opcional)",
@@ -204,6 +227,22 @@ export function EditListing({ listing }: { listing: ListingParaEditar }) {
           carConvite: "Confira o CAR para ganhar o selo “CAR ativo no SICAR”.",
           conferidoEm: (d: string) => `Conferido em ${d}`,
         };
+
+  // A.3 — faixa informativa, derivada em render (estimateLease é síncrono e
+  // barato, então nada de setState em effect). Só existe com o toggle de preço
+  // marcado, UF escolhida, finalidade real e faixa REGIONAL: o fallback
+  // nacional não é "sua região", e faixa sem fonte regional não aparece.
+  const faixa = (() => {
+    if (!precoAberto || !ufSel || !purposeSel || purposeSel === PURPOSE_OPEN) return null;
+    const est = estimateLease(purposeSel, ufSel, cropSel || undefined);
+    if (est.kind !== "range" || est.fallback) return null;
+    const uso = w.purposeOptions.find((o) => o.value === purposeSel)?.label ?? purposeSel;
+    return label.rangeInfo(
+      uso.toLocaleLowerCase(lang === "en" ? "en" : "pt-BR"),
+      formatBRL(est.minPerHa),
+      formatBRL(est.maxPerHa),
+    );
+  })();
 
   async function salvar(form: HTMLFormElement) {
     setErro(null);
@@ -439,6 +478,9 @@ export function EditListing({ listing }: { listing: ListingParaEditar }) {
             <label htmlFor="purpose" className="text-sm font-semibold text-deep">{label.purpose}</label>
             <select id="purpose" name="purpose" required value={purposeSel} onChange={(e) => { setPurposeSel(e.target.value); setCropSel(""); }} className={inputCls}>
               <option value="" disabled>{label.selectPurpose}</option>
+              {/* A.2 — finalidade aberta vem PRIMEIRO, antes das ordenadas.
+                  Valor de aplicação (lib/purpose-open.ts), não de content.ts. */}
+              <option value={PURPOSE_OPEN}>{label.purposeOpen}</option>
               {sortOptionsByLabel(w.purposeOptions).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </div>
@@ -456,7 +498,45 @@ export function EditListing({ listing }: { listing: ListingParaEditar }) {
 
         <div>
           <label htmlFor="price_per_ha_year" className="text-sm font-semibold text-deep">{label.price}</label>
-          <input id="price_per_ha_year" name="price_per_ha_year" type="number" min="0" step="any" value={preco} onChange={(e) => setPreco(e.target.value)} className={inputCls} />
+          {/* A.1 — com o toggle marcado, o input fica desabilitado e vazio:
+              fora do FormData, a action grava null (comportamento já existente
+              da action). O estado `preco` sobrevive ao toggle, então desmarcar
+              devolve o valor que estava gravado ou digitado. */}
+          <input
+            id="price_per_ha_year"
+            name="price_per_ha_year"
+            type="number"
+            min="0"
+            step="any"
+            value={precoAberto ? "" : preco}
+            onChange={(e) => setPreco(e.target.value)}
+            disabled={precoAberto}
+            className={`${inputCls} disabled:opacity-60`}
+          />
+          <label className="mt-2 flex cursor-pointer items-start gap-2 rounded-xl border border-deep/15 px-4 py-3">
+            <input
+              type="checkbox"
+              checked={precoAberto}
+              onChange={(e) => setPrecoAberto(e.target.checked)}
+              className="mt-0.5 accent-primary"
+            />
+            <span className="text-sm font-semibold text-deep">
+              {label.priceOpen}
+              <span className="mt-0.5 block text-xs font-normal leading-relaxed text-deep/60">
+                {label.priceOpenHint}
+              </span>
+            </span>
+          </label>
+          {faixa && (
+            <div className="mt-2">
+              <p className="rounded-xl bg-accent/20 px-4 py-2.5 text-sm font-semibold text-deep">
+                {faixa}
+              </p>
+              <p className="mt-1.5 text-xs leading-relaxed text-deep/60">
+                {t.appraiser.disclaimer}
+              </p>
+            </div>
+          )}
         </div>
 
         <div>

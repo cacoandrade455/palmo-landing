@@ -48,7 +48,7 @@ const PT: Copy = {
   busy: "Salvando…",
   checking: "Validando o link…",
   noSession:
-    "Este link de recuperação não é mais válido — ele expira depois de um tempo e só pode ser usado uma vez.",
+    "Este link de recuperação não é mais válido: ele expira depois de um tempo e só pode ser usado uma vez.",
   askAgain: "Pedir um link novo",
   okTitle: "Senha alterada",
   okBody: "Pronto. Sua senha nova já está valendo.",
@@ -67,7 +67,7 @@ const EN: Copy = {
   busy: "Saving…",
   checking: "Checking the link…",
   noSession:
-    "This recovery link is no longer valid — it expires after a while and can only be used once.",
+    "This recovery link is no longer valid: it expires after a while and can only be used once.",
   askAgain: "Request a new link",
   okTitle: "Password changed",
   okBody: "Done. Your new password is active.",

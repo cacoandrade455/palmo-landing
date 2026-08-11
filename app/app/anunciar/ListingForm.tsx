@@ -133,7 +133,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         varietyAll: "All / not sure",
         price: "Expected price (R$/ha/year, optional)",
         priceSuggested:
-          "Suggested by the Palmo calculator (official sources) — adjust as you like.",
+          "Suggested by the Palmo calculator (official sources). Adjust as you like.",
         priceOpen: "Open to proposals",
         priceOpenHint:
           "Let producers propose the value. The real price is set by the proposal.",
@@ -150,10 +150,10 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         carHint:
           "We check it against the official SICAR database. If the property comes back active, your listing gets the “CAR active on SICAR” badge.",
         carUnknown: "We don't recognise this format.",
-        carExpected: "Have another look — it should look like",
+        carExpected: "Have another look. It should look like",
         matricula: "Property record at the CRI (optional)",
         matriculaHint:
-          "The Palmo standard contract requires the land registry (CRI) record number — you can also fill it in later, in the draft.",
+          "The Palmo standard contract requires the land registry (CRI) record number. You can also fill it in later, in the draft.",
         saveDraft: "Save as draft",
         publish: "Publish listing",
         submitting: "Saving…",
@@ -184,7 +184,7 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         varietyAll: "Todas / não sei",
         price: "Preço esperado (R$/ha/ano, opcional)",
         priceSuggested:
-          "Sugerido pela calculadora Palmo (fontes oficiais) — ajuste como quiser.",
+          "Sugerido pela calculadora Palmo (fontes oficiais). Ajuste como quiser.",
         priceOpen: "Aberto a propostas",
         priceOpenHint:
           "Deixe que os produtores proponham o valor. Quem define o preço de verdade é a proposta.",
@@ -201,10 +201,10 @@ export function ListingForm({ prefill }: { prefill?: ListingPrefill }) {
         carHint:
           "A gente confere na base oficial do SICAR. Se o imóvel voltar como ativo, seu anúncio recebe o selo “CAR ativo no SICAR”.",
         carUnknown: "Não reconhecemos esse formato.",
-        carExpected: "Dá uma conferida — ele costuma ser assim:",
+        carExpected: "Dá uma conferida. Ele costuma ser assim:",
         matricula: "Matrícula do imóvel no CRI (opcional)",
         matriculaHint:
-          "O contrato padrão Palmo exige a matrícula do Cartório de Registro de Imóveis — dá para preencher depois, na minuta.",
+          "O contrato padrão Palmo exige a matrícula do Cartório de Registro de Imóveis. Dá para preencher depois, na minuta.",
         saveDraft: "Salvar rascunho",
         publish: "Publicar anúncio",
         submitting: "Salvando…",

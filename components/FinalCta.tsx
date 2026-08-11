@@ -16,14 +16,14 @@ type Copy = {
 
 const CTA_PT: Copy = {
   slogan: "Cada Palmo de terra produzindo.",
-  support: "Grátis até fechar negócio — para os dois lados.",
+  support: "Grátis até fechar negócio, para os dois lados.",
   ctaList: "Anunciar minha terra",
   ctaBrowse: "Explorar terras",
 };
 
 const CTA_EN: Copy = {
   slogan: "Every Palmo of land producing.",
-  support: "Free until the deal closes — for both sides.",
+  support: "Free until the deal closes, for both sides.",
   ctaList: "List my land",
   ctaBrowse: "Explore land",
 };

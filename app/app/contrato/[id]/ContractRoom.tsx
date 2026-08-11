@@ -165,7 +165,7 @@ export function ContractRoom({ id }: { id: string }) {
           waitOther: "Waiting for the other side to respond.",
           fieldsTitle: "Fields to fill in",
           fieldsHint:
-            "Unfilled placeholders stay visible in the draft as {{FIELD}}. Fill them in and save — each save creates a new version.",
+            "Unfilled placeholders stay visible in the draft as {{FIELD}}. Fill them in and save. Each save creates a new version.",
           saveFields: "Save fields (new version)",
           minTermErr: (min: number) =>
             `Term below the legal minimum: for this land use, Decree 59.566/66 (art. 13) requires at least ${min} years.`,
@@ -212,7 +212,7 @@ export function ContractRoom({ id }: { id: string }) {
           waitOther: "Aguardando resposta da outra parte.",
           fieldsTitle: "Campos a preencher",
           fieldsHint:
-            "Placeholders sem dado ficam visíveis na minuta como {{CAMPO}}. Preencha e salve — cada salvamento gera uma nova versão.",
+            "Placeholders sem dado ficam visíveis na minuta como {{CAMPO}}. Preencha e salve. Cada salvamento gera uma nova versão.",
           saveFields: "Salvar campos (nova versão)",
           minTermErr: (min: number) =>
             `Prazo abaixo do mínimo legal: para esta finalidade, o Decreto 59.566/66 (art. 13) exige pelo menos ${min} anos.`,

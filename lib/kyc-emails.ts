@@ -81,11 +81,11 @@ export function emailAprovado(to: string, automatico: boolean): Mail {
     automatico
       ? "A conferência foi automática: os dados do CNPJ batem com o cadastro público da Receita Federal."
       : "A conferência foi feita pela nossa equipe.",
-    "Anúncios de contas verificadas aparecem com o selo para quem procura terra — é o que faz o outro lado responder.",
+    "Anúncios de contas verificadas aparecem com o selo para quem procura terra. É o que faz o outro lado responder.",
   ];
   return {
     to,
-    subject: "Palmo — identidade verificada",
+    subject: "Palmo · identidade verificada",
     html: molde({
       titulo: "Identidade verificada",
       linhas,
@@ -104,7 +104,7 @@ export function emailRejeitado(to: string, motivo: string): Mail {
   ];
   return {
     to,
-    subject: "Palmo — sua verificação precisa de ajuste",
+    subject: "Palmo · sua verificação precisa de ajuste",
     html: molde({
       titulo: "Sua verificação precisa de ajuste",
       linhas,
@@ -136,7 +136,7 @@ export function emailFilaAdmin(to: string, itens: ItemFila[]): Mail {
     .slice(0, 15)
     .map(
       (i) =>
-        `<li style="margin:0 0 8px"><strong style="color:${COR.deep}">${escapar(i.nome)}</strong> — ${escapar(i.documento)}<br><span style="font-size:13px">${escapar(i.motivos.join(" ") || "sem motivos registrados")}</span></li>`,
+        `<li style="margin:0 0 8px"><strong style="color:${COR.deep}">${escapar(i.nome)}</strong> · ${escapar(i.documento)}<br><span style="font-size:13px">${escapar(i.motivos.join(" ") || "sem motivos registrados")}</span></li>`,
     )
     .join("");
   const linhas = [
@@ -151,8 +151,8 @@ export function emailFilaAdmin(to: string, itens: ItemFila[]): Mail {
     to,
     subject:
       total === 1
-        ? "Palmo — 1 verificação na fila"
-        : `Palmo — ${total} verificações na fila`,
+        ? "Palmo · 1 verificação na fila"
+        : `Palmo · ${total} verificações na fila`,
     html: molde({
       titulo: "Fila de verificação",
       linhas,

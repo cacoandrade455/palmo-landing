@@ -6,7 +6,7 @@ import { KycQueue } from "./KycQueue";
 import { listarDecididos, listarFila } from "./actions";
 
 export const metadata = {
-  title: "Palmo — Triagem de verificação",
+  title: "Palmo · Triagem de verificação",
 };
 
 // Fila de KYC nunca pode ser servida de cache: é dado vivo e é dado sensível.

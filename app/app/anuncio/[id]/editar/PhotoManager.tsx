@@ -35,7 +35,7 @@ export function PhotoManager({
     lang === "en"
       ? {
           titulo: "Photos",
-          ajuda: `Up to ${MAX_FOTOS_POR_ANUNCIO}. The first one is the cover — it's the photo people see when browsing.`,
+          ajuda: `Up to ${MAX_FOTOS_POR_ANUNCIO}. The first one is the cover: it's the photo people see when browsing.`,
           capa: "Cover",
           definirCapa: "Make cover",
           mover: "Move left",
@@ -46,7 +46,7 @@ export function PhotoManager({
           vazio: "No photos yet. Listings with photos get far more replies.",
           restantes: (n: number) => `${n} slot${n === 1 ? "" : "s"} left`,
           aviso:
-            "Don't include phone numbers, e-mails or signs with contact details in the images. Contact is released at closing — that's clause 3 of the Terms.",
+            "Don't include phone numbers, e-mails or signs with contact details in the images. Contact is released at closing. That's clause 3 of the Terms.",
           privacidade:
             "We strip the location data (GPS) that phones embed in photos before publishing.",
           erroGenerico: "Something went wrong. Your photos were not changed.",
@@ -62,7 +62,7 @@ export function PhotoManager({
         }
       : {
           titulo: "Fotos",
-          ajuda: `Até ${MAX_FOTOS_POR_ANUNCIO}. A primeira é a capa — é a foto que aparece para quem está procurando terra.`,
+          ajuda: `Até ${MAX_FOTOS_POR_ANUNCIO}. A primeira é a capa: é a foto que aparece para quem está procurando terra.`,
           capa: "Capa",
           definirCapa: "Tornar capa",
           mover: "Mover para a esquerda",
@@ -73,7 +73,7 @@ export function PhotoManager({
           vazio: "Nenhuma foto ainda. Anúncio com foto recebe muito mais resposta.",
           restantes: (n: number) => `${n} ${n === 1 ? "vaga" : "vagas"} restantes`,
           aviso:
-            "Não inclua telefone, e-mail nem placa com contato nas imagens. O contato é liberado no fechamento — é a cláusula 3 dos Termos.",
+            "Não inclua telefone, e-mail nem placa com contato nas imagens. O contato é liberado no fechamento. É a cláusula 3 dos Termos.",
           privacidade:
             "A gente remove a localização (GPS) que o celular grava dentro da foto antes de publicar.",
           erroGenerico: "Algo deu errado. Suas fotos não foram alteradas.",

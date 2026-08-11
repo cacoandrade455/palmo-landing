@@ -29,7 +29,7 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Definições usadas em todos os documentos da plataforma: PROPRIETÁRIO é a parte que oferece a terra — o arrendador, no contrato de arrendamento, ou o parceiro-outorgante, no contrato de parceria. PRODUTOR é a parte que toma a terra para produzir — o arrendatário ou o parceiro-outorgado.",
+          text: "Definições usadas em todos os documentos da plataforma: PROPRIETÁRIO é a parte que oferece a terra: o arrendador, no contrato de arrendamento, ou o parceiro-outorgante, no contrato de parceria. PRODUTOR é a parte que toma a terra para produzir: o arrendatário ou o parceiro-outorgado.",
         },
         {
           kind: "list",
@@ -66,7 +66,7 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Para usar as funcionalidades que envolvem negociação, a conta passa por verificação de identidade com documentos (CPF, para pessoa física, ou CNPJ e dados do responsável, para pessoa jurídica). A verificação confirma QUEM É a pessoa por trás da conta — ela não confirma a titularidade da terra anunciada, nem a exatidão das informações do anúncio.",
+          text: "Para usar as funcionalidades que envolvem negociação, a conta passa por verificação de identidade com documentos (CPF, para pessoa física, ou CNPJ e dados do responsável, para pessoa jurídica). A verificação confirma QUEM É a pessoa por trás da conta. Ela não confirma a titularidade da terra anunciada, nem a exatidão das informações do anúncio.",
         },
         {
           kind: "p",
@@ -78,7 +78,7 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "O aceite destes Termos é registrado em camadas, no momento em que cada regra passa a valer para você: no cadastro (Termos e Política de Privacidade), ao publicar um anúncio (a Taxa), ao enviar uma proposta formal (regras de conduta da seção 3) e no fechamento do negócio (termo específico da taxa). De cada aceite guardamos o documento, a versão, a data e hora, o endereço IP, o user agent e o anúncio ou negócio a que ele se refere — ver a seção 2 da Política de Privacidade.",
+          text: "O aceite destes Termos é registrado em camadas, no momento em que cada regra passa a valer para você: no cadastro (Termos e Política de Privacidade), ao publicar um anúncio (a Taxa), ao enviar uma proposta formal (regras de conduta da seção 3) e no fechamento do negócio (termo específico da taxa). De cada aceite guardamos o documento, a versão, a data e hora, o endereço IP, o user agent e o anúncio ou negócio a que ele se refere (ver a seção 2 da Política de Privacidade).",
         },
       ],
     },
@@ -88,13 +88,13 @@ export const termsPt: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "A Palmo é gratuita até o fechamento do negócio. Isso só é possível porque a plataforma remunera-se da Taxa devida quando o negócio fecha (definida na seção 5) — e porque o contato direto entre as partes é liberado no fechamento. As regras desta seção são condição essencial do uso da plataforma e cada usuário as aceita expressamente.",
+          text: "A Palmo é gratuita até o fechamento do negócio. Isso só é possível porque a plataforma remunera-se da Taxa devida quando o negócio fecha (definida na seção 5), e porque o contato direto entre as partes é liberado no fechamento. As regras desta seção são condição essencial do uso da plataforma e cada usuário as aceita expressamente.",
         },
         {
           kind: "clause",
           ref: "3.1",
           title: "Proibição de troca de contato antes do fechamento",
-          text: "É ESTRITAMENTE PROIBIDO compartilhar, solicitar ou tentar obter dados de contato pessoal — telefone, e-mail, redes sociais, endereço, links de contato direto ou qualquer outro meio de comunicação fora da plataforma — por meio do chat, da descrição do anúncio, das fotos ou de qualquer campo livre da plataforma, antes do fechamento formal do negócio.",
+          text: "É ESTRITAMENTE PROIBIDO compartilhar, solicitar ou tentar obter dados de contato pessoal (telefone, e-mail, redes sociais, endereço, links de contato direto ou qualquer outro meio de comunicação fora da plataforma) por meio do chat, da descrição do anúncio, das fotos ou de qualquer campo livre da plataforma, antes do fechamento formal do negócio.",
         },
         {
           kind: "clause",
@@ -106,13 +106,13 @@ export const termsPt: LegalDocument = {
           kind: "clause",
           ref: "3.3",
           title: "Não circunvenção",
-          text: "As partes que se conheceram por meio da Palmo não podem celebrar, por fora da plataforma, negócio sobre a mesma terra — direta ou indiretamente, em nome próprio ou de terceiros, inclusive por meio de cônjuge, companheiro, parentes, sócios ou pessoas jurídicas ligadas — pelo prazo de 12 (doze) meses contados da última interação na plataforma.",
+          text: "As partes que se conheceram por meio da Palmo não podem celebrar, por fora da plataforma, negócio sobre a mesma terra (direta ou indiretamente, em nome próprio ou de terceiros, inclusive por meio de cônjuge, companheiro, parentes, sócios ou pessoas jurídicas ligadas) pelo prazo de 12 (doze) meses contados da última interação na plataforma.",
         },
         {
           kind: "clause",
           ref: "3.4",
           title: "Cláusula penal",
-          text: "O descumprimento das cláusulas 3.1 ou 3.3 sujeita a parte infratora ao pagamento de multa equivalente ao DOBRO da Taxa que seria devida sobre o negócio, correspondente a 10% (dez por cento) do valor total do contrato firmado ou pretendido, sem prejuízo da suspensão ou do encerramento da conta. Esta multa vincula AMBAS as partes — proprietário e produtor —, ainda que a Taxa seja devida apenas pelo proprietário: quem burla a regra responde por ela. A multa é convencionada como cláusula penal, nos termos dos arts. 408 e seguintes do Código Civil, tem natureza compensatória e é proporcional ao proveito econômico do negócio que se pretendeu subtrair à plataforma. Observado o art. 412 do Código Civil, seu valor não excede o da obrigação principal; e, nos termos do art. 413, poderá ser reduzida equitativamente se a obrigação tiver sido cumprida em parte ou se o montante se mostrar manifestamente excessivo diante da natureza e da finalidade do negócio.",
+          text: "O descumprimento das cláusulas 3.1 ou 3.3 sujeita a parte infratora ao pagamento de multa equivalente ao DOBRO da Taxa que seria devida sobre o negócio, correspondente a 10% (dez por cento) do valor total do contrato firmado ou pretendido, sem prejuízo da suspensão ou do encerramento da conta. Esta multa vincula AMBAS as partes (proprietário e produtor), ainda que a Taxa seja devida apenas pelo proprietário: quem burla a regra responde por ela. A multa é convencionada como cláusula penal, nos termos dos arts. 408 e seguintes do Código Civil, tem natureza compensatória e é proporcional ao proveito econômico do negócio que se pretendeu subtrair à plataforma. Observado o art. 412 do Código Civil, seu valor não excede o da obrigação principal; e, nos termos do art. 413, poderá ser reduzida equitativamente se a obrigação tiver sido cumprida em parte ou se o montante se mostrar manifestamente excessivo diante da natureza e da finalidade do negócio.",
         },
         {
           kind: "clause",
@@ -132,7 +132,7 @@ export const termsPt: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "Quem anuncia declara ser o proprietário do imóvel ou estar autorizado a oferecê-lo, e é o único responsável pela veracidade e pela atualização das informações publicadas — localização, área, finalidade, cultura, presença de água, preço pretendido, registro no CAR, matrícula, fotos e descrição.",
+          text: "Quem anuncia declara ser o proprietário do imóvel ou estar autorizado a oferecê-lo, e é o único responsável pela veracidade e pela atualização das informações publicadas: localização, área, finalidade, cultura, presença de água, preço pretendido, registro no CAR, matrícula, fotos e descrição.",
         },
         {
           kind: "p",
@@ -154,7 +154,7 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Chama-se TAXA (a “Taxa”) a quantia devida à Palmo pelo PROPRIETÁRIO quando um negócio é fechado por meio da plataforma. A Taxa corresponde a 5% (cinco por cento) sobre o valor total do contrato celebrado entre as partes e é cobrada proporcionalmente a cada pagamento anual — ou seja, 5% de cada parcela anual, à medida que o contrato for sendo pago.",
+          text: "Chama-se TAXA (a “Taxa”) a quantia devida à Palmo pelo PROPRIETÁRIO quando um negócio é fechado por meio da plataforma. A Taxa corresponde a 5% (cinco por cento) sobre o valor total do contrato celebrado entre as partes e é cobrada proporcionalmente a cada pagamento anual: ou seja, 5% de cada parcela anual, à medida que o contrato for sendo pago.",
         },
         {
           kind: "p",
@@ -188,7 +188,7 @@ export const termsPt: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "A calculadora pública e os retratos regionais apresentam ESTIMATIVAS construídas a partir de fontes públicas — entre elas IBGE, CONAB, Embrapa e CEPEA — e de referências públicas de mercado. Os valores são faixas de referência regionais, não avaliação individual do seu imóvel.",
+          text: "A calculadora pública e os retratos regionais apresentam ESTIMATIVAS construídas a partir de fontes públicas (entre elas IBGE, CONAB, Embrapa e CEPEA) e de referências públicas de mercado. Os valores são faixas de referência regionais, não avaliação individual do seu imóvel.",
         },
         {
           kind: "p",
@@ -232,7 +232,7 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "O conteúdo que você publica — fotos, descrições e demais informações do anúncio — continua seu. Ao publicá-lo, você concede à Palmo licença não exclusiva e gratuita para exibi-lo na plataforma e em materiais de divulgação do próprio anúncio, enquanto ele estiver ativo.",
+          text: "O conteúdo que você publica (fotos, descrições e demais informações do anúncio) continua seu. Ao publicá-lo, você concede à Palmo licença não exclusiva e gratuita para exibi-lo na plataforma e em materiais de divulgação do próprio anúncio, enquanto ele estiver ativo.",
         },
       ],
     },
@@ -264,7 +264,7 @@ export const termsPt: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "A Palmo pode suspender ou encerrar contas, com aviso sempre que possível, em caso de violação destes Termos — especialmente das cláusulas 3.1 e 3.3 —, de fraude, de informação falsa, de risco à segurança da plataforma ou de determinação legal.",
+          text: "A Palmo pode suspender ou encerrar contas, com aviso sempre que possível, em caso de violação destes Termos (especialmente das cláusulas 3.1 e 3.3), de fraude, de informação falsa, de risco à segurança da plataforma ou de determinação legal.",
         },
         {
           kind: "p",
@@ -286,7 +286,7 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Alterações materiais — que afetem seus direitos, suas obrigações ou a estrutura da taxa — serão comunicadas com antecedência razoável e exigirão NOVA ACEITAÇÃO no seu próximo acesso. Continuar usando a plataforma após alterações não materiais significa concordar com elas.",
+          text: "Alterações materiais (que afetem seus direitos, suas obrigações ou a estrutura da taxa) serão comunicadas com antecedência razoável e exigirão NOVA ACEITAÇÃO no seu próximo acesso. Continuar usando a plataforma após alterações não materiais significa concordar com elas.",
         },
       ],
     },
@@ -314,7 +314,7 @@ export const termsPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Para os demais assuntos — dúvidas sobre a plataforma, denúncias de violação destes Termos e pedidos de encerramento de conta —, use os canais de atendimento indicados no site, incluindo o WhatsApp no rodapé.",
+          text: "Para os demais assuntos (dúvidas sobre a plataforma, denúncias de violação destes Termos e pedidos de encerramento de conta), use os canais de atendimento indicados no site, incluindo o WhatsApp no rodapé.",
         },
       ],
     },
@@ -340,7 +340,7 @@ export const termsEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Definitions used across all platform documents: the LANDOWNER is the party offering the land — the lessor, in a lease contract, or the granting partner, in a partnership contract. The PRODUCER is the party taking the land to work it — the lessee or the grantee partner.",
+          text: "Definitions used across all platform documents: the LANDOWNER is the party offering the land: the lessor, in a lease contract, or the granting partner, in a partnership contract. The PRODUCER is the party taking the land to work it: the lessee or the grantee partner.",
         },
         {
           kind: "list",
@@ -377,7 +377,7 @@ export const termsEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "To use the features that involve negotiation, the account goes through identity verification with documents (CPF for individuals, or CNPJ and the details of the responsible person for companies). Verification confirms WHO is behind the account — it does not confirm title to the advertised land, nor the accuracy of the listing information.",
+          text: "To use the features that involve negotiation, the account goes through identity verification with documents (CPF for individuals, or CNPJ and the details of the responsible person for companies). Verification confirms WHO is behind the account. It does not confirm title to the advertised land, nor the accuracy of the listing information.",
         },
         {
           kind: "p",
@@ -389,7 +389,7 @@ export const termsEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Acceptance of these Terms is recorded in layers, at the moment each rule starts to apply to you: at sign-up (Terms and Privacy Policy), when publishing a listing (success fee), when sending a formal offer (the conduct rules in section 3) and at closing (the specific fee acceptance). For each acceptance we keep the document, the version, the date and time, the IP address, the user agent and the listing or deal it refers to — see section 2 of the Privacy Policy.",
+          text: "Acceptance of these Terms is recorded in layers, at the moment each rule starts to apply to you: at sign-up (Terms and Privacy Policy), when publishing a listing (success fee), when sending a formal offer (the conduct rules in section 3) and at closing (the specific fee acceptance). For each acceptance we keep the document, the version, the date and time, the IP address, the user agent and the listing or deal it refers to (see section 2 of the Privacy Policy).",
         },
       ],
     },
@@ -399,13 +399,13 @@ export const termsEn: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "Palmo is free until the deal closes. That is only possible because the platform is paid through a success fee charged when the deal happens — and because direct contact between the parties is released at closing. The rules in this section are an essential condition of using the platform and every user expressly accepts them.",
+          text: "Palmo is free until the deal closes. That is only possible because the platform is paid through a success fee charged when the deal happens, and because direct contact between the parties is released at closing. The rules in this section are an essential condition of using the platform and every user expressly accepts them.",
         },
         {
           kind: "clause",
           ref: "3.1",
           title: "Ban on exchanging contact details before closing",
-          text: "It is STRICTLY FORBIDDEN to share, request or attempt to obtain personal contact details — phone number, e-mail, social media, address, direct contact links or any other means of communication outside the platform — through the chat, the listing description, the photos or any free-text field of the platform, before the formal closing of the deal.",
+          text: "It is STRICTLY FORBIDDEN to share, request or attempt to obtain personal contact details (phone number, e-mail, social media, address, direct contact links or any other means of communication outside the platform) through the chat, the listing description, the photos or any free-text field of the platform, before the formal closing of the deal.",
         },
         {
           kind: "clause",
@@ -417,13 +417,13 @@ export const termsEn: LegalDocument = {
           kind: "clause",
           ref: "3.3",
           title: "Non-circumvention",
-          text: "Parties who met through Palmo may not close, outside the platform, a deal concerning the same land — directly or indirectly, in their own name or through third parties, including spouses, partners, relatives, business associates or related legal entities — for a period of 12 (twelve) months counted from the last interaction on the platform.",
+          text: "Parties who met through Palmo may not close, outside the platform, a deal concerning the same land (directly or indirectly, in their own name or through third parties, including spouses, partners, relatives, business associates or related legal entities) for a period of 12 (twelve) months counted from the last interaction on the platform.",
         },
         {
           kind: "clause",
           ref: "3.4",
           title: "Penalty clause",
-          text: "Breach of clauses 3.1 or 3.3 subjects the infringing party to a penalty equal to TWICE the success fee that would be due on the deal, corresponding to 10% (ten per cent) of the total value of the contract signed or intended, without prejudice to the suspension or termination of the account. This penalty binds BOTH parties — landowner and producer — even though the success fee is owed by the landowner alone: whoever breaks the rule answers for it. The penalty is agreed as a penalty clause under articles 408 et seq. of the Brazilian Civil Code, is compensatory in nature and is proportional to the economic benefit of the deal that the party sought to divert from the platform. In accordance with article 412 of the Civil Code, its amount does not exceed that of the main obligation; and, under article 413, it may be reduced equitably if the obligation has been partly performed or if the amount proves manifestly excessive given the nature and purpose of the deal.",
+          text: "Breach of clauses 3.1 or 3.3 subjects the infringing party to a penalty equal to TWICE the success fee that would be due on the deal, corresponding to 10% (ten per cent) of the total value of the contract signed or intended, without prejudice to the suspension or termination of the account. This penalty binds BOTH parties (landowner and producer) even though the success fee is owed by the landowner alone: whoever breaks the rule answers for it. The penalty is agreed as a penalty clause under articles 408 et seq. of the Brazilian Civil Code, is compensatory in nature and is proportional to the economic benefit of the deal that the party sought to divert from the platform. In accordance with article 412 of the Civil Code, its amount does not exceed that of the main obligation; and, under article 413, it may be reduced equitably if the obligation has been partly performed or if the amount proves manifestly excessive given the nature and purpose of the deal.",
         },
         {
           kind: "clause",
@@ -443,7 +443,7 @@ export const termsEn: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "Whoever posts a listing represents that they own the property or are authorised to offer it, and is solely responsible for the truthfulness and the updating of the published information — location, area, intended use, crop, water availability, asking price, CAR registration, title record, photos and description.",
+          text: "Whoever posts a listing represents that they own the property or are authorised to offer it, and is solely responsible for the truthfulness and the updating of the published information: location, area, intended use, crop, water availability, asking price, CAR registration, title record, photos and description.",
         },
         {
           kind: "p",
@@ -465,7 +465,7 @@ export const termsEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Once the deal closes, a success fee of 5% (five per cent) of the total value of the contract signed between the parties is due to Palmo, charged proportionally with each annual payment — that is, 5% of each annual instalment, as the contract is paid. The fee is owed by the LANDOWNER, the party offering the land.",
+          text: "Once the deal closes, a success fee of 5% (five per cent) of the total value of the contract signed between the parties is due to Palmo, charged proportionally with each annual payment: that is, 5% of each annual instalment, as the contract is paid. The fee is owed by the LANDOWNER, the party offering the land.",
         },
         {
           kind: "p",
@@ -499,7 +499,7 @@ export const termsEn: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "The public calculator and the regional profiles present ESTIMATES built from public sources — among them IBGE, CONAB, Embrapa and CEPEA — and public market references. The figures are regional reference ranges, not an individual appraisal of your property.",
+          text: "The public calculator and the regional profiles present ESTIMATES built from public sources (among them IBGE, CONAB, Embrapa and CEPEA) and public market references. The figures are regional reference ranges, not an individual appraisal of your property.",
         },
         {
           kind: "p",
@@ -543,7 +543,7 @@ export const termsEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "The content you publish — photos, descriptions and other listing information — remains yours. By publishing it, you grant Palmo a non-exclusive, royalty-free licence to display it on the platform and in materials promoting that listing, for as long as it is active.",
+          text: "The content you publish (photos, descriptions and other listing information) remains yours. By publishing it, you grant Palmo a non-exclusive, royalty-free licence to display it on the platform and in materials promoting that listing, for as long as it is active.",
         },
       ],
     },
@@ -575,7 +575,7 @@ export const termsEn: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "Palmo may suspend or terminate accounts, with notice whenever possible, in the event of breach of these Terms — particularly clauses 3.1 and 3.3 —, fraud, false information, risk to the security of the platform or legal determination.",
+          text: "Palmo may suspend or terminate accounts, with notice whenever possible, in the event of breach of these Terms (particularly clauses 3.1 and 3.3), fraud, false information, risk to the security of the platform or legal determination.",
         },
         {
           kind: "p",
@@ -597,7 +597,7 @@ export const termsEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Material changes — those affecting your rights, your obligations or the fee structure — will be announced with reasonable notice and will require A NEW ACCEPTANCE on your next visit. Continuing to use the platform after non-material changes means you agree with them.",
+          text: "Material changes (those affecting your rights, your obligations or the fee structure) will be announced with reasonable notice and will require A NEW ACCEPTANCE on your next visit. Continuing to use the platform after non-material changes means you agree with them.",
         },
       ],
     },
@@ -625,7 +625,7 @@ export const termsEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "For everything else — questions about the platform, reports of breaches of these Terms and account closure requests —, use the support channels indicated on the site, including the WhatsApp link in the footer.",
+          text: "For everything else (questions about the platform, reports of breaches of these Terms and account closure requests), use the support channels indicated on the site, including the WhatsApp link in the footer.",
         },
       ],
     },

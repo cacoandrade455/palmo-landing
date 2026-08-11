@@ -87,7 +87,7 @@ const XL: Record<
     country: "Brasil",
     bestUsesTitle: "Melhores usos para sua terra",
     seeLandTitle: "Ver terras disponíveis na sua região",
-    seeLandSub: "Anúncios ativos no seu estado — sem precisar de conta",
+    seeLandSub: "Anúncios ativos no seu estado. Sem precisar de conta.",
   },
   en: {
     year: "year",
@@ -97,7 +97,7 @@ const XL: Record<
     country: "Brazil",
     bestUsesTitle: "Best uses for your land",
     seeLandTitle: "See land available in your region",
-    seeLandSub: "Active listings in your state — no account needed",
+    seeLandSub: "Active listings in your state. No account needed.",
   },
   zh: {
     year: "年",
@@ -107,7 +107,7 @@ const XL: Record<
     country: "Brazil",
     bestUsesTitle: "Best uses for your land",
     seeLandTitle: "See land available in your region",
-    seeLandSub: "Active listings in your state — no account needed",
+    seeLandSub: "Active listings in your state. No account needed.",
   },
   fr: {
     year: "an",
@@ -117,7 +117,7 @@ const XL: Record<
     country: "Brazil",
     bestUsesTitle: "Best uses for your land",
     seeLandTitle: "See land available in your region",
-    seeLandSub: "Active listings in your state — no account needed",
+    seeLandSub: "Active listings in your state. No account needed.",
   },
   ar: {
     year: "سنة",
@@ -127,7 +127,7 @@ const XL: Record<
     country: "Brazil",
     bestUsesTitle: "Best uses for your land",
     seeLandTitle: "See land available in your region",
-    seeLandSub: "Active listings in your state — no account needed",
+    seeLandSub: "Active listings in your state. No account needed.",
   },
 };
 

@@ -66,7 +66,7 @@ export function classifyAuthError(
 
 const PT: Record<AuthErrorKey, string> = {
   email_exists:
-    "Este e-mail já tem conta na Palmo. Entre com sua senha — ou, se você criou a conta pelo Google, use “Continuar com Google”.",
+    "Este e-mail já tem conta na Palmo. Entre com sua senha. Ou, se você criou a conta pelo Google, use “Continuar com Google”.",
   invalid_credentials:
     "E-mail ou senha incorretos. Se você criou a conta pelo Google, entre por lá.",
   email_not_confirmed:
@@ -85,7 +85,7 @@ const PT: Record<AuthErrorKey, string> = {
 
 const EN: Record<AuthErrorKey, string> = {
   email_exists:
-    "This e-mail already has a Palmo account. Sign in with your password — or use “Continue with Google” if that is how you created it.",
+    "This e-mail already has a Palmo account. Sign in with your password, or use “Continue with Google” if that is how you created it.",
   invalid_credentials:
     "Wrong e-mail or password. If you created the account with Google, sign in there.",
   email_not_confirmed:

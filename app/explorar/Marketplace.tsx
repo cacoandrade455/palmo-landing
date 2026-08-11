@@ -397,7 +397,7 @@ export function Marketplace({ initialUf = "" }: { initialUf?: string }) {
                 step="any"
                 value={maxHa}
                 onChange={(e) => setMaxHa(e.target.value)}
-                placeholder="—"
+                placeholder="–"
                 className={`mt-1.5 ${inputCls}`}
               />
             </div>

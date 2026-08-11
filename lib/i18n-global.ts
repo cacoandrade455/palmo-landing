@@ -38,7 +38,7 @@ const en = {
     "Palmo connects investors to income from productive land in Brazil. We are in early access: investment structures are under legal structuring, and access opens only after verification.",
   bullet1Title: "Calculator built on official data",
   bullet1Body:
-    "Our land-value estimates use official Brazilian sources (IBGE and municipal land values) — no invented numbers.",
+    "Our land-value estimates use official Brazilian sources (IBGE and municipal land values): no invented numbers.",
   bullet2Title: "Verified land",
   bullet2Body:
     "Listings are checked against Brazil's rural environmental registry (CAR) and documentation before going live.",
@@ -47,7 +47,7 @@ const en = {
     "International investment flows through regulated Brazilian instruments, structured case by case with legal counsel.",
   ctaStart: "Start verification",
   disclaimer:
-    "Early access — investment structures under legal structuring. This page is informational only: it is not an offer of securities and no return is promised or guaranteed.",
+    "Early access: investment structures under legal structuring. This page is informational only: it is not an offer of securities and no return is promised or guaranteed.",
   inboundOnly: "Palmo operates exclusively with land and production located in Brazil.",
 
   // ── Wizard ──
@@ -206,7 +206,7 @@ const fr: GlobalDict = {
     "Palmo relie les investisseurs au revenu de terres productives au Brésil. Nous sommes en accès anticipé : les structures d'investissement sont en cours de structuration juridique, et l'accès ne s'ouvre qu'après vérification.",
   bullet1Title: "Calculateur fondé sur des données officielles",
   bullet1Body:
-    "Nos estimations de valeur foncière s'appuient sur des sources officielles brésiliennes (IBGE et valeurs foncières municipales) — aucun chiffre inventé.",
+    "Nos estimations de valeur foncière s'appuient sur des sources officielles brésiliennes (IBGE et valeurs foncières municipales) : aucun chiffre inventé.",
   bullet2Title: "Terres vérifiées",
   bullet2Body:
     "Les annonces sont contrôlées via le registre environnemental rural du Brésil (CAR) et la documentation avant publication.",
@@ -215,7 +215,7 @@ const fr: GlobalDict = {
     "L'investissement international passe par des instruments brésiliens réglementés, structurés au cas par cas avec des conseils juridiques.",
   ctaStart: "Commencer la vérification",
   disclaimer:
-    "Accès anticipé — structures d'investissement en cours de structuration juridique. Cette page est purement informative : elle ne constitue pas une offre de titres et aucun rendement n'est promis ni garanti.",
+    "Accès anticipé : structures d'investissement en cours de structuration juridique. Cette page est purement informative : elle ne constitue pas une offre de titres et aucun rendement n'est promis ni garanti.",
   inboundOnly: "Palmo opère exclusivement avec des terres et une production situées au Brésil.",
 
   kycTitle: "Vérification de l'investisseur",

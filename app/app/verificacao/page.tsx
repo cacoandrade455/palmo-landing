@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { Verification } from "./Verification";
 
 export const metadata = {
-  title: "Palmo — Verificação de identidade",
+  title: "Palmo · Verificação de identidade",
 };
 
 export default function VerificacaoPage() {

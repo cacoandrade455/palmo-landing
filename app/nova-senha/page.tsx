@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { NewPassword } from "./NewPassword";
 
 export const metadata: Metadata = {
-  title: "Nova senha — Palmo",
+  title: "Nova senha · Palmo",
   description: "Defina uma senha nova para a sua conta Palmo.",
   robots: { index: false, follow: false },
 };

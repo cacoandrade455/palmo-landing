@@ -36,14 +36,14 @@ export function PhotoPicker({
     lang === "en"
       ? {
           titulo: "Photos",
-          ajuda: `Up to ${MAX_FOTOS_POR_ANUNCIO} photos. The first one is the cover — you can reorder them after saving.`,
+          ajuda: `Up to ${MAX_FOTOS_POR_ANUNCIO} photos. The first one is the cover. You can reorder them after saving.`,
           escolher: "Choose photos",
           camera: "Take a photo",
           capa: "Cover",
           remover: "Remove",
           restantes: (n: number) => `${n} slot${n === 1 ? "" : "s"} left`,
           aviso:
-            "Don't include phone numbers, e-mails or signs with contact details in the images. Contact is released at closing — that's clause 3 of the Terms.",
+            "Don't include phone numbers, e-mails or signs with contact details in the images. Contact is released at closing. That's clause 3 of the Terms.",
           fase: {
             aguardando: "Waiting",
             enviando: "Uploading…",
@@ -66,14 +66,14 @@ export function PhotoPicker({
         }
       : {
           titulo: "Fotos",
-          ajuda: `Até ${MAX_FOTOS_POR_ANUNCIO} fotos. A primeira é a capa — você pode reordenar depois de salvar.`,
+          ajuda: `Até ${MAX_FOTOS_POR_ANUNCIO} fotos. A primeira é a capa. Você pode reordenar depois de salvar.`,
           escolher: "Escolher fotos",
           camera: "Tirar foto",
           capa: "Capa",
           remover: "Remover",
           restantes: (n: number) => `${n} ${n === 1 ? "vaga" : "vagas"} restantes`,
           aviso:
-            "Não inclua telefone, e-mail nem placa com contato nas imagens. O contato é liberado no fechamento — é a cláusula 3 dos Termos.",
+            "Não inclua telefone, e-mail nem placa com contato nas imagens. O contato é liberado no fechamento. É a cláusula 3 dos Termos.",
           fase: {
             aguardando: "Aguardando",
             enviando: "Enviando…",

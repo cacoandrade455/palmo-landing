@@ -28,7 +28,7 @@ function LangSelect({ variant = "desktop" }: { variant?: "desktop" | "menu" }) {
         >
           {APP_LANGS.map((l) => (
             <option key={l.code} value={l.code}>
-              {l.label} — {l.name}
+              {l.label} · {l.name}
             </option>
           ))}
         </select>

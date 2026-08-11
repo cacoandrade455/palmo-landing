@@ -15,7 +15,7 @@ import type { LegalDocument } from "./legal";
 export const privacyPt: LegalDocument = {
   title: "Política de Privacidade",
   intro:
-    "Esta Política explica quais dados pessoais a Palmo coleta, por que coleta, com quem compartilha e como você exerce seus direitos. Ela segue a Lei Geral de Proteção de Dados (Lei 13.709/2018 — LGPD) e o Marco Civil da Internet (Lei 12.965/2014).",
+    "Esta Política explica quais dados pessoais a Palmo coleta, por que coleta, com quem compartilha e como você exerce seus direitos. Ela segue a Lei Geral de Proteção de Dados (Lei 13.709/2018, LGPD) e o Marco Civil da Internet (Lei 12.965/2014).",
   sections: [
     {
       id: "controlador",
@@ -31,7 +31,7 @@ export const privacyPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Encarregado pelo tratamento de dados pessoais (art. 41 da LGPD) — canal para dúvidas, pedidos e reclamações: privacidade@palmo.lat.",
+          text: "Encarregado pelo tratamento de dados pessoais (art. 41 da LGPD). Canal para dúvidas, pedidos e reclamações: privacidade@palmo.lat.",
         },
       ],
     },
@@ -51,7 +51,7 @@ export const privacyPt: LegalDocument = {
             "Anúncios: município e UF, área, finalidade, cultura, presença de água, preço pretendido, número do CAR, matrícula, descrição e fotos que você publica.",
             "Mensagens e propostas: o conteúdo das conversas na plataforma, as propostas (preço, prazo e mensagem) e o status do negócio.",
             "Contratos: os blocos da minuta, comentários, propostas de redação e aprovações registradas na Sala do Contrato.",
-            "Aceites legais: documento aceito, versão, data e hora, ENDEREÇO IP e USER AGENT do dispositivo, e o contexto do aceite (o anúncio ou o negócio a que ele se refere, quando houver) — coletados como prova dos aceites feitos no cadastro, ao publicar um anúncio, ao enviar uma proposta e no fechamento.",
+            "Aceites legais: documento aceito, versão, data e hora, ENDEREÇO IP e USER AGENT do dispositivo, e o contexto do aceite (o anúncio ou o negócio a que ele se refere, quando houver), coletados como prova dos aceites feitos no cadastro, ao publicar um anúncio, ao enviar uma proposta e no fechamento.",
             "Uso e registros de acesso: data, hora, endereço IP e user agent das requisições, registrados pela infraestrutura de hospedagem e de banco de dados (Marco Civil, art. 15).",
             "Audiência: métricas agregadas de visitação, sem cookies e sem identificação individual.",
           ],
@@ -81,7 +81,7 @@ export const privacyPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Não usamos cookies de publicidade, de perfilamento comportamental ou de rastreamento entre sites. Você pode bloquear ou apagar cookies nas configurações do navegador — bloqueando os essenciais, a área logada deixa de funcionar.",
+          text: "Não usamos cookies de publicidade, de perfilamento comportamental ou de rastreamento entre sites. Você pode bloquear ou apagar cookies nas configurações do navegador. Bloqueando os essenciais, a área logada deixa de funcionar.",
         },
       ],
     },
@@ -96,16 +96,16 @@ export const privacyPt: LegalDocument = {
         {
           kind: "list",
           items: [
-            "Criar e manter sua conta e autenticar seu acesso — execução de contrato (art. 7º, V).",
-            "Publicar anúncios, viabilizar mensagens, propostas e a Sala do Contrato — execução de contrato (art. 7º, V).",
-            "Verificar identidade com documentos (KYC) — execução de contrato (art. 7º, V) e legítimo interesse na prevenção a fraudes (art. 7º, IX); quando exigido por lei, cumprimento de obrigação legal (art. 7º, II).",
-            "Liberar os dados de contato à contraparte no fechamento do negócio — execução de contrato (art. 7º, V).",
-            "Calcular e cobrar a Taxa devida à Palmo no fechamento — execução de contrato (art. 7º, V) e exercício regular de direitos (art. 7º, VI).",
-            "Registrar o aceite dos documentos legais, com IP e user agent — cumprimento de obrigação legal e exercício regular de direitos (art. 7º, II e VI).",
-            "Segurança, prevenção a fraude e apuração de infrações às regras de conduta, inclusive as cláusulas 3.1 e 3.3 dos Termos — legítimo interesse (art. 7º, IX) e exercício regular de direitos (art. 7º, VI).",
-            "Guardar registros de acesso — cumprimento de obrigação legal (art. 7º, II, c/c Marco Civil, art. 15).",
-            "Medir audiência de forma agregada para melhorar o produto — legítimo interesse (art. 7º, IX).",
-            "Enviar comunicações operacionais sobre negociações e conta — execução de contrato (art. 7º, V). Comunicações de marketing, quando houver, dependem do seu consentimento (art. 7º, I), revogável a qualquer tempo.",
+            "Criar e manter sua conta e autenticar seu acesso: execução de contrato (art. 7º, V).",
+            "Publicar anúncios, viabilizar mensagens, propostas e a Sala do Contrato: execução de contrato (art. 7º, V).",
+            "Verificar identidade com documentos (KYC): execução de contrato (art. 7º, V) e legítimo interesse na prevenção a fraudes (art. 7º, IX); quando exigido por lei, cumprimento de obrigação legal (art. 7º, II).",
+            "Liberar os dados de contato à contraparte no fechamento do negócio: execução de contrato (art. 7º, V).",
+            "Calcular e cobrar a Taxa devida à Palmo no fechamento: execução de contrato (art. 7º, V) e exercício regular de direitos (art. 7º, VI).",
+            "Registrar o aceite dos documentos legais, com IP e user agent: cumprimento de obrigação legal e exercício regular de direitos (art. 7º, II e VI).",
+            "Segurança, prevenção a fraude e apuração de infrações às regras de conduta, inclusive as cláusulas 3.1 e 3.3 dos Termos: legítimo interesse (art. 7º, IX) e exercício regular de direitos (art. 7º, VI).",
+            "Guardar registros de acesso: cumprimento de obrigação legal (art. 7º, II, c/c Marco Civil, art. 15).",
+            "Medir audiência de forma agregada para melhorar o produto: legítimo interesse (art. 7º, IX).",
+            "Enviar comunicações operacionais sobre negociações e conta: execução de contrato (art. 7º, V). Comunicações de marketing, quando houver, dependem do seu consentimento (art. 7º, I), revogável a qualquer tempo.",
           ],
         },
       ],
@@ -116,7 +116,7 @@ export const privacyPt: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "Com a CONTRAPARTE, no fechamento: quando o negócio é fechado, seu nome, telefone e e-mail são liberados à outra parte daquela negociação — e os dela, a você. Antes do fechamento, esses dados não são acessíveis à contraparte nem a terceiros: o bloqueio é técnico, aplicado no próprio banco de dados.",
+          text: "Com a CONTRAPARTE, no fechamento: quando o negócio é fechado, seu nome, telefone e e-mail são liberados à outra parte daquela negociação, e os dela, a você. Antes do fechamento, esses dados não são acessíveis à contraparte nem a terceiros: o bloqueio é técnico, aplicado no próprio banco de dados.",
         },
         {
           kind: "p",
@@ -161,7 +161,7 @@ export const privacyPt: LegalDocument = {
             "Mensagens, propostas e contratos: enquanto a conta existir e, após o encerramento, pelo prazo necessário ao exercício regular de direitos, inclusive para apurar infrações às cláusulas 3.1 e 3.3 dos Termos.",
             "Documentos de verificação de identidade: pelo tempo necessário à finalidade da verificação e aos prazos legais aplicáveis.",
             "Aceites legais (documento, versão, data, IP e user agent): enquanto durar a relação e pelos prazos de prescrição aplicáveis, por serem a prova do consentimento contratual.",
-            "Registros de acesso (data, hora, IP e user agent das requisições): hoje não mantemos base própria desses registros — eles existem nos logs da nossa infraestrutura de hospedagem e de banco de dados e ficam disponíveis pelo período técnico de retenção praticado por esses provedores. Quando a guarda for exigida, ela se dá com fundamento no art. 15 do Marco Civil da Internet e alcança os registros que estiverem sob nossa custódia, podendo ser estendida por determinação judicial.",
+            "Registros de acesso (data, hora, IP e user agent das requisições): hoje não mantemos base própria desses registros. Eles existem nos logs da nossa infraestrutura de hospedagem e de banco de dados e ficam disponíveis pelo período técnico de retenção praticado por esses provedores. Quando a guarda for exigida, ela se dá com fundamento no art. 15 do Marco Civil da Internet e alcança os registros que estiverem sob nossa custódia, podendo ser estendida por determinação judicial.",
             "Registros de eventos relevantes (cadastro, aceites legais, propostas e fechamentos): ficam na nossa base de dados enquanto a conta existir e pelo prazo necessário ao cumprimento de obrigações legais e ao exercício regular de direitos.",
           ],
         },
@@ -203,7 +203,7 @@ export const privacyPt: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Alguns pedidos podem ser recusados quando houver obrigação legal de guarda ou necessidade de exercício regular de direitos — nesses casos, explicamos o motivo. Você também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).",
+          text: "Alguns pedidos podem ser recusados quando houver obrigação legal de guarda ou necessidade de exercício regular de direitos. Nesses casos, explicamos o motivo. Você também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).",
         },
       ],
     },
@@ -219,7 +219,7 @@ export const privacyPt: LegalDocument = {
           kind: "list",
           items: [
             "segurança em nível de linha no banco de dados (Row-Level Security): cada usuário só alcança os próprios dados e o que é público;",
-            "gate de contato aplicado no banco: os dados de contato da contraparte só são devolvidos por uma função de segurança quando o negócio está com status de fechado — nem mesmo o acesso técnico direto à API contorna essa regra;",
+            "gate de contato aplicado no banco: os dados de contato da contraparte só são devolvidos por uma função de segurança quando o negócio está com status de fechado. Nem mesmo o acesso técnico direto à API contorna essa regra;",
             "criptografia em trânsito (HTTPS/TLS) em toda a plataforma;",
             "armazenamento dos documentos de verificação em área privada, com acesso restrito à pasta do próprio usuário;",
             "autenticação delegada ao Google, sem que a Palmo armazene sua senha.",
@@ -252,7 +252,7 @@ export const privacyPt: LegalDocument = {
         {
           kind: "list",
           items: [
-            "Versão 1.0 — versão inicial, publicada com a abertura do marketplace ao público.",
+            "Versão 1.0: versão inicial, publicada com a abertura do marketplace ao público.",
           ],
         },
       ],
@@ -263,7 +263,7 @@ export const privacyPt: LegalDocument = {
 export const privacyEn: LegalDocument = {
   title: "Privacy Policy",
   intro:
-    "This Policy explains which personal data Palmo collects, why we collect it, whom we share it with and how you exercise your rights. It follows the Brazilian General Data Protection Law (Law 13.709/2018 — LGPD) and the Brazilian Internet Act (Law 12.965/2014).",
+    "This Policy explains which personal data Palmo collects, why we collect it, whom we share it with and how you exercise your rights. It follows the Brazilian General Data Protection Law (Law 13.709/2018, LGPD) and the Brazilian Internet Act (Law 12.965/2014).",
   sections: [
     {
       id: "controlador",
@@ -279,7 +279,7 @@ export const privacyEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Data protection officer (article 41 of the LGPD) — channel for questions, requests and complaints: privacidade@palmo.lat.",
+          text: "Data protection officer (article 41 of the LGPD). Channel for questions, requests and complaints: privacidade@palmo.lat.",
         },
       ],
     },
@@ -299,7 +299,7 @@ export const privacyEn: LegalDocument = {
             "Listings: municipality and state, area, intended use, crop, water availability, asking price, CAR number, title record, description and photos you publish.",
             "Messages and offers: the content of conversations on the platform, the offers (price, term and message) and the status of the deal.",
             "Contracts: the draft blocks, comments, wording proposals and approvals recorded in the Contract Room.",
-            "Legal acceptances: the document accepted, its version, date and time, the IP ADDRESS and the USER AGENT of the device, and the context of the acceptance (the listing or the deal it refers to, where applicable) — collected as evidence of the acceptances made at sign-up, when publishing a listing, when sending an offer and at closing.",
+            "Legal acceptances: the document accepted, its version, date and time, the IP ADDRESS and the USER AGENT of the device, and the context of the acceptance (the listing or the deal it refers to, where applicable), collected as evidence of the acceptances made at sign-up, when publishing a listing, when sending an offer and at closing.",
             "Usage and access logs: date, time, IP address and user agent of requests, recorded by the hosting and database infrastructure (Brazilian Internet Act, article 15).",
             "Audience: aggregated visit metrics, without cookies and without individual identification.",
           ],
@@ -329,7 +329,7 @@ export const privacyEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "We use no advertising, behavioural profiling or cross-site tracking cookies. You can block or delete cookies in your browser settings — blocking the essential ones stops the signed-in area from working.",
+          text: "We use no advertising, behavioural profiling or cross-site tracking cookies. You can block or delete cookies in your browser settings. Blocking the essential ones stops the signed-in area from working.",
         },
       ],
     },
@@ -344,16 +344,16 @@ export const privacyEn: LegalDocument = {
         {
           kind: "list",
           items: [
-            "Creating and maintaining your account and authenticating your access — performance of a contract (article 7, V).",
-            "Publishing listings and enabling messages, offers and the Contract Room — performance of a contract (article 7, V).",
-            "Verifying identity with documents (KYC) — performance of a contract (article 7, V) and legitimate interest in fraud prevention (article 7, IX); where required by law, compliance with a legal obligation (article 7, II).",
-            "Releasing contact details to the counterparty when the deal closes — performance of a contract (article 7, V).",
-            "Calculating and charging the success fee — performance of a contract (article 7, V) and regular exercise of rights (article 7, VI).",
-            "Recording acceptance of the legal documents, with IP address and user agent — compliance with a legal obligation and regular exercise of rights (article 7, II and VI).",
-            "Security, fraud prevention and investigation of breaches of the rules of conduct, including clauses 3.1 and 3.3 of the Terms — legitimate interest (article 7, IX) and regular exercise of rights (article 7, VI).",
-            "Keeping access logs — compliance with a legal obligation (article 7, II, together with article 15 of the Brazilian Internet Act).",
-            "Measuring audience in aggregate to improve the product — legitimate interest (article 7, IX).",
-            "Sending operational communications about negotiations and your account — performance of a contract (article 7, V). Marketing communications, if any, depend on your consent (article 7, I), revocable at any time.",
+            "Creating and maintaining your account and authenticating your access: performance of a contract (article 7, V).",
+            "Publishing listings and enabling messages, offers and the Contract Room: performance of a contract (article 7, V).",
+            "Verifying identity with documents (KYC): performance of a contract (article 7, V) and legitimate interest in fraud prevention (article 7, IX); where required by law, compliance with a legal obligation (article 7, II).",
+            "Releasing contact details to the counterparty when the deal closes: performance of a contract (article 7, V).",
+            "Calculating and charging the success fee: performance of a contract (article 7, V) and regular exercise of rights (article 7, VI).",
+            "Recording acceptance of the legal documents, with IP address and user agent: compliance with a legal obligation and regular exercise of rights (article 7, II and VI).",
+            "Security, fraud prevention and investigation of breaches of the rules of conduct, including clauses 3.1 and 3.3 of the Terms: legitimate interest (article 7, IX) and regular exercise of rights (article 7, VI).",
+            "Keeping access logs: compliance with a legal obligation (article 7, II, together with article 15 of the Brazilian Internet Act).",
+            "Measuring audience in aggregate to improve the product: legitimate interest (article 7, IX).",
+            "Sending operational communications about negotiations and your account: performance of a contract (article 7, V). Marketing communications, if any, depend on your consent (article 7, I), revocable at any time.",
           ],
         },
       ],
@@ -364,7 +364,7 @@ export const privacyEn: LegalDocument = {
       blocks: [
         {
           kind: "p",
-          text: "With the COUNTERPARTY, at closing: when the deal closes, your name, phone number and e-mail are released to the other party in that negotiation — and theirs to you. Before closing, this data is not accessible to the counterparty or to third parties: the block is technical, enforced in the database itself.",
+          text: "With the COUNTERPARTY, at closing: when the deal closes, your name, phone number and e-mail are released to the other party in that negotiation, and theirs to you. Before closing, this data is not accessible to the counterparty or to third parties: the block is technical, enforced in the database itself.",
         },
         {
           kind: "p",
@@ -409,7 +409,7 @@ export const privacyEn: LegalDocument = {
             "Messages, offers and contracts: while the account exists and, after closure, for the period needed for the regular exercise of rights, including investigating breaches of clauses 3.1 and 3.3 of the Terms.",
             "Identity verification documents: for the time needed for the verification purpose and for the applicable legal periods.",
             "Legal acceptances (document, version, date, IP and user agent): for the duration of the relationship and the applicable limitation periods, as they are the evidence of contractual consent.",
-            "Access logs (date, time, IP address and user agent of requests): today we keep no dedicated store for these records — they live in the logs of our hosting and database infrastructure and remain available for the technical retention period those providers offer. Where retention is required, it rests on article 15 of the Brazilian Internet Act and covers the records under our custody, and may be extended by court order.",
+            "Access logs (date, time, IP address and user agent of requests): today we keep no dedicated store for these records. They live in the logs of our hosting and database infrastructure and remain available for the technical retention period those providers offer. Where retention is required, it rests on article 15 of the Brazilian Internet Act and covers the records under our custody, and may be extended by court order.",
             "Records of relevant events (sign-up, legal acceptances, offers and closings): kept in our database for as long as the account exists and for the period needed to comply with legal obligations and to exercise rights.",
           ],
         },
@@ -451,7 +451,7 @@ export const privacyEn: LegalDocument = {
         },
         {
           kind: "p",
-          text: "Some requests may be refused where there is a legal retention duty or a need for the regular exercise of rights — in those cases, we explain why. You may also file a complaint with the Brazilian National Data Protection Authority (ANPD).",
+          text: "Some requests may be refused where there is a legal retention duty or a need for the regular exercise of rights. In those cases, we explain why. You may also file a complaint with the Brazilian National Data Protection Authority (ANPD).",
         },
       ],
     },
@@ -467,7 +467,7 @@ export const privacyEn: LegalDocument = {
           kind: "list",
           items: [
             "row-level security in the database: each user only reaches their own data and what is public;",
-            "a contact gate enforced in the database: the counterparty's contact details are only returned by a security function when the deal status is closed — not even direct technical access to the API bypasses this rule;",
+            "a contact gate enforced in the database: the counterparty's contact details are only returned by a security function when the deal status is closed. Not even direct technical access to the API bypasses this rule;",
             "encryption in transit (HTTPS/TLS) across the whole platform;",
             "storage of verification documents in a private area, with access restricted to the user's own folder;",
             "authentication delegated to Google, so Palmo never stores your password.",
@@ -500,7 +500,7 @@ export const privacyEn: LegalDocument = {
         {
           kind: "list",
           items: [
-            "Version 1.0 — initial version, published when the marketplace opened to the public.",
+            "Version 1.0: initial version, published when the marketplace opened to the public.",
           ],
         },
       ],

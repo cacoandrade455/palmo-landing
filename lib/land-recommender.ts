@@ -390,15 +390,15 @@ function waterCopy(
     case "agua_sempre":
       if (water) {
         return {
-          reasonPt: "Uso que depende de água o ano todo — e você indicou ter fonte para isso.",
-          reasonEn: "A use that depends on water year-round — and you indicated you have a source for it.",
+          reasonPt: "Uso que depende de água o ano todo, e você indicou ter fonte para isso.",
+          reasonEn: "A use that depends on water year-round, and you indicated you have a source for it.",
         };
       }
       return {
         reasonPt: "Uso de valor registrado na sua região, mas depende de água garantida em qualquer clima.",
         reasonEn: "A valuable use registered in your region, but it depends on secured water in any climate.",
-        warnPt: "Requer água o ano todo (irrigação ou corpo d'água) — você indicou não ter fonte. Sem ela, priorize as opções acima.",
-        warnEn: "Requires year-round water (irrigation or a water body) — you indicated no source. Without it, prioritize the options above.",
+        warnPt: "Requer água o ano todo (irrigação ou corpo d'água). Você indicou não ter fonte. Sem ela, priorize as opções acima.",
+        warnEn: "Requires year-round water (irrigation or a water body). You indicated no source. Without it, prioritize the options above.",
       };
     case "irrigacao_semiarido":
       if (clima === "umido") {
@@ -410,15 +410,15 @@ function waterCopy(
       if (clima === "semiarido") {
         if (water) {
           return {
-            reasonPt: "Cultura de alto valor que no semiárido é irrigada — e você indicou ter fonte de água.",
-            reasonEn: "A high-value crop that is irrigated in the semi-arid — and you indicated you have a water source.",
+            reasonPt: "Cultura de alto valor que no semiárido é irrigada, e você indicou ter fonte de água.",
+            reasonEn: "A high-value crop that is irrigated in the semi-arid, and you indicated you have a water source.",
           };
         }
         return {
           reasonPt: "Vocação de alto valor da sua região, mas no semiárido depende de irrigação.",
           reasonEn: "A high-value vocation for your region, but in the semi-arid it depends on irrigation.",
-          warnPt: "No semiárido esta cultura não vinga sem irrigação — você indicou não ter fonte de água. Priorize as vocações de sequeiro.",
-          warnEn: "In the semi-arid this crop won't take without irrigation — you indicated no water source. Prioritize the rainfed vocations.",
+          warnPt: "No semiárido esta cultura não vinga sem irrigação. Você indicou não ter fonte de água. Priorize as vocações de sequeiro.",
+          warnEn: "In the semi-arid this crop won't take without irrigation. You indicated no water source. Prioritize the rainfed vocations.",
         };
       }
       return {
@@ -428,8 +428,8 @@ function waterCopy(
     case "umido_obrigatorio":
       if (clima === "semiarido") {
         return {
-          reasonPt: "Cultura de clima úmido registrada no seu estado — mas fora do alcance do semiárido.",
-          reasonEn: "A humid-climate crop registered in your state — but out of the semi-arid's reach.",
+          reasonPt: "Cultura de clima úmido registrada no seu estado, mas fora do alcance do semiárido.",
+          reasonEn: "A humid-climate crop registered in your state, but out of the semi-arid's reach.",
           warnPt: "Exige clima úmido: no semiárido não se sustenta nem com irrigação. Considere as vocações de sequeiro da sua região.",
           warnEn: "Requires a humid climate: in the semi-arid it doesn't hold up even with irrigation. Consider your region's rainfed vocations.",
         };
@@ -447,12 +447,12 @@ function waterCopy(
     case "sequeiro_semiarido_ok":
       if (clima === "semiarido") {
         const base: WaterCopy = {
-          reasonPt: "Adaptada ao sequeiro do semiárido (Embrapa) — não depende de irrigação.",
-          reasonEn: "Adapted to semi-arid rainfed farming (Embrapa) — it doesn't depend on irrigation.",
+          reasonPt: "Adaptada ao sequeiro do semiárido (Embrapa): não depende de irrigação.",
+          reasonEn: "Adapted to semi-arid rainfed farming (Embrapa): it doesn't depend on irrigation.",
         };
         if (entry.riscoInteranual) {
-          base.warnPt = "Sequeiro dependente da quadra chuvosa: a safra varia com o ano — em ano seco há risco de frustração.";
-          base.warnEn = "Rainfed and tied to the rainy season: harvests vary by year — in a dry year there is crop-failure risk.";
+          base.warnPt = "Sequeiro dependente da quadra chuvosa: a safra varia com o ano. Em ano seco há risco de frustração.";
+          base.warnEn = "Rainfed and tied to the rainy season: harvests vary by year. In a dry year there is crop-failure risk.";
         }
         return base;
       }
@@ -465,8 +465,8 @@ function waterCopy(
         return {
           reasonPt: "Sequeiro tradicional da sua região.",
           reasonEn: "Traditional rainfed cropping in your region.",
-          warnPt: "No semiárido a safra de sequeiro depende da chuva do ano — risco de frustração em ano seco.",
-          warnEn: "In the semi-arid, rainfed harvests depend on the year's rainfall — crop-failure risk in dry years.",
+          warnPt: "No semiárido a safra de sequeiro depende da chuva do ano: risco de frustração em ano seco.",
+          warnEn: "In the semi-arid, rainfed harvests depend on the year's rainfall: crop-failure risk in dry years.",
         };
       }
       return {

@@ -37,15 +37,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id: param } = await params;
   const id = listingIdFromParam(param);
-  if (!id) return { title: "Terra — Palmo" };
+  if (!id) return { title: "Terra · Palmo" };
   const res = await getListing(id);
-  if (!res.ok) return { title: "Terra — Palmo" };
+  if (!res.ok) return { title: "Terra · Palmo" };
   const l = res.listing;
 
   const title = `${seoHeadline(l)} | Palmo`;
   const description = l.description
     ? l.description.slice(0, 155)
-    : `Terra disponível para arrendar em ${l.municipality}, ${l.state}. Converse com o dono pela Palmo — grátis até fechar negócio.`;
+    : `Terra disponível para arrendar em ${l.municipality}, ${l.state}. Converse com o dono pela Palmo. Grátis até fechar negócio.`;
   const url = `${siteConfig.siteUrl}${listingPath(l)}`;
 
   return {

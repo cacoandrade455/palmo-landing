@@ -38,7 +38,7 @@ type Copy = {
 const COPY_PT: Copy = {
   eyebrow: "Marketplace",
   title: "Terras disponíveis",
-  subtitle: "Anúncios ativos agora — leia sem conta, converse com login.",
+  subtitle: "Anúncios ativos agora: leia sem conta, converse com login.",
   seeAll: "Ver todas as terras",
   yourLandTitle: "Sua terra aqui",
   yourLandBody: "Anuncie grátis e apareça para produtores do Brasil inteiro.",
@@ -60,7 +60,7 @@ const COPY_PT: Copy = {
 const COPY_EN: Copy = {
   eyebrow: "Marketplace",
   title: "Land available",
-  subtitle: "Active listings right now — browse without an account, chat with login.",
+  subtitle: "Active listings right now: browse without an account, chat with login.",
   seeAll: "See all land",
   yourLandTitle: "Your land here",
   yourLandBody: "List for free and reach producers across Brazil.",

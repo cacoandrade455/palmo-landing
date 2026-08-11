@@ -60,9 +60,9 @@ const PT: Chrome = {
   weakKnownLabel: "Usos com faixa de mercado levantada na sua região:",
   demotedTag: "requer água",
   noIncome:
-    "Sem faixa de renda de referência para esta cultura na sua região — a Palmo pode ajudar a levantar.",
+    "Sem faixa de renda de referência para esta cultura na sua região. A Palmo pode ajudar a levantar.",
   disclaimer:
-    "Não é avaliação agronômica: nada de solo, pH ou microclima. Ranqueamos apenas a vocação registrada da sua região (fontes oficiais) — não prometemos produtividade nem sucesso.",
+    "Não é avaliação agronômica: nada de solo, pH ou microclima. Ranqueamos apenas a vocação registrada da sua região (fontes oficiais). Não prometemos produtividade nem sucesso.",
 };
 
 const EN: Chrome = {
@@ -84,9 +84,9 @@ const EN: Chrome = {
   weakKnownLabel: "Uses with a surveyed market range in your region:",
   demotedTag: "needs water",
   noIncome:
-    "No reference income range for this crop in your region — Palmo can help survey it.",
+    "No reference income range for this crop in your region. Palmo can help survey it.",
   disclaimer:
-    "Not an agronomic appraisal: no soil, pH or micro-climate. We rank only your region's registered vocation (official sources) — we don't promise yield or success.",
+    "Not an agronomic appraisal: no soil, pH or micro-climate. We rank only your region's registered vocation (official sources). We don't promise yield or success.",
 };
 
 const CHROME: Record<AppLang, Chrome> = { pt: PT, en: EN, zh: EN, fr: EN, ar: EN };

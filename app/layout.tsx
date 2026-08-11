@@ -23,17 +23,17 @@ const nunito = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
-  title: "Palmo — Terra parada vira renda",
+  title: "Palmo · Terra parada vira renda",
   description:
-    "Conectamos donos de terras paradas a quem quer produzir nelas — com verificação, contrato e acompanhamento. Grátis até fechar negócio.",
+    "Conectamos donos de terras paradas a quem quer produzir nelas, com verificação, contrato e acompanhamento. Grátis até fechar negócio.",
   icons: {
     icon: "/palmo-icon.svg",
     apple: "/palmo-app-icon.png",
   },
   openGraph: {
-    title: "Palmo — Terra parada vira renda",
+    title: "Palmo · Terra parada vira renda",
     description:
-      "Conectamos donos de terras paradas a quem quer produzir nelas — com verificação, contrato e acompanhamento.",
+      "Conectamos donos de terras paradas a quem quer produzir nelas, com verificação, contrato e acompanhamento.",
     url: siteConfig.siteUrl,
     siteName: "Palmo",
     locale: "pt_BR",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Palmo — Terra parada vira renda",
+    title: "Palmo · Terra parada vira renda",
     description:
       "Conectamos donos de terras paradas a quem quer produzir nelas.",
   },

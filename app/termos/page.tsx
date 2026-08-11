@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { LegalDoc } from "@/components/LegalDoc";
 
 export const metadata: Metadata = {
-  title: "Termos de Uso — Palmo",
+  title: "Termos de Uso · Palmo",
   description:
     "Termos de Uso da plataforma Palmo: como funciona o marketplace, regras de conduta e do chat, a Taxa devida no fechamento, minutas de contrato e responsabilidades.",
 };

@@ -58,7 +58,7 @@ export function KycQueue({
           reject: "Reject",
           reasonLabel: "Reason (goes in the e-mail to the person)",
           reasonPlaceholder: "What could not be confirmed and how to fix it.",
-          reasonRequired: "Write at least a sentence — this is what the person reads.",
+          reasonRequired: "Write at least a sentence: this is what the person reads.",
           cancel: "Cancel",
           confirmReject: "Confirm rejection",
           working: "Saving…",
@@ -83,7 +83,7 @@ export function KycQueue({
           valid: "valid",
           invalid: "invalid",
           serviceMissing:
-            "SUPABASE_SERVICE_ROLE_KEY is not set — the queue cannot be read.",
+            "SUPABASE_SERVICE_ROLE_KEY is not set. The queue cannot be read.",
           auto: "Approved automatically",
           byAdmin: "Decided by a person",
         }
@@ -106,7 +106,7 @@ export function KycQueue({
           reasonLabel: "Motivo (vai no e-mail para a pessoa)",
           reasonPlaceholder: "O que não pôde ser confirmado e como corrigir.",
           reasonRequired:
-            "Escreva ao menos uma frase — é o que a pessoa vai ler.",
+            "Escreva ao menos uma frase: é o que a pessoa vai ler.",
           cancel: "Cancelar",
           confirmReject: "Confirmar rejeição",
           working: "Salvando…",
@@ -132,7 +132,7 @@ export function KycQueue({
           valid: "válido",
           invalid: "inválido",
           serviceMissing:
-            "SUPABASE_SERVICE_ROLE_KEY não está configurada — a fila não pode ser lida.",
+            "SUPABASE_SERVICE_ROLE_KEY não está configurada. A fila não pode ser lida.",
           auto: "Aprovado automaticamente",
           byAdmin: "Decidido por uma pessoa",
         };
@@ -285,7 +285,7 @@ function Checagens({ checks, label }: { checks: KycChecks; label: Label }) {
               </p>
               {r.cnae_codigo && (
                 <p className="mt-1 text-xs text-deep/50">
-                  {label.cnae} {r.cnae_codigo} — {r.cnae_descricao} (
+                  {label.cnae} {r.cnae_codigo} · {r.cnae_descricao} (
                   {r.cnae_rural ? label.rural : label.notRural})
                 </p>
               )}

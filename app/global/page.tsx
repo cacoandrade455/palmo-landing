@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { GlobalLanding } from "./GlobalLanding";
 
 export const metadata: Metadata = {
-  title: "Palmo Global — Access Brazilian farmland yield",
+  title: "Palmo Global · Access Brazilian farmland yield",
   description:
     "Early access for international investors: income from verified, productive land in Brazil through regulated structures. Verification required.",
 };

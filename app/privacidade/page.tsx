@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { LegalDoc } from "@/components/LegalDoc";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade — Palmo",
+  title: "Política de Privacidade · Palmo",
   description:
     "Como a Palmo trata seus dados pessoais: o que coletamos, bases legais da LGPD, cookies, compartilhamento, transferência internacional, retenção e seus direitos.",
 };

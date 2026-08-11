@@ -90,7 +90,7 @@ export function FeeDisclosure({ conversationId }: { conversationId: string }) {
           </>
         )}
         , {c.paidBy}
-        {showTotal ? "" : ` — ${c.pending}`}
+        {showTotal ? "" : ` (${c.pending})`}
       </span>
     </p>
   );

@@ -4,11 +4,11 @@ import { Footer } from "@/components/Footer";
 import { Marketplace } from "./Marketplace";
 
 export const metadata: Metadata = {
-  title: "Explorar terras — Palmo",
+  title: "Explorar terras · Palmo",
   description:
-    "Terras paradas disponíveis para arrendar em todo o Brasil. Filtre por estado, município, finalidade e área — grátis até fechar negócio.",
+    "Terras paradas disponíveis para arrendar em todo o Brasil. Filtre por estado, município, finalidade e área. Grátis até fechar negócio.",
   openGraph: {
-    title: "Explorar terras — Palmo",
+    title: "Explorar terras · Palmo",
     description:
       "Terras paradas disponíveis para arrendar em todo o Brasil. Filtre por estado, município, finalidade e área.",
   },

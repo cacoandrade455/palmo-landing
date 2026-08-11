@@ -11,14 +11,14 @@ export function ComingSoon() {
       ? {
           badge: "Coming soon",
           title: "The Palmo platform is almost here",
-          body: "Listings, verified profiles and secure deal-making — all in one place. Meanwhile, find out what your land is worth.",
+          body: "Listings, verified profiles and secure deal-making. All in one place. Meanwhile, find out what your land is worth.",
           cta: "How much is my land worth?",
           back: "Back to home",
         }
       : {
           badge: "Em breve",
           title: "A plataforma Palmo está chegando",
-          body: "Anúncios, perfis verificados e negociação segura — tudo em um só lugar. Enquanto isso, descubra quanto vale a sua terra.",
+          body: "Anúncios, perfis verificados e negociação segura. Tudo em um só lugar. Enquanto isso, descubra quanto vale a sua terra.",
           cta: "Quanto vale minha terra?",
           back: "Voltar ao início",
         };

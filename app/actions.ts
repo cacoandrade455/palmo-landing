@@ -73,7 +73,7 @@ export async function submitWaitlist(formData: FormData): Promise<WaitlistResult
     : "";
   const purposeLabel = purposeDetail
     ? baseLabel
-      ? `${baseLabel} — ${purposeDetail}`
+      ? `${baseLabel} · ${purposeDetail}`
       : purposeDetail
     : baseLabel;
 

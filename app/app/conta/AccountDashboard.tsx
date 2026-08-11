@@ -46,7 +46,7 @@ export function AccountDashboard() {
           carCheckedOn: "checked on",
           carDeclared: "CAR declared, not checked yet",
           carUnknownFormat:
-            "We don't recognise this CAR format. It may well be our pattern that is incomplete — worth a second look at the number.",
+            "We don't recognise this CAR format. It may well be our pattern that is incomplete. Worth a second look at the number.",
           carReview:
             "Our SICAR check didn't line up with what is on this listing. Worth reviewing the CAR number.",
           carMissing:
@@ -89,7 +89,7 @@ export function AccountDashboard() {
           carCheckedOn: "conferido em",
           carDeclared: "CAR declarado, ainda não conferido",
           carUnknownFormat:
-            "Não reconhecemos esse formato de CAR. Pode muito bem ser o nosso padrão que está incompleto — vale dar uma olhada no número.",
+            "Não reconhecemos esse formato de CAR. Pode muito bem ser o nosso padrão que está incompleto. Vale dar uma olhada no número.",
           carReview:
             "Nossa conferência no SICAR não fechou com o que está neste anúncio. Vale revisar o número do CAR.",
           carMissing:

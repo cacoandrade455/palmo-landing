@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { SignIn } from "@/components/SignIn";
 
 export const metadata: Metadata = {
-  title: "Entrar — Palmo",
+  title: "Entrar · Palmo",
   description:
     "Entre na Palmo com sua conta Google ou com e-mail e senha. Anunciar sua terra e negociar é sempre grátis.",
 };

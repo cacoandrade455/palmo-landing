@@ -4,7 +4,7 @@ import { Appraiser } from "@/components/Appraiser";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Quanto vale minha terra? — Palmo",
+  title: "Quanto vale minha terra? · Palmo",
   description:
     "Descubra em 1 minuto a faixa de valores de arrendamento da sua terra, por região e tipo de uso. Grátis.",
 };

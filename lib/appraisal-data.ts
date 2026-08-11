@@ -194,7 +194,7 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
       revMin: 35000,
       revMax: 45000,
       sourceNote:
-        "produtores do sul da Bahia (2026) — fazenda formada; a média censitária da BA é R$25,2 mil/ha (IBGE PAM 2024, inclui bananal não tecnificado)",
+        "produtores do sul da Bahia (2026): fazenda formada; a média censitária da BA é R$25,2 mil/ha (IBGE PAM 2024, inclui bananal não tecnificado)",
     },
     default: {
       revMin: 25000,
@@ -206,7 +206,7 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
   cacau: (() => {
     const p = price("arroba_cacau") || 310;
     const rev = { revMin: Math.round(60 * p), revMax: Math.round(150 * p) };
-    const note = `sul da Bahia: 60–150 @/ha (lavoura tecnificada/clonada — a média censitária da BA é ~21 @/ha, IBGE PAM 2024; CEPLAC leva assistidos a 90–200 @/ha) × R$${p}/@ (spot jul/2026, muito volátil)`;
+    const note = `sul da Bahia: 60–150 @/ha (lavoura tecnificada/clonada; a média censitária da BA é ~21 @/ha, IBGE PAM 2024; CEPLAC leva assistidos a 90–200 @/ha) × R$${p}/@ (spot jul/2026, muito volátil)`;
     return {
       BA: { ...rev, sourceNote: note },
       default: { ...rev, sourceNote: note },
@@ -226,7 +226,7 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
   citros: (() => {
     const p = price("caixa_laranja") || 31;
     const rev = { revMin: Math.round(650 * p), revMax: Math.round(950 * p) };
-    const note = `citricultura formada (Fundecitrus: 687 cx/ha em 24/25 e 869 cx/ha em 25/26; safra 26/27 estimada em queda de 12,9%) — 650–950 cx/ha × R$${p}/cx (CEPEA indústria)`;
+    const note = `citricultura formada (Fundecitrus: 687 cx/ha em 24/25 e 869 cx/ha em 25/26; safra 26/27 estimada em queda de 12,9%): 650–950 cx/ha × R$${p}/cx (CEPEA indústria)`;
     return {
       SP: { ...rev, sourceNote: note },
       MG: { ...rev, sourceNote: note },
@@ -416,7 +416,7 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
       revMin: 30000,
       revMax: 80000,
       sourceNote:
-        "macieiras do Sul (IBGE PAM 2024) — SC/RS/PR fazem 98% do valor da produção",
+        "macieiras do Sul (IBGE PAM 2024): SC/RS/PR fazem 98% do valor da produção",
     },
   },
   caju: (() => {
@@ -451,7 +451,7 @@ const formedCropRefs: Record<string, Record<string, FormedCropRef>> = {
       revMin: 80000,
       revMax: 140000,
       sourceNote:
-        "pêssego de mesa SP (IBGE PAM 2024: 21,2 t/ha e R$123,9 mil/ha — área pequena, perto do mercado)",
+        "pêssego de mesa SP (IBGE PAM 2024: 21,2 t/ha e R$123,9 mil/ha; área pequena, perto do mercado)",
     },
     default: {
       revMin: 30000,

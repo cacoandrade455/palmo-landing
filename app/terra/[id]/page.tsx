@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { CamadasAmbientais } from "@/components/CamadasAmbientais";
+import { basemapSatelite } from "@/lib/basemap-satelite";
 import { content } from "@/lib/content";
 import { listingIdFromParam, listingPath } from "@/lib/listing-slug";
 import { PURPOSE_OPEN } from "@/lib/purpose-open";
 import { siteConfig } from "@/lib/site-config";
 import { getServerSupabase } from "@/lib/supabase-server";
-import { getListing, type ListingDetailData } from "./actions";
+import { getCamadasAmbientais, getListing, type ListingDetailData } from "./actions";
 import { ListingDetail } from "./ListingDetail";
 
 type Params = Promise<{ id: string }>;
@@ -90,12 +92,20 @@ export default async function TerraPage({ params }: { params: Params }) {
     isOwner = user?.id === res.listing.owner_id;
   }
 
+  // Camadas ambientais do CAR. Lidas do banco, NUNCA da fonte externa: o SICAR
+  // é consultado por evento de anúncio, jamais por pageview. Sem linha
+  // gravada, `camadas` é null e a seção não é renderizada.
+  const camadas = await getCamadasAmbientais(res.listing.id);
+
   return (
     <>
       <Header />
       <main className="bg-neutral/40 py-12">
         <div className="mx-auto max-w-2xl px-6">
           <ListingDetail listing={res.listing} isOwner={isOwner} />
+          {camadas ? (
+            <CamadasAmbientais camadas={camadas} basemap={basemapSatelite()} />
+          ) : null}
         </div>
       </main>
       <Footer />

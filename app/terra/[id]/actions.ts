@@ -1,5 +1,8 @@
 "use server";
 
+// Import só de TIPO: some na compilação, então o componente client não é
+// arrastado para dentro do módulo de server actions.
+import type { CamadasAmbientaisData } from "@/components/CamadasAmbientais";
 import { getServerSupabase } from "@/lib/supabase-server";
 
 /**
@@ -177,4 +180,47 @@ export async function startConversation(
 
   if (error) return { ok: false, error: error.message };
   return { ok: true, conversationId: created.id };
+}
+
+/**
+ * CAMADAS AMBIENTAIS DO CAR — leitura pública do anúncio.
+ *
+ * Dois caminhos, na ordem:
+ *   1. `public_listing_car_layers`, a view que só mostra anúncio ATIVO. É por
+ *      onde anon lê, e o `security_invoker = off` é o que permite isso sem dar
+ *      grant de leitura na tabela base.
+ *   2. `listing_car_layers` direto, que a policy `lcl_select_own` limita ao
+ *      DONO. É o que faz o dono conseguir conferir as camadas de um anúncio
+ *      ainda não publicado (ou já arquivado) na própria página do imóvel.
+ *
+ * Falha de qualquer natureza — inclusive a migration ainda não aplicada —
+ * devolve `null`, e a seção simplesmente não aparece. Camada ambiental é
+ * enriquecimento: ela nunca pode derrubar a página do anúncio.
+ */
+export async function getCamadasAmbientais(
+  listingId: string,
+): Promise<CamadasAmbientaisData | null> {
+  const supabase = await getServerSupabase();
+  if (!supabase) return null;
+
+  const COLS =
+    "fetched_at, geom_perimetro, geom_rl, geom_app, area_total_ha, area_rl_ha, area_app_ha, area_rl_app_uniao_ha, area_util_estimada_ha";
+
+  const daView = await supabase
+    .from("public_listing_car_layers")
+    .select(COLS)
+    .eq("listing_id", listingId)
+    .maybeSingle();
+
+  if (!daView.error && daView.data) return daView.data as unknown as CamadasAmbientaisData;
+
+  const daTabela = await supabase
+    .from("listing_car_layers")
+    .select(COLS)
+    .eq("listing_id", listingId)
+    .maybeSingle();
+
+  if (!daTabela.error && daTabela.data) return daTabela.data as unknown as CamadasAmbientaisData;
+
+  return null;
 }

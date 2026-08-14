@@ -72,51 +72,66 @@ const USER_AGENT =
  * banco, sem enum, e um par finalidade/cultura torto não pode fazer o card
  * sumir.
  *
- * O QUE FICOU DE FORA, E POR QUÊ (a ausência é decisão, não esquecimento):
- *   • algodao      — a c782 tem DOIS produtos ("Algodão herbáceo (em caroço)"
- *                    e "Algodão arbóreo (em caroço)"). Sem desempate no rótulo
- *                    da Palmo, não é inequívoco.
- *   • seringueira  — idem: "Borracha (látex coagulado)" e "Borracha (látex
- *                    líquido)" são produtos distintos que não se somam.
- *   • noz_pecan    — o IBGE publica "Noz (fruto seco)", genérico. "Noz-pecã"
- *                    é mais estreito que o produto, e não dá para afirmar que
- *                    o produto é só pecã.
- *   • palmito_pupunha — o IBGE publica "Palmito", sem separar espécie.
- *   • hortalicas   — rótulo guarda-chuva, não é produto.
- *   • arroz        — o rótulo da Palmo é "Arroz irrigado" e a PAM mede TODO o
- *                    arroz do município, sem separar sistema de cultivo. Não é
- *                    detalhe: medido em 13/08/2026 sobre esta própria base, dos
- *                    1.606 municípios com valor de arroz, 1.043 (64,9%) estão
- *                    abaixo de 3.000 kg/ha (sequeiro) e a mediana é 2.000
- *                    kg/ha, contra 9.370 kg/ha em Uruguaiana/RS. Publicar a
- *                    mediana municipal sob a etiqueta "irrigado" seria errar
- *                    por um fator de até 12. Volta a entrar no dia em que o
- *                    rótulo do dropdown deixar de prometer sistema de cultivo.
- *   • limao_tahiti — mesmo caso: "Limão tahiti" é mais estreito que o produto
- *                    "Limão", que agrega tahiti, siciliano e galego.
+ * `produtoAlternativo` / `escopoAlternativo`: quando a c782 publica DUAS
+ *           lavouras diferentes sob o mesmo rótulo do dropdown e a escolha
+ *           depende do município. Só o algodão usa: o herbáceo é a lavoura
+ *           anual tecnificada e responde por quase toda a área do país; o
+ *           arbóreo é o algodão perene do semiárido, que sobrevive em
+ *           municípios onde o herbáceo simplesmente não existe. Prefere-se o
+ *           herbáceo; onde ele falta, entra o arbóreo, e a ressalva na tela diz
+ *           QUAL dos dois foi usado naquele município.
+ *           Medido em 14/08/2026: em 2024 o herbáceo tem 376 municípios em 17
+ *           UFs (mediana 1.500 kg/ha) e o arbóreo tem ZERO — o mecanismo de
+ *           alternativo não dispara para nenhum município neste ano. Fica
+ *           mesmo assim, porque a regra é do dado e não do ano: o arbóreo teve
+ *           valor municipal até 2013 e a categoria continua publicada.
  *
- * ── A REGRA QUE SEPARA O QUE ENTRA DO QUE SAI ────────────────────────────
- * Fica FORA quando o rótulo da Palmo nomeia uma POPULAÇÃO mais estreita de
- * lavouras do que a que o IBGE mediu (arroz irrigado dentro de todo o arroz,
- * noz-pecã dentro de "Noz", pupunha dentro de "Palmito"): aí o número é de
- * outras lavouras que não as anunciadas, e nenhuma ressalva conserta isso.
+ * ── A REGRA, decidida pelo Carlos em 14/08/2026 ──────────────────────────
+ * Cultura NÃO sai do mapa por desconforto de rótulo. Onde o número é o certo e
+ * quem engana é o rótulo, a saída é NOMEAR o que o número mede, na ressalva de
+ * escopo que aparece embaixo do valor. Só fica fora o que não tem dado
+ * municipal com fonte.
  *
- * Fica DENTRO, com `escopo`, quando a população é a MESMA e o que muda é a
- * FORMA ou a PARTE medida (azeitona e não azeite, cacho e não fruta, café
- * somando arábica e canephora): aí o número é da lavoura certa, e a ressalva
- * na tela diz exatamente o que ele mede.
- *   • sem par na PAM: gergelim, canola, milheto, grao_de_bico, chia,
+ * A regra anterior era outra: deixava fora sempre que o rótulo da Palmo
+ * nomeasse uma população mais estreita de lavouras do que a medida. Ela tirava
+ * arroz, limão, noz e palmito — dado bom do IBGE, escondido do proprietário
+ * por causa de uma palavra no dropdown. Agora eles entram, com a agregação dita
+ * em voz alta na própria tela.
+ *
+ * O QUE CONTINUA FORA, E POR QUÊ:
+ *   • hortalicas   — "Hortaliças em geral" é rótulo guarda-chuva, não é
+ *                    produto. Não existe agregado de hortaliças na c782, e
+ *                    somar tomate com alho não produz rendimento de coisa
+ *                    alguma.
+ *   • sem par na PAM (29): gergelim, canola, milheto, grao_de_bico, chia,
  *     macadamia, aroeira, acerola, atemoia, graviola, pitaya, morango,
  *     cupuacu, roma, lichia, jabuticaba, cenoura, abobora, pimentao, inhame,
  *     quiabo, gengibre, pimentas, mandioquinha, brassicas, beterraba, chuchu,
- *     pepino, flores.
- *   • pecuária, avicultura, aquicultura, silvicultura e extrativismo — a PAM
- *     é de LAVOURA. Pecuária é a PPM e extrativismo/silvicultura é a PEVS
- *     (esta já ingerida em lib/pevs.json). Não se misturam.
+ *     pepino, flores. Não é escolha nossa: a PAM não pesquisa esses produtos.
+ *   • pecuária, avicultura, aquicultura, silvicultura e extrativismo (31) — a
+ *     PAM é de LAVOURA. Pecuária é a PPM e extrativismo/silvicultura é a PEVS
+ *     (esta já ingerida em lib/pevs.json). Não se misturam, e a unidade nem
+ *     seria por hectare.
  */
 const DE_PARA = {
   // ── grãos ──────────────────────────────────────────────────────────────
   soja: { produto: "Soja (em grão)", unidade: "kg_ha", sacaKg: 60 },
+  arroz: {
+    produto: "Arroz (em casca)",
+    unidade: "kg_ha",
+    // 50 kg, NUNCA 60: a saca de arroz em casca é de 50 kg. O divisor está
+    // amarrado à cultura justamente para ninguém copiar o 60 da soja e errar
+    // por +20% num número que ninguém confere de cabeça.
+    sacaKg: 50,
+    escopo: "arroz_todo_sistema",
+  },
+  algodao: {
+    produto: "Algodão herbáceo (em caroço)",
+    produtoAlternativo: "Algodão arbóreo (em caroço)",
+    unidade: "kg_ha",
+    escopo: "algodao_herbaceo",
+    escopoAlternativo: "algodao_arboreo",
+  },
   milho: { produto: "Milho (em grão)", unidade: "kg_ha", sacaKg: 60 },
   feijao: { produto: "Feijão (em grão)", unidade: "kg_ha", sacaKg: 60 },
   sorgo: {
@@ -133,7 +148,14 @@ const DE_PARA = {
   cevada: { produto: "Cevada (em grão)", unidade: "kg_ha" },
   mamona: { produto: "Mamona (baga)", unidade: "kg_ha" },
   fumo: { produto: "Fumo (em folha)", unidade: "kg_ha" },
-  fava: { produto: "Fava (em grão)", unidade: "kg_ha" },
+  fava: {
+    produto: "Fava (em grão)",
+    unidade: "kg_ha",
+    // A fava do IBGE é a do Nordeste (Phaseolus lunatus), não a fava europeia
+    // (Vicia faba). O rótulo EN já diz "Lima bean (fava)"; a ressalva fecha a
+    // dúvida também em português, onde "fava" sozinha é ambígua.
+    escopo: "fava_de_lima",
+  },
   triticale: { produto: "Triticale (em grão)", unidade: "kg_ha" },
 
   // ── lavoura permanente ─────────────────────────────────────────────────
@@ -163,6 +185,20 @@ const DE_PARA = {
   guarana: { produto: "Guaraná (semente)", unidade: "kg_ha" },
   oliveira: { produto: "Azeitona", unidade: "kg_ha", escopo: "fruto_nao_derivado" },
   urucum: { produto: "Urucum (semente)", unidade: "kg_ha" },
+  limao_tahiti: { produto: "Limão", unidade: "kg_ha", escopo: "limao_agregado" },
+  seringueira: {
+    // Escolha por COBERTURA MUNICIPAL medida em 14/08/2026, não por preferência:
+    // "Borracha (látex coagulado)" tem 585 municípios em 14 UFs (mediana 2.096
+    // kg/ha), enquanto "Borracha (látex líquido)" tem ZERO — os 5.563
+    // municípios vêm "..." (não disponível) em 2024, e a série nacional só teve
+    // valor entre 1981 e 1987. Não há trade-off nem risco de misturar as duas:
+    // uma delas simplesmente não existe hoje.
+    produto: "Borracha (látex coagulado)",
+    unidade: "kg_ha",
+    escopo: "seringueira_coagulado",
+  },
+  noz_pecan: { produto: "Noz (fruto seco)", unidade: "kg_ha", escopo: "noz_sem_especie" },
+  palmito_pupunha: { produto: "Palmito", unidade: "kg_ha", escopo: "palmito_sem_especie" },
 
   // ── fruticultura ───────────────────────────────────────────────────────
   banana: {
@@ -260,8 +296,16 @@ async function main() {
   const semPar = [];
   for (const [cultura, def] of Object.entries(DE_PARA)) {
     const codigo = porNome.get(def.produto);
-    if (!codigo) semPar.push(`${cultura} → "${def.produto}"`);
-    else alvos.push({ cultura, codigo, ...def });
+    if (!codigo) {
+      semPar.push(`${cultura} → "${def.produto}"`);
+      continue;
+    }
+    const codigoAlternativo = def.produtoAlternativo ? porNome.get(def.produtoAlternativo) : null;
+    if (def.produtoAlternativo && !codigoAlternativo) {
+      semPar.push(`${cultura} (alternativo) → "${def.produtoAlternativo}"`);
+      continue;
+    }
+    alvos.push({ cultura, codigo, codigoAlternativo: codigoAlternativo ?? null, ...def });
   }
   if (semPar.length > 0) {
     throw new Error(
@@ -285,21 +329,49 @@ async function main() {
   // municípios muda quando o IBGE cria município.
   const nMunicipios = new Set(Object.values(indice)).size;
   const porLote = Math.max(1, Math.floor(LIMITE_VALORES / nMunicipios));
+  // O teto da API é de VALORES, e valor se conta por PRODUTO pedido, não por
+  // cultura: uma cultura com produto alternativo pede dois. Fatiar por cultura
+  // estouraria o teto em silêncio no dia em que houvesse muitas delas.
   const lotes = [];
-  for (let i = 0; i < alvos.length; i += porLote) lotes.push(alvos.slice(i, i + porLote));
+  let atual = [];
+  let produtosNoLote = 0;
+  for (const a of alvos) {
+    const custo = a.codigoAlternativo ? 2 : 1;
+    if (produtosNoLote + custo > porLote && atual.length > 0) {
+      lotes.push(atual);
+      atual = [];
+      produtosNoLote = 0;
+    }
+    atual.push(a);
+    produtosNoLote += custo;
+  }
+  if (atual.length > 0) lotes.push(atual);
+  const totalProdutos = alvos.reduce((n, a) => n + (a.codigoAlternativo ? 2 : 1), 0);
   console.log(
-    `3/5 Buscando rendimento: ${alvos.length} produtos em ${lotes.length} requisições ` +
-      `(${porLote} por vez; teto de ${LIMITE_VALORES} valores / ${nMunicipios} municípios)`,
+    `3/5 Buscando rendimento: ${alvos.length} culturas / ${totalProdutos} produtos em ` +
+      `${lotes.length} requisições (até ${porLote} produtos por vez; teto de ` +
+      `${LIMITE_VALORES} valores / ${nMunicipios} municípios)`,
   );
 
+  // Primeiro junta o cru por papel; a escolha entre principal e alternativo é
+  // feita DEPOIS, com os dois na mão, município a município.
+  const bruto = {};
   const rendimentos = {};
+  const escoposPorMunicipio = {};
   let numericos = 0;
   let ausentes = 0;
 
   for (let i = 0; i < lotes.length; i++) {
     const lote = lotes[i];
-    const codigos = lote.map((a) => a.codigo).join(",");
-    const porCodigo = new Map(lote.map((a) => [a.codigo, a.cultura]));
+    // Cada alvo pode pedir dois produtos (o principal e o alternativo), e o
+    // papel de cada código precisa sobreviver à volta: é ele que decide qual
+    // ressalva o município recebe.
+    const codigos = lote.flatMap((a) => (a.codigoAlternativo ? [a.codigo, a.codigoAlternativo] : [a.codigo])).join(",");
+    const porCodigo = new Map();
+    for (const a of lote) {
+      porCodigo.set(a.codigo, { cultura: a.cultura, alternativo: false });
+      if (a.codigoAlternativo) porCodigo.set(a.codigoAlternativo, { cultura: a.cultura, alternativo: true });
+    }
     const url =
       `https://apisidra.ibge.gov.br/values/t/${AGREGADO}/n6/all/v/${VARIAVEL}` +
       `/p/${ano}/c${CLASSIFICACAO}/${codigos}/f/c/h/n`;
@@ -316,7 +388,8 @@ async function main() {
           ausentes++;
           continue;
         }
-        (rendimentos[ibge] ??= {})[cultura] = v;
+        const papel = cultura.alternativo ? "alternativo" : "principal";
+        ((bruto[cultura.cultura] ??= {})[ibge] ??= {})[papel] = v;
         numericos++;
       }
       console.log(`    ${i + 1}/${lotes.length} ok — ${lote.map((a) => a.cultura).join(", ")}`);
@@ -326,7 +399,30 @@ async function main() {
     }
   }
 
+  // ── ESCOLHA ENTRE PRINCIPAL E ALTERNATIVO, MUNICÍPIO A MUNICÍPIO ─────────
+  // O principal manda sempre que existe. O alternativo só entra onde o
+  // principal falta, e nesse caso o município leva uma ressalva PRÓPRIA, para
+  // a tela dizer qual das duas lavouras foi medida ali. Nunca se soma um com o
+  // outro: são lavouras diferentes.
+  const porAlvo = new Map(alvos.map((a) => [a.cultura, a]));
+  let comAlternativo = 0;
+  for (const [cultura, porMunicipio] of Object.entries(bruto)) {
+    const def = porAlvo.get(cultura);
+    for (const [ibge, papeis] of Object.entries(porMunicipio)) {
+      if (papeis.principal != null) {
+        (rendimentos[ibge] ??= {})[cultura] = papeis.principal;
+      } else if (papeis.alternativo != null) {
+        (rendimentos[ibge] ??= {})[cultura] = papeis.alternativo;
+        if (def?.escopoAlternativo) {
+          (escoposPorMunicipio[cultura] ??= {})[ibge] = def.escopoAlternativo;
+          comAlternativo++;
+        }
+      }
+    }
+  }
+
   console.log(`4/5 ${numericos} valores numéricos; ${ausentes} ausências descartadas (nunca viram zero)`);
+  if (comAlternativo > 0) console.log(`    ${comAlternativo} municípios ficaram com o produto ALTERNATIVO (ressalva própria)`);
   if (numericos === 0) throw new Error("nenhum valor numérico: não gravo arquivo vazio por cima do bom");
 
   const unidades = {};
@@ -349,6 +445,7 @@ async function main() {
     unidades,
     sacasKg: sacas,
     escopos,
+    escoposPorMunicipio,
     municipios: indice,
     rendimentos,
   };

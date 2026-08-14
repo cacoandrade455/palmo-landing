@@ -32,7 +32,19 @@ export type ReferenciaProdutivaData = {
   sacaKg: number | null;
   ano: number;
   municipio: string;
-  escopo: "soma_de_tipos" | "fruto_nao_derivado" | "rendimento_do_cacho" | null;
+  escopo:
+    | "soma_de_tipos"
+    | "fruto_nao_derivado"
+    | "rendimento_do_cacho"
+    | "fava_de_lima"
+    | "arroz_todo_sistema"
+    | "limao_agregado"
+    | "noz_sem_especie"
+    | "palmito_sem_especie"
+    | "algodao_herbaceo"
+    | "algodao_arboreo"
+    | "seringueira_coagulado"
+    | null;
 };
 
 /** Um milheiro de quilos. Existe para o 1.000 não virar número mágico. */
@@ -64,6 +76,17 @@ export function ReferenciaProdutiva({
             soma_de_tipos: "Arabica and canephora combined.",
             fruto_nao_derivado: "IBGE measures the harvested fruit, not the processed product.",
             rendimento_do_cacho: "Yield measured as bunches, not loose fruit.",
+            fava_de_lima: "Lima bean (Phaseolus lunatus), the fava grown in Brazil's Northeast.",
+            arroz_todo_sistema:
+              "The survey measures all the rice in the municipality, irrigated and upland.",
+            limao_agregado: "In the survey, lemon aggregates Tahiti, Sicilian and Galego.",
+            noz_sem_especie: "IBGE publishes nuts (dried fruit) without separating species.",
+            palmito_sem_especie: "Heart of palm, without separating species.",
+            algodao_herbaceo: "Herbaceous cotton (unginned).",
+            algodao_arboreo:
+              "Tree cotton (unginned), used because this municipality reports no herbaceous cotton.",
+            seringueira_coagulado:
+              "Rubber as coagulated latex; liquid latex has no municipal data published.",
           },
         }
       : {
@@ -78,6 +101,16 @@ export function ReferenciaProdutiva({
             soma_de_tipos: "Soma de arábica e canephora.",
             fruto_nao_derivado: "O IBGE mede o fruto colhido, não o produto beneficiado.",
             rendimento_do_cacho: "Rendimento medido em cacho, não em fruta solta.",
+            fava_de_lima: "Fava-de-lima (Phaseolus lunatus), a fava do Nordeste.",
+            arroz_todo_sistema: "A PAM mede todo o arroz do município, irrigado e sequeiro.",
+            limao_agregado: "Limão na PAM agrega tahiti, siciliano e galego.",
+            noz_sem_especie: "O IBGE publica noz (fruto seco), sem separar espécie.",
+            palmito_sem_especie: "Palmito, sem separar espécie.",
+            algodao_herbaceo: "Algodão herbáceo (em caroço).",
+            algodao_arboreo:
+              "Algodão arbóreo (em caroço), usado porque este município não declara o herbáceo.",
+            seringueira_coagulado:
+              "Borracha em látex coagulado; o látex líquido não tem dado municipal publicado.",
           },
         };
 

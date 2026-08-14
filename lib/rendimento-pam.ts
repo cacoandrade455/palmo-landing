@@ -42,15 +42,24 @@ export type UnidadeRendimento = "kg_ha" | "frutos_ha";
  * script morreria lá dentro e o leitor veria "Oliveira (azeite) · 3,37 t/ha"
  * sem saber que o IBGE mediu a azeitona, não o azeite.
  *
- * Só aparece quando a POPULAÇÃO de lavouras é a mesma e o que muda é a forma
- * ou a parte medida. Quando o rótulo nomeia uma população mais estreita que a
- * medida (arroz irrigado dentro de todo o arroz), a cultura fica fora do mapa:
- * ressalva não conserta número de outra lavoura.
+ * Desde 14/08/2026 a ressalva é a saída PADRÃO, e não a exceção: cultura não
+ * some do card por desconforto de rótulo. Quando o rótulo do dropdown é mais
+ * estreito que a lavoura medida (arroz irrigado dentro de todo o arroz do
+ * município, limão tahiti dentro de "Limão"), o número continua sendo o do
+ * IBGE e a tela diz o que ele mede.
  */
 export type EscopoRendimento =
   | "soma_de_tipos"
   | "fruto_nao_derivado"
-  | "rendimento_do_cacho";
+  | "rendimento_do_cacho"
+  | "fava_de_lima"
+  | "arroz_todo_sistema"
+  | "limao_agregado"
+  | "noz_sem_especie"
+  | "palmito_sem_especie"
+  | "algodao_herbaceo"
+  | "algodao_arboreo"
+  | "seringueira_coagulado";
 
 export type ReferenciaProdutiva = {
   /** Chave da cultura, como gravada no anúncio. */
@@ -81,6 +90,13 @@ type Arquivo = {
   unidades: Record<string, UnidadeRendimento>;
   sacasKg: Record<string, number>;
   escopos: Record<string, EscopoRendimento>;
+  /**
+   * Ressalva que vale só em ALGUNS municípios, quando a c782 publica duas
+   * lavouras sob o mesmo rótulo e a escolha muda de lugar para lugar (o
+   * algodão herbáceo some no semiárido e quem sobra é o arbóreo). Tem
+   * precedência sobre `escopos`.
+   */
+  escoposPorMunicipio: Record<string, Record<string, EscopoRendimento>>;
   municipios: Record<string, number>;
   rendimentos: Record<string, Record<string, number>>;
 };
@@ -141,6 +157,9 @@ export function referenciaProdutiva(
     sacaKg: base.sacasKg[cultura] ?? null,
     ano: base.ano,
     municipio: municipio ?? "",
-    escopo: base.escopos[cultura] ?? null,
+    // O município manda quando tem ressalva própria: é ele que sabe qual das
+    // duas lavouras foi medida ali.
+    escopo:
+      base.escoposPorMunicipio?.[cultura]?.[String(codigo)] ?? base.escopos[cultura] ?? null,
   };
 }

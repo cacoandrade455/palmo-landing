@@ -3,10 +3,12 @@ import { redirect } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CamadasAmbientais } from "@/components/CamadasAmbientais";
+import { ReferenciaProdutiva } from "@/components/ReferenciaProdutiva";
 import { basemapSatelite } from "@/lib/basemap-satelite";
 import { content } from "@/lib/content";
 import { listingIdFromParam, listingPath } from "@/lib/listing-slug";
 import { PURPOSE_OPEN } from "@/lib/purpose-open";
+import { referenciaProdutiva } from "@/lib/rendimento-pam";
 import { siteConfig } from "@/lib/site-config";
 import { getServerSupabase } from "@/lib/supabase-server";
 import { getCamadasAmbientais, getListing, type ListingDetailData } from "./actions";
@@ -97,12 +99,34 @@ export default async function TerraPage({ params }: { params: Params }) {
   // gravada, `camadas` é null e a seção não é renderizada.
   const camadas = await getCamadasAmbientais(res.listing.id);
 
+  // Referência produtiva da região. Resolvida NO SERVIDOR: a base do IBGE tem
+  // ~980 KB e não pode chegar perto do bundle do celular — o que desce para o
+  // componente é um objeto de seis campos.
+  //
+  // Finalidade aberta fica de fora por definição: sem UMA cultura definida não
+  // existe rendimento a citar, e "aberta a propostas" não é cultura.
+  const referencia =
+    res.listing.purpose !== PURPOSE_OPEN && res.listing.crop
+      ? referenciaProdutiva(
+          res.listing.state,
+          res.listing.municipality,
+          res.listing.crop,
+        )
+      : null;
+
   return (
     <>
       <Header />
       <main className="bg-neutral/40 py-12">
         <div className="mx-auto max-w-2xl px-6">
           <ListingDetail listing={res.listing} isOwner={isOwner} />
+          {referencia && res.listing.crop ? (
+            <ReferenciaProdutiva
+              referencia={referencia}
+              purpose={res.listing.purpose}
+              crop={res.listing.crop}
+            />
+          ) : null}
           {camadas ? (
             <CamadasAmbientais camadas={camadas} basemap={basemapSatelite()} />
           ) : null}

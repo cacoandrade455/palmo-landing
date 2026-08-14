@@ -1,5 +1,7 @@
 "use client";
 
+import { useCallback, useState } from "react";
+
 import { useLanguage } from "@/lib/language-context";
 import { formatarHectares } from "@/lib/medidas-agrarias";
 import {
@@ -116,6 +118,27 @@ export function CamadasAmbientais({
 }) {
   const { lang } = useLanguage();
 
+  // ── O ESTADO DA FOTOGRAFIA GOVERNA A IMAGEM E A ATRIBUIÇÃO ────────────────
+  // As duas coisas andam juntas de propósito. Antes não andavam: com a
+  // configuração do CDSE quebrada, o WMS devolve HTTP 400 com XML, o navegador
+  // desenhava o ícone de imagem quebrada dentro do mapa, e a legenda continuava
+  // dizendo "Imagem de satélite: Copernicus Sentinel-2" sem imagem nenhuma na
+  // tela. Creditar uma foto que não está lá é afirmação falsa, mesmo que
+  // pequena.
+  const [satelite, setSatelite] = useState<"carregando" | "ok" | "erro">("carregando");
+
+  // A imagem que vem do cache pode terminar ANTES da hidratação, e aí nem
+  // `onLoad` nem `onError` disparam: o estado ficaria em "carregando" para
+  // sempre e a atribuição sumiria de uma imagem que está na tela. O callback de
+  // ref cobre esse caso lendo `complete` no momento em que o elemento monta.
+  // `queueMicrotask` é o padrão da casa para não cair no
+  // react-hooks/set-state-in-effect.
+  const aoMontarImagem = useCallback((el: HTMLImageElement | null) => {
+    if (!el || !el.complete) return;
+    const estado = el.naturalWidth > 0 ? "ok" : "erro";
+    queueMicrotask(() => setSatelite((atual) => (atual === estado ? atual : estado)));
+  }, []);
+
   const perimetro = paraMultiPoligono(camadas.geom_perimetro);
   const rl = paraMultiPoligono(camadas.geom_rl);
   const app = paraMultiPoligono(camadas.geom_app);
@@ -227,16 +250,24 @@ export function CamadasAmbientais({
       {/* ── O MAPA ─────────────────────────────────────────────────────────── */}
       <div className="mt-4 overflow-hidden rounded-xl bg-deep">
         <div className="relative" style={{ aspectRatio: `${PROPORCAO}` }}>
-          {urlSatelite ? (
+          {urlSatelite && satelite !== "erro" ? (
             /* WMS externo devolve uma imagem por caixa, sem tamanho fixo
                conhecido no build: o otimizador do next/image nao tem o que
                otimizar aqui — e mandar a imagem de satelite pelo otimizador
-               colocaria o nosso servidor no caminho de cada pageview. */
+               colocaria o nosso servidor no caminho de cada pageview.
+
+               Em erro a <img> sai do DOM inteira, e não escondida: elemento
+               escondido continua sendo elemento quebrado, e o navegador ainda
+               desenha o ícone dele em alguns estados. O fundo `deep` do tema
+               volta a ser o que aparece, que é o estado de repouso do mapa. */
             // eslint-disable-next-line @next/next/no-img-element
             <img
+              ref={aoMontarImagem}
               src={urlSatelite}
               alt=""
               aria-hidden
+              onLoad={() => setSatelite("ok")}
+              onError={() => setSatelite("erro")}
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : null}
@@ -346,7 +377,8 @@ export function CamadasAmbientais({
         ) : null}
         {dataTexto ? <p>{label.fonte(dataTexto)}</p> : null}
         <p className="mt-1">{label.ressalva}</p>
-        {urlSatelite ? <p className="mt-1">{label.satelite}</p> : null}
+        {/* Só credita o Copernicus quando a foto dele está mesmo na tela. */}
+        {satelite === "ok" ? <p className="mt-1">{label.satelite}</p> : null}
       </div>
     </section>
   );

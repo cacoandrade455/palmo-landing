@@ -26,6 +26,7 @@
 import "server-only";
 
 import { getAdminSupabase } from "./supabase-admin";
+import { atualizarCamadasAmbientais } from "./listing-car-layers";
 import { consultarCar } from "./car-sicar";
 import { decideCar, parseCar, type CarChecks, type CarSicarLookup } from "./car-checks";
 
@@ -127,6 +128,16 @@ export async function verificarEGravarCar(
   // apagasse o CAR e nós não gravássemos nada, a linha antiga continuaria sendo
   // a mais recente e o selo sobreviveria a um campo agora vazio. O histórico
   // completo é o que mantém o estado corrente honesto.
+  // ── CAMADAS AMBIENTAIS ─────────────────────────────────────────────────────
+  // Enriquecimento, e é assim que ele se comporta: só quando o SICAR CONFIRMOU
+  // que o imóvel existe (mandar buscar camada de imóvel inexistente é
+  // desperdício de requisição na fonte pública), nunca bloqueia, nunca é
+  // aguardado antes de gravar o veredito, e o erro é ignorado de propósito —
+  // `atualizarCamadasAmbientais` não lança e já devolve `{ ok: false }` com
+  // motivo. A guarda interna de "já buscamos hoje" garante no máximo UMA
+  // requisição por anúncio por dia, mesmo que o dono salve dez vezes.
+  const buscarCamadas = parsed && sicar?.found === true;
+
   const { error } = await db.from("listing_car_verifications").insert({
     listing_id: entrada.listingId,
     car_number_consultado: parsed?.normalizado ?? null,
@@ -139,6 +150,13 @@ export async function verificarEGravarCar(
     crs,
     checked_at: sicar?.checked_at ?? null,
   });
+
+  if (buscarCamadas) {
+    await atualizarCamadasAmbientais({
+      listingId: entrada.listingId,
+      codImovel: parsed.normalizado,
+    });
+  }
 
   return { gravado: !error, checks };
 }

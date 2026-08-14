@@ -37,9 +37,18 @@ import "server-only";
 
 import type { CarSicarLookup } from "./car-checks";
 
-/** Identificação da Palmo em toda chamada externa. */
-const USER_AGENT =
+/**
+ * Identificação da Palmo em toda chamada externa.
+ *
+ * Exportado desde ago/2026 porque o adapter das camadas ambientais
+ * (`lib/car-camadas.ts`) fala com outro endereço do MESMO órgão, e as duas
+ * portas têm que se apresentar com a mesma cara. Duas identificações
+ * diferentes seriam duas Palmos para quem lê o log do outro lado.
+ */
+export const USER_AGENT_SICAR =
   "Palmo/1.0 (marketplace de terras; validacao de CAR; contato: cacoandrade45@gmail.com)";
+
+const USER_AGENT = USER_AGENT_SICAR;
 
 /**
  * Timeout curto e EXPLÍCITO. Nada de default de runtime.
@@ -137,7 +146,32 @@ function camadaDaUf(uf: string): string {
   return `sicar:sicar_imoveis_${uf.toLowerCase()}`;
 }
 
-/** Campos pedidos explicitamente. Nada de coordenada de ponto. */
+/**
+ * Campos pedidos explicitamente. Nada de coordenada de ponto.
+ *
+ * ── POR QUE `data_atualizacao` SAIU (ago/2026) ───────────────────────────────
+ * Porque ele não existe em 12 das 27 camadas, e pedir campo inexistente NÃO
+ * devolve o campo vazio: o GeoServer RECUSA A REQUISIÇÃO INTEIRA com
+ * `InvalidParameterValue`, em HTTP 200 e corpo XML. Ou seja, `res.ok` era
+ * true, `res.json()` estourava no parse, o `catch` devolvia
+ * `consulted: false`, e `decideCar` parava em `formato_ok`.
+ *
+ * Efeito prático medido em 13/08/2026, com `DescribeFeatureType` nas 27
+ * camadas: em PE, PI, PR, RJ, RN, RO, RR, RS, SC, SE, SP e TO o selo
+ * "CAR ativo no SICAR" NUNCA podia nascer. Não havia erro visível em lugar
+ * nenhum — o anúncio saía com "CAR declarado pelo proprietário" e ninguém
+ * tinha por que desconfiar. São 12 estados, incluindo São Paulo, Paraná, Rio
+ * Grande do Sul e Tocantins.
+ *
+ * A correção é tirar o campo, e não fazer lista de UF: lista de UF envelhece
+ * em silêncio no dia em que o SICAR padronizar as camadas, e o modo de falha
+ * dela é exatamente este que estamos consertando. O campo era guardado só no
+ * `checks` para auditoria e nunca foi lido por `decideCar` nem exibido em
+ * lugar nenhum, então a perda é zero. `dat_criacao`, que existe nas 27, fica.
+ *
+ * A lição que fica no arquivo: `propertyName` do WFS é contrato rígido. Campo
+ * novo aqui só depois de conferir nas 27 camadas.
+ */
 const PROPERTY_NAMES = [
   "cod_imovel",
   "status_imovel",
@@ -148,7 +182,6 @@ const PROPERTY_NAMES = [
   "cod_municipio_ibge",
   "tipo_imovel",
   "dat_criacao",
-  "data_atualizacao",
   "geo_area_imovel",
 ].join(",");
 
@@ -251,7 +284,11 @@ export const fonteWfsLegado: CarSicarFonte = {
           condicao: str(p.condicao),
           tipo_imovel: str(p.tipo_imovel),
           dat_criacao: str(p.dat_criacao),
-          data_atualizacao: str(p.data_atualizacao),
+          // Sempre null desde ago/2026: o campo saiu do `propertyName` porque
+          // não existe em 12 das 27 camadas e derrubava a consulta inteira.
+          // Fica no tipo para as linhas de auditoria antigas continuarem
+          // legíveis sem `CAR_CHECKS_VERSION` novo.
+          data_atualizacao: null,
           error: null,
         },
         geometria,

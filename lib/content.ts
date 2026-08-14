@@ -756,7 +756,7 @@ export const content: Record<Lang, Content> = {
           { value: "grao_de_bico", label: "Chickpea" },
           { value: "mamona", label: "Castor bean" },
           { value: "fumo", label: "Tobacco" },
-          { value: "fava", label: "Broad bean" },
+          { value: "fava", label: "Lima bean (fava)" },
           { value: "chia", label: "Chia" },
           { value: "triticale", label: "Triticale" },
         ],
